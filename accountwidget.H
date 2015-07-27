@@ -11,7 +11,7 @@ class AccountWidget : public QWidget
 {
 Q_OBJECT
 public:
-    explicit AccountWidget(QWidget *parent = 0);
+    explicit AccountWidget(int number=0, QWidget *parent = 0);
 
 
     QVBoxLayout * layoutAccountConf;

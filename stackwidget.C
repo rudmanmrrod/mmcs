@@ -9,11 +9,15 @@ StackWidget::StackWidget(int accountNumber, QWidget *parent) :
 
     stackedWidget = new QStackedWidget(this);
 
+    stackedWidget->setObjectName("StackAccount");
+
     for (int i = 0;i < accountNumber; ++i)
     {
         comboAccount->addItem(QString("Cuenta %1").arg(i + 1));
 
-        AccountWidget * widget = new AccountWidget(stackedWidget);
+        comboAccount->setObjectName(QString("Cuenta %1").arg(i+1));
+
+        AccountWidget * widget = new AccountWidget(i,stackedWidget);
 
         stackedWidget->addWidget(widget);
 
@@ -23,6 +27,7 @@ StackWidget::StackWidget(int accountNumber, QWidget *parent) :
 
     layoutMain->addWidget(comboAccount);
     layoutMain->addWidget(stackedWidget);
+
 
     setLayout(layoutMain);
 

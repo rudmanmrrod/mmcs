@@ -12,6 +12,8 @@ class StackWidget : public QWidget
 {
 Q_OBJECT
 
+public:
+
     QStackedWidget * stackedWidget;
 
     QList<QWidget *> widgetList;
@@ -21,7 +23,7 @@ Q_OBJECT
     QComboBox * comboAccount;
 
 
-public:
+
     StackWidget(int accountNumber, QWidget *parent = 0);
 
 signals:

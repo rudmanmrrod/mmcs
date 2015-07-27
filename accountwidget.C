@@ -1,6 +1,6 @@
 #include "accountwidget.H"
 
-AccountWidget::AccountWidget(QWidget *parent) :
+AccountWidget::AccountWidget(int number,QWidget *parent) :
     QWidget(parent)
 {
 
@@ -14,6 +14,7 @@ AccountWidget::AccountWidget(QWidget *parent) :
 
     lineEditAccountName = new QLineEdit(this);
     lineEditAccountName->setFixedWidth(200);
+    lineEditAccountName->setObjectName(QString("linedit %1").arg(number+1));//Nombre para el objeto Nombre de la Cuenta
     layoutAccountConf->addWidget(lineEditAccountName);
 
     labelAccountStart = new QLabel(this);
@@ -22,6 +23,7 @@ AccountWidget::AccountWidget(QWidget *parent) :
 
     spinBoxAccountStart = new QSpinBox(this);
     spinBoxAccountStart->setFixedWidth(100);
+    spinBoxAccountStart->setObjectName(QString("accountstart %1").arg(number+1));//Nombre para el objeto Comienzo de la Cuenta
     layoutAccountConf->addWidget(spinBoxAccountStart);
 
     labelAccountEnd = new QLabel(this);
@@ -30,6 +32,7 @@ AccountWidget::AccountWidget(QWidget *parent) :
 
     spinBoxAccountEnd = new QSpinBox(this);
     spinBoxAccountEnd->setFixedWidth(100);
+    spinBoxAccountEnd->setObjectName(QString("accountend %1").arg(number+1));//Nombre para el objeto Final de la Cuenta
     layoutAccountConf->addWidget(spinBoxAccountEnd);
 
 }

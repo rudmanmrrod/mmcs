@@ -1,4 +1,5 @@
 #include "formloadmatrix.H"
+#include "ui_formLoadMatrix.h"
 
 void FormLoadMatrix::closeEvent(QCloseEvent *)
 {
@@ -15,13 +16,13 @@ FormLoadMatrix::FormLoadMatrix(QWidget * parent)
     this->move(x, y);
 
     ui.editYear->setValidator(new QIntValidator);
-
     connect(ui.buttonSearch, SIGNAL(clicked()),this,SLOT(slotLoadMatrixFile()));
     connect(ui.buttonCancel, SIGNAL(clicked()),this,SLOT(close()));
     connect(ui.buttonOpen, SIGNAL(clicked()), this,
             SLOT(slotButtonAcceptClicked()));
 
 }
+
 void FormLoadMatrix::slotLoadMatrixFile() {
     QString filename = QFileDialog::getOpenFileName(this,
             "Seleccione archivo de Matriz", QDir::homePath(),"*.csv");
