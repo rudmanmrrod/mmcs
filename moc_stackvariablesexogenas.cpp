@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'stackvariablesexogenas.h'
 **
-** Created: Tue Jul 7 17:00:53 2015
+** Created: Mon Jul 27 17:35:15 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.2)
 **
 ** WARNING! All changes made in this file will be lost!

@@ -1,8 +1,12 @@
 #include "mainwindow.H"
 #include "accountwidget.H"
 #include "stackvariablesexogenas.h"
+#include "formexportmatrix.h"
 #include <QDebug>
+
+#define ARMA_DONT_PRINT_ERRORS
 #include <armadillo>
+
 
 using namespace arma;
 
@@ -13,16 +17,96 @@ void MainWindow::slotLoadMatrix()
     connect(formLoadMatrix, SIGNAL(formAccepted(QString,int,char)),
             this, SLOT(slotFormLoadMatrixAccepted(QString,int,char)));
 }
+
 void MainWindow::slotExportMatrix()
 {
-    QMessageBox::warning(this,"Warning", "Opcion en desarrollo",
-                         QMessageBox::Ok);
+
+    if(opcionExportarMatriz == 0)
+    {
+        formExportMatriz = new FormExportMatrix(this);
+        QHBoxLayout * layoutLateralWidget = new QHBoxLayout;
+        QVBoxLayout * layoutCentralWidget = new QVBoxLayout;
+
+        QLabel *label = new QLabel;
+        label->setText("Seleccione una de las matrices");
+        label->setStyleSheet("font-size:14;font-weight:bold;");
+        layoutLateralWidget->addWidget(label);
+
+        formExportMatriz->Exportcb = new QComboBox;
+        formExportMatriz->Exportcb->setFixedWidth(150);
+        QVBoxLayout *cbLayout = new QVBoxLayout;
+        cbLayout->addWidget(formExportMatriz->Exportcb);
+        QWidget *cbWidget = new QWidget;
+        cbWidget->setLayout(cbLayout);
+
+        QStringList list;
+        list << "valor1" << "valor2" << "valor3";
+        formExportMatriz->Exportcb->addItems(list);
+
+        layoutLateralWidget->addWidget(cbWidget);
+
+        QLabel *label2 = new QLabel;
+        label2->setText("Archivo");
+        formExportMatriz->ExportLine = new QLineEdit;
+        //line->setObjectName("lineaCarga");
+        formExportMatriz->ExportLine->setReadOnly(true);
+        formExportMatriz->ExportLine->setFixedWidth(450);
+
+        QPushButton * buttonExplorar = new QPushButton;
+        buttonExplorar->setObjectName("Exportar-Explorar");
+        buttonExplorar->setFlat(true);
+        buttonExplorar->setIcon(QIcon("./img/folder_blue.png"));
+
+        QHBoxLayout *layoutMiddle = new QHBoxLayout;
+        layoutMiddle->addWidget(label2);
+        layoutMiddle->addWidget(formExportMatriz->ExportLine);
+        layoutMiddle->addWidget(buttonExplorar);
+        QWidget *middle = new QWidget;
+        middle->setLayout(layoutMiddle);
+
+
+        /***        Se crean y personalizan los bottones para agregar, finalizar, deshacer y cancelar    ***/
+        QPushButton * buttonExportar = new QPushButton;
+        buttonExportar->setObjectName("ExportarMatriz");//Se le asigna nombre al objeto
+        buttonExportar->setText("Exportar");
+        buttonExportar->setFixedWidth(130);
+
+        QPushButton * buttonCancelar = new QPushButton;
+        buttonCancelar->setObjectName("CancelarMatriz");//Se le asigna nombre al objeto
+        buttonCancelar->setText("Cancelar");
+        buttonCancelar->setFixedWidth(130);
+
+        connect(buttonCancelar,SIGNAL(clicked()),this,SLOT(slotCloseExport()));
+        connect(buttonExportar,SIGNAL(clicked()),this,SLOT(slotSaveExport()));
+        connect(buttonExplorar,SIGNAL(clicked()),this,SLOT(slotSearchExport()));
+
+        QHBoxLayout * layoutsButtons = new QHBoxLayout;
+        layoutsButtons->addWidget(buttonExportar);
+        layoutsButtons->addWidget(buttonCancelar);
+        QWidget *buttonWidget = new QWidget;
+        buttonWidget->setLayout(layoutsButtons);
+
+        QWidget *widget = new QWidget;
+        widget->setLayout(layoutLateralWidget);
+        layoutCentralWidget->addWidget(widget);
+        layoutCentralWidget->addWidget(middle);
+        layoutCentralWidget->addWidget(buttonWidget);
+        formExportMatriz->setLayout(layoutCentralWidget);
+        formExportMatriz->show();
+        opcionExportarMatriz = 1;
+
+    }
+    else
+    {
+        formExportMatriz->show();
+    }
+
 }
 void MainWindow::closeEvent(QCloseEvent * event)
 {
-    if(QMessageBox::question(this, "Warning", "Are you sure?",
-                             QMessageBox::Yes | QMessageBox::No) ==
-       QMessageBox::No)
+    QMessageBox msBox(QMessageBox::Question,"Alerta","¿Desea Salir?", QMessageBox::Yes | QMessageBox::No,this);
+    msBox.setButtonText(QMessageBox::Yes,"Si");
+    if(msBox.exec()==QMessageBox::No)
     {
         event->ignore();
     }
@@ -134,6 +218,13 @@ MainWindow::MainWindow()
       actionVariableExogena(this),actionAn(this),actionLa(this),actionEncadenamiento(this), formLoadMatrix(0)
 {
     tabWidget = new QTabWidget;
+
+    /*    Opcion de la cuenta exogena, 0 para decir que nos se selecciono ninguna, 1 que se seleccionaron algunas
+                                    y 2 para decir que se seleccionaron todas*/
+    opcionCuentaExogena = 0;
+    opcionVentanaExogena = 0;
+    opcionExportarMatriz = 0;
+
     initGUI();
 
     connect(&actionLoadMatrix, SIGNAL(triggered()), this,
@@ -284,7 +375,7 @@ void MainWindow::slotCoeficienteHorizontal()
     noEditColZero(CT_HorizontalTW);
     /*****      Se llena la tabla vacia con los valores de la tabla principal ****/
 
-    CalcularAn(tw,CT_HorizontalTW,count,false);//Funcion para calcular el Coeficiente Tecnico Horizontal (An)
+    CalcularAn(tw,CT_HorizontalTW,new QTableWidget,count,false);//Funcion para calcular el Coeficiente Tecnico Horizontal (An)
 
     /*      Se agrega la columna y fila (0,0) y se insertan los titulos de las cuentas      */
     insertremoveRowCol(tw,0,true);
@@ -317,12 +408,14 @@ void MainWindow::slotCoeficienteVertical()
     /*****      Se llena la tabla vacia con los valores de la tabla principal ****/
     for(int i=0;i<count-1;i++)
     {
-        double total=tw->item(count-1,i)->text().toDouble();//Se obtiene el total de esa columna
+        QString STotal = Separador(tw->item(i,count-1),true);
+        double total=STotal.toDouble();//Se obtiene el total de esa columna
         for(int j=0;j<count-1;j++)
         {
             if(i!=0 && j!=0)
             {
-                double valor=tw->item(j,i)->text().toDouble();
+                QString value = Separador(tw->item(i,j),true);
+                double valor=value.toDouble();
                 if(total==0)//Se comprueba en caso de que el total sea zero
                 {
                     valor=0;
@@ -331,9 +424,11 @@ void MainWindow::slotCoeficienteVertical()
                 {
                     valor/=total;//Se divide el valor de la celda entre el total correspondiente
                 }
-                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',4));
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',2));
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
-                CT_VerticalTW->setItem(j,i,ValoraInsertar);
+                value = Separador(ValoraInsertar,false);
+                ValoraInsertar->setText(value);
+                CT_VerticalTW->setItem(i,j,ValoraInsertar);
             }
             /****           En este else se llenan las celdas con fila y columna 0, es decir las que tienen nombre *****/
             else if((i==0 && j>0)||(j==0 && i>0))
@@ -366,11 +461,11 @@ void MainWindow::slotCloseExogena()
 
 void MainWindow::slotDeshacerExogena()
 {
-    QMessageBox::StandardButton respuesta;
-    respuesta=QMessageBox::question(this,"Deshacer","¿Desea deshacer todos los cambios?",
-                                    QMessageBox::Yes|QMessageBox::Default, QMessageBox::No);
-
-    if(respuesta==QMessageBox::Yes)
+    QMessageBox msBox(QMessageBox::Question,"Deshacer","¿Desea deshacer todos los cambios?",
+                      QMessageBox::Yes | QMessageBox::No,this);
+    msBox.setButtonText(QMessageBox::Yes,"Si");
+    msBox.setDefaultButton(QMessageBox::Yes);
+    if(msBox.exec()==QMessageBox::Yes)
     {
         int cantidad=stackVE->comboAccount->count();
         /*   Se habilitan todas cuentas   */
@@ -456,8 +551,11 @@ void MainWindow::slotFinalizarExogena()
             {
                 if(i!=0 && j!=0)
                 {
-                    double valor=tablaPPAL->item(i,j)->text().toDouble();
-                    QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',4));
+                    QString value = Separador(tablaPPAL->item(i,j),true);
+                    double valor=value.toDouble();
+                    QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',2));
+                    value = Separador(ValoraInsertar,false);
+                    ValoraInsertar->setText(value);
                     ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
                     tablaEE->setItem(i,j,ValoraInsertar);
                 }
@@ -554,8 +652,11 @@ void MainWindow::slotFinalizarExogena()
             {
                 if(i!=0 && j!=0)
                 {
-                    double valor=tablaPPAL->item(i,j)->text().toDouble();
-                    QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',4));
+                    QString value = Separador(tablaPPAL->item(i,j),true);
+                    double valor=value.toDouble();
+                    QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',2));
+                    value = Separador(ValoraInsertar,false);
+                    ValoraInsertar->setText(value);
                     ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
                     tablaEE->setItem(i,j,ValoraInsertar);
                 }
@@ -613,20 +714,36 @@ void MainWindow::slotFinalizarExogena()
     insertremoveRowCol(tablaPPAL,0,true);
     setAccountTitle(tablaPPAL);
 }
+
 /***        Slot para calcular el coeficiente tecnico horizontal de la matriz endogena/exogena      ***/
 void MainWindow::slotAn()
 {
     actionAn.setDisabled(true);
     tabWidget->addTab(new QWidget,"An");
     QTableWidget *tw = findChild<QTableWidget *>("MatrizEndogenaEndogena");
+    QTableWidget *to = findChild<QTableWidget *>("TablaExogenaEndogena");
     QTableWidget *tablaAn = new QTableWidget;
+    tablaAn->setObjectName("MatrizAn");
     int count=tw->rowCount();
     CrearTablaVacia(count,tablaAn);//Se crea una tabla vacia
     /* ****     Se coloca como no editable la celda(0,0)    ***** */
     noEditColZero(tablaAn);
     /*****      Se llena la tabla vacia con los valores de la tabla principal ****/
 
-    CalcularAn(tw,tablaAn,count,false);//Funcion para calcular el Coeficiente Tecnico Horizontal (An)
+    insertremoveRowCol(to,0, false);
+    CalcularAn(tw,tablaAn,to,count,true);//Funcion para calcular el Coeficiente Tecnico Horizontal (An)
+    /***            Procedimiento para obtener la matriz con los totales originales para luegos ser usados en An ***/
+    int elementos = contarElementosMap();
+    count=to->rowCount()-1;
+    if(opcionCuentaExogena==1)
+    {
+        int inicioExogena=count-elementos;
+        setEndogenaExogenaCell(to,inicioExogena+1,elementos,true);
+    }
+    else
+    {
+        setEndogenaExogenaCell(to,count,0,false);
+    }
 
     int indice=ObtenerIndice("An");//Se obtiene el indice de la pestaña
     QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
@@ -641,7 +758,7 @@ void MainWindow::slotAn()
 
 void MainWindow::slotLa()
 {
-    QTableWidget *tw = findChild<QTableWidget *>("MatrizEndogenaEndogena");
+    QTableWidget *tw = findChild<QTableWidget *>("MatrizAn");
     double matrizIdentidad[200][200];
     double matrizResta[200][200];
     crearMatrizIdentidad(tw,matrizIdentidad);
@@ -778,6 +895,8 @@ void MainWindow::createMatrixCentralWidget()
 
     actionLoadMatrix.setDisabled(true);
 
+    actionExportMatrix.setEnabled(true);
+
     /****          Se conectan las acciones para coeficientes tecnicos horizontales y verticales      ****/
     connect(&actionCH, SIGNAL(triggered()), this,SLOT(slotCoeficienteHorizontal()));
     connect(&actionCV, SIGNAL(triggered()), this,SLOT(slotCoeficienteVertical()));
@@ -787,11 +906,11 @@ void MainWindow::createMatrixCentralWidget()
 
 void MainWindow::AgregarCuenta()
 {
-    QMessageBox::StandardButton respuesta;
-    respuesta=QMessageBox::question(this,"Agregar cuenta","¿Está seguro que agregar la cuenta?",
-                                    QMessageBox::Yes|QMessageBox::Default, QMessageBox::No);
-
-    if(respuesta==QMessageBox::Yes)
+    QMessageBox msBox(QMessageBox::Question,"Agregar cuenta","¿Está seguro que agregar la cuenta?",
+                      QMessageBox::Yes | QMessageBox::No,this);
+    msBox.setButtonText(QMessageBox::Yes,"Si");
+    msBox.setDefaultButton(QMessageBox::Yes);
+    if(msBox.exec()==QMessageBox::Yes)
     {
         QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");//Se busca la tabla que se creo
         StackWidget *sw = findChild<StackWidget *>();//Se buscan las cuentas creadas
@@ -879,10 +998,11 @@ void MainWindow::AgregarCuenta()
 
 void MainWindow::FinalizarCuentas()
 {
-    QMessageBox::StandardButton respuesta;
-    respuesta=QMessageBox::question(this,"Finalizar Carga","¿Está seguro que desea finalizar?",
-                                    QMessageBox::Yes|QMessageBox::Default, QMessageBox::No);
-    if(respuesta==QMessageBox::Yes)
+    QMessageBox msBox(QMessageBox::Question,"Finalizar Carga","¿Está seguro que desea finalizar?",
+                      QMessageBox::Yes | QMessageBox::No,this);
+    msBox.setButtonText(QMessageBox::Yes,"Si");
+    msBox.setDefaultButton(QMessageBox::Yes);
+    if(msBox.exec()==QMessageBox::Yes)
     {
         bool Centinela=ComprobarCuentas();//Se llama a la funcion que comprueba si todos los campos de las cuentas estan llenos
         if(Centinela)
@@ -954,16 +1074,22 @@ void MainWindow::CalcularTotales(QTableWidget *tableWidget,int inicio)//Se calcu
         double SumaColumna=0;
         for(int j=inicio;j<filas;j++)
         {
-            double thisFila=tableWidget->item(j,i)->text().toDouble();
-            double thisColumna=tableWidget->item(i,j)->text().toDouble();
+            QString fila=Separador(tableWidget->item(j,i),true);
+            double thisFila=fila.toDouble();
+            QString columna=Separador(tableWidget->item(i,j),true);
+            double thisColumna=columna.toDouble();
             SumaFila+=thisFila;
             SumaColumna+=thisColumna;
         }
         QTableWidgetItem *Valor1 = new QTableWidgetItem;
-        Valor1->setText(QString::number(SumaFila));
+        Valor1->setText(QString::number(SumaFila,'f',2));
+        QString value1 = Separador(Valor1,false);
+        Valor1->setText(value1);
         Valor1->setFlags(Valor1->flags() ^ Qt::ItemIsEditable);
         QTableWidgetItem *Valor2 = new QTableWidgetItem;
-        Valor2->setText(QString::number(SumaColumna));
+        Valor2->setText(QString::number(SumaColumna,'f',2));
+        QString value2 = Separador(Valor2,false);
+        Valor2->setText(value2);
         Valor2->setFlags(Valor2->flags() ^ Qt::ItemIsEditable);
         tableWidget->setItem(filas,i,Valor1);//Inserta en Filas
         tableWidget->setItem(i,filas,Valor2);//Inserta en Columnas
@@ -973,10 +1099,11 @@ void MainWindow::CalcularTotales(QTableWidget *tableWidget,int inicio)//Se calcu
 
 void MainWindow::RestaurarCeldas()//Slot que permite restaurar el titulo de las cuentas en las celdas
 {
-    QMessageBox::StandardButton respuesta;
-    respuesta=QMessageBox::question(this,"Restaurar Celdas","¿Desea Restaurar el titulo de todas las celdas?",
-                                    QMessageBox::Yes|QMessageBox::Default, QMessageBox::No);
-    if(respuesta==QMessageBox::Yes)
+    QMessageBox msBox(QMessageBox::Question,"Restaurar Celdas","¿Desea Restaurar el titulo de todas las celdas?",
+                      QMessageBox::Yes | QMessageBox::No,this);
+    msBox.setButtonText(QMessageBox::Yes,"Si");
+    msBox.setDefaultButton(QMessageBox::Yes);
+    if(msBox.exec()==QMessageBox::Yes)
     {
         QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
         insertremoveRowCol(tw,0,false);
@@ -986,10 +1113,11 @@ void MainWindow::RestaurarCeldas()//Slot que permite restaurar el titulo de las 
 
 void MainWindow::ModificarCuenta()//Slot que permite habilitar la edicion de una cuenta una vez agregada
 {
-    QMessageBox::StandardButton respuesta;
-    respuesta=QMessageBox::question(this,"Modificar Cuenta","¿Desea Modificar la Cuenta Actual?",
-                                    QMessageBox::Yes|QMessageBox::Default, QMessageBox::No);
-    if(respuesta==QMessageBox::Yes)
+    QMessageBox msBox(QMessageBox::Question,"Modificar Cuenta","¿Desea Modificar la Cuenta Actual?",
+                      QMessageBox::Yes | QMessageBox::No,this);
+    msBox.setButtonText(QMessageBox::Yes,"Si");
+    msBox.setDefaultButton(QMessageBox::Yes);
+    if(msBox.exec()==QMessageBox::Yes)
     {
         StackWidget *sw = findChild<StackWidget *>();//Se buscan las cuentas creadas
         int index=sw->comboAccount->currentIndex();
@@ -1014,8 +1142,9 @@ void MainWindow::populateTable(QTableWidget * tableWidget) {
     {
         int row = 0;
         QString lineHead = file.readLine();
-        std::vector<std::string> rowVH =
+        const std::vector<std::string> rowVH =
                 csv_read_row(lineHead.toStdString(), csvSeparator);
+
 
         matrixSize = rowVH.size();
         tableWidget->setRowCount(matrixSize+1);
@@ -1046,13 +1175,19 @@ void MainWindow::populateTable(QTableWidget * tableWidget) {
                 tableWidget->setItem(row, column, newItem);
 
             }*/
+
             std::vector<std::string> rowV =
                     csv_read_row(line.toStdString(), csvSeparator);
-
             for(int column=0, leng=rowV.size();
             column < leng and column<matrixSize; column++) {
 
-                double value = (double)atof(rowV[column].c_str());
+                //double value = (double)atof(rowV[column].c_str());
+
+                /*              Aqui se incorporan los valores luego de la coma(,)          */
+                QString rowVal = QString::fromUtf8(rowV[column].c_str());
+                double value = rowVal.toDouble();
+
+
 
                 QTableWidgetItem *newItem = new QTableWidgetItem(
                         numberFormat(value).
@@ -1120,6 +1255,13 @@ std::vector<std::string> MainWindow::csv_read_row(std::istream &in,
 QString MainWindow::numberFormat(double & d) {
 
     int precision = 2;
+    bool controlador = false;
+    if(d<0)
+    {
+        controlador = true;
+        d *=-1;
+    }
+
 
     QString stringNumber = QString::number(d, 'f', precision);
     for(int point = 0, i = (stringNumber.lastIndexOf('.') == -1 ? stringNumber.length() : stringNumber.lastIndexOf('.')); i > 0; --i, ++point)
@@ -1128,6 +1270,12 @@ QString MainWindow::numberFormat(double & d) {
         {
             stringNumber.insert(i, '*');
         }
+    }
+    if(controlador)
+    {
+        double var = stringNumber.toDouble();
+        var *=-1;
+        stringNumber = QString::number(var, 'f', precision);
     }
     stringNumber.replace(".", ",");
     stringNumber.replace("*", ".");
@@ -1227,6 +1375,7 @@ int MainWindow::retornarIndiceCuenta(QString nombre_cuenta)
             return i;
        }
     }
+    return 0;
 }
 
 /***        Funcion que permite llenar una lista con los elementos en un intervalo dado(fila o columna)         ***/
@@ -1280,11 +1429,19 @@ void MainWindow::setEndogenaExogenaCell(QTableWidget *tw,int inicioExogena,int e
     CuentaEndogenafila->setTextAlignment(Qt::AlignCenter);
     tw->setItem(0,1,CuentaEndogenafila);
     tw->setSpan(0,1,1,inicioExogena-1);
-    QTableWidgetItem *CuentaEndogenaColumna = new QTableWidgetItem("C\nu\ne\nn\nt\na\ns\n\nE\nn\nd\no\ng\ne\nn\na\ns");
+    QTableWidgetItem *CuentaEndogenaColumna = new QTableWidgetItem;
+    if(elementos<12)
+    {
+        CuentaEndogenaColumna->setText("Cuentas \nExogenas");
+    }
+    else
+    {
+        CuentaEndogenaColumna->setText("C\nu\ne\nn\nt\na\ns\n\nE\nn\nd\no\ng\ne\nn\na\ns");
+    }
     CuentaEndogenaColumna->setFlags(CuentaEndogenaColumna->flags() ^ Qt::ItemIsEditable);
     tw->setItem(1,0,CuentaEndogenaColumna);
     tw->setSpan(1,0,inicioExogena-1,1);
-    if(condicion)
+    if(condicion)//Si tiene cuentas exogenas
     {
         /*      Titulos para las Cuentas exogenas   */
         QTableWidgetItem *CuentaExogenafila = new QTableWidgetItem("Cuentas Exogenas");
@@ -1313,23 +1470,31 @@ void MainWindow::setEndogenaExogenaCell(QTableWidget *tw,int inicioExogena,int e
     }
 }
 
-void MainWindow::CalcularAn(QTableWidget *tw,QTableWidget *nuevaTabla,int count,bool exogena)//Funcion para calcular el Coeficiente Tecnico Horizontal (An)
+void MainWindow::CalcularAn(QTableWidget *tw,QTableWidget *nuevaTabla,QTableWidget *tablaOriginal,int count,bool endogena)//Funcion para calcular el Coeficiente Tecnico Horizontal (An)
 {
-    if(exogena)
-    {
-        tw->removeRow(0);
-        tw->removeColumn(0);
-        count=tw->rowCount();
-    }
-    /*****      Se llena la tabla vacia con los valores de la tabla principal ****/
     for(int i=0;i<count-1;i++)
     {
-        double total=tw->item(i,count-1)->text().toDouble();//Se obtiene el total de esa columna
+        double total;
+        if(endogena)
+        {
+            QString value = Separador(tablaOriginal->item(count,i),true);
+            value = QString::number(value.toDouble(),'f',2);
+            total=value.toDouble();
+        }
+        else
+        {
+            QString value = Separador(tw->item(count-1,i),true);
+            value = QString::number(value.toDouble(),'f',2);
+            total=value.toDouble();
+        }
         for(int j=0;j<count-1;j++)
         {
             if(i!=0 && j!=0)
             {
-                double valor=tw->item(i,j)->text().toDouble();
+                QString values = Separador(tw->item(j,i),true);
+                values = QString::number(values.toDouble(),'f',2);
+                double valor=values.toDouble();
+
                 if(total==0)//Se comprueba en caso de que el total sea zero
                 {
                     valor=0;
@@ -1337,10 +1502,13 @@ void MainWindow::CalcularAn(QTableWidget *tw,QTableWidget *nuevaTabla,int count,
                 else
                 {
                     valor/=total;//Se divide el valor de la celda entre el total correspondiente
+
                 }
-                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',4));
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',2));
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
-                nuevaTabla->setItem(i,j,ValoraInsertar);
+                QString value = Separador(ValoraInsertar,false);
+                ValoraInsertar->setText(value);
+                nuevaTabla->setItem(j,i,ValoraInsertar);
             }
             /****           En este else se llenan las celdas con fila y columna 0, es decir las que tienen nombre *****/
             else if((i==0 && j>0)||(j==0 && i>0))
@@ -1353,21 +1521,6 @@ void MainWindow::CalcularAn(QTableWidget *tw,QTableWidget *nuevaTabla,int count,
        }
 
     }
-    if(exogena)
-    {
-        if(opcionCuentaExogena==1)
-        {
-            int elementos = contarElementosMap();
-            int inicioExogena=count-elementos;
-            //setEndogenaExogenaCell(nuevaTabla,inicioExogena,elementos,count-1,true);
-            setEndogenaExogenaCell(tw,inicioExogena,elementos,true);
-        }
-        else
-        {
-           //setEndogenaExogenaCell(nuevaTabla,count,0,count,false);
-           setEndogenaExogenaCell(tw,count,0,false);
-        }
-    }
 }
 
 void MainWindow::clonarTabla(QTableWidget *tw,QTableWidget *nuevaTabla,int cantidad)
@@ -1378,8 +1531,11 @@ void MainWindow::clonarTabla(QTableWidget *tw,QTableWidget *nuevaTabla,int canti
         {
             if(i!=0 && j!=0)
             {
-                double valor=tw->item(i,j)->text().toDouble();
-                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',4));
+                QString value = Separador(tw->item(i,j),true);
+                double valor= value.toDouble();
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',2));
+                value = Separador(ValoraInsertar,false);
+                ValoraInsertar->setText(value);
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
                 nuevaTabla->setItem(i,j,ValoraInsertar);
             }
@@ -1398,9 +1554,9 @@ void MainWindow::clonarTabla(QTableWidget *tw,QTableWidget *nuevaTabla,int canti
 void MainWindow::crearMatrizEndogena(QTableWidget *tw)
 {
     int cantidad=tw->rowCount();
-    for(int i=0;i<cantidad-1;i++)
+    for(int i=0;i<cantidad;i++)
     {
-        for(int j=0;j<cantidad-1;j++)
+        for(int j=0;j<cantidad;j++)
         {
             if(i!=0 && j!=0)
             {
@@ -1440,6 +1596,7 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw,double identidad[200][200],d
     {
         for(int j=0;j<cantidad-1;j++)
         {
+            //qDebug()<<MatrizEndogenaEndogena[i][j]<<" "<<identidad[i][j];
             resta[i][j] = identidad[i][j]-MatrizEndogenaEndogena[i][j];
             //qDebug()<<"A"<<resta[i][j];
             A.at(i,j) = resta[i][j];
@@ -1447,28 +1604,58 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw,double identidad[200][200],d
 
          }
     }
-   /* mat A;
+
+    mat inverse = inv(A);
+
+    QTableWidget *tablaLa = new QTableWidget;
+    tablaLa->setObjectName("MatrizLa");
+    CrearTablaVacia(cantidad,tablaLa);
+    for(int i=0;i<cantidad-1;i++)
+    {
+        for(int j=0;j<cantidad-1;j++)
+        {
+            double value = inverse.at(i,j);
+            qDebug()<<"double "<<value;
+            QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(value,'f',2));
+            ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
+            tablaLa->setItem(i,j,ValoraInsertar);
+
+         }
+    }
+    tabWidget->addTab(new QWidget,"La");
+    int indice=ObtenerIndice("La");//Se obtiene el indice de la pestaña
+    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+    layoutCentralWidget->addWidget(tablaLa);
+    QWidget *widget = tabWidget->widget(indice);
+    widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
+
+
+    /*mat A;
     A << 1 << 2.2222 << 3 << 4 << endr
      << 2 << 1 << 5 << 6 << endr
      << 3 << 5 << 1 << 7 <<endr
-     << 4 << 6 << 7 << 1<<endr;*/
+     << 4 << 6 << 7 << 1<<endr;
     //qDebug()<<"here"<<A.at(0,8);
     //qDebug()<<"resta"<<resta[0][8];
-    double determinant = det(A);
-    qDebug() << isnan(determinant);
-    /*
-    mat inverse = inv(A);
-    for(int i=0;i<4-1;i++)
+
+    double determinant = det(A);*/
+    //qDebug() << isnan(determinant);
+
+   /*mat inverse = inv(A);
+    for(int i=0;i<4;i++)
     {
-        for(int j=0;j<4-1;j++)
+        for(int j=0;j<4;j++)
         {
             qDebug()<<"inversa"<<inverse.at(i,j);
 
          }
     }*/
 
-    qDebug()<<"determinant"<<determinant;
-    if(determinant < -std::numeric_limits<qreal>::max())
+
+
+
+    //qDebug()<<"determinant"<<determinant;
+    /*if(determinant < -std::numeric_limits<qreal>::max())
     {
         qDebug()<<"-inf";
     }
@@ -1479,8 +1666,7 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw,double identidad[200][200],d
     else if(determinant != determinant)
     {
         qDebug()<< "nan";
-    }
-
+    }*/
 
 
 }
@@ -1521,6 +1707,7 @@ void MainWindow::setAccountTitle(QTableWidget *tw)
     }
 }
 
+/*                  Funcion para agregar/quitar columnas y filas                    */
 void MainWindow::insertremoveRowCol(QTableWidget *tw, int rowcol, bool opcion)
 {
     if(opcion)//Si la opcion es verdadero se agrega
@@ -1533,4 +1720,65 @@ void MainWindow::insertremoveRowCol(QTableWidget *tw, int rowcol, bool opcion)
         tw->removeColumn(rowcol);
         tw->removeRow(rowcol);
     }
+}
+
+/*                      Funcion para agregar/quitar el separador de miles y la coma en las tablas           */
+QString MainWindow::Separador(QTableWidgetItem *ti,bool quitar)
+{
+    QString value=ti->text();
+    if(quitar)
+    {
+        value.remove(QChar('.'));
+        value.replace(",",".");
+    }
+    else
+    {
+        double val =value.toDouble();
+        value = numberFormat(val);
+    }
+    return value;
+}
+
+void MainWindow::slotCloseExport()
+{
+    formExportMatriz->ExportLine->setText("");
+    formExportMatriz->close();
+}
+
+void MainWindow::slotSaveExport()
+{
+
+    if(formExportMatriz->ExportLine->text().isEmpty())
+    {
+        QMessageBox::critical(this,"Nombre del Archivo","Debe Colocar un nombre");
+    }
+    else
+    {
+        QString filename = formExportMatriz->ExportLine->text();
+        QFile archivo(filename);
+        archivo.open(QFile::WriteOnly | QFile::Text);
+        QTextStream out(&archivo);
+        out << "hola " << "que hace" << "? \n";
+        out << "otra linea de prueba";
+        archivo.flush();
+        archivo.close();
+        formExportMatriz->ExportLine->setText("");
+        formExportMatriz->close();
+    }
+}
+
+void MainWindow::slotSearchExport()
+{
+    QString format = ".txt";
+
+    QString filename = QFileDialog::getSaveFileName(this,
+            "Elija el nombre", QDir::homePath(),"*.txt");
+
+    filename +=format;
+
+    formExportMatriz->Exportcb->addItem(filename);
+
+    formExportMatriz->ExportLine->setText(filename);
+    qDebug()<< formExportMatriz->ExportLine->text();
+
 }
