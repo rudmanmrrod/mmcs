@@ -10,6 +10,7 @@
 #include <QTabWidget>
 #include <stackvariablesexogenas.h>
 #include <QMap>
+#include <formexportmatrix.h>
 
 class MainWindow : public QMainWindow
 {
@@ -46,14 +47,16 @@ class MainWindow : public QMainWindow
     int numAccounts;
     int matrixSize;
     double  matrix[100][100];
-    /*    Opcion de la cuenta exogena, 0 para decir que nos se selecciono ninguna, 1 que se seleccionaron algunas
-                                    y 2 para decir que se seleccionaron todas*/
-    int opcionCuentaExogena=0;
-    int opcionVentanaExogena=0;
+
+    int opcionCuentaExogena;
+    int opcionVentanaExogena;
+    int opcionExportarMatriz;
 
     FormLoadMatrix * formLoadMatrix;
     FormViewMatrix * formViewMatrix;
     FormVariablesExogenas * formVariablesExogenas;
+    FormExportMatrix * formExportMatriz;
+
 
     void initGUI();
 
@@ -76,7 +79,8 @@ class MainWindow : public QMainWindow
     QList<QString> llenarLista(QList<QString>, QTableWidget *, int valor, int opcion);
     void insertRowExogena(QList<QString>, QTableWidget *, int opcion);
     void setEndogenaExogenaCell(QTableWidget *, int inicioExogena, int elementos,bool condicion);
-    void CalcularAn(QTableWidget *, QTableWidget *, int count, bool exogena);
+    void CalcularAn(QTableWidget *, QTableWidget *, QTableWidget *, int count, bool endogena);
+    QString Separador(QTableWidgetItem *,bool quitar);
 
     void crearMatrizEndogena(QTableWidget *);
     void crearMatrizIdentidad(QTableWidget *,double identidad[200][200]);
@@ -113,6 +117,10 @@ private slots:
     void slotDeshacerExogena();
     void slotAn();
     void slotLa();
+
+    void slotCloseExport();
+    void slotSaveExport();
+    void slotSearchExport();
 
 public:
     MainWindow();

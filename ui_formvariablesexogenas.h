@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'formvariablesexogenas.ui'
 **
-** Created: Fri Jul 3 17:13:17 2015
+** Created: Thu Aug 6 16:13:25 2015
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -28,7 +28,7 @@ public:
         if (FormVariablesExogenas->objectName().isEmpty())
             FormVariablesExogenas->setObjectName(QString::fromUtf8("FormVariablesExogenas"));
         FormVariablesExogenas->setWindowModality(Qt::ApplicationModal);
-        FormVariablesExogenas->resize(766, 378);
+        FormVariablesExogenas->resize(697, 345);
 
         retranslateUi(FormVariablesExogenas);
 

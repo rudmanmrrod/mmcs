@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'accountwidget.H'
 **
-** Created: Thu Jun 25 16:54:37 2015
+** Created: Mon Jul 27 17:35:13 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.2)
 **
 ** WARNING! All changes made in this file will be lost!
