@@ -30,7 +30,6 @@ class MainWindow : public QMainWindow
     QAction actionCH;
     QAction actionCV;
     QAction actionVariableExogena;
-    QAction actionAn;
     QAction actionLa;
     QAction actionEncadenamiento;    
 
@@ -51,6 +50,7 @@ class MainWindow : public QMainWindow
     int opcionCuentaExogena;
     int opcionVentanaExogena;
     int opcionExportarMatriz;
+    int opcionCTEndogena;
 
     FormLoadMatrix * formLoadMatrix;
     FormViewMatrix * formViewMatrix;
@@ -81,6 +81,9 @@ class MainWindow : public QMainWindow
     void setEndogenaExogenaCell(QTableWidget *, int inicioExogena, int elementos,bool condicion);
     void CalcularAn(QTableWidget *, QTableWidget *, QTableWidget *, int count, bool endogena);
     QString Separador(QTableWidgetItem *,bool quitar);
+    void ItemsNoEditable(QTableWidget *, int inicio, int fin);
+    void CellStyle(QTableWidgetItem *);
+    void EndogenaAn();
 
     void crearMatrizEndogena(QTableWidget *);
     void crearMatrizIdentidad(QTableWidget *,double identidad[200][200]);
@@ -115,7 +118,6 @@ private slots:
     void slotAgregarExogena();
     void slotFinalizarExogena();
     void slotDeshacerExogena();
-    void slotAn();
     void slotLa();
 
     void slotCloseExport();
