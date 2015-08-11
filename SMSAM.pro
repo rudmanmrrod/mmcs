@@ -27,3 +27,5 @@ INCLUDEPATH += $$PWD/armadillo_bits
 
 LIBS += -L -larmadillo \
         -llapack
+
+CONFIG += warn_off
