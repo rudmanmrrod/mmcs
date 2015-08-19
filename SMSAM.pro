@@ -6,7 +6,10 @@ HEADERS += mainwindow.H \
     formvariablesexogenas.h \
     stackvariablesexogenas.h \
     variableexogenawidget.h \
-    formexportmatrix.h
+    formexportmatrix.h \
+    formencadenamientos.h \
+    stackencadenamientos.h \
+    encadenamientoswidget.h
 
 SOURCES += mainwindow.C \
     main.C \
@@ -17,15 +20,17 @@ SOURCES += mainwindow.C \
     formvariablesexogenas.cpp \
     stackvariablesexogenas.cpp \
     variableexogenawidget.cpp \
-    formexportmatrix.cpp
+    formexportmatrix.cpp \
+    formencadenamientos.cpp \
+    stackencadenamientos.cpp \
+    encadenamientoswidget.cpp
 FORMS += formLoadMatrix.ui \
     formMatrixView.ui \
     formvariablesexogenas.ui \
-    formexportmatrix.ui
+    formexportmatrix.ui \
+    formencadenamientos.ui
 
-INCLUDEPATH += $$PWD/armadillo_bits
+INCLUDEPATH += $$PWD/Eigen
 
-LIBS += -L -larmadillo \
-        -llapack
 
 CONFIG += warn_off

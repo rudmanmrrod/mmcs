@@ -1,6 +1,4 @@
 #include "stackvariablesexogenas.h"
-#include <QDebug>
-
 
 stackVariablesExogenas::stackVariablesExogenas(QStringList Lista,QStringList Componentes,QList<int> inicio,
                                                QList<int> fin,QWidget *parent,int contar) :

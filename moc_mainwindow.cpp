@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.H'
 **
-** Created: Tue Aug 11 15:26:03 2015
+** Created: Wed Aug 19 10:53:40 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.2)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      19,   14, // methods
+      23,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -48,8 +48,12 @@ static const uint qt_meta_data_MainWindow[] = {
      333,   11,   11,   11, 0x08,
      355,   11,   11,   11, 0x08,
      364,   11,   11,   11, 0x08,
-     382,   11,   11,   11, 0x08,
-     399,   11,   11,   11, 0x08,
+     386,   11,   11,   11, 0x08,
+     412,   11,   11,   11, 0x08,
+     440,   11,   11,   11, 0x08,
+     464,   11,   11,   11, 0x08,
+     482,   11,   11,   11, 0x08,
+     499,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -65,8 +69,10 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "slotVariableExogena()\0slotCloseExogena()\0"
     "slotAgregarExogena()\0slotFinalizarExogena()\0"
     "slotDeshacerExogena()\0slotLa()\0"
-    "slotCloseExport()\0slotSaveExport()\0"
-    "slotSearchExport()\0"
+    "slotEncadenamientos()\0slotCloseEncadenamiento()\0"
+    "slotAgregarEncadenamiento()\0"
+    "slotVerEncadenamiento()\0slotCloseExport()\0"
+    "slotSaveExport()\0slotSearchExport()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -91,9 +97,13 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 13: _t->slotFinalizarExogena(); break;
         case 14: _t->slotDeshacerExogena(); break;
         case 15: _t->slotLa(); break;
-        case 16: _t->slotCloseExport(); break;
-        case 17: _t->slotSaveExport(); break;
-        case 18: _t->slotSearchExport(); break;
+        case 16: _t->slotEncadenamientos(); break;
+        case 17: _t->slotCloseEncadenamiento(); break;
+        case 18: _t->slotAgregarEncadenamiento(); break;
+        case 19: _t->slotVerEncadenamiento(); break;
+        case 20: _t->slotCloseExport(); break;
+        case 21: _t->slotSaveExport(); break;
+        case 22: _t->slotSearchExport(); break;
         default: ;
         }
     }
@@ -131,9 +141,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 19)
+        if (_id < 23)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 19;
+        _id -= 23;
     }
     return _id;
 }

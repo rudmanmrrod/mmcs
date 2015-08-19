@@ -2,15 +2,23 @@
 #define MAINWINDOW_H
 
 #include <QtGui>
+
 #include <formloadmatrix.H>
 #include <formviewmatrix.H>
 #include <formvariablesexogenas.h>
+#include <formexportmatrix.h>
+#include <formencadenamientos.h>
+
 #include <sstream>
 #include <stackwidget.H>
-#include <QTabWidget>
 #include <stackvariablesexogenas.h>
+#include <stackencadenamientos.h>
+
+#include <QTabWidget>
+
 #include <QMap>
-#include <formexportmatrix.h>
+#include <QVector>
+
 
 class MainWindow : public QMainWindow
 {
@@ -37,8 +45,13 @@ class MainWindow : public QMainWindow
     QTableWidget * tableWidget;
     QTabWidget * tabWidget;
     QMap<QString,QStringList> diccCuentasExogenas;
+    QMap<int,QVector<QString> > diccCuentasEndogenas;
+    QMap<int,QVector<QString> > espacioCuentasExogenas;
+    QMap<QString,QStringList> diccCuentasComponentes;
+    QMap<QString,QStringList> diccCuentasEncadenamientos;
 
     stackVariablesExogenas *stackVE;
+    stackEncadenamientos *stackEncadenamiento;
 
 
     QString csvFilePath;
@@ -47,15 +60,22 @@ class MainWindow : public QMainWindow
     int matrixSize;
     double  matrix[100][100];
 
+    double MatrizEndogenaEndogena[200][200];
+
     int opcionCuentaExogena;
     int opcionVentanaExogena;
     int opcionExportarMatriz;
     int opcionCTEndogena;
+    int opcionEncadenamientos;
+    int opcionCuentaEncadenamientos;
+
+    int cantidadEncadenamientos;
 
     FormLoadMatrix * formLoadMatrix;
     FormViewMatrix * formViewMatrix;
     FormVariablesExogenas * formVariablesExogenas;
     FormExportMatrix * formExportMatriz;
+    FormEncadenamientos * formEncadenamientos;
 
 
     void initGUI();
@@ -72,22 +92,31 @@ class MainWindow : public QMainWindow
     void noEditColZero(QTableWidget *);
     void setAccountTitle(QTableWidget *);
     void insertremoveRowCol(QTableWidget *, int rowcol, bool opcion);
-
-    double MatrizEndogenaEndogena[200][200];
-
+    void crearDiccionario(QTableWidget *, bool endogena=true);
+    QStringList obtenerCuentasEndogenas(QTableWidget *,QStringList);
+    QStringList obtenerCuentasExogenas(QTableWidget *,QStringList );
+    void spanEndogenaCell(QTableWidget *, int inicio, int celda, bool endex=true);
+    void spanExogenaCell(QTableWidget *,int celda);
 
     QList<QString> llenarLista(QList<QString>, QTableWidget *, int valor, int opcion);
     void insertRowExogena(QList<QString>, QTableWidget *, int opcion);
     void setEndogenaExogenaCell(QTableWidget *, int inicioExogena, int elementos,bool condicion);
     void CalcularAn(QTableWidget *, QTableWidget *, QTableWidget *, int count, bool endogena);
     QString Separador(QTableWidgetItem *,bool quitar);
-    void ItemsNoEditable(QTableWidget *, int inicio, int fin);
+    void ItemsNoEditable(QTableWidget *, int inicio, int fin, int col=0);
     void CellStyle(QTableWidgetItem *);
     void EndogenaAn();
 
+    void obtenerCuentaComponentes();
+    void crearTablaVaciaEncadenamiento(int contador, QTableWidget *);
+    void crearMatrizEncadenamiento(QTableWidget *, QTableWidget *);
+    void crearMatrizEncadenamientoEndogena(QTableWidget *, QTableWidget *);
+    void calcularTotalesEncadenamientos(QTableWidget *);
+    void encademientosStyle(QTableWidgetItem *);
+
     void crearMatrizEndogena(QTableWidget *);
-    void crearMatrizIdentidad(QTableWidget *,double identidad[200][200]);
-    void restarIdentidadAn(QTableWidget *tw,double identidad[200][200],double resta[200][200]);
+    void restarIdentidadAn(QTableWidget *);
+    void titleEndogena(QTableWidget *);
 
     bool ComprobarCuentas();
     int ObtenerIndice(QString );
@@ -120,6 +149,11 @@ private slots:
     void slotDeshacerExogena();
     void slotLa();
 
+    void slotEncadenamientos();
+    void slotCloseEncadenamiento();
+    void slotAgregarEncadenamiento();
+    void slotVerEncadenamiento();
+
     void slotCloseExport();
     void slotSaveExport();
     void slotSearchExport();
@@ -130,7 +164,7 @@ public:
     std::vector<std::string> csv_read_row(std::istream &, char);
     QString numberFormat(double &);
 
-    int contarElementosMap();
+    int contarElementosMap(QMap<QString, QStringList> diccionario);
     int retornarIndiceCuenta(QString nombre_cuenta);
 };
 
