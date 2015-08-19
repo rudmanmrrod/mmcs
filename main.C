@@ -2,7 +2,6 @@
 # include <mainwindow.H>
 # include <QTabWidget>
 
-
 int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
@@ -14,11 +13,9 @@ int main(int argc, char * argv[])
 
     QLocale::setDefault(QLocale(QLocale::Spanish, QLocale::Venezuela));
 
-
     MainWindow mw;
 
     mw.show();
-
 
     return app.exec();
 }

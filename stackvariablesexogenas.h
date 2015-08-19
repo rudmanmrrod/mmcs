@@ -8,7 +8,6 @@
 #include <QList>
 #include <QComboBox>
 #include <variableexogenawidget.h>
-#include <QTableWidget>
 
 class stackVariablesExogenas : public QWidget
 {
