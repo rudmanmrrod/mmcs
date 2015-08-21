@@ -953,6 +953,10 @@ void MainWindow::AgregarCuenta()
             {
                 QMessageBox::warning(this,"Alerta","Valores mayores al tamaño\n de la tabla");
             }
+            else if(inicio>fin)
+            {
+                QMessageBox::warning(this,"Alerta","El inicio es mayor\nque el fin");
+            }
             else
             {
                 /***  Se comprueba si la celda de la tabla esta ocupada por otra cuenta  ***/
@@ -962,11 +966,20 @@ void MainWindow::AgregarCuenta()
                     {
                         if(i!=index)
                         {
-                            QSpinBox *otherEnd = findChild<QSpinBox *>(QString("accountend %1").arg(i+1));
-                            int otroFin=otherEnd->text().toInt();
-                            if(inicio<otroFin)
+                            QSpinBox *oI = findChild<QSpinBox *>(QString("accountstart %1").arg(i+1));
+                            QSpinBox *oF = findChild<QSpinBox *>(QString("accountend %1").arg(i+1));
+                            int otroInicio = oI->text().toInt();
+                            int otroFin = oF->text().toInt();
+                            for(int k=inicio;k<=fin;k++)
                             {
-                                centinela=false;
+                                for(int j=otroInicio;j<=otroFin;j++)
+                                {
+                                    if(k==j)
+                                    {
+                                        centinela=false;
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
@@ -2326,7 +2339,7 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
                         QFont font;
                         font.setBold(true);
                         title->setFont(font);
-                        title->setText(QString("<b>Cuenta:</b> %1\n<b>Componente:</b> %2").arg(key,valor));
+                        title->setText(QString("Cuenta: %1\nComponente: %2").arg(key,valor));
                         title->setFlags(title->flags() ^ Qt::ItemIsEditable);
                         enTable->setItem(columna,0,title);
                         //Elementos del encadenamiento hacia atras
