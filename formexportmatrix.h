@@ -15,8 +15,8 @@ class FormExportMatrix : public QWidget
 
     
 public:
+    QLineEdit *MatrixName;
     QLineEdit *ExportLine;
-    QComboBox *Exportcb;
     explicit FormExportMatrix(QWidget *parent = 0);
     ~FormExportMatrix();
     

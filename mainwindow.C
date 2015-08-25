@@ -27,27 +27,26 @@ void MainWindow::slotExportMatrix()
         QVBoxLayout * layoutCentralWidget = new QVBoxLayout;
 
         QLabel *label = new QLabel;
-        label->setText("Seleccione una de las matrices");
+        label->setText("Exportará la siguiente matriz: ");
         label->setStyleSheet("font-size:14;font-weight:bold;");
         layoutLateralWidget->addWidget(label);
 
-        formExportMatriz->Exportcb = new QComboBox;
-        formExportMatriz->Exportcb->setFixedWidth(150);
+        int indice = tabWidget->currentIndex();
+        QString text = tabWidget->tabText(indice);
+        formExportMatriz->MatrixName = new QLineEdit;
+        formExportMatriz->MatrixName->setFixedWidth(150);
+        formExportMatriz->MatrixName->setText(text);
+        formExportMatriz->MatrixName->setReadOnly(true);
         QVBoxLayout *cbLayout = new QVBoxLayout;
-        cbLayout->addWidget(formExportMatriz->Exportcb);
+        cbLayout->addWidget(formExportMatriz->MatrixName);
         QWidget *cbWidget = new QWidget;
         cbWidget->setLayout(cbLayout);
-
-        QStringList list;
-        list << "valor1" << "valor2" << "valor3";
-        formExportMatriz->Exportcb->addItems(list);
 
         layoutLateralWidget->addWidget(cbWidget);
 
         QLabel *label2 = new QLabel;
         label2->setText("Archivo");
         formExportMatriz->ExportLine = new QLineEdit;
-        //line->setObjectName("lineaCarga");
         formExportMatriz->ExportLine->setReadOnly(true);
         formExportMatriz->ExportLine->setFixedWidth(450);
 
@@ -64,7 +63,7 @@ void MainWindow::slotExportMatrix()
         middle->setLayout(layoutMiddle);
 
 
-        /***        Se crean y personalizan los bottones para agregar, finalizar, deshacer y cancelar    ***/
+        /***        Se crean y personalizan los bottones para exportar y cancelar    ***/
         QPushButton * buttonExportar = new QPushButton;
         buttonExportar->setObjectName("ExportarMatriz");//Se le asigna nombre al objeto
         buttonExportar->setText("Exportar");
@@ -97,6 +96,9 @@ void MainWindow::slotExportMatrix()
     }
     else
     {
+        int indice = tabWidget->currentIndex();
+        QString text = tabWidget->tabText(indice);
+        formExportMatriz->MatrixName->setText(text);
         formExportMatriz->show();
     }
 
@@ -679,19 +681,8 @@ void MainWindow::slotFinalizarExogena()
              }
         }
 
-        QTableWidget *matrizEndogena = new QTableWidget;
-        matrizEndogena->setObjectName("MatrizEndogenaEndogena");
-        CrearTablaVacia(count,matrizEndogena);
-        QTableWidgetItem *ValoraInsertar = new QTableWidgetItem("");
-        ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
-        matrizEndogena->setItem(0,0,ValoraInsertar);
-
-
-        clonarTabla(tablaEE,matrizEndogena,count);
-        CalcularTotales(matrizEndogena,2);
-
-        setEndogenaExogenaCell(tablaEE,count,0,false);
-        CalcularTotales(tablaEE,3);
+        CalcularTotales(tablaEE,2);
+        setEndogenaExogenaCell(tablaEE,2,count-2,false);
 
         //Se agrega la nueva pestaña
         tabWidget->addTab(new QWidget,"Tipo de Variable");
@@ -702,20 +693,10 @@ void MainWindow::slotFinalizarExogena()
         widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
         formVariablesExogenas->close();
 
-        /*                  Se crea la pestaña endogena-endogena            */
-        tabWidget->addTab(new QWidget,"Endogena-Endogena");
-        int indiceEndogeno=ObtenerIndice("Endogena-Endogena");//Se obtiene el indice de la pestaña
-        QHBoxLayout * layoutEndogeno = new QHBoxLayout;
-        layoutEndogeno->addWidget(matrizEndogena);
-        QWidget *widgetEndogeno = tabWidget->widget(indiceEndogeno);
-        widgetEndogeno->setLayout(layoutEndogeno);//Se añade el widget y layout a la pestaña creada
 
         //Se juntan los espacios referentes a las cuentas
         crearDiccionario(tablaEE);
         spanEndogenaCell(tablaEE,3,1);
-        spanEndogenaCell(matrizEndogena,2,0,false);
-
-        //obtenerCuentaComponentes();//Se guardan las cuentas/componentes*/
 
     }
     else
@@ -1459,55 +1440,62 @@ void MainWindow::setEndogenaExogenaCell(QTableWidget *tw,int inicioExogena,int e
     QTableWidgetItem *ValoraInsertar = new QTableWidgetItem;
     ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
     tw->setItem(0,0,ValoraInsertar);
-    /*      Titulos para las Cuentas endogenas   */
-    QTableWidgetItem *CuentaEndogenafila = new QTableWidgetItem("Cuentas Endógenas");
-    CuentaEndogenafila->setFlags(CuentaEndogenafila->flags() ^ Qt::ItemIsEditable);
-    CuentaEndogenafila->setTextAlignment(Qt::AlignCenter);
-    tw->setItem(0,1,CuentaEndogenafila);
-    tw->setSpan(0,1,1,inicioExogena-1);
-    QTableWidgetItem *CuentaEndogenaColumna = new QTableWidgetItem;
+    /*      Titulos para las Cuentas exogenas   */
+    QTableWidgetItem *CuentaExogenafila = new QTableWidgetItem("Cuentas Exógenas");
+    CuentaExogenafila->setFlags(CuentaExogenafila->flags() ^ Qt::ItemIsEditable);
+    CuentaExogenafila->setTextAlignment(Qt::AlignCenter);
+    tw->setItem(0,inicioExogena,CuentaExogenafila);
+    if(elementos>1)
+    {
+        tw->setSpan(0,inicioExogena,1,elementos);
+    }
+    QTableWidgetItem *CuentaExogenaColumna = new QTableWidgetItem;
     if(elementos<12)
     {
-        CuentaEndogenaColumna->setText("Cuentas \nEndógenas");
+        CuentaExogenaColumna->setText("Cuentas \nExógenas");
     }
     else
     {
-        CuentaEndogenaColumna->setText("C\nu\ne\nn\nt\na\ns\n\nE\nn\nd\nó\ng\ne\nn\na\ns");
+        CuentaExogenaColumna->setText("C\nu\ne\nn\nt\na\ns\n\nE\nx\nó\ng\ne\nn\na\ns");
     }
-    CuentaEndogenaColumna->setFlags(CuentaEndogenaColumna->flags() ^ Qt::ItemIsEditable);
-    tw->setItem(1,0,CuentaEndogenaColumna);
-    if((inicioExogena-1)>1)
+    CuentaExogenaColumna->setFlags(CuentaExogenaColumna->flags() ^ Qt::ItemIsEditable);
+    tw->setItem(inicioExogena,0,CuentaExogenaColumna);
+    if(elementos>1)
     {
-        tw->setSpan(1,0,inicioExogena-1,1);
+        tw->setSpan(inicioExogena,0,elementos,1);
     }
-    if(condicion)//Si tiene cuentas exogenas
+    int count = tw->rowCount();
+    ItemsNoEditable(tw,count-1,count);
+    tableItem(tw,inicioExogena+1,count-1,"Cuentas Exógenas");
+
+    if(condicion)//Si tiene cuentas endogenas
     {
-        /*      Titulos para las Cuentas exogenas   */
-        QTableWidgetItem *CuentaExogenafila = new QTableWidgetItem("Cuentas Exógenas");
-        CuentaExogenafila->setFlags(CuentaExogenafila->flags() ^ Qt::ItemIsEditable);
-        CuentaExogenafila->setTextAlignment(Qt::AlignCenter);
-        tw->setItem(0,inicioExogena,CuentaExogenafila);
-        if(elementos>1)
-        {
-            tw->setSpan(0,inicioExogena,1,elementos);
-        }
-        QTableWidgetItem *CuentaExogenaColumna = new QTableWidgetItem;
+        /*      Titulos para las Cuentas endogenas   */
+        QTableWidgetItem *CuentaEndogenafila = new QTableWidgetItem("Cuentas Endógenas");
+        CuentaEndogenafila->setFlags(CuentaEndogenafila->flags() ^ Qt::ItemIsEditable);
+        CuentaEndogenafila->setTextAlignment(Qt::AlignCenter);
+        tw->setItem(0,1,CuentaEndogenafila);
+        tw->setSpan(0,1,1,inicioExogena-1);
+        QTableWidgetItem *CuentaEndogenaColumna = new QTableWidgetItem;
         if(elementos<12)
         {
-            CuentaExogenaColumna->setText("Cuentas \nExógenas");
+            CuentaEndogenaColumna->setText("Cuentas \nEndógenas");
         }
         else
         {
-            CuentaExogenaColumna->setText("C\nu\ne\nn\nt\na\ns\n\nE\nx\nó\ng\ne\nn\na\ns");
+            CuentaEndogenaColumna->setText("C\nu\ne\nn\nt\na\ns\n\nE\nn\nd\nó\ng\ne\nn\na\ns");
         }
-        CuentaExogenaColumna->setFlags(CuentaExogenaColumna->flags() ^ Qt::ItemIsEditable);
-        tw->setItem(inicioExogena,0,CuentaExogenaColumna);
-        if(elementos>1)
+        CuentaEndogenaColumna->setFlags(CuentaEndogenaColumna->flags() ^ Qt::ItemIsEditable);
+        tw->setItem(1,0,CuentaEndogenaColumna);
+        if((inicioExogena-1)>1)
         {
-            tw->setSpan(inicioExogena,0,elementos,1);
+            tw->setSpan(1,0,inicioExogena-1,1);
         }
-        int count = tw->rowCount();
-        ItemsNoEditable(tw,count-1,count);
+        tableItem(tw,2,inicioExogena,"Cuentas Endógenas");
+    }
+    else
+    {
+        ItemsNoEditable(tw,1,2);
     }
 }
 
@@ -1813,31 +1801,56 @@ void MainWindow::slotSaveExport()
     {
         QString filename = formExportMatriz->ExportLine->text();
         QFile archivo(filename);
-        archivo.open(QFile::WriteOnly | QFile::Text);
-        QTextStream out(&archivo);
-        out << "hola " << "que hace" << "? \n";
-        out << "otra linea de prueba";
-        archivo.flush();
-        archivo.close();
-        formExportMatriz->ExportLine->setText("");
-        formExportMatriz->close();
+        int actual = tabWidget->currentIndex();
+        if(actual!=0)
+        {
+            QTableWidget *tw = tabWidget->widget(actual)->findChild<QTableWidget *>();
+            int fila = tw->rowCount();
+            int col = tw->columnCount();
+            archivo.open(QFile::WriteOnly | QFile::Text);
+            QTextStream out(&archivo);
+            for(int i=0;i<fila;i++)
+            {
+                for(int j=0;j<col;j++)
+                {
+                    QString item = tw->item(i,j)->text();
+                    item.remove("\n");
+                    if(item.isEmpty())
+                    {
+                        item = "-";
+                    }
+                    out << item;
+                    if(j+1<col)
+                    {
+                        out << ";";
+                    }
+                }
+                out<<"\n";
+            }
+            archivo.flush();
+            archivo.close();
+            formExportMatriz->ExportLine->setText("");
+            formExportMatriz->close();
+        }
+        else
+        {
+            QMessageBox::critical(this,"Alerta","No puede exportar la pestaña\n inicio");
+        }
     }
 }
 
 void MainWindow::slotSearchExport()
 {
-    QString format = ".txt";
+    QString format = ".csv";
 
     QString filename = QFileDialog::getSaveFileName(this,
-            "Elija el nombre", QDir::homePath(),"*.txt");
+            "Elija el nombre", QDir::homePath(),"*.csv");
+
+    filename.remove(format);
 
     filename +=format;
 
-    formExportMatriz->Exportcb->addItem(filename);
-
     formExportMatriz->ExportLine->setText(filename);
-    qDebug()<< formExportMatriz->ExportLine->text();
-
 }
 
 /* Funcion estandar para hacer algunas celdas no editables debido a que son dificiles de manipular(por motivos de colocado y borrado dinamico)*/
@@ -2494,4 +2507,17 @@ void MainWindow::calcularTotalesEncadenamientos(QTableWidget *tw)
     encademientosStyle(totalAdelante);
     tw->setItem(count,1,totalAtras);
     tw->setItem(count,2,totalAdelante);
+}
+
+void MainWindow::tableItem(QTableWidget *tw, int inicio, int fin, QString texto)
+{
+    for(int i=inicio;i<fin;i++)
+    {
+        QTableWidgetItem *itemFila = new QTableWidgetItem(texto);
+        itemFila->setFlags(itemFila->flags() ^ Qt::ItemIsEditable);
+        QTableWidgetItem *itemColumna = new QTableWidgetItem(texto);
+        itemColumna->setFlags(itemColumna->flags() ^ Qt::ItemIsEditable);
+        tw->setItem(0,i,itemFila);
+        tw->setItem(i,0,itemColumna);
+    }
 }

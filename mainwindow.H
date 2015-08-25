@@ -97,6 +97,7 @@ class MainWindow : public QMainWindow
     QStringList obtenerCuentasExogenas(QTableWidget *,QStringList );
     void spanEndogenaCell(QTableWidget *, int inicio, int celda, bool endex=true);
     void spanExogenaCell(QTableWidget *,int celda);
+    void tableItem(QTableWidget *, int inicio, int fin, QString texto);
 
     QList<QString> llenarLista(QList<QString>, QTableWidget *, int valor, int opcion);
     void insertRowExogena(QList<QString>, QTableWidget *, int opcion);
