@@ -8,6 +8,8 @@
 #include <formvariablesexogenas.h>
 #include <formexportmatrix.h>
 #include <formencadenamientos.h>
+#include <ui_formcompararresultados.h>
+#include <formcompararresultados.h>
 
 #include <sstream>
 #include <stackwidget.H>
@@ -38,8 +40,12 @@ class MainWindow : public QMainWindow
     QAction actionCH;
     QAction actionCV;
     QAction actionVariableExogena;
+    QAction actionCTVEndEx;
     QAction actionLa;
+
     QAction actionEncadenamiento;    
+    QAction actionModeloClasico;
+    QAction actionCompararResultados;
 
 
     QTableWidget * tableWidget;
@@ -68,15 +74,22 @@ class MainWindow : public QMainWindow
     int opcionCTEndogena;
     int opcionEncadenamientos;
     int opcionCuentaEncadenamientos;
+    int opcionMa;
+    int opcionFormCompararResultados;
+
+    QVector<double> subtotalEnd;
+    QVector<double> subtotalExog;
 
     int cantidadEncadenamientos;
+    int cantidadEscenarios;
+    int cantidadResultados;
 
     FormLoadMatrix * formLoadMatrix;
     FormViewMatrix * formViewMatrix;
     FormVariablesExogenas * formVariablesExogenas;
     FormExportMatrix * formExportMatriz;
     FormEncadenamientos * formEncadenamientos;
-
+    FormCompararResultados *formCompararResultados;
 
     void initGUI();
 
@@ -109,11 +122,20 @@ class MainWindow : public QMainWindow
     void EndogenaAn();
 
     void obtenerCuentaComponentes();
-    void crearTablaVaciaEncadenamiento(int contador, QTableWidget *);
+    void crearTablaVaciaEncadenamiento(int contador, QTableWidget *,int filas=4);
     void crearMatrizEncadenamiento(QTableWidget *, QTableWidget *);
     void crearMatrizEncadenamientoEndogena(QTableWidget *, QTableWidget *);
     void calcularTotalesEncadenamientos(QTableWidget *);
     void encademientosStyle(QTableWidgetItem *);
+
+    void calcularSubtotal(QTableWidget *, int inicio, int fin, int exogena);
+    void llenarEscenario(QTableWidget *);
+    void calcularFinEscenario(QTableWidget *);
+    QVector<double> obtenerResultadoEscenario(QVector<double>);
+    QStringList obtenerNombreResultadoEscenario();
+    void crearTablaComparar(QTableWidget *, QTableWidget *);
+    void cuentacomponentesResultado(QTableWidget *, int count);
+    void validar();
 
     void crearMatrizEndogena(QTableWidget *);
     void restarIdentidadAn(QTableWidget *);
@@ -148,7 +170,9 @@ private slots:
     void slotAgregarExogena();
     void slotFinalizarExogena();
     void slotDeshacerExogena();
-    void slotLa();
+    void slotCTVEndogena();
+
+    void slotMa();
 
     void slotEncadenamientos();
     void slotCloseEncadenamiento();
@@ -158,6 +182,13 @@ private slots:
     void slotCloseExport();
     void slotSaveExport();
     void slotSearchExport();
+
+    void slotModeloClasico();
+    void calcularEscenario();
+    void finalizarEscenario();
+
+    void slotCompararResultados();
+    void slotVerResultado();
 
 public:
     MainWindow();
