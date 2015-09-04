@@ -452,6 +452,7 @@ void MainWindow::slotCoeficienteHorizontal()
                 QString value=tw->item(j,i)->text();
                 QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(value);
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
+                CellStyleComponente(ValoraInsertar);
                 CT_HorizontalTW->setItem(j,i,ValoraInsertar);
             }
 
@@ -582,6 +583,14 @@ void MainWindow::slotFinalizarExogena()
                     QString value=tablaPPAL->item(i,j)->text();
                     QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(value);
                     ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
+                    if((i==0 && j>1)||(j==0 && i>1))
+                    {
+                        CellStyle(ValoraInsertar);
+                    }
+                    else if((i==1 && j>1)||(j==1 && i>1))
+                    {
+                        CellStyleComponente(ValoraInsertar);
+                    }
                     tablaEE->setItem(i,j,ValoraInsertar);
                 }
                 else
@@ -703,6 +712,14 @@ void MainWindow::slotFinalizarExogena()
                     QString value=tablaPPAL->item(i,j)->text();
                     QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(value);
                     ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
+                    if((i==0 && j>1)||(j==0 && i>1))
+                    {
+                        CellStyle(ValoraInsertar);
+                    }
+                    else if((i==1 && j>1)||(j==1 && i>1))
+                    {
+                        CellStyleComponente(ValoraInsertar);
+                    }
                     tablaEE->setItem(i,j,ValoraInsertar);
                 }
                 else
@@ -825,11 +842,11 @@ void MainWindow::createMatrixCentralWidget()
     QPushButton * buttonEnd = new QPushButton;
     buttonEnd->setObjectName("AgregarCuentas");//Se le asigna nombre al objeto
     QPushButton * buttonRestaurar = new QPushButton;
-    buttonRestaurar->setObjectName("Restaurar");//Se le asigna nombre al objeto
+    buttonRestaurar->setObjectName("RestaurarCuentas");//Se le asigna nombre al objeto
     QPushButton * buttonFinalizar = new QPushButton;
-    buttonFinalizar->setObjectName("Finalizar");//Se le asigna nombre al objeto
+    buttonFinalizar->setObjectName("FinalizarCuentas");//Se le asigna nombre al objeto
     QPushButton * buttonModificar = new QPushButton;
-    buttonModificar->setObjectName("Modificar");//Se le asigna nombre al objeto
+    buttonModificar->setObjectName("ModificarCuentas");//Se le asigna nombre al objeto
 
     populateTable(tableWidget);
     tableWidget->setMaximumHeight(700);
@@ -859,35 +876,57 @@ void MainWindow::createMatrixCentralWidget()
     layoutLateralWidget->addStretch(1);
     layoutLateralWidget->addWidget(groupBoxAccount);
     buttonEnd->setText("A&gregar");
-    buttonEnd->setFixedWidth(120);
+    buttonEnd->setObjectName("AgregarCuentas");
+    buttonEnd->setFixedWidth(100);
     buttonEnd->setStyleSheet("background-color: #358ccb; color: #fff;"
                              "font-weight: bold; height: 30px; border: none;"
                              "border-radius: 5px; margin-top: 40px;");
-    layoutLateralWidget->addWidget(buttonEnd);
+    //layoutLateralWidget->addWidget(buttonEnd);
 
 
-    /***********          Nuevo boton para restaurar la tabla             *******/
-    buttonRestaurar->setText("&Restaurar");
-    buttonRestaurar->setFixedWidth(120);
-    buttonRestaurar->setStyleSheet("background-color: #358ccb; color: #fff;"
+    /***********          Nuevo boton para restaurar,editar y finalizar la tabla             *******/
+    //buttonRestaurar->setText("&Restaurar");
+    buttonRestaurar->setIcon(QIcon("./img/undo-habilitado.png"));
+    buttonRestaurar->setFlat(true);
+    buttonRestaurar->setObjectName("Restaurar");
+    buttonRestaurar->setFixedWidth(100);
+    /*buttonRestaurar->setStyleSheet("background-color: #358ccb; color: #fff;"
                              "font-weight: bold; height: 30px; border: none;"
-                             "border-radius: 5px; margin-top: 40px;");
-    layoutLateralWidget->addWidget(buttonRestaurar);
+                             "border-radius: 5px; margin-top: 40px;");*/
+    //layoutLateralWidget->addWidget(buttonRestaurar);
 
-    buttonModificar->setText("&Editar ");
-    buttonModificar->setFixedWidth(120);
-    buttonModificar->setStyleSheet("background-color: #358ccb; color: #fff;"
+    //buttonModificar->setText("&Editar ");
+    buttonModificar->setIcon(QIcon("./img/edit-habilitado.png"));
+    buttonModificar->setFlat(true);
+    buttonModificar->setObjectName("Modificar");
+    buttonModificar->setFixedWidth(100);
+    /*buttonModificar->setStyleSheet("background-color: #358ccb; color: #fff;"
                              "font-weight: bold; height: 30px; border: none;"
-                             "border-radius: 5px; margin-top: 40px;");
-    layoutLateralWidget->addWidget(buttonModificar);
+                             "border-radius: 5px; margin-top: 40px;");*/
+    //layoutLateralWidget->addWidget(buttonModificar);
 
 
     buttonFinalizar->setText("&Finalizar");
-    buttonFinalizar->setFixedWidth(120);
+    buttonFinalizar->setObjectName("Finalizar");
+    buttonFinalizar->setFixedWidth(100);
     buttonFinalizar->setStyleSheet("background-color: #358ccb; color: #fff;"
                              "font-weight: bold; height: 30px; border: none;"
                              "border-radius: 5px; margin-top: 40px;");
-    layoutLateralWidget->addWidget(buttonFinalizar);
+    //layoutLateralWidget->addWidget(buttonFinalizar);
+    QHBoxLayout *botonesPrimarios = new QHBoxLayout;
+    botonesPrimarios->addWidget(buttonEnd);
+    botonesPrimarios->addWidget(buttonFinalizar);
+    QWidget *widgetBotonesPrimarios = new QWidget;
+    widgetBotonesPrimarios->setLayout(botonesPrimarios);
+    layoutLateralWidget->addWidget(widgetBotonesPrimarios);
+
+    QHBoxLayout *botonesSecundarios = new QHBoxLayout;
+    botonesSecundarios->addWidget(buttonRestaurar);
+    botonesSecundarios->addWidget(buttonModificar);
+    QWidget *widgetBotonesSecundarios = new QWidget;
+    widgetBotonesSecundarios->setLayout(botonesSecundarios);
+    layoutLateralWidget->addWidget(widgetBotonesSecundarios);
+
     layoutLateralWidget->addStretch(6);
 
 
@@ -1016,11 +1055,13 @@ void MainWindow::AgregarCuenta()
                         ValoraInsertarFila->setTextAlignment(Qt::AlignCenter);
                         ValoraInsertarFila->setFlags(ValoraInsertarFila->flags() ^ Qt::ItemIsEditable);
                         ValoraInsertarFila->setTextAlignment(Qt::AlignCenter);
+                        CellStyle(ValoraInsertarFila);
                         tw->setItem(0,i,ValoraInsertarFila);
                         QTableWidgetItem *ValoraInsertarColumna = new QTableWidgetItem(nombreCuenta);
                         ValoraInsertarColumna->setTextAlignment(Qt::AlignCenter);
                         ValoraInsertarColumna->setFlags(ValoraInsertarColumna->flags() ^ Qt::ItemIsEditable);
                         ValoraInsertarColumna->setTextAlignment(Qt::AlignCenter);
+                        CellStyle(ValoraInsertarColumna);
                         tw->setItem(i,0,ValoraInsertarColumna);
                     }
                     int espacio=(fin-inicio)+1;
@@ -1230,6 +1271,7 @@ void MainWindow::populateTable(QTableWidget * tableWidget) {
                     QString::fromUtf8(rowVH[column].c_str()).
                     toLocal8Bit().constData());
             newItem->setFlags(newItem->flags() ^ Qt::ItemIsEditable);//Se coloca como no editable
+            CellStyleComponente(newItem);
             tableWidget->setItem(row, column+1, newItem);
         }
         ++row;
@@ -1240,6 +1282,7 @@ void MainWindow::populateTable(QTableWidget * tableWidget) {
                     QString::fromUtf8(rowVH[row-1].c_str()).
                     toLocal8Bit().constData());
             newItem->setFlags(newItem->flags() ^ Qt::ItemIsEditable);//Se coloca como no editable
+            CellStyleComponente(newItem);
             tableWidget->setItem(row, 0, newItem);
 
             QString line = file.readLine();
@@ -1511,6 +1554,7 @@ void MainWindow::setEndogenaExogenaCell(QTableWidget *tw,int inicioExogena,int e
     QTableWidgetItem *CuentaExogenafila = new QTableWidgetItem("Cuentas Exógenas");
     CuentaExogenafila->setFlags(CuentaExogenafila->flags() ^ Qt::ItemIsEditable);
     CuentaExogenafila->setTextAlignment(Qt::AlignCenter);
+    CellStyleExEn(CuentaExogenafila);
     tw->setItem(0,inicioExogena,CuentaExogenafila);
     if(elementos>1)
     {
@@ -1526,6 +1570,7 @@ void MainWindow::setEndogenaExogenaCell(QTableWidget *tw,int inicioExogena,int e
         CuentaExogenaColumna->setText("C\nu\ne\nn\nt\na\ns\n\nE\nx\nó\ng\ne\nn\na\ns");
     }
     CuentaExogenaColumna->setFlags(CuentaExogenaColumna->flags() ^ Qt::ItemIsEditable);
+    CellStyleExEn(CuentaExogenaColumna);
     tw->setItem(inicioExogena,0,CuentaExogenaColumna);
     if(elementos>1)
     {
@@ -1541,6 +1586,7 @@ void MainWindow::setEndogenaExogenaCell(QTableWidget *tw,int inicioExogena,int e
         QTableWidgetItem *CuentaEndogenafila = new QTableWidgetItem("Cuentas Endógenas");
         CuentaEndogenafila->setFlags(CuentaEndogenafila->flags() ^ Qt::ItemIsEditable);
         CuentaEndogenafila->setTextAlignment(Qt::AlignCenter);
+        CellStyleExEn(CuentaEndogenafila);
         tw->setItem(0,1,CuentaEndogenafila);
         tw->setSpan(0,1,1,inicioExogena-1);
         QTableWidgetItem *CuentaEndogenaColumna = new QTableWidgetItem;
@@ -1553,6 +1599,7 @@ void MainWindow::setEndogenaExogenaCell(QTableWidget *tw,int inicioExogena,int e
             CuentaEndogenaColumna->setText("C\nu\ne\nn\nt\na\ns\n\nE\nn\nd\nó\ng\ne\nn\na\ns");
         }
         CuentaEndogenaColumna->setFlags(CuentaEndogenaColumna->flags() ^ Qt::ItemIsEditable);
+        CellStyleExEn(CuentaEndogenaColumna);
         tw->setItem(1,0,CuentaEndogenaColumna);
         if((inicioExogena-1)>1)
         {
@@ -1614,6 +1661,14 @@ void MainWindow::CalcularAn(QTableWidget *tw,QTableWidget *nuevaTabla,QTableWidg
                 QString value=tw->item(i,j)->text();
                 QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(value);
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
+                if((i==0 && j>1)||(j==0 && i>1))
+                {
+                    CellStyle(ValoraInsertar);
+                }
+                else if((i==1 && j>1)||(j==1 && i>1))
+                {
+                    CellStyleComponente(ValoraInsertar);
+                }
                 nuevaTabla->setItem(i,j,ValoraInsertar);
             }
             /*      Se colocan no editables algunas de las celdas que estan vacias*/
@@ -1650,6 +1705,14 @@ void MainWindow::clonarTabla(QTableWidget *tw,QTableWidget *nuevaTabla,int canti
                 QString value=tw->item(i,j)->text();
                 QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(value);
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
+                if((i==0 && j>1)||(j==0 && i>1))
+                {
+                    CellStyle(ValoraInsertar);
+                }
+                else if((i==1 && j>1)||(j==1 && i>1))
+                {
+                    CellStyleComponente(ValoraInsertar);
+                }
                 nuevaTabla->setItem(i,j,ValoraInsertar);
             }
             else
@@ -1759,9 +1822,19 @@ void MainWindow::titleEndogena(QTableWidget *tw)
                 QString item=endogena->item(i,j)->text();
                 QTableWidgetItem *fila = new QTableWidgetItem(item);
                 fila->setFlags(fila->flags() ^ Qt::ItemIsEditable);
-                tw->setItem(i,j,fila);
                 QTableWidgetItem *columna = new QTableWidgetItem(item);
                 columna->setFlags(columna->flags() ^ Qt::ItemIsEditable);
+                if(i==0)
+                {
+                    CellStyle(fila);
+                    CellStyle(columna);
+                }
+                else
+                {
+                    CellStyleComponente(fila);
+                    CellStyleComponente(columna);
+                }
+                tw->setItem(i,j,fila);
                 tw->setItem(j,i,columna);
             }
             else
@@ -1807,10 +1880,12 @@ void MainWindow::setAccountTitle(QTableWidget *tw)
             QTableWidgetItem *ValoraInsertarFila = new QTableWidgetItem(nombreCuenta);
             ValoraInsertarFila->setTextAlignment(Qt::AlignCenter);
             ValoraInsertarFila->setFlags(ValoraInsertarFila->flags() ^ Qt::ItemIsEditable);
+            CellStyle(ValoraInsertarFila);
             tw->setItem(0,i,ValoraInsertarFila);
             QTableWidgetItem *ValoraInsertarColumna = new QTableWidgetItem(nombreCuenta);
             ValoraInsertarColumna->setTextAlignment(Qt::AlignCenter);
             ValoraInsertarColumna->setFlags(ValoraInsertarColumna->flags() ^ Qt::ItemIsEditable);
+            CellStyle(ValoraInsertarColumna);
             tw->setItem(i,0,ValoraInsertarColumna);
         }
 
@@ -1945,10 +2020,26 @@ void MainWindow::ItemsNoEditable(QTableWidget *tw,int inicio,int fin,int col)
     }
 }
 
-/*          Funcion para agregar el estilo de una celda en negrita con fondo de color azul        */
+/*          Funcion para agregar el estilo de una celda en negrita(letra blanca) con fondo de color azul        */
 void MainWindow::CellStyle(QTableWidgetItem *ti)
 {
     ti->setBackgroundColor(QColor(53,140,203));
+    ti->setTextColor(Qt::white);
+    QFont font;
+    font.setBold(true);
+    ti->setFont(font);
+}
+
+/*          Funcion para agregar el estilo de una celda en negrita con fondo de color gris        */
+void MainWindow::CellStyleComponente(QTableWidgetItem *ti)
+{
+    ti->setBackgroundColor(QColor(221,227,230));
+}
+
+/*          Funcion para agregar el estilo de una celda en negrita(letras blancas) con fondo de color gris oscuro        */
+void MainWindow::CellStyleExEn(QTableWidgetItem *ti)
+{
+    ti->setBackgroundColor(QColor(110,110,110));
     ti->setTextColor(Qt::white);
     QFont font;
     font.setBold(true);
@@ -2957,6 +3048,29 @@ void MainWindow::slotVerResultado()
         QTableWidget *tw = findChild<QTableWidget *>(QString("TablaResultadoEscenario %1").arg(text));
         crearTablaComparar(tablaComparar,tw);
     }
+    //Se agrega el nombre de los resultados
+    tablaComparar->insertRow(0);
+    QFont font;
+    font.setBold(true);
+    int j = 0;
+    for(int i=0;i<contar;i++)
+    {
+        QString text = formCompararResultados->ui->resultadosListWidget->selectedItems().value(i)->text();
+        QTableWidgetItem *item1 = new QTableWidgetItem(text);
+        item1->setFlags(item1->flags() ^ Qt::ItemIsEditable);
+        item1->setFont(font);
+        item1->setTextAlignment(Qt::AlignCenter);
+        QTableWidgetItem *item2 = new QTableWidgetItem(text);
+        item2->setFlags(item2->flags() ^ Qt::ItemIsEditable);
+        item2->setFont(font);
+        item2->setTextAlignment(Qt::AlignCenter);
+        tablaComparar->setItem(0,2+j,item1);
+        j++;
+        tablaComparar->setItem(0,2+j,item2);
+        tablaComparar->setSpan(0,(2+j)-1,1,2);
+        j++;
+    }
+    ItemsNoEditable(tablaComparar,0,2);
 
     tabWidget->addTab(new QWidget,QString("Comparacion %1").arg(cantidadResultados));
     int indice=ObtenerIndice(QString("Comparacion %1").arg(cantidadResultados));
@@ -2999,7 +3113,7 @@ void MainWindow::crearTablaComparar(QTableWidget *to, QTableWidget *tw)
     to->resizeRowsToContents();
 }
 
-/*      Funcion para colocar cuenta/componentes en las tablas de modelo calsico, resultados y comparar resultados*/
+/*      Funcion para colocar cuenta/componentes en las tablas de modelo clasico, resultados y comparar resultados*/
 void MainWindow::cuentacomponentesResultado(QTableWidget *to,int count)
 {
     QStringList cuentaTitulos;
@@ -3015,9 +3129,11 @@ void MainWindow::cuentacomponentesResultado(QTableWidget *to,int count)
         QTableWidgetItem *cuenta = new QTableWidgetItem;
         cuenta->setFlags(cuenta->flags() ^ Qt::ItemIsEditable);
         cuenta->setText(accName);
+        CellStyle(cuenta);
         QTableWidgetItem *componente = new QTableWidgetItem;
         componente->setText(tw->item(1,i+2)->text());
         componente->setFlags(componente->flags() ^ Qt::ItemIsEditable);
+        CellStyleComponente(componente);
         to->setItem(i+1,0,cuenta);
         to->setItem(i+1,1,componente);
         cuentaTitulos.append(accName);

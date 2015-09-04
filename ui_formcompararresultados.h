@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'formcompararresultados.ui'
 **
-** Created: Thu Sep 3 14:39:36 2015
+** Created: Fri Sep 4 09:56:44 2015
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -55,6 +55,7 @@ public:
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(buttonVerResultados->sizePolicy().hasHeightForWidth());
         buttonVerResultados->setSizePolicy(sizePolicy1);
+        buttonVerResultados->setMinimumSize(QSize(100, 0));
         buttonVerResultados->setStyleSheet(QString::fromUtf8("background-color: #358ccb; color: #fff; font-weight: bold; height: 30px; border: none; border-radius: 5px; margin-top: 40px;\n"
 ""));
 
@@ -69,7 +70,7 @@ public:
     void retranslateUi(QWidget *FormCompararResultados)
     {
         FormCompararResultados->setWindowTitle(QApplication::translate("FormCompararResultados", "Comparar Resultados", 0, QApplication::UnicodeUTF8));
-        buttonVerResultados->setText(QApplication::translate("FormCompararResultados", "&Ver Resultados", 0, QApplication::UnicodeUTF8));
+        buttonVerResultados->setText(QApplication::translate("FormCompararResultados", "&Ver", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

@@ -119,6 +119,8 @@ class MainWindow : public QMainWindow
     QString Separador(QTableWidgetItem *,bool quitar);
     void ItemsNoEditable(QTableWidget *, int inicio, int fin, int col=0);
     void CellStyle(QTableWidgetItem *);
+    void CellStyleComponente(QTableWidgetItem *);
+    void CellStyleExEn(QTableWidgetItem *);
     void EndogenaAn();
 
     void obtenerCuentaComponentes();
