@@ -46,6 +46,7 @@ class MainWindow : public QMainWindow
     QAction actionEncadenamiento;    
     QAction actionModeloClasico;
     QAction actionCompararResultados;
+    QAction actionModeloNoClasico;
 
 
     QTableWidget * tableWidget;
@@ -71,7 +72,6 @@ class MainWindow : public QMainWindow
     int opcionCuentaExogena;
     int opcionVentanaExogena;
     int opcionExportarMatriz;
-    int opcionCTEndogena;
     int opcionEncadenamientos;
     int opcionCuentaEncadenamientos;
     int opcionMa;
@@ -115,7 +115,7 @@ class MainWindow : public QMainWindow
     QList<QString> llenarLista(QList<QString>, QTableWidget *, int valor, int opcion);
     void insertRowExogena(QList<QString>, QTableWidget *, int opcion);
     void setEndogenaExogenaCell(QTableWidget *, int inicioExogena, int elementos,bool condicion);
-    void CalcularAn(QTableWidget *, QTableWidget *, QTableWidget *, int count, bool endogena);
+    void CalcularAn(QTableWidget *, QTableWidget *, QTableWidget *, int count, bool endogena = false);
     QString Separador(QTableWidgetItem *,bool quitar);
     void ItemsNoEditable(QTableWidget *, int inicio, int fin, int col=0);
     void CellStyle(QTableWidgetItem *);
@@ -124,7 +124,7 @@ class MainWindow : public QMainWindow
     void EndogenaAn();
 
     void obtenerCuentaComponentes();
-    void crearTablaVaciaEncadenamiento(int contador, QTableWidget *,int filas=4);
+    void crearTablaVaciaEncadenamiento(int columnas, QTableWidget *, int filas=4);
     void crearMatrizEncadenamiento(QTableWidget *, QTableWidget *);
     void crearMatrizEncadenamientoEndogena(QTableWidget *, QTableWidget *);
     void calcularTotalesEncadenamientos(QTableWidget *);
@@ -138,6 +138,13 @@ class MainWindow : public QMainWindow
     void crearTablaComparar(QTableWidget *, QTableWidget *);
     void cuentacomponentesResultado(QTableWidget *, int count);
     void validar();
+
+    void obtenerMatrizExgEnd();
+    void crearMatrizExgEnd(QTableWidget *,QTableWidget *,int elementos,int inicioExogena);
+    void calcularMatrizExgEnd(QTableWidget *);
+    void ctvMatrizExgEnd(QTableWidget *, QTableWidget *);
+    void titlespanMatrizExgEnd(QTableWidget *);
+    void estimarMb(QTableWidget *, QTableWidget *);
 
     void crearMatrizEndogena(QTableWidget *);
     void restarIdentidadAn(QTableWidget *);
@@ -166,13 +173,14 @@ private slots:
     void ModificarCuenta();
     void slotCoeficienteHorizontal();
     void slotCoeficienteVertical();
+    void slotAccChange();
 
     void slotVariableExogena();
     void slotCloseExogena();
     void slotAgregarExogena();
     void slotFinalizarExogena();
     void slotDeshacerExogena();
-    void slotCTVEndogena();
+    void AnMa();
 
     void slotMa();
 
@@ -188,6 +196,8 @@ private slots:
     void slotModeloClasico();
     void calcularEscenario();
     void finalizarEscenario();
+
+    void slotModeloNoClasico();
 
     void slotCompararResultados();
     void slotVerResultado();

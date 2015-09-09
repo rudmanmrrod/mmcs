@@ -219,13 +219,17 @@ void MainWindow::matricesMenuBar()
     actionCompararResultados.setDisabled(true);
     OpMatrices.addAction(&actionCompararResultados);
 
+    actionModeloNoClasico.setText("Mó&delo No Clásico");
+    actionModeloNoClasico.setDisabled(true);
+    OpMatrices.addAction(&actionModeloNoClasico);
+
     menuBar()->addMenu(&OpMatrices);
 }
 
 MainWindow::MainWindow()
     : actionLoadMatrix(this), actionExportMatrix(this), actionQuit(this),actionCH(this), actionCV(this),
       actionVariableExogena(this),actionLa(this),actionCTVEndEx(this),actionEncadenamiento(this), actionModeloClasico(this),
-      actionCompararResultados(this), formLoadMatrix(0)
+      actionCompararResultados(this), actionModeloNoClasico(this),formLoadMatrix(0)
 {
     tabWidget = new QTabWidget;
 
@@ -238,7 +242,6 @@ MainWindow::MainWindow()
 
     opcionExportarMatriz = 0;
     opcionEncadenamientos = 0;
-    opcionCTEndogena = 0;
     opcionMa = 0;
     opcionFormCompararResultados = 0;
     /*      Estas variables permiten terner el control de los procedimientos que se pueden generar multiples ventanas */
@@ -276,6 +279,543 @@ void MainWindow::slotFormLoadMatrixClosed()
     disconnect(formLoadMatrix, SIGNAL(formAccepted(QString,int,char)),
                this, SLOT(slotFormLoadMatrixAccepted(QString,int,char)));
     formLoadMatrix = 0;
+}
+
+void MainWindow::createMatrixCentralWidget()
+{
+    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+    QVBoxLayout * layoutLateralWidget = new QVBoxLayout;
+
+    QTableWidget * tableWidget = new QTableWidget(this);
+    tableWidget->setObjectName("TablaPrincipal");//Se le asigna nombre al objeto
+    QGroupBox * groupBoxAccount = new QGroupBox;
+    QPushButton * buttonEnd = new QPushButton;
+    buttonEnd->setObjectName("AgregarCuentas");//Se le asigna nombre al objeto
+    QPushButton * buttonRestaurar = new QPushButton;
+    buttonRestaurar->setObjectName("RestaurarCuentas");//Se le asigna nombre al objeto
+    QPushButton * buttonFinalizar = new QPushButton;
+    buttonFinalizar->setObjectName("FinalizarCuentas");//Se le asigna nombre al objeto
+    QPushButton * buttonModificar = new QPushButton;
+    buttonModificar->setObjectName("ModificarCuentas");//Se le asigna nombre al objeto
+
+    populateTable(tableWidget);
+    tableWidget->setMaximumHeight(700);
+
+    /* ****     Se coloca como no editable la celda(0,0)    ***** */
+    noEditColZero(tableWidget);
+
+    //tableWidget->setFixedSize(750,750);
+    layoutCentralWidget->addWidget(tableWidget);
+    //layoutCentralWidget->addStretch();
+
+    QVBoxLayout * layoutAccounts = new QVBoxLayout;
+
+    StackWidget *sw = new StackWidget(numAccounts, groupBoxAccount);
+    layoutAccounts->addWidget(sw);
+
+    groupBoxAccount->setFixedWidth(220);
+    groupBoxAccount->setObjectName("GrupoCuentas");//Se le asigna nombre al objeto
+    groupBoxAccount->setLayout(layoutAccounts);;
+    groupBoxAccount->setTitle("Cuentas");
+    groupBoxAccount->setStyleSheet("QGroupBox {border: 1px solid gray; "
+                     "border-radius: 3px; margin-top: 0.5em;} "
+                     "QGroupBox::title { subcontrol-origin: margin; "
+                     "left: 10px; padding: 0 3px 0 3px; } ");
+
+
+    layoutLateralWidget->addStretch(1);
+    layoutLateralWidget->addWidget(groupBoxAccount);
+    buttonEnd->setText("A&gregar");
+    buttonEnd->setObjectName("AgregarCuentas");
+    buttonEnd->setFixedWidth(100);
+    buttonEnd->setStyleSheet("background-color: #358ccb; color: #fff;"
+                             "font-weight: bold; height: 30px; border: none;"
+                             "border-radius: 5px; margin-top: 40px;");
+
+
+    /***********          Nuevo boton para restaurar,editar y finalizar la tabla             *******/
+    //buttonRestaurar->setText("&Restaurar");
+    buttonRestaurar->setIcon(QIcon("./img/undo-habilitado.png"));
+    buttonRestaurar->setFlat(true);
+    buttonRestaurar->setObjectName("Restaurar");
+    buttonRestaurar->setFixedWidth(100);
+    /*buttonRestaurar->setStyleSheet("background-color: #358ccb; color: #fff;"
+                             "font-weight: bold; height: 30px; border: none;"
+                             "border-radius: 5px; margin-top: 40px;");*/
+
+    //buttonModificar->setText("&Editar ");
+    buttonModificar->setIcon(QIcon("./img/edit-deshabilitado.png"));
+    buttonModificar->setDisabled(true);
+    buttonModificar->setFlat(true);
+    buttonModificar->setObjectName("Modificar");
+    buttonModificar->setFixedWidth(100);
+    /*buttonModificar->setStyleSheet("background-color: #358ccb; color: #fff;"
+                             "font-weight: bold; height: 30px; border: none;"
+                             "border-radius: 5px; margin-top: 40px;");*/
+
+
+    buttonFinalizar->setText("&Finalizar");
+    buttonFinalizar->setObjectName("Finalizar");
+    buttonFinalizar->setFixedWidth(100);
+    buttonFinalizar->setDisabled(true);
+    buttonFinalizar->setStyleSheet("background-color: gray; color: #fff;"
+                             "font-weight: bold; height: 30px; border: none;"
+                             "border-radius: 5px; margin-top: 40px;");
+
+    QHBoxLayout *botonesSecundarios = new QHBoxLayout;
+    botonesSecundarios->addWidget(buttonRestaurar);
+    botonesSecundarios->addWidget(buttonModificar);
+    QWidget *widgetBotonesSecundarios = new QWidget;
+    widgetBotonesSecundarios->setLayout(botonesSecundarios);
+    layoutLateralWidget->addWidget(widgetBotonesSecundarios);
+
+    QHBoxLayout *botonesPrimarios = new QHBoxLayout;
+    botonesPrimarios->addWidget(buttonEnd);
+    botonesPrimarios->addWidget(buttonFinalizar);
+    QWidget *widgetBotonesPrimarios = new QWidget;
+    widgetBotonesPrimarios->setLayout(botonesPrimarios);
+    layoutLateralWidget->addWidget(widgetBotonesPrimarios);
+
+    layoutLateralWidget->addStretch(6);
+
+    layoutCentralWidget->addLayout(layoutLateralWidget);
+
+    connect(sw->comboAccount,SIGNAL(activated(int)),this,SLOT(slotAccChange()));
+
+    connect(buttonEnd,SIGNAL(clicked()),this,SLOT(AgregarCuenta()));//**************Conexion del boton agregar**********************
+    connect(buttonRestaurar,SIGNAL(clicked()),this,SLOT(RestaurarCeldas()));//Conexion del boton restaurar
+    connect(buttonFinalizar,SIGNAL(clicked()),this,SLOT(FinalizarCuentas()));//Conexion del boton Finalizar
+    connect(buttonModificar,SIGNAL(clicked()),this,SLOT(ModificarCuenta()));//Conexion del boton modificar
+
+
+    layoutCentralWidget->sizeHint();
+
+    tabWidget->addTab(new QWidget,"MCS");
+    QWidget *widget= tabWidget->widget(1);
+    widget->setLayout(layoutCentralWidget);
+
+
+    /*  ***********         Se agrega la columna en la que se asignan los nombre            **************           */
+    tableWidget->insertRow(0);
+    tableWidget->insertColumn(0);
+    noEditColZero(tableWidget);
+    /*              Se agregan elementos a la recien creada fila/columna        */
+    int contador=tableWidget->rowCount();
+    for(int i=1;i<contador;i++)
+    {
+        QTableWidgetItem *ValoraInsertar = new QTableWidgetItem;
+        ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
+        tableWidget->setItem(0,i,ValoraInsertar);
+
+        QTableWidgetItem *ValoraInsertar2 = new QTableWidgetItem;
+        ValoraInsertar2->setFlags(ValoraInsertar2->flags() ^ Qt::ItemIsEditable);
+        tableWidget->setItem(i,0,ValoraInsertar2);
+    }
+
+    matricesMenuBar();//Al terminar la carga de la tabla se ejecuta la accion para el menu de Operaciones
+    tabWidget->setCurrentIndex(1);//Se seleciona la pestaña MCS
+
+    actionLoadMatrix.setDisabled(true);
+
+    actionExportMatrix.setEnabled(true);
+
+    /****          Se conectan las acciones para coeficientes tecnicos horizontales y verticales      ****/
+    connect(&actionCH, SIGNAL(triggered()), this,SLOT(slotCoeficienteHorizontal()));
+    connect(&actionCV, SIGNAL(triggered()), this,SLOT(slotCoeficienteVertical()));
+    //Se conecta la accion para la variables exogenas
+    connect(&actionVariableExogena,SIGNAL(triggered()),this,SLOT(slotVariableExogena()));
+}
+
+void MainWindow::slotAccChange()
+{
+    StackWidget *sw = findChild<StackWidget *>();
+    int indice = sw->comboAccount->currentIndex();
+    QLineEdit *le= findChild<QLineEdit *>(QString("linedit %1").arg(indice + 1));
+    QPushButton *Modificar = findChild<QPushButton *>("Modificar");
+    if(!le->isEnabled())
+    {
+        Modificar->setEnabled(true);
+        Modificar->setIcon(QIcon("./img/edit-habilitado"));
+    }
+    else
+    {
+        Modificar->setDisabled(true);
+        Modificar->setIcon(QIcon("./img/edit-deshabilitado"));
+    }
+}
+
+void MainWindow::AgregarCuenta()
+{
+    QMessageBox msBox(QMessageBox::Question,"Agregar cuenta","¿Está seguro que agregar la cuenta?",
+                      QMessageBox::Yes | QMessageBox::No,this);
+    msBox.setButtonText(QMessageBox::Yes,"&Si");
+    msBox.setDefaultButton(QMessageBox::Yes);
+    if(msBox.exec()==QMessageBox::Yes)
+    {
+        QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");//Se busca la tabla que se creo
+        StackWidget *sw = findChild<StackWidget *>();//Se buscan las cuentas creadas
+
+        /* ******   Se leen los campos del widget izquierdo   ******* */;
+
+        int index=sw->comboAccount->currentIndex();
+
+
+        /*****       Se cargan la linea y las spin box correpondientes a la cuenta seleccionada       *****/
+
+        QLineEdit *le= findChild<QLineEdit *>(QString("linedit %1").arg(index + 1));
+        QSpinBox *SBStart = findChild<QSpinBox *>(QString("accountstart %1").arg(index+1));
+        QSpinBox *SBEnd = findChild<QSpinBox *>(QString("accountend %1").arg(index+1));
+
+        int inicio=SBStart->value();
+        int fin=SBEnd->value();
+        QString nombreCuenta=le->text();
+
+        if(nombreCuenta.isEmpty() or nombreCuenta.isNull())
+        {
+            QMessageBox::warning(this,"Alerta","El nombre de la cuenta esta vacio");
+        }
+        else
+        {
+            int cantidad_filas=tw->rowCount();
+
+            if(inicio>cantidad_filas or fin>cantidad_filas)//Se verifica que los valores no excedan el tamaño de la tabla
+            {
+                QMessageBox::warning(this,"Alerta","Valores mayores al tamaño\n de la tabla");
+            }
+            else if(inicio>fin)
+            {
+                QMessageBox::warning(this,"Alerta","El inicio es mayor\nque el fin");
+            }
+            else
+            {
+                /***  Se comprueba si la celda de la tabla esta ocupada por otra cuenta  ***/
+                bool centinela=true;
+                if(inicio>2 and fin>2){
+                    for(int i=0;i<numAccounts;i++)
+                    {
+                        if(i!=index)
+                        {
+                            QSpinBox *oI = findChild<QSpinBox *>(QString("accountstart %1").arg(i+1));
+                            QSpinBox *oF = findChild<QSpinBox *>(QString("accountend %1").arg(i+1));
+                            int otroInicio = oI->text().toInt();
+                            int otroFin = oF->text().toInt();
+                            for(int k=inicio;k<=fin;k++)
+                            {
+                                for(int j=otroInicio;j<=otroFin;j++)
+                                {
+                                    if(k==j)
+                                    {
+                                        centinela=false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                /*  *****    Se asigna el nombre de la cuenta a las cabecereas de la tabla en el rango(inicio,fin)     *****    */
+                if((inicio>2 && fin>2) and (centinela))
+                {
+                    for(int i=inicio-1;i<fin;i++)
+                    {
+                        QTableWidgetItem *ValoraInsertarFila = new QTableWidgetItem(nombreCuenta);
+                        ValoraInsertarFila->setTextAlignment(Qt::AlignCenter);
+                        ValoraInsertarFila->setFlags(ValoraInsertarFila->flags() ^ Qt::ItemIsEditable);
+                        ValoraInsertarFila->setTextAlignment(Qt::AlignCenter);
+                        CellStyle(ValoraInsertarFila);
+                        tw->setItem(0,i,ValoraInsertarFila);
+                        QTableWidgetItem *ValoraInsertarColumna = new QTableWidgetItem(nombreCuenta);
+                        ValoraInsertarColumna->setTextAlignment(Qt::AlignCenter);
+                        ValoraInsertarColumna->setFlags(ValoraInsertarColumna->flags() ^ Qt::ItemIsEditable);
+                        ValoraInsertarColumna->setTextAlignment(Qt::AlignCenter);
+                        CellStyle(ValoraInsertarColumna);
+                        tw->setItem(i,0,ValoraInsertarColumna);
+                    }
+                    int espacio=(fin-inicio)+1;
+                    if(espacio>1)
+                    {
+                        tw->setSpan(inicio-1,0,espacio,1);
+                        tw->setSpan(0,inicio-1,1,espacio);
+                    }
+                    /*****              Se inhabilita el boton de la linea  y los spinbox  *******/
+                    le->setEnabled(false);
+                    SBStart->setEnabled(false);
+                    SBEnd->setEnabled(false);
+                    QPushButton *Modificar = findChild<QPushButton *>("Modificar");
+                    Modificar->setEnabled(true);
+                    Modificar->setIcon(QIcon("./img/edit-habilitado"));
+                }
+                else if(!centinela)
+                {
+                    QMessageBox::warning(this,"Alerta","Valores en el espacio de otra cuenta");
+                }
+                else
+                {
+                    QMessageBox::warning(this,"Alerta","Valores invalidos");
+                }
+
+            }
+        }
+    }
+    bool Centinela=ComprobarCuentas();
+    if(Centinela)
+    {
+        QPushButton *Finalizar = findChild<QPushButton *>("Finalizar");
+        Finalizar->setStyleSheet("background-color: #358ccb; color: #fff;"
+                                 "font-weight: bold; height: 30px; border: none;"
+                                 "border-radius: 5px; margin-top: 40px;");
+        Finalizar->setEnabled(true);
+    }
+}
+
+void MainWindow::FinalizarCuentas()
+{
+    QMessageBox msBox(QMessageBox::Question,"Finalizar Carga","¿Está seguro que desea finalizar?",
+                      QMessageBox::Yes | QMessageBox::No,this);
+    msBox.setButtonText(QMessageBox::Yes,"&Si");
+    msBox.setDefaultButton(QMessageBox::Yes);
+    if(msBox.exec()==QMessageBox::Yes)
+    {
+        bool Centinela=ComprobarCuentas();//Se llama a la funcion que comprueba si todos los campos de las cuentas estan llenos
+        if(Centinela)
+        {
+            QPushButton *Agregar = findChild<QPushButton *>("AgregarCuentas");
+            QPushButton *Restaurar = findChild<QPushButton *>("Restaurar");
+            Agregar->setStyleSheet("background-color: gray; color: #fff;"
+                                     "font-weight: bold; height: 30px; border: none;"
+                                     "border-radius: 5px; margin-top: 40px;");
+            Agregar->setEnabled(false);
+            Agregar->setVisible(false);
+            Restaurar->setStyleSheet("background-color: gray; color: #fff;"
+                                     "font-weight: bold; height: 30px; border: none;"
+                                     "border-radius: 5px; margin-top: 40px;");
+            Restaurar->setEnabled(false);
+            Restaurar->setVisible(false);
+            QPushButton *Modificar = findChild<QPushButton *>("Modificar");
+            Modificar->setStyleSheet("background-color: gray; color: #fff;"
+                                     "font-weight: bold; height: 30px; border: none;"
+                                     "border-radius: 5px; margin-top: 40px;");
+            Modificar->setEnabled(false);
+            Modificar->setVisible(false);
+
+            QPushButton *Finalizar = findChild<QPushButton *>("Finalizar");
+            Finalizar->setStyleSheet("background-color: gray; color: #fff;"
+                                     "font-weight: bold; height: 30px; border: none;"
+                                     "border-radius: 5px; margin-top: 40px;");
+            Finalizar->setEnabled(false);
+            Finalizar->setVisible(false);
+
+            QGroupBox *groupbox = findChild<QGroupBox *>("GrupoCuentas");
+            groupbox->setVisible(false);
+
+            QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
+            CalcularTotales(tw,2);//Se llama a la funcion que agregue una nueva fila y columna con los totales respectivos
+            setAccountTitle(tw);
+
+            /*       Luego de calcular los totales se habilitan las opciones del menu herramientas       */
+            actionCH.setEnabled(true);
+            actionCV.setEnabled(true);
+            EndoExo.setEnabled(true);
+            actionVariableExogena.setEnabled(true);
+         }
+        else
+        {
+            QMessageBox::warning(this,"Alerta","Debe llenar correctamente y agregar todas las cuentas");
+        }
+    }
+}
+
+void MainWindow::CalcularTotales(QTableWidget *tableWidget,int inicio)//Se calculan los totales por fila/columna
+{
+    int filas=tableWidget->rowCount();
+    int columnas=tableWidget->columnCount();
+    /*******       Se inserta la nueva fila y columna para los totales, asi como es texto corespondiente             *****/
+    tableWidget->insertRow(filas);
+    tableWidget->insertColumn(columnas);
+    QTableWidgetItem *ColumnaTotal = new QTableWidgetItem;
+    ColumnaTotal->setText("Total en Columna");
+    CellStyle(ColumnaTotal);//Estilo de la Celda
+    ColumnaTotal->setFlags(ColumnaTotal->flags() ^ Qt::ItemIsEditable);
+    QTableWidgetItem *FilaTotal = new QTableWidgetItem;
+    FilaTotal->setText("Total en Fila");
+    CellStyle(FilaTotal);//Estilo de la Celda
+    FilaTotal->setFlags(FilaTotal->flags() ^ Qt::ItemIsEditable);
+    tableWidget->setItem(columnas,inicio-1,ColumnaTotal);
+    tableWidget->setItem(inicio-1,filas,FilaTotal);
+    for(int i=inicio;i<filas;i++)
+    {
+        double SumaFila=0;
+        double SumaColumna=0;
+        for(int j=inicio;j<filas;j++)
+        {
+            QString fila=Separador(tableWidget->item(j,i),true);
+            double thisFila=fila.toDouble();
+            QString columna=Separador(tableWidget->item(i,j),true);
+            double thisColumna=columna.toDouble();
+            SumaFila+=thisFila;
+            SumaColumna+=thisColumna;
+        }
+        QTableWidgetItem *Valor1 = new QTableWidgetItem;
+        Valor1->setText(QString::number(SumaFila,'f',2));
+        QString value1 = Separador(Valor1,false);
+        Valor1->setText(value1);
+        Valor1->setFlags(Valor1->flags() ^ Qt::ItemIsEditable);
+        Valor1->setTextAlignment(Qt::AlignCenter);
+        CellStyle(Valor1);//Estilo de la Celda
+        QTableWidgetItem *Valor2 = new QTableWidgetItem;
+        Valor2->setText(QString::number(SumaColumna,'f',2));
+        QString value2 = Separador(Valor2,false);
+        Valor2->setText(value2);
+        Valor2->setFlags(Valor2->flags() ^ Qt::ItemIsEditable);
+        Valor2->setTextAlignment(Qt::AlignCenter);
+        CellStyle(Valor2);//Estilo de la Celda
+        tableWidget->setItem(filas,i,Valor1);//Inserta en Filas
+        tableWidget->setItem(i,filas,Valor2);//Inserta en Columnas
+    }
+    /*          Se coloca como no editable la última celda      */
+    QTableWidgetItem *Valor = new QTableWidgetItem;
+    Valor->setFlags(Valor->flags() ^ Qt::ItemIsEditable);
+    tableWidget->setItem(filas,columnas,Valor);
+    //
+    int cantidad = tableWidget->rowCount();
+    ItemsNoEditable(tableWidget,0,inicio-1,cantidad-1);
+
+}
+
+void MainWindow::RestaurarCeldas()//Slot que permite restaurar el titulo de las cuentas en las celdas
+{
+    QMessageBox msBox(QMessageBox::Question,"Restaurar Celdas","¿Desea Restaurar el titulo de todas las celdas?",
+                      QMessageBox::Yes | QMessageBox::No,this);
+    msBox.setButtonText(QMessageBox::Yes,"&Si");
+    msBox.setDefaultButton(QMessageBox::Yes);
+    if(msBox.exec()==QMessageBox::Yes)
+    {
+        QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
+        insertremoveRowCol(tw,0,false);
+        insertremoveRowCol(tw,0,true);
+        int cantidad = tw->rowCount();
+        for(int i = 0; i<cantidad;i++)
+        {
+            QTableWidgetItem *fila = new QTableWidgetItem;
+            fila->setFlags(fila->flags() ^ Qt::ItemIsEditable);
+            tw->setItem(0,i,fila);
+            QTableWidgetItem *columna = new QTableWidgetItem;
+            columna->setFlags(columna->flags() ^ Qt::ItemIsEditable);
+            tw->setItem(i,0,columna);
+        }
+    }
+}
+
+void MainWindow::ModificarCuenta()//Slot que permite habilitar la edicion de una cuenta una vez agregada
+{
+    QMessageBox msBox(QMessageBox::Question,"Modificar Cuenta","¿Desea Modificar la Cuenta Actual?",
+                      QMessageBox::Yes | QMessageBox::No,this);
+    msBox.setButtonText(QMessageBox::Yes,"&Si");
+    msBox.setDefaultButton(QMessageBox::Yes);
+    if(msBox.exec()==QMessageBox::Yes)
+    {
+        StackWidget *sw = findChild<StackWidget *>();//Se buscan las cuentas creadas
+        int index=sw->comboAccount->currentIndex();
+        QLineEdit *le= findChild<QLineEdit *>(QString("linedit %1").arg(index + 1));
+        QSpinBox *SBStart = findChild<QSpinBox *>(QString("accountstart %1").arg(index+1));
+        QSpinBox *SBEnd = findChild<QSpinBox *>(QString("accountend %1").arg(index+1));
+        le->setEnabled(true);
+        SBStart->setEnabled(true);
+        SBEnd->setEnabled(true);
+    }
+}
+
+void MainWindow::slotCoeficienteVertical()
+{
+    actionCV.setDisabled(true);
+    tabWidget->addTab(new QWidget,"CT_Vertical");
+    QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
+
+    QTableWidget *CT_VerticalTW = new QTableWidget;
+    int count=tw->rowCount();
+    CrearTablaVacia(count,CT_VerticalTW);//Se crea una tabla vacia
+    /* ****     Se coloca como no editable la celda(0,0)    ***** */
+    noEditColZero(CT_VerticalTW);
+    /*****      Se llena la tabla vacia con los valores de la tabla principal ****/
+    CalcularAn(tw,CT_VerticalTW,new QTableWidget,count);//Funcion para calcular el Coeficiente Tecnico Horizontal (An)
+
+
+    insertremoveRowCol(CT_VerticalTW,0,true);
+    insertremoveRowCol(CT_VerticalTW,0,false);
+    setAccountTitle(CT_VerticalTW);
+    int indice=ObtenerIndice("CT_Vertical");//Se obtiene el indice de la pestaña
+    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+    layoutCentralWidget->addWidget(CT_VerticalTW);
+    QWidget *widget = tabWidget->widget(indice);
+    widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
+    tabWidget->setCurrentIndex(indice);
+}
+
+void MainWindow::slotCoeficienteHorizontal()
+{
+    actionCH.setDisabled(true);
+    tabWidget->addTab(new QWidget,"CT_Horizontal");
+    QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
+
+    /*      Se eliminan la fila y columna (0,0) para los calculos*/
+    insertremoveRowCol(tw,0,false);
+
+    int count=tw->rowCount();
+    QTableWidget *CT_HorizontalTW = new QTableWidget;
+    CrearTablaVacia(count,CT_HorizontalTW); //Se Crea la tabla vacia
+    /* ****     Se coloca como no editable la celda(0,0)    ***** */
+    noEditColZero(CT_HorizontalTW);
+    /*****      Se llena la tabla vacia con los valores de la tabla principal ****/
+    for(int i=0;i<count-1;i++)
+    {
+        QString STotal = Separador(tw->item(i,count-1),true);
+        double total=STotal.toDouble();//Se obtiene el total de esa columna
+        for(int j=0;j<count-1;j++)
+        {
+            if(i!=0 && j!=0)
+            {
+                QString value = Separador(tw->item(i,j),true);
+                double valor=value.toDouble();
+                if(total==0)//Se comprueba en caso de que el total sea zero
+                {
+                    valor=0;
+                }
+                else
+                {
+                    valor/=total;//Se divide el valor de la celda entre el total correspondiente
+                }
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',2));
+                ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
+                ValoraInsertar->setTextAlignment(Qt::AlignCenter);
+                value = Separador(ValoraInsertar,false);
+                ValoraInsertar->setText(value);
+                CT_HorizontalTW->setItem(i,j,ValoraInsertar);
+            }
+            /****           En este else se llenan las celdas con fila y columna 0, es decir las que tienen nombre *****/
+            else if((i==0 && j>0)||(j==0 && i>0))
+            {
+                QString value=tw->item(j,i)->text();
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(value);
+                ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
+                CellStyleComponente(ValoraInsertar);
+                CT_HorizontalTW->setItem(j,i,ValoraInsertar);
+            }
+
+         }
+    }
+    /*      Se agrega la columna y fila (0,0) y se insertan los titulos de las cuentas      */
+    insertremoveRowCol(tw,0,true);
+    insertremoveRowCol(CT_HorizontalTW,0,true);
+    setAccountTitle(tw);
+    setAccountTitle(CT_HorizontalTW);
+
+    int indice=ObtenerIndice("CT_Horizontal");//Se obtiene el indice de la pestaña
+    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+    layoutCentralWidget->addWidget(CT_HorizontalTW);
+    QWidget *widget = tabWidget->widget(indice);
+    widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
+    tabWidget->setCurrentIndex(indice);
 }
 
 void MainWindow::slotVariableExogena()
@@ -377,99 +917,6 @@ void MainWindow::slotVariableExogena()
     {
         formVariablesExogenas->show();
     }
-}
-
-
-void MainWindow::slotCoeficienteVertical()
-{
-    actionCV.setDisabled(true);
-    tabWidget->addTab(new QWidget,"CT_Vertical");
-    QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
-
-    QTableWidget *CT_VerticalTW = new QTableWidget;
-    int count=tw->rowCount();
-    CrearTablaVacia(count,CT_VerticalTW);//Se crea una tabla vacia
-    /* ****     Se coloca como no editable la celda(0,0)    ***** */
-    noEditColZero(CT_VerticalTW);
-    /*****      Se llena la tabla vacia con los valores de la tabla principal ****/
-    CalcularAn(tw,CT_VerticalTW,new QTableWidget,count,false);//Funcion para calcular el Coeficiente Tecnico Horizontal (An)
-
-
-    insertremoveRowCol(CT_VerticalTW,0,true);
-    insertremoveRowCol(CT_VerticalTW,0,false);
-    setAccountTitle(CT_VerticalTW);
-    int indice=ObtenerIndice("CT_Vertical");//Se obtiene el indice de la pestaña
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(CT_VerticalTW);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
-    tabWidget->setCurrentIndex(indice);
-}
-
-void MainWindow::slotCoeficienteHorizontal()
-{
-    actionCH.setDisabled(true);
-    tabWidget->addTab(new QWidget,"CT_Horizontal");
-    QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
-
-    /*      Se eliminan la fila y columna (0,0) para los calculos*/
-    insertremoveRowCol(tw,0,false);
-
-    int count=tw->rowCount();
-    QTableWidget *CT_HorizontalTW = new QTableWidget;
-    CrearTablaVacia(count,CT_HorizontalTW); //Se Crea la tabla vacia
-    /* ****     Se coloca como no editable la celda(0,0)    ***** */
-    noEditColZero(CT_HorizontalTW);
-    /*****      Se llena la tabla vacia con los valores de la tabla principal ****/
-    for(int i=0;i<count-1;i++)
-    {
-        QString STotal = Separador(tw->item(i,count-1),true);
-        double total=STotal.toDouble();//Se obtiene el total de esa columna
-        for(int j=0;j<count-1;j++)
-        {
-            if(i!=0 && j!=0)
-            {
-                QString value = Separador(tw->item(i,j),true);
-                double valor=value.toDouble();
-                if(total==0)//Se comprueba en caso de que el total sea zero
-                {
-                    valor=0;
-                }
-                else
-                {
-                    valor/=total;//Se divide el valor de la celda entre el total correspondiente
-                }
-                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',2));
-                ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
-                ValoraInsertar->setTextAlignment(Qt::AlignCenter);
-                value = Separador(ValoraInsertar,false);
-                ValoraInsertar->setText(value);
-                CT_HorizontalTW->setItem(i,j,ValoraInsertar);
-            }
-            /****           En este else se llenan las celdas con fila y columna 0, es decir las que tienen nombre *****/
-            else if((i==0 && j>0)||(j==0 && i>0))
-            {
-                QString value=tw->item(j,i)->text();
-                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(value);
-                ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
-                CellStyleComponente(ValoraInsertar);
-                CT_HorizontalTW->setItem(j,i,ValoraInsertar);
-            }
-
-         }
-    }
-    /*      Se agrega la columna y fila (0,0) y se insertan los titulos de las cuentas      */
-    insertremoveRowCol(tw,0,true);
-    insertremoveRowCol(CT_HorizontalTW,0,true);
-    setAccountTitle(tw);
-    setAccountTitle(CT_HorizontalTW);
-
-    int indice=ObtenerIndice("CT_Horizontal");//Se obtiene el indice de la pestaña
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(CT_HorizontalTW);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
-    tabWidget->setCurrentIndex(indice);
 }
 
 void MainWindow::slotCloseExogena()
@@ -661,7 +1108,7 @@ void MainWindow::slotFinalizarExogena()
         connect(&actionLa,SIGNAL(triggered()),this,SLOT(slotMa()));
         actionLa.setEnabled(true);
         //Opcion de los coeficientes tecnicos verticales
-        connect(&actionCTVEndEx,SIGNAL(triggered()),this,SLOT(slotCTVEndogena()));
+        connect(&actionCTVEndEx,SIGNAL(triggered()),this,SLOT(AnMa()));
         actionCTVEndEx.setEnabled(true);
 
         /*                  Se crea la pestaña endogena-endogena            */
@@ -681,8 +1128,12 @@ void MainWindow::slotFinalizarExogena()
 
         obtenerCuentaComponentes();//Se guardan las cuentas/componentes
 
-        actionModeloClasico.setEnabled(true);//Se activa la opción de módelo clásico
+        //Se activa la opción de módelo clásico
+        actionModeloClasico.setEnabled(true);
         connect(&actionModeloClasico,SIGNAL(triggered()),this,SLOT(slotModeloClasico()));
+        //Se activa la opción para el módelo no clásico
+        actionModeloNoClasico.setEnabled(true);
+        connect(&actionModeloNoClasico,SIGNAL(triggered()),this,SLOT(slotModeloNoClasico()));
 
         tabWidget->setCurrentIndex(indice);
 
@@ -757,22 +1208,26 @@ void MainWindow::slotFinalizarExogena()
     }
 }
 
-void MainWindow::slotCTVEndogena()
+/*      Funcion que calcula la el CTV necesario para el cálculo Ma*/
+void MainWindow::AnMa()
 {
-    if(opcionMa==0)
+    if(opcionMa==1)
+    {
+        QTableWidget *tw = findChild<QTableWidget *>("MatrizAn");
+        QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+        layoutCentralWidget->addWidget(tw);
+        QWidget *widget = new QWidget;
+        widget->setLayout(layoutCentralWidget);
+        tabWidget->addTab(widget,"An");
+        actionCTVEndEx.setDisabled(true);
+    }
+    else
     {
         EndogenaAn();
+        connect(&actionEncadenamiento,SIGNAL(triggered()),this,SLOT(slotEncadenamientos()));
+        actionEncadenamiento.setEnabled(true);
+        actionCTVEndEx.setDisabled(true);
     }
-    QTableWidget *tablaAn = findChild<QTableWidget *>("MatrizAn");
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(tablaAn);
-    QWidget *widget = new QWidget;
-    widget->setLayout(layoutCentralWidget);
-    tabWidget->addTab(widget,"An");
-    int indice = ObtenerIndice("An");
-    opcionCTEndogena = 1;
-    actionCTVEndEx.setDisabled(true);
-    tabWidget->setCurrentIndex(indice);
 }
 
 /***        Slot para calcular el coeficiente tecnico vertical de la matriz endogena/exogena      ***/
@@ -801,15 +1256,18 @@ void MainWindow::EndogenaAn()
     QWidget *widget = tabWidget->widget(indice);
     widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
     spanEndogenaCell(tablaAn,2,0,false);//Se juntan los espacios de las cuentas
+    tabWidget->setCurrentIndex(indice); 
     crearMatrizEndogena(tablaAn);
-    tabWidget->removeTab(indice);
+
 }
 
 void MainWindow::slotMa()
 {
-    if(opcionCTEndogena==0)
+    if(actionCTVEndEx.isEnabled())
     {
         EndogenaAn();
+        int indice=ObtenerIndice("An");
+        tabWidget->removeTab(indice);
     }
     QTableWidget *tw = findChild<QTableWidget *>("MatrizAn");
     restarIdentidadAn(tw);
@@ -828,422 +1286,6 @@ int MainWindow::ObtenerIndice(QString text)//Funcion para obtener el indice de u
         }
     }
     return indice;
-}
-
-
-void MainWindow::createMatrixCentralWidget()
-{
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    QVBoxLayout * layoutLateralWidget = new QVBoxLayout;
-
-    QTableWidget * tableWidget = new QTableWidget(this);
-    tableWidget->setObjectName("TablaPrincipal");//Se le asigna nombre al objeto
-    QGroupBox * groupBoxAccount = new QGroupBox;
-    QPushButton * buttonEnd = new QPushButton;
-    buttonEnd->setObjectName("AgregarCuentas");//Se le asigna nombre al objeto
-    QPushButton * buttonRestaurar = new QPushButton;
-    buttonRestaurar->setObjectName("RestaurarCuentas");//Se le asigna nombre al objeto
-    QPushButton * buttonFinalizar = new QPushButton;
-    buttonFinalizar->setObjectName("FinalizarCuentas");//Se le asigna nombre al objeto
-    QPushButton * buttonModificar = new QPushButton;
-    buttonModificar->setObjectName("ModificarCuentas");//Se le asigna nombre al objeto
-
-    populateTable(tableWidget);
-    tableWidget->setMaximumHeight(700);
-
-    /* ****     Se coloca como no editable la celda(0,0)    ***** */
-    noEditColZero(tableWidget);
-
-    //tableWidget->setFixedSize(750,750);
-    layoutCentralWidget->addWidget(tableWidget);
-    //layoutCentralWidget->addStretch();
-
-    QVBoxLayout * layoutAccounts = new QVBoxLayout;
-
-    layoutAccounts->addWidget(new StackWidget(numAccounts, groupBoxAccount));
-
-    groupBoxAccount->setFixedWidth(220);
-    groupBoxAccount->setObjectName("GrupoCuentas");//Se le asigna nombre al objeto
-    groupBoxAccount->setLayout(layoutAccounts);;
-    groupBoxAccount->setTitle("Cuentas");
-    groupBoxAccount->setStyleSheet("QGroupBox {border: 1px solid gray; "
-                     "border-radius: 3px; margin-top: 0.5em;} "
-                     "QGroupBox::title { subcontrol-origin: margin; "
-                     "left: 10px; padding: 0 3px 0 3px; } ");
-
-
-
-    layoutLateralWidget->addStretch(1);
-    layoutLateralWidget->addWidget(groupBoxAccount);
-    buttonEnd->setText("A&gregar");
-    buttonEnd->setObjectName("AgregarCuentas");
-    buttonEnd->setFixedWidth(100);
-    buttonEnd->setStyleSheet("background-color: #358ccb; color: #fff;"
-                             "font-weight: bold; height: 30px; border: none;"
-                             "border-radius: 5px; margin-top: 40px;");
-    //layoutLateralWidget->addWidget(buttonEnd);
-
-
-    /***********          Nuevo boton para restaurar,editar y finalizar la tabla             *******/
-    //buttonRestaurar->setText("&Restaurar");
-    buttonRestaurar->setIcon(QIcon("./img/undo-habilitado.png"));
-    buttonRestaurar->setFlat(true);
-    buttonRestaurar->setObjectName("Restaurar");
-    buttonRestaurar->setFixedWidth(100);
-    /*buttonRestaurar->setStyleSheet("background-color: #358ccb; color: #fff;"
-                             "font-weight: bold; height: 30px; border: none;"
-                             "border-radius: 5px; margin-top: 40px;");*/
-    //layoutLateralWidget->addWidget(buttonRestaurar);
-
-    //buttonModificar->setText("&Editar ");
-    buttonModificar->setIcon(QIcon("./img/edit-habilitado.png"));
-    buttonModificar->setFlat(true);
-    buttonModificar->setObjectName("Modificar");
-    buttonModificar->setFixedWidth(100);
-    /*buttonModificar->setStyleSheet("background-color: #358ccb; color: #fff;"
-                             "font-weight: bold; height: 30px; border: none;"
-                             "border-radius: 5px; margin-top: 40px;");*/
-    //layoutLateralWidget->addWidget(buttonModificar);
-
-
-    buttonFinalizar->setText("&Finalizar");
-    buttonFinalizar->setObjectName("Finalizar");
-    buttonFinalizar->setFixedWidth(100);
-    buttonFinalizar->setStyleSheet("background-color: #358ccb; color: #fff;"
-                             "font-weight: bold; height: 30px; border: none;"
-                             "border-radius: 5px; margin-top: 40px;");
-    //layoutLateralWidget->addWidget(buttonFinalizar);
-    QHBoxLayout *botonesPrimarios = new QHBoxLayout;
-    botonesPrimarios->addWidget(buttonEnd);
-    botonesPrimarios->addWidget(buttonFinalizar);
-    QWidget *widgetBotonesPrimarios = new QWidget;
-    widgetBotonesPrimarios->setLayout(botonesPrimarios);
-    layoutLateralWidget->addWidget(widgetBotonesPrimarios);
-
-    QHBoxLayout *botonesSecundarios = new QHBoxLayout;
-    botonesSecundarios->addWidget(buttonRestaurar);
-    botonesSecundarios->addWidget(buttonModificar);
-    QWidget *widgetBotonesSecundarios = new QWidget;
-    widgetBotonesSecundarios->setLayout(botonesSecundarios);
-    layoutLateralWidget->addWidget(widgetBotonesSecundarios);
-
-    layoutLateralWidget->addStretch(6);
-
-
-    layoutCentralWidget->addLayout(layoutLateralWidget);
-
-    connect(buttonEnd,SIGNAL(clicked()),this,SLOT(AgregarCuenta()));//**************Conexion del boton agregar**********************
-    connect(buttonRestaurar,SIGNAL(clicked()),this,SLOT(RestaurarCeldas()));//Conexion del boton restaurar
-    connect(buttonFinalizar,SIGNAL(clicked()),this,SLOT(FinalizarCuentas()));//Conexion del boton Finalizar
-    connect(buttonModificar,SIGNAL(clicked()),this,SLOT(ModificarCuenta()));//Conexion del boton modificar
-
-
-    layoutCentralWidget->sizeHint();
-
-    tabWidget->addTab(new QWidget,"MCS");
-    QWidget *widget= tabWidget->widget(1);
-    widget->setLayout(layoutCentralWidget);
-
-
-    /*  ***********         Se agrega la columna en la que se asignan los nombre            **************           */
-    tableWidget->insertRow(0);
-    tableWidget->insertColumn(0);
-    noEditColZero(tableWidget);
-    /*              Se agregan elementos a la recien creada fila/columna        */
-    int contador=tableWidget->rowCount();
-    for(int i=1;i<contador;i++)
-    {
-        QTableWidgetItem *ValoraInsertar = new QTableWidgetItem;
-        ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
-        tableWidget->setItem(0,i,ValoraInsertar);
-
-        QTableWidgetItem *ValoraInsertar2 = new QTableWidgetItem;
-        ValoraInsertar2->setFlags(ValoraInsertar2->flags() ^ Qt::ItemIsEditable);
-        tableWidget->setItem(i,0,ValoraInsertar2);
-    }
-
-    matricesMenuBar();//Al terminar la carga de la tabla se ejecuta la accion para el menu de Operaciones
-    tabWidget->setCurrentIndex(1);//Se seleciona la pestaña MCS
-
-    actionLoadMatrix.setDisabled(true);
-
-    actionExportMatrix.setEnabled(true);
-
-    /****          Se conectan las acciones para coeficientes tecnicos horizontales y verticales      ****/
-    connect(&actionCH, SIGNAL(triggered()), this,SLOT(slotCoeficienteHorizontal()));
-    connect(&actionCV, SIGNAL(triggered()), this,SLOT(slotCoeficienteVertical()));
-    //Se conecta la accion para la variables exogenas
-    connect(&actionVariableExogena,SIGNAL(triggered()),this,SLOT(slotVariableExogena()));
-}
-
-void MainWindow::AgregarCuenta()
-{
-    QMessageBox msBox(QMessageBox::Question,"Agregar cuenta","¿Está seguro que agregar la cuenta?",
-                      QMessageBox::Yes | QMessageBox::No,this);
-    msBox.setButtonText(QMessageBox::Yes,"&Si");
-    msBox.setDefaultButton(QMessageBox::Yes);
-    if(msBox.exec()==QMessageBox::Yes)
-    {
-        QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");//Se busca la tabla que se creo
-        StackWidget *sw = findChild<StackWidget *>();//Se buscan las cuentas creadas
-
-        /* ******   Se leen los campos del widget izquierdo   ******* */;
-
-        int index=sw->comboAccount->currentIndex();
-
-
-        /*****       Se cargan la linea y las spin box correpondientes a la cuenta seleccionada       *****/
-
-        QLineEdit *le= findChild<QLineEdit *>(QString("linedit %1").arg(index + 1));
-        QSpinBox *SBStart = findChild<QSpinBox *>(QString("accountstart %1").arg(index+1));
-        QSpinBox *SBEnd = findChild<QSpinBox *>(QString("accountend %1").arg(index+1));
-
-        int inicio=SBStart->value();
-        int fin=SBEnd->value();
-        QString nombreCuenta=le->text();
-
-        if(nombreCuenta.isEmpty() or nombreCuenta.isNull())
-        {
-            QMessageBox::warning(this,"Alerta","El nombre de la cuenta esta vacio");
-        }
-        else
-        {
-            int cantidad_filas=tw->rowCount();
-
-            if(inicio>cantidad_filas or fin>cantidad_filas)//Se verifica que los valores no excedan el tamaño de la tabla
-            {
-                QMessageBox::warning(this,"Alerta","Valores mayores al tamaño\n de la tabla");
-            }
-            else if(inicio>fin)
-            {
-                QMessageBox::warning(this,"Alerta","El inicio es mayor\nque el fin");
-            }
-            else
-            {
-                /***  Se comprueba si la celda de la tabla esta ocupada por otra cuenta  ***/
-                bool centinela=true;
-                if(inicio>2 and fin>2){
-                    for(int i=0;i<numAccounts;i++)
-                    {
-                        if(i!=index)
-                        {
-                            QSpinBox *oI = findChild<QSpinBox *>(QString("accountstart %1").arg(i+1));
-                            QSpinBox *oF = findChild<QSpinBox *>(QString("accountend %1").arg(i+1));
-                            int otroInicio = oI->text().toInt();
-                            int otroFin = oF->text().toInt();
-                            for(int k=inicio;k<=fin;k++)
-                            {
-                                for(int j=otroInicio;j<=otroFin;j++)
-                                {
-                                    if(k==j)
-                                    {
-                                        centinela=false;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                /*  *****    Se asigna el nombre de la cuenta a las cabecereas de la tabla en el rango(inicio,fin)     *****    */
-                if((inicio>2 && fin>2) and (centinela))
-                {
-                    for(int i=inicio-1;i<fin;i++)
-                    {
-                        QTableWidgetItem *ValoraInsertarFila = new QTableWidgetItem(nombreCuenta);
-                        ValoraInsertarFila->setTextAlignment(Qt::AlignCenter);
-                        ValoraInsertarFila->setFlags(ValoraInsertarFila->flags() ^ Qt::ItemIsEditable);
-                        ValoraInsertarFila->setTextAlignment(Qt::AlignCenter);
-                        CellStyle(ValoraInsertarFila);
-                        tw->setItem(0,i,ValoraInsertarFila);
-                        QTableWidgetItem *ValoraInsertarColumna = new QTableWidgetItem(nombreCuenta);
-                        ValoraInsertarColumna->setTextAlignment(Qt::AlignCenter);
-                        ValoraInsertarColumna->setFlags(ValoraInsertarColumna->flags() ^ Qt::ItemIsEditable);
-                        ValoraInsertarColumna->setTextAlignment(Qt::AlignCenter);
-                        CellStyle(ValoraInsertarColumna);
-                        tw->setItem(i,0,ValoraInsertarColumna);
-                    }
-                    int espacio=(fin-inicio)+1;
-                    if(espacio>1)
-                    {
-                        tw->setSpan(inicio-1,0,espacio,1);
-                        tw->setSpan(0,inicio-1,1,espacio);
-                    }
-                    /*****              Se inhabilita el boton de la linea  y los spinbox  *******/
-                    le->setEnabled(false);
-                    SBStart->setEnabled(false);
-                    SBEnd->setEnabled(false);
-                }
-                else if(!centinela)
-                {
-                    QMessageBox::warning(this,"Alerta","Valores en el espacio de otra cuenta");
-                }
-                else
-                {
-                    QMessageBox::warning(this,"Alerta","Valores invalidos");
-                }
-
-            }
-        }
-    }
-
-}
-
-void MainWindow::FinalizarCuentas()
-{
-    QMessageBox msBox(QMessageBox::Question,"Finalizar Carga","¿Está seguro que desea finalizar?",
-                      QMessageBox::Yes | QMessageBox::No,this);
-    msBox.setButtonText(QMessageBox::Yes,"&Si");
-    msBox.setDefaultButton(QMessageBox::Yes);
-    if(msBox.exec()==QMessageBox::Yes)
-    {
-        bool Centinela=ComprobarCuentas();//Se llama a la funcion que comprueba si todos los campos de las cuentas estan llenos
-        if(Centinela)
-        {
-            QPushButton *Agregar = findChild<QPushButton *>("AgregarCuentas");
-            QPushButton *Restaurar = findChild<QPushButton *>("Restaurar");
-            Agregar->setStyleSheet("background-color: gray; color: #fff;"
-                                     "font-weight: bold; height: 30px; border: none;"
-                                     "border-radius: 5px; margin-top: 40px;");
-            Agregar->setEnabled(false);
-            Agregar->setVisible(false);
-            Restaurar->setStyleSheet("background-color: gray; color: #fff;"
-                                     "font-weight: bold; height: 30px; border: none;"
-                                     "border-radius: 5px; margin-top: 40px;");
-            Restaurar->setEnabled(false);
-            Restaurar->setVisible(false);
-            QPushButton *Modificar = findChild<QPushButton *>("Modificar");
-            Modificar->setStyleSheet("background-color: gray; color: #fff;"
-                                     "font-weight: bold; height: 30px; border: none;"
-                                     "border-radius: 5px; margin-top: 40px;");
-            Modificar->setEnabled(false);
-            Modificar->setVisible(false);
-            QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
-            QPushButton *Finalizar = findChild<QPushButton *>("Finalizar");
-            Finalizar->setStyleSheet("background-color: gray; color: #fff;"
-                                     "font-weight: bold; height: 30px; border: none;"
-                                     "border-radius: 5px; margin-top: 40px;");
-            Finalizar->setEnabled(false);
-            Finalizar->setVisible(false);
-
-            QGroupBox *groupbox = findChild<QGroupBox *>("GrupoCuentas");
-            groupbox->setVisible(false);
-
-            CalcularTotales(tw,2);//Se llama a la funcion que agregue una nueva fila y columna con los totales respectivos
-            setAccountTitle(tw);
-
-            /*       Luego de calcular los totales se habilitan las opciones del menu herramientas       */
-            actionCH.setEnabled(true);
-            actionCV.setEnabled(true);
-            EndoExo.setEnabled(true);
-            actionVariableExogena.setEnabled(true);
-         }
-        else
-        {
-            QMessageBox::warning(this,"Alerta","Debe llenar correctamente y agregar todas las cuentas");
-        }
-    }
-}
-
-void MainWindow::CalcularTotales(QTableWidget *tableWidget,int inicio)//Se calculan los totales por fila/columna
-{
-    int filas=tableWidget->rowCount();
-    int columnas=tableWidget->columnCount();
-    /*******       Se inserta la nueva fila y columna para los totales, asi como es texto corespondiente             *****/
-    tableWidget->insertRow(filas);
-    tableWidget->insertColumn(columnas);
-    QTableWidgetItem *ColumnaTotal = new QTableWidgetItem;
-    ColumnaTotal->setText("Total en Columna");
-    CellStyle(ColumnaTotal);//Estilo de la Celda
-    ColumnaTotal->setFlags(ColumnaTotal->flags() ^ Qt::ItemIsEditable);
-    QTableWidgetItem *FilaTotal = new QTableWidgetItem;
-    FilaTotal->setText("Total en Fila");
-    CellStyle(FilaTotal);//Estilo de la Celda
-    FilaTotal->setFlags(FilaTotal->flags() ^ Qt::ItemIsEditable);
-    tableWidget->setItem(columnas,inicio-1,ColumnaTotal);
-    tableWidget->setItem(inicio-1,filas,FilaTotal);
-    for(int i=inicio;i<filas;i++)
-    {
-        double SumaFila=0;
-        double SumaColumna=0;
-        for(int j=inicio;j<filas;j++)
-        {
-            QString fila=Separador(tableWidget->item(j,i),true);
-            double thisFila=fila.toDouble();
-            QString columna=Separador(tableWidget->item(i,j),true);
-            double thisColumna=columna.toDouble();
-            SumaFila+=thisFila;
-            SumaColumna+=thisColumna;
-        }
-        QTableWidgetItem *Valor1 = new QTableWidgetItem;
-        Valor1->setText(QString::number(SumaFila,'f',2));
-        QString value1 = Separador(Valor1,false);
-        Valor1->setText(value1);
-        Valor1->setFlags(Valor1->flags() ^ Qt::ItemIsEditable);
-        Valor1->setTextAlignment(Qt::AlignCenter);
-        CellStyle(Valor1);//Estilo de la Celda
-        QTableWidgetItem *Valor2 = new QTableWidgetItem;
-        Valor2->setText(QString::number(SumaColumna,'f',2));
-        QString value2 = Separador(Valor2,false);
-        Valor2->setText(value2);
-        Valor2->setFlags(Valor2->flags() ^ Qt::ItemIsEditable);
-        Valor2->setTextAlignment(Qt::AlignCenter);
-        CellStyle(Valor2);//Estilo de la Celda
-        tableWidget->setItem(filas,i,Valor1);//Inserta en Filas
-        tableWidget->setItem(i,filas,Valor2);//Inserta en Columnas
-    }
-    /*          Se coloca como no editable la última celda      */
-    QTableWidgetItem *Valor = new QTableWidgetItem;
-    Valor->setFlags(Valor->flags() ^ Qt::ItemIsEditable);
-    tableWidget->setItem(filas,columnas,Valor);
-    //
-    int cantidad = tableWidget->rowCount();
-    ItemsNoEditable(tableWidget,0,inicio-1,cantidad-1);
-
-}
-
-void MainWindow::RestaurarCeldas()//Slot que permite restaurar el titulo de las cuentas en las celdas
-{
-    QMessageBox msBox(QMessageBox::Question,"Restaurar Celdas","¿Desea Restaurar el titulo de todas las celdas?",
-                      QMessageBox::Yes | QMessageBox::No,this);
-    msBox.setButtonText(QMessageBox::Yes,"&Si");
-    msBox.setDefaultButton(QMessageBox::Yes);
-    if(msBox.exec()==QMessageBox::Yes)
-    {
-        QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
-        insertremoveRowCol(tw,0,false);
-        insertremoveRowCol(tw,0,true);
-        int cantidad = tw->rowCount();
-        for(int i = 0; i<cantidad;i++)
-        {
-            QTableWidgetItem *fila = new QTableWidgetItem;
-            fila->setFlags(fila->flags() ^ Qt::ItemIsEditable);
-            tw->setItem(0,i,fila);
-            QTableWidgetItem *columna = new QTableWidgetItem;
-            columna->setFlags(columna->flags() ^ Qt::ItemIsEditable);
-            tw->setItem(i,0,columna);
-        }
-    }
-}
-
-void MainWindow::ModificarCuenta()//Slot que permite habilitar la edicion de una cuenta una vez agregada
-{
-    QMessageBox msBox(QMessageBox::Question,"Modificar Cuenta","¿Desea Modificar la Cuenta Actual?",
-                      QMessageBox::Yes | QMessageBox::No,this);
-    msBox.setButtonText(QMessageBox::Yes,"&Si");
-    msBox.setDefaultButton(QMessageBox::Yes);
-    if(msBox.exec()==QMessageBox::Yes)
-    {
-        StackWidget *sw = findChild<StackWidget *>();//Se buscan las cuentas creadas
-        int index=sw->comboAccount->currentIndex();
-        QLineEdit *le= findChild<QLineEdit *>(QString("linedit %1").arg(index + 1));
-        QSpinBox *SBStart = findChild<QSpinBox *>(QString("accountstart %1").arg(index+1));
-        QSpinBox *SBEnd = findChild<QSpinBox *>(QString("accountend %1").arg(index+1));
-        le->setEnabled(true);
-        SBStart->setEnabled(true);
-        SBEnd->setEnabled(true);
-    }
 }
 
 void MainWindow::loadMatrizExogena()
@@ -1286,13 +1328,6 @@ void MainWindow::populateTable(QTableWidget * tableWidget) {
             tableWidget->setItem(row, 0, newItem);
 
             QString line = file.readLine();
-            /*QStringList strings = line.split(csvSeparator);
-            for (int column = 0; column < strings.size(); ++column) {
-                QTableWidgetItem *newItem = new QTableWidgetItem(
-                        strings.at(column).toLocal8Bit().constData());
-                tableWidget->setItem(row, column, newItem);
-
-            }*/
 
             std::vector<std::string> rowV =
                     csv_read_row(line.toStdString(), csvSeparator);
@@ -1374,6 +1409,7 @@ QString MainWindow::numberFormat(double & d) {
     bool controlador = false;
     if(d<0)
     {
+        qDebug()<<d;
         controlador = true;
         d *=-1;
     }
@@ -1387,14 +1423,12 @@ QString MainWindow::numberFormat(double & d) {
             stringNumber.insert(i, '*');
         }
     }
-    if(controlador)
-    {
-        double var = stringNumber.toDouble();
-        var *=-1;
-        stringNumber = QString::number(var, 'f', precision);
-    }
     stringNumber.replace(".", ",");
     stringNumber.replace("*", ".");
+    if(controlador)
+    {
+        stringNumber.insert(0,"-");
+    }
     return stringNumber;
 }
 
@@ -1490,7 +1524,7 @@ int MainWindow::contarElementosMap(QMap<QString,QStringList> diccionario)//Funci
     return contador;
 }
 
-/***    Funcion, que dada un nombre de uan cuenta permite retornar su respectivo indice en la combobox ***/
+/***    Funcion, que dada un nombre de una cuenta permite retornar su respectivo indice en la combobox ***/
 int MainWindow::retornarIndiceCuenta(QString nombre_cuenta)
 {
     for(int i=0;i<numAccounts;i++)
@@ -1753,8 +1787,12 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw)
     {
         for(int j=0;j<cantidad-1;j++)
         {
+            qDebug()<<"ident"<<ident(i,j);
+            qDebug()<<"mendend"<<MatrizEndogenaEndogena[i][j];
             A(i,j) = ident(i,j)-MatrizEndogenaEndogena[i][j];
-         }
+            qDebug()<<"res"<<A(i,j);
+        }
+        qDebug()<<"----------------";
     }
 
     double determinant = A.determinant();
@@ -1764,8 +1802,6 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw)
         QMessageBox::critical(this,"Alerta","El determinante es Nulo");
         actionLa.setDisabled(true);
         actionModeloClasico.setDisabled(true);
-        int indice=ObtenerIndice("An");//Se obtiene el indice de la pestaña
-        tabWidget->widget(indice)->setDisabled(true);
     }
     else
     {
@@ -1795,11 +1831,14 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw)
         QWidget *widget = tabWidget->widget(indice);
         widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
         //Se activa la opcion para los encadenamientos
-        connect(&actionEncadenamiento,SIGNAL(triggered()),this,SLOT(slotEncadenamientos()));
-        actionEncadenamiento.setEnabled(true);
+        if(actionCTVEndEx.isEnabled())
+        {
+            connect(&actionEncadenamiento,SIGNAL(triggered()),this,SLOT(slotEncadenamientos()));
+            actionEncadenamiento.setEnabled(true);
+        }
         actionLa.setDisabled(true);
         opcionMa = 1;
-        //validar();
+        validar();
         tabWidget->setCurrentIndex(indice);
     }
 }
@@ -2091,8 +2130,10 @@ void MainWindow::slotEncadenamientos()
         //Radio Button
         QRadioButton *ct = new QRadioButton;
         ct->setObjectName("CTButton");
+        ct->setDisabled(true);
         QRadioButton *ma = new QRadioButton;
         ma->setObjectName("MaButton");
+        ma->setDisabled(true);
         ct->setText("Coeficientes Técnicos");
         ma->setText("Multiplicadores Leontief");
         radioBox->addWidget(ct);
@@ -2147,9 +2188,33 @@ void MainWindow::slotEncadenamientos()
         formEncadenamientos->setLayout(layoutCentralWidget);
         formEncadenamientos->show();
         opcionEncadenamientos = 1;
+        if(!actionCTVEndEx.isEnabled())
+        {
+            QRadioButton *ct = findChild<QRadioButton *>("CTButton");
+            ct->setEnabled(true);
+        }
+        if(opcionMa==1)
+        {
+            QRadioButton *ma = findChild<QRadioButton *>("MaButton");
+            ma->setEnabled(true);
+            QRadioButton *ct = findChild<QRadioButton *>("CTButton");
+            ct->setEnabled(true);
+        }
     }
     else
     {
+        if(!actionCTVEndEx.isEnabled())
+        {
+            QRadioButton *ct = findChild<QRadioButton *>("CTButton");
+            ct->setEnabled(true);
+        }
+        if(opcionMa==1)
+        {
+            QRadioButton *ma = findChild<QRadioButton *>("MaButton");
+            ma->setEnabled(true);
+            QRadioButton *ct = findChild<QRadioButton *>("CTButton");
+            ct->setEnabled(true);
+        }
         formEncadenamientos->show();
     }
 }
@@ -2475,13 +2540,13 @@ void MainWindow::slotVerEncadenamiento()
 }
 
 /*          Funcion para crear una tabla vacia, específicamente para los encadenamientos        */
-void MainWindow::crearTablaVaciaEncadenamiento(int contador, QTableWidget *tw,int filas)
+void MainWindow::crearTablaVaciaEncadenamiento(int columnas, QTableWidget *tw,int filas)
 {
     for(int j=0;j<filas;j++)
     {
         tw->insertColumn(0);
     }
-    for(int k=0;k<contador;k++)
+    for(int k=0;k<columnas;k++)
     {
         tw->insertRow(k);
     }
@@ -2748,6 +2813,7 @@ void MainWindow::slotModeloClasico()
 
     QPushButton *buttonCalcular = new QPushButton;
     buttonCalcular->setText("&Calcular");
+    buttonCalcular->setObjectName(QString("Calcular %1").arg(cantidadEscenarios));
     buttonCalcular->setFixedWidth(130);
     buttonCalcular->setStyleSheet("background-color: #358ccb; color: #fff;"
                              "font-weight: bold; height: 30px; border: none;"
@@ -2756,8 +2822,10 @@ void MainWindow::slotModeloClasico()
 
     QPushButton *buttonFinalizar = new QPushButton;
     buttonFinalizar->setText("&Finalizar");
+    buttonFinalizar->setObjectName(QString("Finalizar %1").arg(cantidadEscenarios));
+    buttonFinalizar->setDisabled(true);
     buttonFinalizar->setFixedWidth(130);
-    buttonFinalizar->setStyleSheet("background-color: #358ccb; color: #fff;"
+    buttonFinalizar->setStyleSheet("background-color: gray; color: #fff;"
                              "font-weight: bold; height: 30px; border: none;"
                              "border-radius: 5px; margin-top: 40px;");
     stackLayout->addWidget(buttonFinalizar);
@@ -2880,7 +2948,11 @@ void MainWindow::calcularEscenario()
         }
         tw->resizeColumnsToContents();
         tw->resizeRowsToContents();
-
+        QPushButton *buttonFinalizar = findChild<QPushButton *>(QString("Finalizar %1").arg(cantidadEscenarios));
+        buttonFinalizar->setStyleSheet("background-color: #358ccb; color: #fff;"
+                                 "font-weight: bold; height: 30px; border: none;"
+                                 "border-radius: 5px; margin-top: 40px;");
+        buttonFinalizar->setEnabled(true);
     }
 }
 
@@ -2893,39 +2965,32 @@ void MainWindow::finalizarEscenario()
     if(msBox.exec()==QMessageBox::Yes)
     {
         QTableWidget *tw = findChild<QTableWidget *>(QString("TablaModeloClasico %1").arg(cantidadEscenarios));
-        if(!tw->item(1,4)->text().isEmpty())
-        {
-            QTableWidget *resultadoEscenario = new QTableWidget;
-            resultadoEscenario->setObjectName(QString("TablaResultadoEscenario %1").arg(cantidadEscenarios));
-            int contador = tw->rowCount();
-            crearTablaVaciaEncadenamiento(contador,resultadoEscenario);
-            calcularFinEscenario(resultadoEscenario);
-            //Se ajustan las columnas/filas al contenido
-            resultadoEscenario->resizeColumnsToContents();
-            resultadoEscenario->resizeRowsToContents();
-            //Se oculta el stack
-            QStackedWidget *sw = findChild<QStackedWidget *>(QString("StackEscenario %1").arg(cantidadEscenarios));
-            sw->hide();
+        QTableWidget *resultadoEscenario = new QTableWidget;
+        resultadoEscenario->setObjectName(QString("TablaResultadoEscenario %1").arg(cantidadEscenarios));
+        int contador = tw->rowCount();
+        crearTablaVaciaEncadenamiento(contador,resultadoEscenario);
+        calcularFinEscenario(resultadoEscenario);
+        //Se ajustan las columnas/filas al contenido
+        resultadoEscenario->resizeColumnsToContents();
+        resultadoEscenario->resizeRowsToContents();
+        //Se oculta el stack
+        QStackedWidget *sw = findChild<QStackedWidget *>(QString("StackEscenario %1").arg(cantidadEscenarios));
+        sw->hide();
 
-            tabWidget->addTab(new QWidget,QString("Resultado %1").arg(cantidadEscenarios));
-            int indice=ObtenerIndice(QString("Resultado %1").arg(cantidadEscenarios));
+        tabWidget->addTab(new QWidget,QString("Resultado %1").arg(cantidadEscenarios));
+        int indice=ObtenerIndice(QString("Resultado %1").arg(cantidadEscenarios));
 
-            QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-            layoutCentralWidget->addWidget(resultadoEscenario);
-            QWidget *widget = tabWidget->widget(indice);
-            widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
-            tabWidget->setCurrentIndex(indice);
-            cantidadEscenarios++;
-            actionModeloClasico.setEnabled(true);
-            if(cantidadEscenarios>2)
-            {
-                actionCompararResultados.setEnabled(true);
-                connect(&actionCompararResultados,SIGNAL(triggered()),this,SLOT(slotCompararResultados()));
-            }
-        }
-        else
+        QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+        layoutCentralWidget->addWidget(resultadoEscenario);
+        QWidget *widget = tabWidget->widget(indice);
+        widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
+        tabWidget->setCurrentIndex(indice);
+        cantidadEscenarios++;
+        actionModeloClasico.setEnabled(true);
+        if(cantidadEscenarios>2)
         {
-            QMessageBox::warning(this,"Alerta","Debe calcular para\nluego finalizar");
+            actionCompararResultados.setEnabled(true);
+            connect(&actionCompararResultados,SIGNAL(triggered()),this,SLOT(slotCompararResultados()));
         }
     }
 }
@@ -2960,7 +3025,7 @@ void MainWindow::calcularFinEscenario(QTableWidget *tw)
         res->setFlags(res->flags() ^ Qt::ItemIsEditable);
         tw->setItem(i+1,2,res);
         //Se agregan los valores de variacion
-        double var = (valor/subtotalEnd[i])*100;
+        double var = ((valor/subtotalEnd[i])-1)*100;
         QTableWidgetItem *vari = new QTableWidgetItem(QString::number(var,'f',2));
         QString variItem = Separador(vari,false);
         vari->setText(QString(variItem+"%"));
@@ -3154,4 +3219,287 @@ void MainWindow::cuentacomponentesResultado(QTableWidget *to,int count)
     }
 }
 
+void MainWindow::slotModeloNoClasico()
+{
+    if(opcionMa == 0)
+    {
+        slotMa();
+    }
+    obtenerMatrizExgEnd();
+}
 
+void MainWindow::obtenerMatrizExgEnd()
+{
+    QTableWidget *MatrizEndogenaExogena = findChild<QTableWidget *>("TablaExogenaEndogena");
+    QTableWidget *MatrizExgEnd = new QTableWidget;
+    QTableWidget *Bn = new QTableWidget;
+    Bn->setObjectName("Bn");
+    QTableWidget *Mb = new QTableWidget;
+    Mb->setObjectName("MatrizMb");
+    int count=MatrizEndogenaExogena->rowCount()-1;
+    int elementos = contarElementosMap(diccCuentasExogenas);
+    int inicioExogena=count-elementos;
+    crearTablaVaciaEncadenamiento(elementos+2,MatrizExgEnd,inicioExogena-1);
+    crearTablaVaciaEncadenamiento(elementos+2,Bn,inicioExogena-1);
+    crearTablaVaciaEncadenamiento(elementos+2,Mb,inicioExogena-1);
+
+    crearMatrizExgEnd(MatrizEndogenaExogena,MatrizExgEnd,elementos,inicioExogena);
+    calcularMatrizExgEnd(MatrizExgEnd);
+    ctvMatrizExgEnd(MatrizExgEnd,Bn);
+    titlespanMatrizExgEnd(Bn);
+
+    tabWidget->addTab(new QWidget,"Ma^T");
+    int indice=ObtenerIndice("Ma^T");
+    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+    layoutCentralWidget->addWidget(Bn);
+    QWidget *widget = tabWidget->widget(indice);
+    widget->setLayout(layoutCentralWidget);
+
+    estimarMb(Bn,Mb);
+}
+
+/*      Funcion para crear la Matriz Exógena Endógena*/
+void MainWindow::crearMatrizExgEnd(QTableWidget *MatrizEndogenaExogena,QTableWidget *MatrizExgEnd,int elementos,int inicioExogena)
+{
+    //Crear Matriz ExgEnd
+    for(int i = 0;i<elementos+2;i++)
+    {
+        for(int j=1;j<inicioExogena;j++)
+        {
+            if(i<2)
+            {
+                QString value = MatrizEndogenaExogena->item(i+1,j)->text();
+                QTableWidgetItem *item = new QTableWidgetItem(value);
+                item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+                MatrizExgEnd->setItem(i,j-1,item);
+            }
+            else
+            {
+                QString value = MatrizEndogenaExogena->item(inicioExogena+(i-2),j)->text();
+                QTableWidgetItem *item = new QTableWidgetItem(value);
+                item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+                MatrizExgEnd->setItem(i,j-1,item);
+            }
+        }
+    }
+}
+
+/*      Funcion para calcular los totales de la matriz Exógena-Endógena     */
+void MainWindow::calcularMatrizExgEnd(QTableWidget *MatrizExgEnd)
+{
+    //Calcular resultados
+    int fila= MatrizExgEnd->rowCount();
+    int columna = MatrizExgEnd->columnCount();
+    MatrizExgEnd->insertRow(fila);
+    for(int i = 2; i<columna; i++)
+    {
+        double total = 0;
+        for(int j = 2;j<fila;j++)
+        {
+            QString value = Separador(MatrizExgEnd->item(j,i),true);
+            double valor = value.toDouble();
+            total+=valor;
+        }
+        QTableWidgetItem *item = new QTableWidgetItem(QString::number(total,'f',2));
+        QString value = Separador(item,false);
+        item->setText(value);
+        item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+        MatrizExgEnd->setItem(fila,i,item);
+    }
+}
+
+void MainWindow::ctvMatrizExgEnd(QTableWidget *MatrizExgEnd,QTableWidget *Bn)
+{
+    //Calcular CTV
+    int fila = MatrizExgEnd->rowCount()-1;
+    int columna = MatrizExgEnd->columnCount();
+    QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
+    int totalLocal = tw->rowCount()-1;
+    for(int i = 0; i<columna; i++)
+    {
+
+        QString value;
+        double total;
+        for(int j = 0;j<fila;j++)
+        {
+            if(i>=2 and j>=2)
+            {
+                value = Separador(tw->item(totalLocal,i),true);
+                total = value.toDouble();
+                double valoraInsertar;
+                if(total==0)
+                {
+                    valoraInsertar=0;
+                }
+                else
+                {
+                    QString valor = Separador(MatrizExgEnd->item(j,i),true);
+                    valoraInsertar = valor.toDouble();
+                    valoraInsertar /= total;
+                }
+                QTableWidgetItem *item = new QTableWidgetItem(QString::number(valoraInsertar,'f',2));
+                QString value = Separador(item,false);
+                item->setText(value);
+                item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+                item->setTextAlignment(Qt::AlignCenter);
+                Bn->setItem(j,i,item);
+            }
+            else if(((i==0 && j>1)||(j==0 && i>1))or((i==1 && j>1)||(j==1 && i>1)))
+            {
+                QString value=MatrizExgEnd->item(j,i)->text();
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(value);
+                ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
+                if((i==0 && j>1)||(j==0 && i>1))
+                {
+                    CellStyle(ValoraInsertar);
+                    ValoraInsertar->setTextAlignment(Qt::AlignCenter);
+                }
+                else if((i==1 && j>1)||(j==1 && i>1))
+                {
+                    CellStyleComponente(ValoraInsertar);
+                }
+                Bn->setItem(j,i,ValoraInsertar);
+            }
+            /*      Se colocan no editables algunas de las celdas que estan vacias*/
+            else
+            {
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem;
+                ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
+                Bn->setItem(j,i,ValoraInsertar);
+            }
+        }
+    }
+}
+
+/*      Funcion para colocar los espacios de los títulos de las cuentas*/
+void MainWindow::titlespanMatrizExgEnd(QTableWidget *Bn)
+{
+    int fila = Bn->rowCount();
+    int columna = Bn->columnCount();
+    //Span Title No Clasico
+    QStringList valoresColumna;
+    QStringList valoresFila;
+    //Se obtienen los valores
+    for(int i = 2; i<columna; i++)
+    {
+        QString value = Bn->item(0,i)->text();
+        valoresColumna.append(value);
+    }
+    for(int j = 2;j<fila;j++)
+    {
+        QString value = Bn->item(j,0)->text();
+        valoresFila.append(value);
+
+    }
+
+    //Se agrega el espaciado
+    for(int i = 2; i<columna; i++)
+    {
+        QString name = Bn->item(0,i)->text();
+        if(valoresColumna.contains(name))
+        {
+            int contar = valoresColumna.count(name);
+            Bn->setSpan(0,i,1,contar);
+            valoresColumna.removeAll(name);
+        }
+        if(valoresColumna.isEmpty())
+        {
+            break;
+        }
+    }
+
+    for(int j = 2; j<fila; j++)
+    {
+        QString name = Bn->item(j,0)->text();
+        if(valoresFila.contains(name))
+        {
+            int contar = valoresFila.count(name);
+            Bn->setSpan(j,0,contar,1);
+            valoresFila.removeAll(name);
+        }
+        if(valoresFila.isEmpty())
+        {
+            break;
+        }
+    }
+}
+
+void MainWindow::estimarMb(QTableWidget *Bn,QTableWidget *Mb)
+{
+    int fila = Bn->rowCount();
+    int columna = Bn->columnCount();
+    QTableWidget *Ma = findChild<QTableWidget *>("MatrizMa");
+    int count = Ma->rowCount();
+    MatrixXd A(fila-2,columna-2);
+    MatrixXd Mbn(fila-2,columna-2);
+    MatrixXd Mma(count-2,count-2);
+    for(int i=2;i<columna;i++)
+    {
+        for(int j=2;j<fila;j++)
+        {
+            QString valueb = Separador(Bn->item(j,i),true);
+            double doubleb = valueb.toDouble();
+            Mbn(j-2,i-2) = doubleb;
+        }
+    }
+    for(int i=2;i<count;i++)
+    {
+        for(int j=2;j<count;j++)
+        {
+            QString valuem = Separador(Ma->item(i,j),true);
+            double doublem = valuem.toDouble();
+            Mma(i-2,j-2) = doublem;
+        }
+    }
+    A = Mbn*Mma;
+    for(int i=0;i<columna;i++)
+    {
+        for(int j=0;j<fila;j++)
+        {
+            if(i>=2 and j>=2)
+            {
+                QString valor = QString::number(A(j-2,i-2),'f',2);
+                qDebug()<<"matriz"<<A(j-2,i-2);
+                qDebug()<<"value"<<valor;
+                QTableWidgetItem *item = new QTableWidgetItem(valor);
+                QString value = Separador(item,false);
+                item->setText(value);
+                item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+                item->setTextAlignment(Qt::AlignCenter);
+                Mb->setItem(j,i,item);
+            }
+            else if(((i==0 && j>1)||(j==0 && i>1))or((i==1 && j>1)||(j==1 && i>1)))
+            {
+                QString value=Bn->item(j,i)->text();
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(value);
+                ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
+                if((i==0 && j>1)||(j==0 && i>1))
+                {
+                    CellStyle(ValoraInsertar);
+                    ValoraInsertar->setTextAlignment(Qt::AlignCenter);
+                }
+                else if((i==1 && j>1)||(j==1 && i>1))
+                {
+                    CellStyleComponente(ValoraInsertar);
+                }
+                Mb->setItem(j,i,ValoraInsertar);
+            }
+            /*      Se colocan no editables algunas de las celdas que estan vacias*/
+            else
+            {
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem;
+                ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
+                Mb->setItem(j,i,ValoraInsertar);
+            }
+        }
+    }
+    titlespanMatrizExgEnd(Mb);
+    tabWidget->addTab(new QWidget,"Modelo No Clásico");
+    int indice=ObtenerIndice("Modelo No Clásico");
+    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+    layoutCentralWidget->addWidget(Mb);
+    QWidget *widget = tabWidget->widget(indice);
+    widget->setLayout(layoutCentralWidget);
+    tabWidget->setCurrentIndex(indice);
+    actionModeloNoClasico.setDisabled(true);
+}
