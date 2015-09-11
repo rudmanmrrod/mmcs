@@ -11,7 +11,7 @@ class FormLoadMatrix : public QWidget
     Ui_FormLoadMatrix ui;
 
 signals:
-    void formAccepted(const QString &, int, char);
+    void formAccepted(const QString &, int, int);
 
     void formClosed();
 

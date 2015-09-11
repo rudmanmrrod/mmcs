@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'formloadmatrix.H'
 **
-** Created: Mon Aug 10 09:45:26 2015
+** Created: Fri Sep 11 09:48:54 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.2)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -32,17 +32,17 @@ static const uint qt_meta_data_FormLoadMatrix[] = {
 
  // signals: signature, parameters, type, tag, flags
       19,   16,   15,   15, 0x05,
-      50,   15,   15,   15, 0x05,
+      49,   15,   15,   15, 0x05,
 
  // slots: signature, parameters, type, tag, flags
-      63,   15,   15,   15, 0x0a,
-      84,   15,   15,   15, 0x0a,
+      62,   15,   15,   15, 0x0a,
+      83,   15,   15,   15, 0x0a,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_FormLoadMatrix[] = {
-    "FormLoadMatrix\0\0,,\0formAccepted(QString,int,char)\0"
+    "FormLoadMatrix\0\0,,\0formAccepted(QString,int,int)\0"
     "formClosed()\0slotLoadMatrixFile()\0"
     "slotButtonAcceptClicked()\0"
 };
@@ -53,7 +53,7 @@ void FormLoadMatrix::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         Q_ASSERT(staticMetaObject.cast(_o));
         FormLoadMatrix *_t = static_cast<FormLoadMatrix *>(_o);
         switch (_id) {
-        case 0: _t->formAccepted((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< char(*)>(_a[3]))); break;
+        case 0: _t->formAccepted((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
         case 1: _t->formClosed(); break;
         case 2: _t->slotLoadMatrixFile(); break;
         case 3: _t->slotButtonAcceptClicked(); break;
@@ -102,7 +102,7 @@ int FormLoadMatrix::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void FormLoadMatrix::formAccepted(const QString & _t1, int _t2, char _t3)
+void FormLoadMatrix::formAccepted(const QString & _t1, int _t2, int _t3)
 {
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

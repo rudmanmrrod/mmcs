@@ -10,7 +10,8 @@ HEADERS += mainwindow.H \
     formencadenamientos.h \
     stackencadenamientos.h \
     encadenamientoswidget.h \
-    formcompararresultados.h
+    formcompararresultados.h \
+    formcompararmnc.h
 
 SOURCES += mainwindow.C \
     main.C \
@@ -25,13 +26,15 @@ SOURCES += mainwindow.C \
     formencadenamientos.cpp \
     stackencadenamientos.cpp \
     encadenamientoswidget.cpp \
-    formcompararresultados.cpp
+    formcompararresultados.cpp \
+    formcompararmnc.cpp
 FORMS += formLoadMatrix.ui \
     formMatrixView.ui \
     formvariablesexogenas.ui \
     formexportmatrix.ui \
     formencadenamientos.ui \
-    formcompararresultados.ui
+    formcompararresultados.ui \
+    formcompararmnc.ui
 
 INCLUDEPATH += $$PWD/Eigen
 

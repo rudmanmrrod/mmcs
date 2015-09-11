@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'formcompararresultados.ui'
 **
-** Created: Fri Sep 4 09:56:44 2015
+** Created: Fri Sep 11 10:37:10 2015
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -56,7 +56,7 @@ public:
         sizePolicy1.setHeightForWidth(buttonVerResultados->sizePolicy().hasHeightForWidth());
         buttonVerResultados->setSizePolicy(sizePolicy1);
         buttonVerResultados->setMinimumSize(QSize(100, 0));
-        buttonVerResultados->setStyleSheet(QString::fromUtf8("background-color: #358ccb; color: #fff; font-weight: bold; height: 30px; border: none; border-radius: 5px; margin-top: 40px;\n"
+        buttonVerResultados->setStyleSheet(QString::fromUtf8("background-color: #358ccb; color: #fff; font-weight: bold; height: 30px; border: none; border-radius: 5px;\n"
 ""));
 
         horizontalLayout->addWidget(buttonVerResultados);

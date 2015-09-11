@@ -10,6 +10,8 @@
 #include <formencadenamientos.h>
 #include <ui_formcompararresultados.h>
 #include <formcompararresultados.h>
+#include <ui_formcompararmnc.h>
+#include <formcompararmnc.h>
 
 #include <sstream>
 #include <stackwidget.H>
@@ -20,6 +22,8 @@
 
 #include <QMap>
 #include <QVector>
+
+#include <Eigen>
 
 
 class MainWindow : public QMainWindow
@@ -32,6 +36,7 @@ class MainWindow : public QMainWindow
     QMenu menuViews;
     QMenu menuHelp;
     QMenu EndoExo;
+    QMenu Modelos;
 
     QAction actionLoadMatrix;
     QAction actionExportMatrix;
@@ -47,6 +52,7 @@ class MainWindow : public QMainWindow
     QAction actionModeloClasico;
     QAction actionCompararResultados;
     QAction actionModeloNoClasico;
+    QAction actionCompararResultadosMNC;
 
 
     QTableWidget * tableWidget;
@@ -57,14 +63,20 @@ class MainWindow : public QMainWindow
     QMap<QString,QStringList> diccCuentasComponentes;
     QMap<QString,QStringList> diccCuentasEncadenamientos;
 
+    QTableWidget *MatrizExgEnd;
+
     stackVariablesExogenas *stackVE;
     stackEncadenamientos *stackEncadenamiento;
+
+    Eigen::MatrixXd MatrixMa;
+    Eigen::MatrixXd MatrixMb;
 
 
     QString csvFilePath;
     char csvSeparator;
     int numAccounts;
     int matrixSize;
+    int precission;
     double  matrix[100][100];
 
     double MatrizEndogenaEndogena[200][200];
@@ -76,13 +88,17 @@ class MainWindow : public QMainWindow
     int opcionCuentaEncadenamientos;
     int opcionMa;
     int opcionFormCompararResultados;
+    int opcionFormCompararResultadosMNC;
 
     QVector<double> subtotalEnd;
     QVector<double> subtotalExog;
+    QVector<double> subtotalExogEnd;
 
     int cantidadEncadenamientos;
     int cantidadEscenarios;
     int cantidadResultados;
+    int cantidadMNC;//Cantidad de Modelos No Clasicos
+    int cantidadResultadosMNC;
 
     FormLoadMatrix * formLoadMatrix;
     FormViewMatrix * formViewMatrix;
@@ -90,6 +106,7 @@ class MainWindow : public QMainWindow
     FormExportMatrix * formExportMatriz;
     FormEncadenamientos * formEncadenamientos;
     FormCompararResultados *formCompararResultados;
+    FormCompararMNC *formCompararMNC;
 
     void initGUI();
 
@@ -131,12 +148,12 @@ class MainWindow : public QMainWindow
     void encademientosStyle(QTableWidgetItem *);
 
     void calcularSubtotal(QTableWidget *, int inicio, int fin, int exogena);
-    void llenarEscenario(QTableWidget *);
+    void llenarEscenario(QTableWidget *, bool clasico=true);
     void calcularFinEscenario(QTableWidget *);
     QVector<double> obtenerResultadoEscenario(QVector<double>);
     QStringList obtenerNombreResultadoEscenario();
     void crearTablaComparar(QTableWidget *, QTableWidget *);
-    void cuentacomponentesResultado(QTableWidget *, int count);
+    void cuentacomponentesResultado(QTableWidget *, int count, bool clasico = true);
     void validar();
 
     void obtenerMatrizExgEnd();
@@ -145,6 +162,10 @@ class MainWindow : public QMainWindow
     void ctvMatrizExgEnd(QTableWidget *, QTableWidget *);
     void titlespanMatrizExgEnd(QTableWidget *);
     void estimarMb(QTableWidget *, QTableWidget *);
+    void calcularSubtotalEndExg();
+    QVector<double> obtenerResultadoEscenarioMNC(QVector<double>);
+    void calcularFinEscenarioMNC(QTableWidget *);
+    QStringList obtenerNombreResultadoEscenarioMNC();
 
     void crearMatrizEndogena(QTableWidget *);
     void restarIdentidadAn(QTableWidget *);
@@ -164,7 +185,7 @@ protected:
 private slots:
     void slotLoadMatrix();
     void slotExportMatrix();
-    void slotFormLoadMatrixAccepted(const QString &, int, char);
+    void slotFormLoadMatrixAccepted(const QString &, int, int);
     void slotFormLoadMatrixClosed();
 
     void AgregarCuenta();
@@ -194,10 +215,15 @@ private slots:
     void slotSearchExport();
 
     void slotModeloClasico();
-    void calcularEscenario();
+    void calcularEscenario(bool clasico = true);
     void finalizarEscenario();
 
     void slotModeloNoClasico();
+    void calcularEscenarioNC();
+    void finalizarEscenarioNC();
+
+    void slotCompararResultadosMNC();
+    void slotVerResultadoMNC();
 
     void slotCompararResultados();
     void slotVerResultado();

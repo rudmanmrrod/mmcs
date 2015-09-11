@@ -15,7 +15,6 @@ FormLoadMatrix::FormLoadMatrix(QWidget * parent)
     int y = parent->pos().y() + parent->height()/2 - this->height()/2;
     this->move(x, y);
 
-    ui.editYear->setValidator(new QIntValidator);
     connect(ui.buttonSearch, SIGNAL(clicked()),this,SLOT(slotLoadMatrixFile()));
     connect(ui.buttonCancel, SIGNAL(clicked()),this,SLOT(close()));
     connect(ui.buttonOpen, SIGNAL(clicked()), this,
@@ -42,8 +41,7 @@ void FormLoadMatrix::slotButtonAcceptClicked()
         return;
     }
 
-    emit formAccepted(ui.editFilePath->text(), ui.spinNumber->value(),
-                      ui.comboSeparator->currentText().toStdString()[0]);
+    emit formAccepted(ui.editFilePath->text(), ui.spinNumber->value(),ui.spinBox->value());
 
     close();
 }

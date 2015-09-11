@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FormCompararResultados</class>
- <widget class="QWidget" name="FormCompararResultados">
+ <class>FormCompararMNC</class>
+ <widget class="QWidget" name="FormCompararMNC">
   <property name="windowModality">
    <enum>Qt::ApplicationModal</enum>
   </property>
@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>569</width>
-    <height>301</height>
+    <width>601</width>
+    <height>330</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,11 +18,11 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QListWidget" name="resultadosListWidget">
+    <widget class="QListWidget" name="listMNC">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
        <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
+       <verstretch>100</verstretch>
       </sizepolicy>
      </property>
      <property name="selectionMode">
@@ -31,7 +31,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="buttonVerResultados">
+    <widget class="QPushButton" name="verMNC">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -45,8 +45,7 @@
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: #358ccb; color: #fff; font-weight: bold; height: 30px; border: none; border-radius: 5px;
-</string>
+      <string notr="true">background-color: #358ccb; color: #fff; font-weight: bold; height: 30px; border: none; border-radius: 5px; </string>
      </property>
      <property name="text">
       <string>&amp;Ver</string>

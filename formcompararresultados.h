@@ -11,8 +11,6 @@ class FormCompararResultados : public QWidget
 {
     Q_OBJECT
 
-
-    
 public:
     explicit FormCompararResultados(QWidget *parent = 0);
     Ui::FormCompararResultados *ui;

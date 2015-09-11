@@ -5,16 +5,14 @@
 #include <stackencadenamientos.h>
 #include <QDebug>
 
-#include <Eigen>
-
 using namespace Eigen;
 
 void MainWindow::slotLoadMatrix()
 {
     formLoadMatrix = new  FormLoadMatrix(this);
     formLoadMatrix->show();
-    connect(formLoadMatrix, SIGNAL(formAccepted(QString,int,char)),
-            this, SLOT(slotFormLoadMatrixAccepted(QString,int,char)));
+    connect(formLoadMatrix, SIGNAL(formAccepted(QString,int,int)),
+            this, SLOT(slotFormLoadMatrixAccepted(QString,int,int)));
 }
 
 void MainWindow::slotExportMatrix()
@@ -207,21 +205,31 @@ void MainWindow::matricesMenuBar()
 
     OpMatrices.addMenu(&EndoExo);
 
+
     actionEncadenamiento.setText("E&ncadenamientos");
     actionEncadenamiento.setDisabled(true);
     OpMatrices.addAction(&actionEncadenamiento);
 
-    actionModeloClasico.setText("&Módelo Clásico");
+    Modelos.setTitle("&Modelos");
+    Modelos.setDisabled(true);
+
+    actionModeloClasico.setText("Módelo &Clásico");
     actionModeloClasico.setDisabled(true);
-    OpMatrices.addAction(&actionModeloClasico);
+    Modelos.addAction(&actionModeloClasico);
 
-    actionCompararResultados.setText("&Comparar Resultados");
+    actionCompararResultados.setText("(&1) Comparar Resultados(Módelo Clásico)");
     actionCompararResultados.setDisabled(true);
-    OpMatrices.addAction(&actionCompararResultados);
+    Modelos.addAction(&actionCompararResultados);
 
-    actionModeloNoClasico.setText("Mó&delo No Clásico");
+    actionModeloNoClasico.setText("Módelo &No Clásico");
     actionModeloNoClasico.setDisabled(true);
-    OpMatrices.addAction(&actionModeloNoClasico);
+    Modelos.addAction(&actionModeloNoClasico);
+
+    actionCompararResultadosMNC.setText("(&2) Comparar Resultados(Módelo No Clásico)");
+    actionCompararResultadosMNC.setDisabled(true);
+    Modelos.addAction(&actionCompararResultadosMNC);
+
+    OpMatrices.addMenu(&Modelos);
 
     menuBar()->addMenu(&OpMatrices);
 }
@@ -229,7 +237,7 @@ void MainWindow::matricesMenuBar()
 MainWindow::MainWindow()
     : actionLoadMatrix(this), actionExportMatrix(this), actionQuit(this),actionCH(this), actionCV(this),
       actionVariableExogena(this),actionLa(this),actionCTVEndEx(this),actionEncadenamiento(this), actionModeloClasico(this),
-      actionCompararResultados(this), actionModeloNoClasico(this),formLoadMatrix(0)
+      actionCompararResultados(this), actionModeloNoClasico(this),actionCompararResultadosMNC(this),formLoadMatrix(0)
 {
     tabWidget = new QTabWidget;
 
@@ -244,10 +252,13 @@ MainWindow::MainWindow()
     opcionEncadenamientos = 0;
     opcionMa = 0;
     opcionFormCompararResultados = 0;
+    opcionFormCompararResultadosMNC = 0;
     /*      Estas variables permiten terner el control de los procedimientos que se pueden generar multiples ventanas */
     cantidadEncadenamientos = 1;
     cantidadEscenarios = 1;
     cantidadResultados = 1;
+    cantidadMNC = 1;
+    cantidadResultadosMNC = 1;
 
     initGUI();
 
@@ -261,23 +272,20 @@ MainWindow::MainWindow()
 }
 
 void MainWindow::slotFormLoadMatrixAccepted(const QString & filePath,
-                                            int accountNumber, char sep)
+                                            int accountNumber, int pre)
 {
-    QString msg = "Archivo: " + filePath + "\nNúmero de cuentas: " +
-                   QString().setNum(accountNumber) +
-                   "\nSeparador: " + sep;
-
     csvFilePath = filePath;
-    csvSeparator = sep;
+    csvSeparator = ';';
     numAccounts = accountNumber;
+    precission = pre;
 
     createMatrixCentralWidget();
 }
 
 void MainWindow::slotFormLoadMatrixClosed()
 {
-    disconnect(formLoadMatrix, SIGNAL(formAccepted(QString,int,char)),
-               this, SLOT(slotFormLoadMatrixAccepted(QString,int,char)));
+    disconnect(formLoadMatrix, SIGNAL(formAccepted(QString,int)),
+               this, SLOT(slotFormLoadMatrixAccepted(QString,int)));
     formLoadMatrix = 0;
 }
 
@@ -474,6 +482,10 @@ void MainWindow::AgregarCuenta()
         {
             QMessageBox::warning(this,"Alerta","El nombre de la cuenta esta vacio");
         }
+        else if(!le->isEnabled())
+        {
+            QMessageBox::warning(this,"Alerta","Esta cuenta ya fue\nagregada");
+        }
         else
         {
             int cantidad_filas=tw->rowCount();
@@ -657,14 +669,14 @@ void MainWindow::CalcularTotales(QTableWidget *tableWidget,int inicio)//Se calcu
             SumaColumna+=thisColumna;
         }
         QTableWidgetItem *Valor1 = new QTableWidgetItem;
-        Valor1->setText(QString::number(SumaFila,'f',2));
+        Valor1->setText(QString::number(SumaFila,'f',precission));
         QString value1 = Separador(Valor1,false);
         Valor1->setText(value1);
         Valor1->setFlags(Valor1->flags() ^ Qt::ItemIsEditable);
         Valor1->setTextAlignment(Qt::AlignCenter);
         CellStyle(Valor1);//Estilo de la Celda
         QTableWidgetItem *Valor2 = new QTableWidgetItem;
-        Valor2->setText(QString::number(SumaColumna,'f',2));
+        Valor2->setText(QString::number(SumaColumna,'f',precission));
         QString value2 = Separador(Valor2,false);
         Valor2->setText(value2);
         Valor2->setFlags(Valor2->flags() ^ Qt::ItemIsEditable);
@@ -785,7 +797,7 @@ void MainWindow::slotCoeficienteHorizontal()
                 {
                     valor/=total;//Se divide el valor de la celda entre el total correspondiente
                 }
-                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',2));
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',precission));
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
                 ValoraInsertar->setTextAlignment(Qt::AlignCenter);
                 value = Separador(ValoraInsertar,false);
@@ -997,7 +1009,7 @@ void MainWindow::slotAgregarExogena()
 void MainWindow::slotFinalizarExogena()
 {
     QTableWidget *tablaEE = new QTableWidget;
-    tablaEE->setObjectName("TablaExogenaEndogena");
+    tablaEE->setObjectName("MatrizExogenaEndogena");
     QTableWidget *tablaPPAL = findChild<QTableWidget *>("TablaPrincipal");//Se carga la tabla principal
     int count=tablaPPAL->rowCount();
     CrearTablaVacia(count,tablaEE);//Se crea la tabla vacia
@@ -1017,7 +1029,7 @@ void MainWindow::slotFinalizarExogena()
                 {
                     QString value = Separador(tablaPPAL->item(i,j),true);
                     double valor=value.toDouble();
-                    QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',2));
+                    QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',precission));
                     value = Separador(ValoraInsertar,false);
                     ValoraInsertar->setText(value);
                     ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
@@ -1128,7 +1140,8 @@ void MainWindow::slotFinalizarExogena()
 
         obtenerCuentaComponentes();//Se guardan las cuentas/componentes
 
-        //Se activa la opción de módelo clásico
+        //Se activa la opción de módelo clásico y no clásico
+        Modelos.setEnabled(true);
         actionModeloClasico.setEnabled(true);
         connect(&actionModeloClasico,SIGNAL(triggered()),this,SLOT(slotModeloClasico()));
         //Se activa la opción para el módelo no clásico
@@ -1150,7 +1163,7 @@ void MainWindow::slotFinalizarExogena()
                 {
                     QString value = Separador(tablaPPAL->item(i,j),true);
                     double valor=value.toDouble();
-                    QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',2));
+                    QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',precission));
                     value = Separador(ValoraInsertar,false);
                     ValoraInsertar->setText(value);
                     ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
@@ -1235,7 +1248,7 @@ void MainWindow::EndogenaAn()
 {
     tabWidget->addTab(new QWidget,"An");
     QTableWidget *tw = findChild<QTableWidget *>("MatrizEndogenaEndogena");
-    QTableWidget *to = findChild<QTableWidget *>("TablaExogenaEndogena");
+    QTableWidget *to = findChild<QTableWidget *>("MatrizExogenaEndogena");
     QTableWidget *tablaAn = new QTableWidget;
     tablaAn->setObjectName("MatrizAn");
     int count=tw->rowCount();
@@ -1339,7 +1352,6 @@ void MainWindow::populateTable(QTableWidget * tableWidget) {
                 double value = rowVal.toDouble();
 
 
-
                 QTableWidgetItem *newItem = new QTableWidgetItem(
                         numberFormat(value).
                         toLocal8Bit().constData());
@@ -1405,17 +1417,15 @@ std::vector<std::string> MainWindow::csv_read_row(std::istream &in,
 
 QString MainWindow::numberFormat(double & d) {
 
-    int precision = 2;
     bool controlador = false;
     if(d<0)
     {
-        qDebug()<<d;
         controlador = true;
         d *=-1;
     }
 
 
-    QString stringNumber = QString::number(d, 'f', precision);
+    QString stringNumber = QString::number(d, 'f', precission);
     for(int point = 0, i = (stringNumber.lastIndexOf('.') == -1 ? stringNumber.length() : stringNumber.lastIndexOf('.')); i > 0; --i, ++point)
     {
         if(point != 0 && point % 3 == 0)
@@ -1661,17 +1671,17 @@ void MainWindow::CalcularAn(QTableWidget *tw,QTableWidget *nuevaTabla,QTableWidg
                 {
                     int contador = tablaOriginal->rowCount()-1;
                     value = Separador(tablaOriginal->item(contador,i),true);
-                    value = QString::number(value.toDouble(),'f',2);
+                    value = QString::number(value.toDouble(),'f',precission);
                     total=value.toDouble();
                 }
                 else
                 {
                     value = Separador(tw->item(count-1,i),true);
-                    value = QString::number(value.toDouble(),'f',2);
+                    value = QString::number(value.toDouble(),'f',precission);
                     total=value.toDouble();
                 }
                 QString values = Separador(tw->item(j,i),true);
-                values = QString::number(values.toDouble(),'f',2);
+                values = QString::number(values.toDouble(),'f',precission);
                 double valor=values.toDouble();
                 if(total==0)//Se comprueba en caso de que el total sea zero
                 {
@@ -1682,7 +1692,7 @@ void MainWindow::CalcularAn(QTableWidget *tw,QTableWidget *nuevaTabla,QTableWidg
                     valor/=total;//Se divide el valor de la celda entre el total correspondiente
 
                 }
-                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',2));
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',precission));
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
                 QString value = Separador(ValoraInsertar,false);
                 ValoraInsertar->setText(value);
@@ -1727,7 +1737,7 @@ void MainWindow::clonarTabla(QTableWidget *tw,QTableWidget *nuevaTabla,int canti
             {
                 QString value = Separador(tw->item(i,j),true);
                 double valor= value.toDouble();
-                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',2));
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',precission));
                 value = Separador(ValoraInsertar,false);
                 ValoraInsertar->setText(value);
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
@@ -1781,22 +1791,17 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw)
 {
     int cantidad=tw->rowCount()-1;
     MatrixXd A(cantidad-1,cantidad-1);
-    MatrixXd b(cantidad-1,cantidad-1);
     MatrixXd ident = MatrixXd::Identity(cantidad-1,cantidad-1);
     for(int i=0;i<cantidad-1;i++)
     {
         for(int j=0;j<cantidad-1;j++)
         {
-            qDebug()<<"ident"<<ident(i,j);
-            qDebug()<<"mendend"<<MatrizEndogenaEndogena[i][j];
             A(i,j) = ident(i,j)-MatrizEndogenaEndogena[i][j];
-            qDebug()<<"res"<<A(i,j);
         }
-        qDebug()<<"----------------";
     }
 
     double determinant = A.determinant();
-    b = A.inverse();
+    MatrixMa = A.inverse();
     if(determinant==0)
     {
         QMessageBox::critical(this,"Alerta","El determinante es Nulo");
@@ -1812,8 +1817,8 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw)
         {
             for(int j=0;j<cantidad-1;j++)
             {
-                double value = b(i,j);
-                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(value,'f',2));
+                double value = MatrixMa(i,j);
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(value,'f',precission));
                 QString valor = Separador(ValoraInsertar,false);
                 ValoraInsertar->setText(valor);
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
@@ -1838,7 +1843,7 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw)
         }
         actionLa.setDisabled(true);
         opcionMa = 1;
-        validar();
+        //validar();
         tabWidget->setCurrentIndex(indice);
     }
 }
@@ -2575,20 +2580,30 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
                     {
                         for(int k=2;k<countEndogena;k++)
                         {
-                            double EncadenamientoAtras = tw->item(k,j)->text().toDouble();//Suma Columna(Encadenamiento hacia atras)
+                            double EncadenamientoAtras;
+                            double EncadenamientoAdelante;
+                            if(tw->objectName()=="MatrizMa")
+                            {
+                                EncadenamientoAtras = MatrixMa(k-2,j-2);
+                                EncadenamientoAdelante = MatrixMa(j-2,k-2);
+                            }
+                            else
+                            {
+                                EncadenamientoAtras = tw->item(k,j)->text().toDouble();//Suma Columna(Encadenamiento hacia atras)
+                                EncadenamientoAdelante = tw->item(j,k)->text().toDouble();//Suma Fila(Encadenamiento hacia adelante)
+                            }
                             sumaColumna+=EncadenamientoAtras;
-                            double EncadenamientoAdelante = tw->item(j,k)->text().toDouble();//Suma Fila(Encadenamiento hacia adelante)
                             sumaFila+=EncadenamientoAdelante;
                         }
                         //Elementos del encadenamiento hacia atras
-                        QTableWidgetItem *valorAtras = new QTableWidgetItem(QString::number(sumaColumna,'f',2));
+                        QTableWidgetItem *valorAtras = new QTableWidgetItem(QString::number(sumaColumna,'f',precission));
                         QString value = Separador(valorAtras,false);
                         valorAtras->setText(value);
                         valorAtras->setFlags(valorAtras->flags() ^ Qt::ItemIsEditable);
                         valorAtras->setTextAlignment(Qt::AlignCenter);
                         enTable->setItem(columna,2,valorAtras);
                         //Elementos del encadenamiento hacia adelante
-                        QTableWidgetItem *valorAdelante = new QTableWidgetItem(QString::number(sumaFila,'f',2));
+                        QTableWidgetItem *valorAdelante = new QTableWidgetItem(QString::number(sumaFila,'f',precission));
                         value = Separador(valorAdelante,false);
                         valorAdelante->setText(value);
                         valorAdelante->setFlags(valorAdelante->flags() ^ Qt::ItemIsEditable);
@@ -2644,14 +2659,14 @@ void MainWindow::crearMatrizEncadenamientoEndogena(QTableWidget *tw,QTableWidget
             sumaFila+=EncadenamientoAdelante;
         }
         //Elementos del encadenamiento hacia atras
-        QTableWidgetItem *valorAtras = new QTableWidgetItem(QString::number(sumaColumna,'f',2));
+        QTableWidgetItem *valorAtras = new QTableWidgetItem(QString::number(sumaColumna,'f',precission));
         QString value = Separador(valorAtras,false);
         valorAtras->setText(value);
         valorAtras->setFlags(valorAtras->flags() ^ Qt::ItemIsEditable);
         valorAtras->setTextAlignment(Qt::AlignCenter);
         enTable->setItem(columna,2,valorAtras);
         //Elementos del encadenamiento hacia adelante
-        QTableWidgetItem *valorAdelante = new QTableWidgetItem(QString::number(sumaFila,'f',2));
+        QTableWidgetItem *valorAdelante = new QTableWidgetItem(QString::number(sumaFila,'f',precission));
         value = Separador(valorAdelante,false);
         valorAdelante->setText(value);
         valorAdelante->setFlags(valorAdelante->flags() ^ Qt::ItemIsEditable);
@@ -2719,11 +2734,11 @@ void MainWindow::calcularTotalesEncadenamientos(QTableWidget *tw)
     QTableWidgetItem *titulo = new QTableWidgetItem("Encadenamiento Parcial, Total");
     encademientosStyle(titulo);
     tw->setItem(count,1,titulo);
-    QTableWidgetItem *totalAtras = new QTableWidgetItem(QString::number(sumaAtras,'f',2));
+    QTableWidgetItem *totalAtras = new QTableWidgetItem(QString::number(sumaAtras,'f',precission));
     QString value = Separador(totalAtras,false);
     totalAtras->setText(value);
     encademientosStyle(totalAtras);
-    QTableWidgetItem *totalAdelante = new QTableWidgetItem(QString::number(sumaAdelante,'f',2));
+    QTableWidgetItem *totalAdelante = new QTableWidgetItem(QString::number(sumaAdelante,'f',precission));
     value = Separador(totalAdelante,false);
     totalAdelante->setText(value);
     encademientosStyle(totalAdelante);
@@ -2770,32 +2785,20 @@ void MainWindow::calcularSubtotal(QTableWidget *tw, int inicio, int fin,int exog
 
 void MainWindow::validar()
 {
-    QTableWidget *Ma = findChild<QTableWidget *>("MatrizMa");
-    int cantidad = Ma->rowCount();
-    MatrixXd Matriz(cantidad-2,cantidad-2);
-    for(int i = 2; i < cantidad; i++)
-    {
-        for(int j = 2; j < cantidad; j++)
-        {
-            QString item = Separador(Ma->item(i,j),true);
-            double val = item.toDouble();
-            Matriz(i-2,j-2) = val;
-        }
-    }
-    cantidad = subtotalExog.count();
+    int cantidad = subtotalExog.count();
     VectorXd vector(cantidad);
     for(int i=0;i<cantidad;i++)
     {
         vector(i)=subtotalExog[i];
     }
-    VectorXd resultado = Matriz*vector;
-    QTableWidget *TablaEnEx = findChild<QTableWidget *>("TablaExogenaEndogena");
+    qDebug()<<subtotalExog;
+    VectorXd resultado = MatrixMa*vector;
+    QTableWidget *TablaEnEx = findChild<QTableWidget *>("MatrizExogenaEndogena");
     for(int i =0;i< cantidad;i++)
     {
         QString item = Separador(TablaEnEx->item(i+3,TablaEnEx->rowCount()-1),true);
-        qDebug()<<item;
-        double val = item.toDouble();
-        qDebug()<<resultado(i);
+        qDebug()<<"total"<<item;
+        qDebug()<<"Ma*b"<<QString::number(resultado(i),'f',precission);
     }
 }
 
@@ -2857,7 +2860,7 @@ void MainWindow::slotModeloClasico()
 
 }
 /*          Funcion que realiza las operaciones en el escenario         */
-void MainWindow::llenarEscenario(QTableWidget *tw)
+void MainWindow::llenarEscenario(QTableWidget *tw,bool clasico)
 {
     QTableWidget *tablaEndogena = findChild<QTableWidget *>("MatrizEndogenaEndogena");
     int contador = tablaEndogena->rowCount()-2;
@@ -2877,7 +2880,15 @@ void MainWindow::llenarEscenario(QTableWidget *tw)
     title3->setFlags(title3->flags() ^ Qt::ItemIsEditable);
     title3->setTextAlignment(Qt::AlignCenter);
     title3->setFont(font);
-    QTableWidgetItem *title4 = new QTableWidgetItem(QString("Sub-Total\nEscenario %1").arg(cantidadEscenarios));
+    QTableWidgetItem *title4 ;
+    if(clasico)
+    {
+        title4 = new QTableWidgetItem(QString("Sub-Total\nEscenario %1").arg(cantidadEscenarios));
+    }
+    else
+    {
+        title4 = new QTableWidgetItem(QString("Sub-Total\nEscenario %1").arg(cantidadMNC));
+    }
     title4->setFlags(title4->flags() ^ Qt::ItemIsEditable);
     title4->setTextAlignment(Qt::AlignCenter);
     title4->setFont(font);
@@ -2889,9 +2900,9 @@ void MainWindow::llenarEscenario(QTableWidget *tw)
     for(int i=0;i<contador;i++)
     {
         //Se colocan no editables la tercera, cuarta y quinta columna, y se llena de 0 el porcentaje
-        QTableWidgetItem *porcentaje = new QTableWidgetItem(QString::number(0,'f',2));
+        QTableWidgetItem *porcentaje = new QTableWidgetItem(QString::number(0,'f',precission));
         porcentaje->setTextAlignment(Qt::AlignCenter);
-        QTableWidgetItem *mExg = new QTableWidgetItem(QString::number(subtotalExog[i],'f',2));
+        QTableWidgetItem *mExg = new QTableWidgetItem(QString::number(subtotalExog[i],'f',precission));
         QString number = Separador (mExg,false);
         mExg->setText(number);
         mExg->setFlags(mExg->flags() ^ Qt::ItemIsEditable);
@@ -2912,7 +2923,7 @@ void MainWindow::llenarEscenario(QTableWidget *tw)
     tw->resizeColumnsToContents();
 }
 
-void MainWindow::calcularEscenario()
+void MainWindow::calcularEscenario(bool clasico)
 {
     QMessageBox msBox(QMessageBox::Question,"Calcular Escenario","¿Está seguro que desea calcular?",
                       QMessageBox::Yes | QMessageBox::No,this);
@@ -2920,14 +2931,24 @@ void MainWindow::calcularEscenario()
     msBox.setDefaultButton(QMessageBox::Yes);
     if(msBox.exec()==QMessageBox::Yes)
     {
-        QTableWidget *tw = findChild<QTableWidget *>(QString("TablaModeloClasico %1").arg(cantidadEscenarios));
-        int count = tw->rowCount();
+        QTableWidget *tw = new QTableWidget;
+        int count;
+        if(clasico)
+        {
+            tw = findChild<QTableWidget *>(QString("TablaModeloClasico %1").arg(cantidadEscenarios));
+            count = tw->rowCount();
+        }
+        else
+        {
+            tw = findChild<QTableWidget *>(QString("TablaModeloNoClasico %1").arg(cantidadMNC));
+            count = tw->rowCount();
+        }
         for(int i=1;i<count;i++)
         {
             double value = tw->item(i,2)->text().toDouble();
             value = (value*subtotalExog[i-1])/100;
             QString item;
-            QTableWidgetItem *inyeccion = new QTableWidgetItem(QString::number(value,'f',2));
+            QTableWidgetItem *inyeccion = new QTableWidgetItem(QString::number(value,'f',precission));
             item = Separador(inyeccion,false);
             inyeccion->setText(item);
             inyeccion->setFlags(inyeccion->flags() ^ Qt::ItemIsEditable);
@@ -2939,7 +2960,7 @@ void MainWindow::calcularEscenario()
             QString item = Separador(tw->item(i,4),true);
             double value = item.toDouble();
             value += subtotalExog[i-1];
-            QTableWidgetItem *subtotal = new QTableWidgetItem(QString::number(value,'f',2));
+            QTableWidgetItem *subtotal = new QTableWidgetItem(QString::number(value,'f',precission));
             item = Separador(subtotal,false);
             subtotal->setText(item);
             subtotal->setFlags(subtotal->flags() ^ Qt::ItemIsEditable);
@@ -2948,7 +2969,15 @@ void MainWindow::calcularEscenario()
         }
         tw->resizeColumnsToContents();
         tw->resizeRowsToContents();
-        QPushButton *buttonFinalizar = findChild<QPushButton *>(QString("Finalizar %1").arg(cantidadEscenarios));
+        QPushButton *buttonFinalizar;
+        if(clasico)
+        {
+            buttonFinalizar = findChild<QPushButton *>(QString("Finalizar %1").arg(cantidadEscenarios));
+        }
+        else
+        {
+            buttonFinalizar = findChild<QPushButton *>(QString("FinalizarMNC %1").arg(cantidadMNC));
+        }
         buttonFinalizar->setStyleSheet("background-color: #358ccb; color: #fff;"
                                  "font-weight: bold; height: 30px; border: none;"
                                  "border-radius: 5px; margin-top: 40px;");
@@ -2985,6 +3014,7 @@ void MainWindow::finalizarEscenario()
         QWidget *widget = tabWidget->widget(indice);
         widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
         tabWidget->setCurrentIndex(indice);
+
         cantidadEscenarios++;
         actionModeloClasico.setEnabled(true);
         if(cantidadEscenarios>2)
@@ -3018,15 +3048,23 @@ void MainWindow::calcularFinEscenario(QTableWidget *tw)
     {
         //Se agregan los valores del Ma*SubTotal
         double valor = resultado[i];
-        QTableWidgetItem *res = new QTableWidgetItem(QString::number(valor,'f',2));
+        QTableWidgetItem *res = new QTableWidgetItem(QString::number(valor,'f',precission));
         QString item = Separador(res,false);
         res->setText(item);
         res->setTextAlignment(Qt::AlignCenter);
         res->setFlags(res->flags() ^ Qt::ItemIsEditable);
         tw->setItem(i+1,2,res);
         //Se agregan los valores de variacion
-        double var = ((valor/subtotalEnd[i])-1)*100;
-        QTableWidgetItem *vari = new QTableWidgetItem(QString::number(var,'f',2));
+        double var;
+        if(subtotalEnd[i]==0)
+        {
+            var = 0;
+        }
+        else
+        {
+               var = ((valor/subtotalEnd[i])-1)*100;
+        }
+        QTableWidgetItem *vari = new QTableWidgetItem(QString::number(var,'f',precission));
         QString variItem = Separador(vari,false);
         vari->setText(QString(variItem+"%"));
         vari->setTextAlignment(Qt::AlignCenter);
@@ -3039,26 +3077,16 @@ void MainWindow::calcularFinEscenario(QTableWidget *tw)
 QVector<double> MainWindow::obtenerResultadoEscenario(QVector<double> res)
 {
     QTableWidget *Ma = findChild<QTableWidget *>("MatrizMa");
-    int cantidad = Ma->rowCount();
-    MatrixXd Matriz(cantidad-2,cantidad-2);
-    for(int i = 2; i < cantidad; i++)
-    {
-        for(int j = 2; j < cantidad; j++)
-        {
-            QString item = Separador(Ma->item(i,j),true);
-            double val = item.toDouble();
-            Matriz(i-2,j-2) = val;
-        }
-    }
+    int cantidad = Ma->rowCount()-2;
     QTableWidget *tw = findChild<QTableWidget *>(QString("TablaModeloClasico %1").arg(cantidadEscenarios));
-    VectorXd vector(cantidad-2);
-    for(int i=0;i<cantidad-2;i++)
+    VectorXd vector(cantidad);
+    for(int i=0;i<cantidad;i++)
     {
         QString value = Separador(tw->item(i+1,5),true);
         vector(i)=value.toDouble();
     }
-    VectorXd resultado = Matriz*vector;
-    for(int i=0;i<cantidad-2;i++)
+    VectorXd resultado = MatrixMa*vector;
+    for(int i=0;i<cantidad;i++)
     {
         double val = resultado(i);
         res.append(val);
@@ -3179,24 +3207,33 @@ void MainWindow::crearTablaComparar(QTableWidget *to, QTableWidget *tw)
 }
 
 /*      Funcion para colocar cuenta/componentes en las tablas de modelo clasico, resultados y comparar resultados*/
-void MainWindow::cuentacomponentesResultado(QTableWidget *to,int count)
+void MainWindow::cuentacomponentesResultado(QTableWidget *to, int count,bool clasico)
 {
     QStringList cuentaTitulos;
     noEditColZero(to);
     QTableWidgetItem *zero = new QTableWidgetItem;
     zero->setFlags(zero->flags() ^ Qt::ItemIsEditable);
     to->setItem(0,1,zero);
-    QTableWidget *tw = findChild<QTableWidget *>("MatrizEndogenaEndogena");
+    QTableWidget *tw = new QTableWidget;
+    if(clasico)
+    {
+        tw = findChild<QTableWidget *>("MatrizEndogenaEndogena");
+    }
+    else
+    {
+        tw = findChild<QTableWidget *>("Bn");
+        count = tw->rowCount()-2;
+    }
     for(int i=0;i<count;i++)
     {
         //Se agregan cuentas y componentes
-        QString accName=tw->item(0,i+2)->text();
+        QString accName=tw->item(i+2,0)->text();
         QTableWidgetItem *cuenta = new QTableWidgetItem;
         cuenta->setFlags(cuenta->flags() ^ Qt::ItemIsEditable);
         cuenta->setText(accName);
         CellStyle(cuenta);
         QTableWidgetItem *componente = new QTableWidgetItem;
-        componente->setText(tw->item(1,i+2)->text());
+        componente->setText(tw->item(i+2,1)->text());
         componente->setFlags(componente->flags() ^ Qt::ItemIsEditable);
         CellStyleComponente(componente);
         to->setItem(i+1,0,cuenta);
@@ -3230,32 +3267,86 @@ void MainWindow::slotModeloNoClasico()
 
 void MainWindow::obtenerMatrizExgEnd()
 {
-    QTableWidget *MatrizEndogenaExogena = findChild<QTableWidget *>("TablaExogenaEndogena");
-    QTableWidget *MatrizExgEnd = new QTableWidget;
-    QTableWidget *Bn = new QTableWidget;
-    Bn->setObjectName("Bn");
-    QTableWidget *Mb = new QTableWidget;
-    Mb->setObjectName("MatrizMb");
-    int count=MatrizEndogenaExogena->rowCount()-1;
-    int elementos = contarElementosMap(diccCuentasExogenas);
-    int inicioExogena=count-elementos;
-    crearTablaVaciaEncadenamiento(elementos+2,MatrizExgEnd,inicioExogena-1);
-    crearTablaVaciaEncadenamiento(elementos+2,Bn,inicioExogena-1);
-    crearTablaVaciaEncadenamiento(elementos+2,Mb,inicioExogena-1);
+    if(cantidadMNC==1)
+    {
+        QTableWidget *MatrizEndogenaExogena = findChild<QTableWidget *>("MatrizExogenaEndogena");
+        MatrizExgEnd = new QTableWidget;
+        QTableWidget *Bn = new QTableWidget;
+        Bn->setObjectName("Bn");
+        QTableWidget *Mb = new QTableWidget;
+        Mb->setObjectName("MatrizMb");
+        int count=MatrizEndogenaExogena->rowCount()-1;
+        int elementos = contarElementosMap(diccCuentasExogenas);
+        int inicioExogena=count-elementos;
+        crearTablaVaciaEncadenamiento(elementos+2,MatrizExgEnd,inicioExogena-1);
+        crearTablaVaciaEncadenamiento(elementos+2,Bn,inicioExogena-1);
+        crearTablaVaciaEncadenamiento(elementos+2,Mb,inicioExogena-1);
 
-    crearMatrizExgEnd(MatrizEndogenaExogena,MatrizExgEnd,elementos,inicioExogena);
-    calcularMatrizExgEnd(MatrizExgEnd);
-    ctvMatrizExgEnd(MatrizExgEnd,Bn);
-    titlespanMatrizExgEnd(Bn);
+        crearMatrizExgEnd(MatrizEndogenaExogena,MatrizExgEnd,elementos,inicioExogena);
+        calcularMatrizExgEnd(MatrizExgEnd);
+        ctvMatrizExgEnd(MatrizExgEnd,Bn);
+        titlespanMatrizExgEnd(Bn);
 
-    tabWidget->addTab(new QWidget,"Ma^T");
-    int indice=ObtenerIndice("Ma^T");
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(Bn);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);
+        tabWidget->addTab(new QWidget,"Ma^T");
+        int indice=ObtenerIndice("Ma^T");
+        QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+        layoutCentralWidget->addWidget(Bn);
+        QWidget *widget = tabWidget->widget(indice);
+        widget->setLayout(layoutCentralWidget);
 
-    estimarMb(Bn,Mb);
+        estimarMb(Bn,Mb);
+        calcularSubtotalEndExg();
+    }
+
+    QHBoxLayout *layoutHorizontal = new QHBoxLayout;
+    QVBoxLayout *stackLayout = new QVBoxLayout;
+    QStackedWidget *Stack = new QStackedWidget;
+    Stack->setObjectName(QString("StackEscenarioMNC %1").arg(cantidadMNC));
+    Stack->setFixedWidth(150);
+
+    QPushButton *buttonCalcular = new QPushButton;
+    buttonCalcular->setText("&Calcular");
+    buttonCalcular->setObjectName(QString("CalcularMNC %1").arg(cantidadMNC));
+    buttonCalcular->setFixedWidth(130);
+    buttonCalcular->setStyleSheet("background-color: #358ccb; color: #fff;"
+                             "font-weight: bold; height: 30px; border: none;"
+                             "border-radius: 5px; margin-top: 40px;");
+    stackLayout->addWidget(buttonCalcular);
+
+    QPushButton *buttonFinalizar = new QPushButton;
+    buttonFinalizar->setText("&Finalizar");
+    buttonFinalizar->setObjectName(QString("FinalizarMNC %1").arg(cantidadMNC));
+    buttonFinalizar->setDisabled(true);
+    buttonFinalizar->setFixedWidth(130);
+    buttonFinalizar->setStyleSheet("background-color: gray; color: #fff;"
+                             "font-weight: bold; height: 30px; border: none;"
+                             "border-radius: 5px; margin-top: 40px;");
+    stackLayout->addWidget(buttonFinalizar);
+    stackLayout->addStretch(50);
+    QWidget *nw = new QWidget;
+    nw->setLayout(stackLayout);
+    Stack->addWidget(nw);
+
+    //Se conectan los botones
+    connect(buttonCalcular,SIGNAL(clicked()),this,SLOT(calcularEscenarioNC()));
+    connect(buttonFinalizar,SIGNAL(clicked()),this,SLOT(finalizarEscenarioNC()));
+
+    //Se crea y se llena la tabla del modelo clásico
+    QTableWidget *modeloNoClasico = new QTableWidget;
+    modeloNoClasico->setObjectName(QString("TablaModeloNoClasico %1").arg(cantidadMNC));
+    llenarEscenario(modeloNoClasico,false);
+
+    tabWidget->addTab(new QWidget,QString("Escenario No Clasico %1").arg(cantidadMNC));
+    int indice2=ObtenerIndice(QString("Escenario No Clasico %1").arg(cantidadMNC));//Se obtiene el indice de la pestaña
+
+    layoutHorizontal->addWidget(modeloNoClasico);
+    layoutHorizontal->addWidget(Stack);
+    QHBoxLayout * layoutCentralWidget2 = new QHBoxLayout;
+    layoutCentralWidget2->addLayout(layoutHorizontal);
+    QWidget *widget2 = tabWidget->widget(indice2);
+    widget2->setLayout(layoutCentralWidget2);//Se añade el widget y layout a la pestaña creada
+    tabWidget->setCurrentIndex(indice2);
+
 }
 
 /*      Funcion para crear la Matriz Exógena Endógena*/
@@ -3300,7 +3391,7 @@ void MainWindow::calcularMatrizExgEnd(QTableWidget *MatrizExgEnd)
             double valor = value.toDouble();
             total+=valor;
         }
-        QTableWidgetItem *item = new QTableWidgetItem(QString::number(total,'f',2));
+        QTableWidgetItem *item = new QTableWidgetItem(QString::number(total,'f',precission));
         QString value = Separador(item,false);
         item->setText(value);
         item->setFlags(item->flags() ^ Qt::ItemIsEditable);
@@ -3337,7 +3428,7 @@ void MainWindow::ctvMatrizExgEnd(QTableWidget *MatrizExgEnd,QTableWidget *Bn)
                     valoraInsertar = valor.toDouble();
                     valoraInsertar /= total;
                 }
-                QTableWidgetItem *item = new QTableWidgetItem(QString::number(valoraInsertar,'f',2));
+                QTableWidgetItem *item = new QTableWidgetItem(QString::number(valoraInsertar,'f',precission));
                 QString value = Separador(item,false);
                 item->setText(value);
                 item->setFlags(item->flags() ^ Qt::ItemIsEditable);
@@ -3430,7 +3521,6 @@ void MainWindow::estimarMb(QTableWidget *Bn,QTableWidget *Mb)
     int columna = Bn->columnCount();
     QTableWidget *Ma = findChild<QTableWidget *>("MatrizMa");
     int count = Ma->rowCount();
-    MatrixXd A(fila-2,columna-2);
     MatrixXd Mbn(fila-2,columna-2);
     MatrixXd Mma(count-2,count-2);
     for(int i=2;i<columna;i++)
@@ -3451,16 +3541,14 @@ void MainWindow::estimarMb(QTableWidget *Bn,QTableWidget *Mb)
             Mma(i-2,j-2) = doublem;
         }
     }
-    A = Mbn*Mma;
+    MatrixMb = Mbn*Mma;
     for(int i=0;i<columna;i++)
     {
         for(int j=0;j<fila;j++)
         {
             if(i>=2 and j>=2)
             {
-                QString valor = QString::number(A(j-2,i-2),'f',2);
-                qDebug()<<"matriz"<<A(j-2,i-2);
-                qDebug()<<"value"<<valor;
+                QString valor = QString::number(MatrixMb(j-2,i-2),'f',precission);
                 QTableWidgetItem *item = new QTableWidgetItem(valor);
                 QString value = Separador(item,false);
                 item->setText(value);
@@ -3503,3 +3591,218 @@ void MainWindow::estimarMb(QTableWidget *Bn,QTableWidget *Mb)
     tabWidget->setCurrentIndex(indice);
     actionModeloNoClasico.setDisabled(true);
 }
+
+void MainWindow::calcularEscenarioNC()
+{
+    calcularEscenario(false);
+}
+
+void MainWindow::finalizarEscenarioNC()
+{
+    QMessageBox msBox(QMessageBox::Question,"Finalizar Escenario","¿Está seguro que desea finalizar\ este escenario?",
+                      QMessageBox::Yes | QMessageBox::No,this);
+    msBox.setButtonText(QMessageBox::Yes,"&Si");
+    msBox.setDefaultButton(QMessageBox::Yes);
+    if(msBox.exec()==QMessageBox::Yes)
+    {
+        QTableWidget *tw = findChild<QTableWidget *>("Bn");
+        QTableWidget *resultadoEscenario = new QTableWidget;
+        resultadoEscenario->setObjectName(QString("TablaResultadoEscenarioMNC %1").arg(cantidadMNC));
+        int contador = tw->rowCount()-1;
+        crearTablaVaciaEncadenamiento(contador,resultadoEscenario);
+        calcularFinEscenarioMNC(resultadoEscenario);
+        //Se ajustan las columnas/filas al contenido
+        resultadoEscenario->resizeColumnsToContents();
+        resultadoEscenario->resizeRowsToContents();
+        //Se oculta el stack
+        QStackedWidget *sw = findChild<QStackedWidget *>(QString("StackEscenarioMNC %1").arg(cantidadMNC));
+        sw->hide();
+
+        tabWidget->addTab(new QWidget,QString("Resultado MNC %1").arg(cantidadMNC));
+        int indice=ObtenerIndice(QString("Resultado MNC %1").arg(cantidadMNC));
+
+        QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+        layoutCentralWidget->addWidget(resultadoEscenario);
+        QWidget *widget = tabWidget->widget(indice);
+        widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
+        tabWidget->setCurrentIndex(indice);
+
+        cantidadMNC++;
+        actionModeloNoClasico.setEnabled(true);
+        if(cantidadMNC>2)
+        {
+            actionCompararResultadosMNC.setEnabled(true);
+            connect(&actionCompararResultadosMNC,SIGNAL(triggered()),this,SLOT(slotCompararResultadosMNC()));
+        }
+    }
+}
+
+QVector<double> MainWindow::obtenerResultadoEscenarioMNC(QVector<double> res)
+{
+    QTableWidget *Ma = findChild<QTableWidget *>("MatrizMa");
+    int cantidad = Ma->rowCount()-2;
+    QTableWidget *tw = findChild<QTableWidget *>(QString("TablaModeloNoClasico %1").arg(cantidadMNC));
+    VectorXd vector(cantidad);
+    for(int i=0;i<cantidad;i++)
+    {
+        QString value = Separador(tw->item(i+1,5),true);
+        vector(i)=value.toDouble();
+    }
+    VectorXd resultado = MatrixMb*vector;
+    cantidad = MatrixMb.rows();
+    for(int i=0;i<cantidad;i++)
+    {
+        double val = resultado(i);
+        res.append(val);
+    }
+    return res;
+}
+
+void MainWindow::calcularFinEscenarioMNC(QTableWidget *tw)
+{
+    QVector<double> resultado;
+    resultado= obtenerResultadoEscenarioMNC(resultado);//Llama a la funcion que retorna el resultado en un Qvector
+    QFont font;
+    font.setBold(true);
+    //Se crean los titulos
+    QTableWidgetItem *resultados = new QTableWidgetItem("Resultados");
+    resultados->setFlags(resultados->flags() ^ Qt::ItemIsEditable);
+    resultados->setTextAlignment(Qt::AlignCenter);
+    resultados->setFont(font);
+    QTableWidgetItem *variacion = new QTableWidgetItem("Variación");
+    variacion->setFlags(variacion->flags() ^ Qt::ItemIsEditable);
+    variacion->setTextAlignment(Qt::AlignCenter);
+    variacion->setFont(font);
+    tw->setItem(0,2,resultados);
+    tw->setItem(0,3,variacion);
+    int count = tw->rowCount();
+    cuentacomponentesResultado(tw,count,false);
+    for(int i=0;i<count-1;i++)
+    {
+        //Se agregan los valores del Ma*SubTotal
+        double valor = resultado[i];
+        QTableWidgetItem *res = new QTableWidgetItem(QString::number(valor,'f',precission));
+        QString item = Separador(res,false);
+        res->setText(item);
+        res->setTextAlignment(Qt::AlignCenter);
+        res->setFlags(res->flags() ^ Qt::ItemIsEditable);
+        tw->setItem(i+1,2,res);
+        //Se agregan los valores de variacion
+        double var;
+        if(subtotalExogEnd[i]==0)
+        {
+            var = 0;
+        }
+        else
+        {
+            var = ((valor/subtotalExogEnd[i])-1)*100;
+        }
+        QTableWidgetItem *vari = new QTableWidgetItem(QString::number(var,'f',precission));
+        QString variItem = Separador(vari,false);
+        vari->setText(QString(variItem+"%"));
+        vari->setTextAlignment(Qt::AlignCenter);
+        vari->setFlags(vari->flags() ^ Qt::ItemIsEditable);
+        tw->setItem(i+1,3,vari);
+    }
+}
+
+void MainWindow::calcularSubtotalEndExg()
+{
+    int fila = MatrizExgEnd->rowCount()-1;
+    int columna = MatrizExgEnd->columnCount();
+    for(int i=2;i<fila;i++)
+    {
+        double total = 0;
+        for(int j=2;j<columna;j++)
+        {
+            QString item = Separador(MatrizExgEnd->item(i,j),true);
+            total+=item.toDouble();
+        }
+        subtotalExogEnd.append(total);
+    }
+}
+
+void MainWindow::slotCompararResultadosMNC()
+{
+    if(opcionFormCompararResultadosMNC == 0)
+    {
+        formCompararMNC = new FormCompararMNC(this);
+        QStringList nombres = obtenerNombreResultadoEscenarioMNC();
+        formCompararMNC->ui->listMNC->addItems(nombres);
+        connect(formCompararMNC->ui->verMNC,SIGNAL(clicked()),this,SLOT(slotVerResultadoMNC()));
+        opcionFormCompararResultadosMNC ++;
+    }
+    else
+    {
+        formCompararMNC->ui->listMNC->clear();
+        QStringList nombres = obtenerNombreResultadoEscenarioMNC();
+        formCompararMNC->ui->listMNC->addItems(nombres);
+    }
+    formCompararMNC->show();
+}
+
+QStringList MainWindow::obtenerNombreResultadoEscenarioMNC()
+{
+    QStringList nombres;
+    for(int i=1;i<cantidadMNC;i++)
+    {
+        int indice = ObtenerIndice(QString("Resultado MNC %1").arg(i));
+        nombres.append(tabWidget->tabText(indice));
+    }
+    return nombres;
+}
+
+void MainWindow::slotVerResultadoMNC()
+{
+    QTableWidget *tablaComparar = new QTableWidget;
+    tablaComparar->setObjectName(QString("TablaCompararResultadoMNC %1").arg(cantidadResultadosMNC));
+    QTableWidget *Bn = findChild<QTableWidget *>("Bn");
+    int contador = Bn->rowCount()-2;
+    crearTablaVaciaEncadenamiento(contador,tablaComparar,2);
+    cuentacomponentesResultado(tablaComparar,contador,false);
+    int contar=formCompararMNC->ui->listMNC->selectedItems().count();
+    for(int i=0;i<contar;i++)
+    {
+        QString text = formCompararMNC->ui->listMNC->selectedItems().value(i)->text();
+        QStringList number = text.split(" ");
+        text = number.at(2);
+        QTableWidget *tw = findChild<QTableWidget *>(QString("TablaResultadoEscenarioMNC %1").arg(text));
+        crearTablaComparar(tablaComparar,tw);
+    }
+    //Se agrega el nombre de los resultados
+    tablaComparar->insertRow(0);
+    QFont font;
+    font.setBold(true);
+    int j = 0;
+    for(int i=0;i<contar;i++)
+    {
+        QString text = formCompararMNC->ui->listMNC->selectedItems().value(i)->text();
+        QTableWidgetItem *item1 = new QTableWidgetItem(text);
+        item1->setFlags(item1->flags() ^ Qt::ItemIsEditable);
+        item1->setFont(font);
+        item1->setTextAlignment(Qt::AlignCenter);
+        QTableWidgetItem *item2 = new QTableWidgetItem(text);
+        item2->setFlags(item2->flags() ^ Qt::ItemIsEditable);
+        item2->setFont(font);
+        item2->setTextAlignment(Qt::AlignCenter);
+        tablaComparar->setItem(0,2+j,item1);
+        j++;
+        tablaComparar->setItem(0,2+j,item2);
+        tablaComparar->setSpan(0,(2+j)-1,1,2);
+        j++;
+    }
+    ItemsNoEditable(tablaComparar,0,2);
+
+    tabWidget->addTab(new QWidget,QString("Comparacion MNC %1").arg(cantidadResultadosMNC));
+    int indice=ObtenerIndice(QString("Comparacion MNC %1").arg(cantidadResultadosMNC));
+
+    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+    layoutCentralWidget->addWidget(tablaComparar);
+    QWidget *widget = tabWidget->widget(indice);
+    widget->setLayout(layoutCentralWidget);
+
+    formCompararMNC->close();
+    tabWidget->setCurrentIndex(indice);
+    cantidadResultadosMNC++;
+}
+

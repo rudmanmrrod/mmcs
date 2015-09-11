@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.H'
 **
-** Created: Wed Sep 9 11:51:34 2015
+** Created: Fri Sep 11 11:24:46 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.2)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      31,   14, // methods
+      36,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -34,34 +34,39 @@ static const uint qt_meta_data_MainWindow[] = {
       12,   11,   11,   11, 0x08,
       29,   11,   11,   11, 0x08,
       51,   48,   11,   11, 0x08,
-      96,   11,   11,   11, 0x08,
-     123,   11,   11,   11, 0x08,
-     139,   11,   11,   11, 0x08,
-     157,   11,   11,   11, 0x08,
-     176,   11,   11,   11, 0x08,
-     194,   11,   11,   11, 0x08,
-     222,   11,   11,   11, 0x08,
-     248,   11,   11,   11, 0x08,
-     264,   11,   11,   11, 0x08,
-     286,   11,   11,   11, 0x08,
-     305,   11,   11,   11, 0x08,
-     326,   11,   11,   11, 0x08,
-     349,   11,   11,   11, 0x08,
-     371,   11,   11,   11, 0x08,
-     378,   11,   11,   11, 0x08,
-     387,   11,   11,   11, 0x08,
-     409,   11,   11,   11, 0x08,
-     435,   11,   11,   11, 0x08,
-     463,   11,   11,   11, 0x08,
-     487,   11,   11,   11, 0x08,
-     505,   11,   11,   11, 0x08,
-     522,   11,   11,   11, 0x08,
-     541,   11,   11,   11, 0x08,
-     561,   11,   11,   11, 0x08,
-     581,   11,   11,   11, 0x08,
-     602,   11,   11,   11, 0x08,
-     624,   11,   11,   11, 0x08,
-     649,   11,   11,   11, 0x08,
+      95,   11,   11,   11, 0x08,
+     122,   11,   11,   11, 0x08,
+     138,   11,   11,   11, 0x08,
+     156,   11,   11,   11, 0x08,
+     175,   11,   11,   11, 0x08,
+     193,   11,   11,   11, 0x08,
+     221,   11,   11,   11, 0x08,
+     247,   11,   11,   11, 0x08,
+     263,   11,   11,   11, 0x08,
+     285,   11,   11,   11, 0x08,
+     304,   11,   11,   11, 0x08,
+     325,   11,   11,   11, 0x08,
+     348,   11,   11,   11, 0x08,
+     370,   11,   11,   11, 0x08,
+     377,   11,   11,   11, 0x08,
+     386,   11,   11,   11, 0x08,
+     408,   11,   11,   11, 0x08,
+     434,   11,   11,   11, 0x08,
+     462,   11,   11,   11, 0x08,
+     486,   11,   11,   11, 0x08,
+     504,   11,   11,   11, 0x08,
+     521,   11,   11,   11, 0x08,
+     540,   11,   11,   11, 0x08,
+     568,  560,   11,   11, 0x08,
+     592,   11,   11,   11, 0x28,
+     612,   11,   11,   11, 0x08,
+     633,   11,   11,   11, 0x08,
+     655,   11,   11,   11, 0x08,
+     677,   11,   11,   11, 0x08,
+     700,   11,   11,   11, 0x08,
+     728,   11,   11,   11, 0x08,
+     750,   11,   11,   11, 0x08,
+     775,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -69,7 +74,7 @@ static const uint qt_meta_data_MainWindow[] = {
 static const char qt_meta_stringdata_MainWindow[] = {
     "MainWindow\0\0slotLoadMatrix()\0"
     "slotExportMatrix()\0,,\0"
-    "slotFormLoadMatrixAccepted(QString,int,char)\0"
+    "slotFormLoadMatrixAccepted(QString,int,int)\0"
     "slotFormLoadMatrixClosed()\0AgregarCuenta()\0"
     "RestaurarCeldas()\0FinalizarCuentas()\0"
     "ModificarCuenta()\0slotCoeficienteHorizontal()\0"
@@ -81,9 +86,13 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "slotAgregarEncadenamiento()\0"
     "slotVerEncadenamiento()\0slotCloseExport()\0"
     "slotSaveExport()\0slotSearchExport()\0"
-    "slotModeloClasico()\0calcularEscenario()\0"
+    "slotModeloClasico()\0clasico\0"
+    "calcularEscenario(bool)\0calcularEscenario()\0"
     "finalizarEscenario()\0slotModeloNoClasico()\0"
-    "slotCompararResultados()\0slotVerResultado()\0"
+    "calcularEscenarioNC()\0finalizarEscenarioNC()\0"
+    "slotCompararResultadosMNC()\0"
+    "slotVerResultadoMNC()\0slotCompararResultados()\0"
+    "slotVerResultado()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -94,7 +103,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         switch (_id) {
         case 0: _t->slotLoadMatrix(); break;
         case 1: _t->slotExportMatrix(); break;
-        case 2: _t->slotFormLoadMatrixAccepted((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< char(*)>(_a[3]))); break;
+        case 2: _t->slotFormLoadMatrixAccepted((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
         case 3: _t->slotFormLoadMatrixClosed(); break;
         case 4: _t->AgregarCuenta(); break;
         case 5: _t->RestaurarCeldas(); break;
@@ -118,11 +127,16 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 23: _t->slotSaveExport(); break;
         case 24: _t->slotSearchExport(); break;
         case 25: _t->slotModeloClasico(); break;
-        case 26: _t->calcularEscenario(); break;
-        case 27: _t->finalizarEscenario(); break;
-        case 28: _t->slotModeloNoClasico(); break;
-        case 29: _t->slotCompararResultados(); break;
-        case 30: _t->slotVerResultado(); break;
+        case 26: _t->calcularEscenario((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 27: _t->calcularEscenario(); break;
+        case 28: _t->finalizarEscenario(); break;
+        case 29: _t->slotModeloNoClasico(); break;
+        case 30: _t->calcularEscenarioNC(); break;
+        case 31: _t->finalizarEscenarioNC(); break;
+        case 32: _t->slotCompararResultadosMNC(); break;
+        case 33: _t->slotVerResultadoMNC(); break;
+        case 34: _t->slotCompararResultados(); break;
+        case 35: _t->slotVerResultado(); break;
         default: ;
         }
     }
@@ -160,9 +174,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 31)
+        if (_id < 36)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 31;
+        _id -= 36;
     }
     return _id;
 }
