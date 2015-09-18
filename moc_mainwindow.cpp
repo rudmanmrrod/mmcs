@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.H'
 **
-** Created: Fri Sep 11 11:24:46 2015
+** Created: Fri Sep 18 15:33:00 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.2)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      36,   14, // methods
+      42,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -32,49 +32,55 @@ static const uint qt_meta_data_MainWindow[] = {
 
  // slots: signature, parameters, type, tag, flags
       12,   11,   11,   11, 0x08,
-      29,   11,   11,   11, 0x08,
-      51,   48,   11,   11, 0x08,
-      95,   11,   11,   11, 0x08,
-     122,   11,   11,   11, 0x08,
-     138,   11,   11,   11, 0x08,
-     156,   11,   11,   11, 0x08,
-     175,   11,   11,   11, 0x08,
-     193,   11,   11,   11, 0x08,
-     221,   11,   11,   11, 0x08,
-     247,   11,   11,   11, 0x08,
-     263,   11,   11,   11, 0x08,
-     285,   11,   11,   11, 0x08,
-     304,   11,   11,   11, 0x08,
-     325,   11,   11,   11, 0x08,
-     348,   11,   11,   11, 0x08,
-     370,   11,   11,   11, 0x08,
-     377,   11,   11,   11, 0x08,
-     386,   11,   11,   11, 0x08,
-     408,   11,   11,   11, 0x08,
-     434,   11,   11,   11, 0x08,
-     462,   11,   11,   11, 0x08,
-     486,   11,   11,   11, 0x08,
-     504,   11,   11,   11, 0x08,
-     521,   11,   11,   11, 0x08,
-     540,   11,   11,   11, 0x08,
-     568,  560,   11,   11, 0x08,
-     592,   11,   11,   11, 0x28,
-     612,   11,   11,   11, 0x08,
-     633,   11,   11,   11, 0x08,
-     655,   11,   11,   11, 0x08,
-     677,   11,   11,   11, 0x08,
-     700,   11,   11,   11, 0x08,
-     728,   11,   11,   11, 0x08,
-     750,   11,   11,   11, 0x08,
-     775,   11,   11,   11, 0x08,
+      32,   11,   11,   11, 0x08,
+      49,   11,   11,   11, 0x08,
+      71,   68,   11,   11, 0x08,
+     115,   11,   11,   11, 0x08,
+     142,   11,   11,   11, 0x08,
+     158,   11,   11,   11, 0x08,
+     176,   11,   11,   11, 0x08,
+     195,   11,   11,   11, 0x08,
+     213,   11,   11,   11, 0x08,
+     241,   11,   11,   11, 0x08,
+     267,   11,   11,   11, 0x08,
+     283,   11,   11,   11, 0x08,
+     305,   11,   11,   11, 0x08,
+     324,   11,   11,   11, 0x08,
+     345,   11,   11,   11, 0x08,
+     368,   11,   11,   11, 0x08,
+     390,   11,   11,   11, 0x08,
+     397,   11,   11,   11, 0x08,
+     406,   11,   11,   11, 0x08,
+     428,   11,   11,   11, 0x08,
+     454,   11,   11,   11, 0x08,
+     482,   11,   11,   11, 0x08,
+     506,   11,   11,   11, 0x08,
+     524,   11,   11,   11, 0x08,
+     541,   11,   11,   11, 0x08,
+     560,   11,   11,   11, 0x08,
+     588,  580,   11,   11, 0x08,
+     612,   11,   11,   11, 0x28,
+     632,   11,   11,   11, 0x08,
+     653,   11,   11,   11, 0x08,
+     675,   11,   11,   11, 0x08,
+     697,   11,   11,   11, 0x08,
+     720,   11,   11,   11, 0x08,
+     748,   11,   11,   11, 0x08,
+     770,   11,   11,   11, 0x08,
+     793,   11,   11,   11, 0x08,
+     820,   11,   11,   11, 0x08,
+     855,   11,   11,   11, 0x08,
+     886,   11,   11,   11, 0x08,
+     925,   11,   11,   11, 0x08,
+     950,   11,   11,   11, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_MainWindow[] = {
-    "MainWindow\0\0slotLoadMatrix()\0"
-    "slotExportMatrix()\0,,\0"
-    "slotFormLoadMatrixAccepted(QString,int,int)\0"
+    "MainWindow\0\0slotNuevoProyecto()\0"
+    "slotLoadMatrix()\0slotExportMatrix()\0"
+    ",,\0slotFormLoadMatrixAccepted(QString,int,int)\0"
     "slotFormLoadMatrixClosed()\0AgregarCuenta()\0"
     "RestaurarCeldas()\0FinalizarCuentas()\0"
     "ModificarCuenta()\0slotCoeficienteHorizontal()\0"
@@ -91,8 +97,12 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "finalizarEscenario()\0slotModeloNoClasico()\0"
     "calcularEscenarioNC()\0finalizarEscenarioNC()\0"
     "slotCompararResultadosMNC()\0"
-    "slotVerResultadoMNC()\0slotCompararResultados()\0"
-    "slotVerResultado()\0"
+    "slotVerResultadoMNC()\0slotPHCIncidencia100()\0"
+    "slotPHCIncidenciaiCuenta()\0"
+    "slotCalcularPHCIncidenciaiCuenta()\0"
+    "slotPHCIncidenciaiComponente()\0"
+    "slotCalcularPHCIncidenciaiComponente()\0"
+    "slotCompararResultados()\0slotVerResultado()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -101,42 +111,48 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         Q_ASSERT(staticMetaObject.cast(_o));
         MainWindow *_t = static_cast<MainWindow *>(_o);
         switch (_id) {
-        case 0: _t->slotLoadMatrix(); break;
-        case 1: _t->slotExportMatrix(); break;
-        case 2: _t->slotFormLoadMatrixAccepted((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
-        case 3: _t->slotFormLoadMatrixClosed(); break;
-        case 4: _t->AgregarCuenta(); break;
-        case 5: _t->RestaurarCeldas(); break;
-        case 6: _t->FinalizarCuentas(); break;
-        case 7: _t->ModificarCuenta(); break;
-        case 8: _t->slotCoeficienteHorizontal(); break;
-        case 9: _t->slotCoeficienteVertical(); break;
-        case 10: _t->slotAccChange(); break;
-        case 11: _t->slotVariableExogena(); break;
-        case 12: _t->slotCloseExogena(); break;
-        case 13: _t->slotAgregarExogena(); break;
-        case 14: _t->slotFinalizarExogena(); break;
-        case 15: _t->slotDeshacerExogena(); break;
-        case 16: _t->AnMa(); break;
-        case 17: _t->slotMa(); break;
-        case 18: _t->slotEncadenamientos(); break;
-        case 19: _t->slotCloseEncadenamiento(); break;
-        case 20: _t->slotAgregarEncadenamiento(); break;
-        case 21: _t->slotVerEncadenamiento(); break;
-        case 22: _t->slotCloseExport(); break;
-        case 23: _t->slotSaveExport(); break;
-        case 24: _t->slotSearchExport(); break;
-        case 25: _t->slotModeloClasico(); break;
-        case 26: _t->calcularEscenario((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 27: _t->calcularEscenario(); break;
-        case 28: _t->finalizarEscenario(); break;
-        case 29: _t->slotModeloNoClasico(); break;
-        case 30: _t->calcularEscenarioNC(); break;
-        case 31: _t->finalizarEscenarioNC(); break;
-        case 32: _t->slotCompararResultadosMNC(); break;
-        case 33: _t->slotVerResultadoMNC(); break;
-        case 34: _t->slotCompararResultados(); break;
-        case 35: _t->slotVerResultado(); break;
+        case 0: _t->slotNuevoProyecto(); break;
+        case 1: _t->slotLoadMatrix(); break;
+        case 2: _t->slotExportMatrix(); break;
+        case 3: _t->slotFormLoadMatrixAccepted((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
+        case 4: _t->slotFormLoadMatrixClosed(); break;
+        case 5: _t->AgregarCuenta(); break;
+        case 6: _t->RestaurarCeldas(); break;
+        case 7: _t->FinalizarCuentas(); break;
+        case 8: _t->ModificarCuenta(); break;
+        case 9: _t->slotCoeficienteHorizontal(); break;
+        case 10: _t->slotCoeficienteVertical(); break;
+        case 11: _t->slotAccChange(); break;
+        case 12: _t->slotVariableExogena(); break;
+        case 13: _t->slotCloseExogena(); break;
+        case 14: _t->slotAgregarExogena(); break;
+        case 15: _t->slotFinalizarExogena(); break;
+        case 16: _t->slotDeshacerExogena(); break;
+        case 17: _t->AnMa(); break;
+        case 18: _t->slotMa(); break;
+        case 19: _t->slotEncadenamientos(); break;
+        case 20: _t->slotCloseEncadenamiento(); break;
+        case 21: _t->slotAgregarEncadenamiento(); break;
+        case 22: _t->slotVerEncadenamiento(); break;
+        case 23: _t->slotCloseExport(); break;
+        case 24: _t->slotSaveExport(); break;
+        case 25: _t->slotSearchExport(); break;
+        case 26: _t->slotModeloClasico(); break;
+        case 27: _t->calcularEscenario((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 28: _t->calcularEscenario(); break;
+        case 29: _t->finalizarEscenario(); break;
+        case 30: _t->slotModeloNoClasico(); break;
+        case 31: _t->calcularEscenarioNC(); break;
+        case 32: _t->finalizarEscenarioNC(); break;
+        case 33: _t->slotCompararResultadosMNC(); break;
+        case 34: _t->slotVerResultadoMNC(); break;
+        case 35: _t->slotPHCIncidencia100(); break;
+        case 36: _t->slotPHCIncidenciaiCuenta(); break;
+        case 37: _t->slotCalcularPHCIncidenciaiCuenta(); break;
+        case 38: _t->slotPHCIncidenciaiComponente(); break;
+        case 39: _t->slotCalcularPHCIncidenciaiComponente(); break;
+        case 40: _t->slotCompararResultados(); break;
+        case 41: _t->slotVerResultado(); break;
         default: ;
         }
     }
@@ -174,9 +190,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 36)
+        if (_id < 42)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 36;
+        _id -= 42;
     }
     return _id;
 }

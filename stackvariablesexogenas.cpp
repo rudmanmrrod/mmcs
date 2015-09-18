@@ -29,18 +29,8 @@ stackVariablesExogenas::stackVariablesExogenas(QStringList Lista,QStringList Com
 
     }
 
-    //Aqui se agrega el apartado para todas las cuentas
-    comboAccount->addItem("Todas las Cuentas");
-    comboAccount->setObjectName(QString("CuentaExogenaFinal"));
-    nuevosComponentes.clear();
-    VariableExogenaWidget * widget = new VariableExogenaWidget(contar,nuevosComponentes,stackedWidget);
-    widget->accounListWidget->setVisible(false);
-    stackedWidget->addWidget(widget);
-    widgetList.append(widget);
-
     layoutMain->addWidget(comboAccount);
     layoutMain->addWidget(stackedWidget);
-
 
     setLayout(layoutMain);
 

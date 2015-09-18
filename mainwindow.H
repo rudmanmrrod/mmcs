@@ -12,6 +12,8 @@
 #include <formcompararresultados.h>
 #include <ui_formcompararmnc.h>
 #include <formcompararmnc.h>
+#include "ui_formincidenciai.h"
+#include <formincidenciai.h>
 
 #include <sstream>
 #include <stackwidget.H>
@@ -36,11 +38,15 @@ class MainWindow : public QMainWindow
     QMenu menuViews;
     QMenu menuHelp;
     QMenu EndoExo;
+
     QMenu Modelos;
+    QMenu PHClasico;
+    QMenu PHClasicoIncidencia;
 
     QAction actionLoadMatrix;
     QAction actionExportMatrix;
     QAction actionQuit;
+    QAction actionNewProject;
 
     QAction actionCH;
     QAction actionCV;
@@ -48,11 +54,16 @@ class MainWindow : public QMainWindow
     QAction actionCTVEndEx;
     QAction actionLa;
 
-    QAction actionEncadenamiento;    
+    QAction actionEncadenamiento;
+
     QAction actionModeloClasico;
     QAction actionCompararResultados;
     QAction actionModeloNoClasico;
     QAction actionCompararResultadosMNC;
+
+    QAction actionPHClasicoIncidencia100;
+    QAction actionPHCIncidenciaCuenta;
+    QAction actionPHCIncidenciaComponente;
 
 
     QTableWidget * tableWidget;
@@ -62,6 +73,9 @@ class MainWindow : public QMainWindow
     QMap<int,QVector<QString> > espacioCuentasExogenas;
     QMap<QString,QStringList> diccCuentasComponentes;
     QMap<QString,QStringList> diccCuentasEncadenamientos;
+    QMap<QString,double> totalCuentas;
+
+    QStringList ComponentesEndogenos;
 
     QTableWidget *MatrizExgEnd;
 
@@ -70,6 +84,7 @@ class MainWindow : public QMainWindow
 
     Eigen::MatrixXd MatrixMa;
     Eigen::MatrixXd MatrixMb;
+    Eigen::MatrixXd MatrizMat;
 
 
     QString csvFilePath;
@@ -89,16 +104,20 @@ class MainWindow : public QMainWindow
     int opcionMa;
     int opcionFormCompararResultados;
     int opcionFormCompararResultadosMNC;
+    int opcionMAT;
 
     QVector<double> subtotalEnd;
     QVector<double> subtotalExog;
     QVector<double> subtotalExogEnd;
+    QVector<double> Vpond;
 
     int cantidadEncadenamientos;
     int cantidadEscenarios;
     int cantidadResultados;
     int cantidadMNC;//Cantidad de Modelos No Clasicos
     int cantidadResultadosMNC;
+    int cantidadPHCindidenciaiCuenta;
+    int cantidadPHCindidenciaiComponente;
 
     FormLoadMatrix * formLoadMatrix;
     FormViewMatrix * formViewMatrix;
@@ -107,6 +126,7 @@ class MainWindow : public QMainWindow
     FormEncadenamientos * formEncadenamientos;
     FormCompararResultados *formCompararResultados;
     FormCompararMNC *formCompararMNC;
+    FormIncidenciaI *FI;
 
     void initGUI();
 
@@ -140,8 +160,11 @@ class MainWindow : public QMainWindow
     void CellStyleExEn(QTableWidgetItem *);
     void EndogenaAn();
 
+    void calcularTotalCuentas(QTableWidget *);
+    void estimarVectorPonderacion(QTableWidget *);
+
     void obtenerCuentaComponentes();
-    void crearTablaVaciaEncadenamiento(int columnas, QTableWidget *, int filas=4);
+    void crearTablaVaciaEncadenamiento(int filas, QTableWidget *, int columnas=4);
     void crearMatrizEncadenamiento(QTableWidget *, QTableWidget *);
     void crearMatrizEncadenamientoEndogena(QTableWidget *, QTableWidget *);
     void calcularTotalesEncadenamientos(QTableWidget *);
@@ -171,6 +194,11 @@ class MainWindow : public QMainWindow
     void restarIdentidadAn(QTableWidget *);
     void titleEndogena(QTableWidget *);
 
+    void calcularMaT();
+    void calcularPHCIncidencia100(QTableWidget *);
+    void calcularPHCIncidenciaI(QTableWidget *, QMap<QString, double>);
+    void calcularPHCIncidenciaIComponente(QTableWidget *,QTableWidget *);
+
     bool ComprobarCuentas();
     int ObtenerIndice(QString );
 
@@ -183,6 +211,7 @@ protected:
     void closeEvent(QCloseEvent *);
 
 private slots:
+    void slotNuevoProyecto();
     void slotLoadMatrix();
     void slotExportMatrix();
     void slotFormLoadMatrixAccepted(const QString &, int, int);
@@ -224,6 +253,12 @@ private slots:
 
     void slotCompararResultadosMNC();
     void slotVerResultadoMNC();
+
+    void slotPHCIncidencia100();
+    void slotPHCIncidenciaiCuenta();
+    void slotCalcularPHCIncidenciaiCuenta();
+    void slotPHCIncidenciaiComponente();
+    void slotCalcularPHCIncidenciaiComponente();
 
     void slotCompararResultados();
     void slotVerResultado();
