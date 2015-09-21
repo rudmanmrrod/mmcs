@@ -1003,29 +1003,25 @@ void MainWindow::slotAgregarExogena()
     int index=stackVE->comboAccount->currentIndex();//Se obtiene el indice selecionado
     lw = findChild<QListWidget *>(QString("accountlist %1").arg(index + 1));//Se obtiene la lista seleccionada
     QStringList componentes_cuenta;
-
-    if(nombre_cuenta!="Todas las Cuentas")
+    if(!lw->isEnabled())
     {
-        if(!lw->isEnabled())
+        QMessageBox::warning(this,"Alerta","La Cuenta Actual ya fue Agregada");
+    }
+    else if(lw->selectedItems().count()==0)
+    {
+        QMessageBox::warning(this,"Alerta",
+                             "Para Agregar la Cuenta debe seleccionar \n al menos un valor");
+    }
+    else
+    {
+        int contar=lw->selectedItems().count();
+        for(int i=0;i<contar;i++)
         {
-            QMessageBox::warning(this,"Alerta","La Cuenta Actual ya fue Agregada");
+            componentes_cuenta.append(lw->selectedItems().value(i)->text());
         }
-        else if(lw->selectedItems().count()==0)
-        {
-            QMessageBox::warning(this,"Alerta",
-                                 "Para Agregar la Cuenta debe seleccionar \n al menos un valor");
-        }
-        else
-        {
-            int contar=lw->selectedItems().count();
-            for(int i=0;i<contar;i++)
-            {
-                componentes_cuenta.append(lw->selectedItems().value(i)->text());
-            }
-            lw->setDisabled(true);
-            diccCuentasExogenas.insert(nombre_cuenta,componentes_cuenta);
-            opcionCuentaExogena++;
-        }
+        lw->setDisabled(true);
+        diccCuentasExogenas.insert(nombre_cuenta,componentes_cuenta);
+        opcionCuentaExogena=1;
     }
 }
 
@@ -3923,7 +3919,6 @@ void MainWindow::slotCalcularPHCIncidenciaiCuenta()
         QString value = Separador(tw->item(1,i),true);
         cantidades.insert(cuenta,value.toDouble());
     }
-    qDebug()<<"cantidades"<<cantidades;
 
     QTableWidget *MatrizIC = new QTableWidget;
     MatrizIC->setObjectName(QString("PHCIcuenta %1").arg(cantidadPHCindidenciaiCuenta));
