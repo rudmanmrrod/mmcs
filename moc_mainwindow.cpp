@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.H'
 **
-** Created: Fri Sep 18 15:33:00 2015
+** Created: Mon Sep 21 16:54:10 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.2)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      42,   14, // methods
+      47,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -73,6 +73,11 @@ static const uint qt_meta_data_MainWindow[] = {
      886,   11,   11,   11, 0x08,
      925,   11,   11,   11, 0x08,
      950,   11,   11,   11, 0x08,
+     969,   11,   11,   11, 0x08,
+     993,   11,   11,   11, 0x08,
+    1021,   11,   11,   11, 0x08,
+    1057,   11,   11,   11, 0x08,
+    1089,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -103,6 +108,11 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "slotPHCIncidenciaiComponente()\0"
     "slotCalcularPHCIncidenciaiComponente()\0"
     "slotCompararResultados()\0slotVerResultado()\0"
+    "slotPHNCIncidencia100()\0"
+    "slotPHNCIncidenciaiCuenta()\0"
+    "slotCalcularPHNCIncidenciaiCuenta()\0"
+    "slotPHNCIncidenciaiComponente()\0"
+    "slotCalcularPHNCIncidenciaiComponente()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -153,6 +163,11 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 39: _t->slotCalcularPHCIncidenciaiComponente(); break;
         case 40: _t->slotCompararResultados(); break;
         case 41: _t->slotVerResultado(); break;
+        case 42: _t->slotPHNCIncidencia100(); break;
+        case 43: _t->slotPHNCIncidenciaiCuenta(); break;
+        case 44: _t->slotCalcularPHNCIncidenciaiCuenta(); break;
+        case 45: _t->slotPHNCIncidenciaiComponente(); break;
+        case 46: _t->slotCalcularPHNCIncidenciaiComponente(); break;
         default: ;
         }
     }
@@ -190,9 +205,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 42)
+        if (_id < 47)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 42;
+        _id -= 47;
     }
     return _id;
 }

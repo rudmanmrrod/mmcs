@@ -42,6 +42,8 @@ class MainWindow : public QMainWindow
     QMenu Modelos;
     QMenu PHClasico;
     QMenu PHClasicoIncidencia;
+    QMenu PHNoClasico;
+    QMenu PHNoClasicoIncidencia;
 
     QAction actionLoadMatrix;
     QAction actionExportMatrix;
@@ -65,6 +67,9 @@ class MainWindow : public QMainWindow
     QAction actionPHCIncidenciaCuenta;
     QAction actionPHCIncidenciaComponente;
 
+    QAction actionPHNoClasicoIncidencia100;
+    QAction actionPHNCIncidenciaCuenta;
+    QAction actionPHNCIncidenciaComponente;
 
     QTableWidget * tableWidget;
     QTabWidget * tabWidget;
@@ -85,6 +90,7 @@ class MainWindow : public QMainWindow
     Eigen::MatrixXd MatrixMa;
     Eigen::MatrixXd MatrixMb;
     Eigen::MatrixXd MatrizMat;
+    Eigen::MatrixXd MatrizMbt;
 
 
     QString csvFilePath;
@@ -102,9 +108,11 @@ class MainWindow : public QMainWindow
     int opcionEncadenamientos;
     int opcionCuentaEncadenamientos;
     int opcionMa;
+    int opcionMb;
     int opcionFormCompararResultados;
     int opcionFormCompararResultadosMNC;
     int opcionMAT;
+    int opcionMBT;
 
     QVector<double> subtotalEnd;
     QVector<double> subtotalExog;
@@ -118,6 +126,8 @@ class MainWindow : public QMainWindow
     int cantidadResultadosMNC;
     int cantidadPHCindidenciaiCuenta;
     int cantidadPHCindidenciaiComponente;
+    int cantidadPHNCindidenciaiCuenta;
+    int cantidadPHNCindidenciaiComponente;
 
     FormLoadMatrix * formLoadMatrix;
     FormViewMatrix * formViewMatrix;
@@ -170,7 +180,7 @@ class MainWindow : public QMainWindow
     void calcularTotalesEncadenamientos(QTableWidget *);
     void encademientosStyle(QTableWidgetItem *);
 
-    void calcularSubtotal(QTableWidget *, int inicio, int fin, int exogena);
+    void calcularSubtotal(QTableWidget *,int inicio, int fin,int exogena);
     void llenarEscenario(QTableWidget *, bool clasico=true);
     void calcularFinEscenario(QTableWidget *);
     QVector<double> obtenerResultadoEscenario(QVector<double>);
@@ -198,6 +208,10 @@ class MainWindow : public QMainWindow
     void calcularPHCIncidencia100(QTableWidget *);
     void calcularPHCIncidenciaI(QTableWidget *, QMap<QString, double>);
     void calcularPHCIncidenciaIComponente(QTableWidget *,QTableWidget *);
+
+    void calcularMbT();
+    void calcularMb();
+    void calcularPHNIncidencia100(QTableWidget *);
 
     bool ComprobarCuentas();
     int ObtenerIndice(QString );
@@ -262,6 +276,12 @@ private slots:
 
     void slotCompararResultados();
     void slotVerResultado();
+
+    void slotPHNCIncidencia100();
+    void slotPHNCIncidenciaiCuenta();
+    void slotCalcularPHNCIncidenciaiCuenta();
+    void slotPHNCIncidenciaiComponente();
+    void slotCalcularPHNCIncidenciaiComponente();
 
 public:
     MainWindow();
