@@ -18,8 +18,15 @@ void MainWindow::slotLoadMatrix()
 /*      Funcion para crear un nuevo proyecto        */
 void MainWindow::slotNuevoProyecto()
 {
-    MainWindow *mw = new MainWindow;
-    mw->show();
+    QMessageBox msBox(QMessageBox::Question,"Nuevo Proyecto","¿Desea crar un nuevo proyecto?",
+                      QMessageBox::Yes | QMessageBox::No,this);
+    msBox.setButtonText(QMessageBox::Yes,"&Si");
+    msBox.setDefaultButton(QMessageBox::Yes);
+    if(msBox.exec()==QMessageBox::Yes)
+    {
+        MainWindow *mw = new MainWindow;
+        mw->show();
+    }
 }
 
 void MainWindow::slotExportMatrix()
@@ -280,8 +287,29 @@ void MainWindow::matricesMenuBar()
     PHNoClasicoIncidencia.addAction(&actionPHNCIncidenciaComponente);
 
     PHNoClasico.addMenu(&PHNoClasicoIncidencia);
-
     Modelos.addMenu(&PHNoClasico);
+
+    PreciosNH.setTitle("Precios No Homogéneos");
+    PreciosNH.setDisabled(true);
+
+    actionPNHIncidencia100.setText("(&1) Incidencia 100%");
+    actionPNHIncidencia100.setDisabled(true);
+
+    PreciosNH.addAction(&actionPNHIncidencia100);
+
+    PreciosNHIncidencia.setTitle("(&2) Incidencia i%");
+    PreciosNHIncidencia.setDisabled(true);
+
+    actionPNHIncidenciaCuenta.setText("Por cue&nta");
+    actionPNHIncidenciaCuenta.setDisabled(true);
+    PreciosNHIncidencia.addAction(&actionPNHIncidenciaCuenta);
+
+    actionPNHIncidenciaComponente.setText("Por co&mponente");
+    actionPHNCIncidenciaComponente.setDisabled(true);
+    PreciosNHIncidencia.addAction(&actionPNHIncidenciaComponente);
+
+    PreciosNH.addMenu(&PreciosNHIncidencia);
+    Modelos.addMenu(&PreciosNH);
 
     OpMatrices.addMenu(&Modelos);
 
@@ -293,7 +321,8 @@ MainWindow::MainWindow()
       actionVariableExogena(this),actionLa(this),actionCTVEndEx(this),actionEncadenamiento(this), actionModeloClasico(this),
       actionCompararResultados(this), actionModeloNoClasico(this),actionCompararResultadosMNC(this),actionPHClasicoIncidencia100(this),
       actionPHCIncidenciaCuenta(this),actionPHCIncidenciaComponente(this),actionPHNoClasicoIncidencia100(this),actionPHNCIncidenciaCuenta(this),
-      actionPHNCIncidenciaComponente(this),formLoadMatrix(0)
+      actionPHNCIncidenciaComponente(this),actionPNHIncidencia100(this),actionPNHIncidenciaCuenta(this),actionPNHIncidenciaComponente(this),
+      formLoadMatrix(0)
 {
     tabWidget = new QTabWidget;
 
@@ -312,6 +341,8 @@ MainWindow::MainWindow()
     opcionFormCompararResultadosMNC = 0;
     opcionMAT = 0;
     opcionMBT = 0;
+    opcionPNHT = 1;
+    opcionFormPNH = 0;
     /*      Estas variables permiten tener el control de los procedimientos que se pueden generar multiples ventanas */
     cantidadEncadenamientos = 1;
     cantidadEscenarios = 1;
@@ -322,6 +353,9 @@ MainWindow::MainWindow()
     cantidadPHCindidenciaiComponente = 1;
     cantidadPHNCindidenciaiCuenta = 1;
     cantidadPHNCindidenciaiComponente = 1;
+    cantidadPNHincidencia100 = 1;
+    cantidadPNHincidenciaiCuenta = 1;
+    cantidadPNHincidenciaiComponente = 1;
 
     initGUI();
 
@@ -1216,6 +1250,15 @@ void MainWindow::slotFinalizarExogena()
         connect(&actionPHNCIncidenciaCuenta,SIGNAL(triggered()),this,SLOT(slotPHNCIncidenciaiCuenta()));
         actionPHNCIncidenciaComponente.setEnabled(true);
         connect(&actionPHNCIncidenciaComponente,SIGNAL(triggered()),this,SLOT(slotPHNCIncidenciaiComponente()));
+        //Se activa la opcion para los modelos de precios no homogéneos
+        PreciosNH.setEnabled(true);
+        actionPNHIncidencia100.setEnabled(true);
+        connect(&actionPNHIncidencia100,SIGNAL(triggered()),this,SLOT(slotPNHIncudencia100()));
+        PreciosNHIncidencia.setEnabled(true);
+        actionPNHIncidenciaCuenta.setEnabled(true);
+        connect(&actionPNHIncidenciaCuenta,SIGNAL(triggered()),this,SLOT(slotPNHIncidenciaiCuenta()));
+        actionPNHIncidenciaComponente.setEnabled(true);
+        connect(&actionPNHIncidenciaComponente,SIGNAL(triggered()),this,SLOT(slotPNHIncidenciaiComponente()));
 
         tabWidget->setCurrentIndex(indice);
 
@@ -3981,6 +4024,7 @@ void MainWindow::slotCalcularPHCIncidenciaiCuenta()
     cantidadPHCindidenciaiCuenta++;
 }
 
+/*          Funcion para calcular la incidencia "i" en los precios homogéneos clásico (cuenta)       */
 void MainWindow::calcularPHCIncidenciaI(QTableWidget *tw,QMap<QString,double> inci)
 {
     int fila = tw->rowCount();
@@ -4056,6 +4100,7 @@ void MainWindow::slotCalcularPHCIncidenciaiComponente()
     cantidadPHCindidenciaiComponente++;
 }
 
+/*      Funcion para calcular la incidencia "i" en los precios homogéneos clásico (componente)      */
 void MainWindow::calcularPHCIncidenciaIComponente(QTableWidget *tw,QTableWidget *ot)
 {
     int fila = tw->rowCount();
@@ -4159,7 +4204,7 @@ void MainWindow::slotPHNCIncidencia100()
     }
     QTableWidget *MatrizMi = new QTableWidget;
     MatrizMi->setObjectName("PHNC100");
-    calcularPHNIncidencia100(MatrizMi);
+    calcularPHNCIncidencia100(MatrizMi);
 
     tabWidget->addTab(new QWidget,"PHNC100");
     int indice=ObtenerIndice("PHNC100");
@@ -4172,7 +4217,8 @@ void MainWindow::slotPHNCIncidencia100()
     actionPHNoClasicoIncidencia100.setDisabled(true);
 }
 
-void MainWindow::calcularPHNIncidencia100(QTableWidget *tw)
+/*      Funcion para calcular la incidencia "i" en los precios homogéneos no clásico (cuenta)*/
+void MainWindow::calcularPHNCIncidencia100(QTableWidget *tw)
 {
     QTableWidget *Mbt = findChild<QTableWidget *>("MatrizMbT");
     int fila = Mbt->rowCount()-2;
@@ -4271,7 +4317,7 @@ void MainWindow::slotCalcularPHNCIncidenciaiCuenta()
 
     QTableWidget *MatrizIC = new QTableWidget;
     MatrizIC->setObjectName(QString("PHNCIcuenta %1").arg(cantidadPHNCindidenciaiCuenta));
-    calcularPHNIncidencia100(MatrizIC);
+    calcularPHNCIncidencia100(MatrizIC);
     calcularPHCIncidenciaI(MatrizIC,cantidades);
 
     tabWidget->addTab(new QWidget,QString("PHNCI %1").arg(cantidadPHNCindidenciaiCuenta));
@@ -4320,7 +4366,7 @@ void MainWindow::slotCalcularPHNCIncidenciaiComponente()
 
     QTableWidget *MatrizIComp = new QTableWidget;
     MatrizIComp->setObjectName(QString("PHNCIcomponente %1").arg(cantidadPHNCindidenciaiComponente));
-    calcularPHNIncidencia100(MatrizIComp);
+    calcularPHNCIncidencia100(MatrizIComp);
     calcularPHCIncidenciaIComponente(MatrizIComp,tw);
 
     tabWidget->addTab(new QWidget,QString("PHNCIc %1").arg(cantidadPHNCindidenciaiComponente));
@@ -4332,4 +4378,474 @@ void MainWindow::slotCalcularPHNCIncidenciaiComponente()
     widget->setLayout(layoutCentralWidget);
     tabWidget->setCurrentIndex(indice);
     cantidadPHNCindidenciaiComponente++;
+}
+
+void MainWindow::slotPNHIncudencia100()
+{
+    if(opcionFormPNH==0)
+    {
+        crearFormularioPNH();
+        QPushButton *buttonSeleccionar = findChild<QPushButton *>("SeleccionarPNH");
+        connect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNH()));
+        formPreciosNoHomogeneos->show();
+    }
+    else
+    {
+        QPushButton *buttonSeleccionar = findChild<QPushButton *>("SeleccionarPNH");
+        disconnect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNHi()));
+        disconnect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNHic()));
+        disconnect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNH()));
+        connect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNH()));
+        formPreciosNoHomogeneos->show();
+    }
+}
+
+void MainWindow::slotCloseformPNH()
+{
+    formPreciosNoHomogeneos->close();
+}
+
+void MainWindow::slotSelectPNH()
+{
+    int cantidad=stackPNH->comboAccount->count();
+    int seleccionados = 0;
+    for(int i = 0;i<cantidad;i++)
+    {
+        QListWidget *lw = findChild<QListWidget *>(QString("accountlistPNH %1").arg(i+1));
+        seleccionados += lw->selectedItems().count();
+    }
+    if(seleccionados>1)
+    {
+        QMessageBox::warning(this,"Alerta","Debe seleccionar sólo\nun componente");
+    }
+    else if(seleccionados<1)
+    {
+        QMessageBox::warning(this,"Alerta","Debe seleccionar un componente");
+    }
+    else
+    {
+        QStringList componentes;
+        for(int i = 0;i<cantidad;i++)
+        {
+            QListWidget *lw = findChild<QListWidget *>(QString("accountlistPNH %1").arg(i+1));
+            if(lw->selectedItems().count()!=0)
+            {
+                componentes.append(lw->selectedItems().value(0)->text());
+            }
+        }
+        QString componente = componentes.at(0);
+        QVector<double> Send;
+        calcularVectorSend(componente,Send);
+        QTableWidget *PNH100 = new QTableWidget;
+        opcionPNHT = 0;
+        multiplicarMatricesPNH(PNH100,Send);
+        formPreciosNoHomogeneos->close();
+    }
+}
+
+/*      Funcion para calcular el vector Send, que se utiliza para crear una matriz identidad con una diagonal conformada
+                                    por los valores de un componente previamente seleccionado           */
+void MainWindow::calcularVectorSend(QString componente,QVector<double> &vector)
+{
+    if(opcionMa == 0)
+    {
+        slotMa();
+    }
+    if(opcionMb == 0)
+    {
+        calcularMb();
+    }
+    QTableWidget *Bn = findChild<QTableWidget *>("Bn");
+    int filas = Bn->rowCount();
+    int columnas = Bn->columnCount();
+    for(int i=2;i<filas;i++)
+    {
+        if(Bn->item(i,1)->text()==componente)
+        {
+            for(int j=2;j<columnas;j++)
+            {
+                QString value = Separador(Bn->item(i,j),true);
+                vector.append(value.toDouble());
+            }
+            break;
+        }
+    }
+}
+
+void MainWindow::multiplicarMatricesPNH(QTableWidget *tw,QVector<double> vector)
+{
+    int count = MatrixMa.rows();
+    MatrixXd ident = MatrixXd::Identity(count,count);
+    for(int i = 0;i<count;i++)
+    {
+        for(int j = 0;j<count;j++)
+        {
+            if(i==j)
+            {
+                ident(i,j) = vector.at(i);
+            }
+        }
+    }
+    MatrixXd res = ident*MatrixMa;
+    /*for(int i = 0;i<count;i++)
+    {
+        for(int j = 0;j<count;j++)
+        {
+            double value = res(i,j);
+            QString valor = QString::number(value,'f',precission);
+            QTableWidgetItem *item = new QTableWidgetItem(valor);
+            valor = Separador(item,false);
+            item->setText(valor);
+            item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+            item->setTextAlignment(Qt::AlignCenter);
+            tw->setItem(i,j,item);
+        }
+    }
+    tabWidget->addTab(new QWidget,"PNHMa");
+    int indice=ObtenerIndice("PNHMa");
+
+    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+    layoutCentralWidget->addWidget(tw);
+    QWidget *widget = tabWidget->widget(indice);
+    widget->setLayout(layoutCentralWidget);
+    tabWidget->setCurrentIndex(indice);*/
+
+    MatrixXd trans = res.transpose();
+    /*QTableWidget *nt = new QTableWidget;
+    CrearTablaVacia(count+1,nt);
+    for(int i = 0;i<count;i++)
+    {
+        for(int j = 0;j<count;j++)
+        {
+            double value = trans(i,j);
+            QString valor = QString::number(value,'f',precission);
+            QTableWidgetItem *item = new QTableWidgetItem(valor);
+            valor = Separador(item,false);
+            item->setText(valor);
+            item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+            item->setTextAlignment(Qt::AlignCenter);
+            nt->setItem(i,j,item);
+        }
+    }
+    tabWidget->addTab(new QWidget,"PNHMa^T");
+    indice=ObtenerIndice("PNHMa^T");
+    QHBoxLayout * layoutCentralWidget2 = new QHBoxLayout;
+    layoutCentralWidget2->addWidget(nt);
+    QWidget *widget2 = tabWidget->widget(indice);
+    widget2->setLayout(layoutCentralWidget2);
+    tabWidget->setCurrentIndex(indice);*/
+
+    calcularPNHIncidencia100(tw,trans);
+    if(opcionPNHT == 0)
+    {
+        tabWidget->addTab(new QWidget,QString("PNH100 %1").arg(cantidadPNHincidencia100));
+        int indice=ObtenerIndice(QString("PNH100 %1").arg(cantidadPNHincidencia100));
+        QHBoxLayout * layoutCentralWidget3 = new QHBoxLayout;
+        layoutCentralWidget3->addWidget(tw);
+        QWidget *widget3 = tabWidget->widget(indice);
+        widget3->setLayout(layoutCentralWidget3);
+        tabWidget->setCurrentIndex(indice);
+        cantidadPNHincidencia100++;
+        opcionPNHT = 1;
+    }
+}
+
+void MainWindow::calcularPNHIncidencia100(QTableWidget *tw,MatrixXd Diagonal)
+{
+    int count = Vpond.count();
+    MatrixXd Res(count,count);
+    for(int i=0;i<count;i++)
+    {
+        for(int j=0;j<count;j++)
+        {
+            Res(i,j)=Diagonal(i,j) * Vpond.at(i);
+        }
+    }
+    CrearTablaVacia(count+1,tw);
+    for(int i=0;i<count;i++)
+    {
+        for(int j=0;j<count;j++)
+        {
+            double value = Res(i,j);
+            QString valor = QString::number(value,'f',precission);
+            QTableWidgetItem *item = new QTableWidgetItem(valor);
+            valor = Separador(item,false);
+            item->setText(valor);
+            item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+            item->setTextAlignment(Qt::AlignCenter);
+            tw->setItem(i,j,item);
+        }
+    }
+    titleEndogena(tw);
+    spanEndogenaCell(tw,2,0,false);
+}
+
+void MainWindow::slotPNHIncidenciaiCuenta()
+{
+    if(opcionFormPNH==0)
+    {
+        crearFormularioPNH();
+        QPushButton *buttonSeleccionar = findChild<QPushButton *>("SeleccionarPNH");
+        connect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNHi()));
+    }
+    else
+    {
+        QPushButton *buttonSeleccionar = findChild<QPushButton *>("SeleccionarPNH");
+        disconnect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNH()));
+        disconnect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNHic()));
+        disconnect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNHi()));
+        connect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNHi()));
+        formPreciosNoHomogeneos->show();
+    }
+
+}
+
+void MainWindow::slotSelectPNHi()
+{
+    int cantidad=stackPNH->comboAccount->count();
+    int seleccionados = 0;
+    for(int i = 0;i<cantidad;i++)
+    {
+        QListWidget *lw = findChild<QListWidget *>(QString("accountlistPNH %1").arg(i+1));
+        seleccionados += lw->selectedItems().count();
+    }
+    if(seleccionados>1)
+    {
+        QMessageBox::warning(this,"Alerta","Debe seleccionar sólo\nun componente");
+    }
+    else if(seleccionados<1)
+    {
+        QMessageBox::warning(this,"Alerta","Debe seleccionar un componente");
+    }
+    else
+    {
+        QStringList componentes;
+        for(int i = 0;i<cantidad;i++)
+        {
+            QListWidget *lw = findChild<QListWidget *>(QString("accountlistPNH %1").arg(i+1));
+            if(lw->selectedItems().count()!=0)
+            {
+                componentes.append(lw->selectedItems().value(0)->text());
+            }
+        }
+        componentePNH = componentes.at(0);
+        formPreciosNoHomogeneos->close();
+        FI = new FormIncidenciaI(this);
+        QTableWidget *tw = FI->ui->TableIncidencia;
+        int cuentas = totalCuentas.count();
+        crearTablaVaciaEncadenamiento(2,tw,cuentas);
+        QStringList nombreCuenta = totalCuentas.keys();
+        for(int i=0;i<cuentas;i++)
+        {
+            QTableWidgetItem *titulo = new QTableWidgetItem(nombreCuenta.at(i));
+            titulo->setFlags(titulo->flags() ^ Qt::ItemIsEditable);
+            titulo->setTextAlignment(Qt::AlignCenter);
+            CellStyle(titulo);
+            tw->setItem(0,i,titulo);
+            QTableWidgetItem *number = new QTableWidgetItem(QString::number(0,'f',precission));
+            number->setTextAlignment(Qt::AlignCenter);
+            QString item = Separador(number,false);
+            number->setText(item);
+            tw->setItem(1,i,number);
+        }
+        connect(FI->ui->CalcularIncidencia,SIGNAL(clicked()),this,SLOT(slotCalcularPNHIncidenciaiCuenta()));
+        FI->show();
+    }
+}
+
+void MainWindow::slotCalcularPNHIncidenciaiCuenta()
+{
+    QVector<double> Send;
+    calcularVectorSend(componentePNH,Send);
+    QTableWidget *PNH100 = new QTableWidget;
+    multiplicarMatricesPNH(PNH100,Send);
+    int count = PNH100->rowCount();
+    QTableWidget *PNHI = new QTableWidget;
+    CrearTablaVacia(count+1,PNHI);
+    clonarTabla(PNH100,PNHI,count+1);
+    spanEndogenaCell(PNHI,2,0,false);
+
+    QTableWidget *tw = FI->ui->TableIncidencia;
+    int cuentas = totalCuentas.count();
+    QMap<QString,double> cantidades;
+    for(int i=0;i<cuentas;i++)
+    {
+        QString cuenta = tw->item(0,i)->text();
+        QString value = Separador(tw->item(1,i),true);
+        cantidades.insert(cuenta,value.toDouble());
+    }
+
+    calcularPHCIncidenciaI(PNHI,cantidades);
+
+    tabWidget->addTab(new QWidget,QString("PNHI %1").arg(cantidadPNHincidenciaiCuenta));
+    int indice=ObtenerIndice(QString("PNHI %1").arg(cantidadPNHincidenciaiCuenta));
+
+    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+    layoutCentralWidget->addWidget(PNHI);
+    QWidget *widget = tabWidget->widget(indice);
+    widget->setLayout(layoutCentralWidget);
+    tabWidget->setCurrentIndex(indice);
+    cantidadPNHincidenciaiCuenta++;
+    FI->close();
+}
+
+void MainWindow::slotPNHIncidenciaiComponente()
+{
+    if(opcionFormPNH==0)
+    {
+        crearFormularioPNH();
+        QPushButton *buttonSeleccionar = findChild<QPushButton *>("SeleccionarPNH");
+        connect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNHic()));
+        formPreciosNoHomogeneos->show();
+    }
+    else
+    {
+        QPushButton *buttonSeleccionar = findChild<QPushButton *>("SeleccionarPNH");
+        disconnect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNH()));
+        disconnect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNHi()));
+        disconnect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNHic()));
+        connect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNHic()));
+        formPreciosNoHomogeneos->show();
+    }
+}
+
+void MainWindow::slotSelectPNHic()
+{
+    int cantidad=stackPNH->comboAccount->count();
+    int seleccionados = 0;
+    for(int i = 0;i<cantidad;i++)
+    {
+        QListWidget *lw = findChild<QListWidget *>(QString("accountlistPNH %1").arg(i+1));
+        seleccionados += lw->selectedItems().count();
+    }
+    if(seleccionados>1)
+    {
+        QMessageBox::warning(this,"Alerta","Debe seleccionar sólo\nun componente");
+    }
+    else if(seleccionados<1)
+    {
+        QMessageBox::warning(this,"Alerta","Debe seleccionar un componente");
+    }
+    else
+    {
+        QStringList componentes;
+        for(int i = 0;i<cantidad;i++)
+        {
+            QListWidget *lw = findChild<QListWidget *>(QString("accountlistPNH %1").arg(i+1));
+            if(lw->selectedItems().count()!=0)
+            {
+                componentes.append(lw->selectedItems().value(0)->text());
+            }
+        }
+        componentePNH = componentes.at(0);
+        formPreciosNoHomogeneos->close();
+        FI = new FormIncidenciaI(this);
+        QTableWidget *tw = FI->ui->TableIncidencia;
+        int contador = ComponentesEndogenos.count();
+        crearTablaVaciaEncadenamiento(2,tw,contador);
+
+        for(int i=0;i<contador;i++)
+        {
+            QTableWidgetItem *titulo = new QTableWidgetItem(ComponentesEndogenos.at(i));
+            titulo->setFlags(titulo->flags() ^ Qt::ItemIsEditable);
+            titulo->setTextAlignment(Qt::AlignCenter);
+            CellStyleComponente(titulo);
+            tw->setItem(0,i,titulo);
+            QTableWidgetItem *number = new QTableWidgetItem(QString::number(0,'f',precission));
+            number->setTextAlignment(Qt::AlignCenter);
+            QString item = Separador(number,false);
+            number->setText(item);
+            tw->setItem(1,i,number);
+        }
+        connect(FI->ui->CalcularIncidencia,SIGNAL(clicked()),this,SLOT(slotCalcularPNHIncidenciaiComponente()));
+        FI->show();
+    }
+}
+
+void MainWindow::slotCalcularPNHIncidenciaiComponente()
+{
+    QVector<double> Send;
+    calcularVectorSend(componentePNH,Send);
+    QTableWidget *PNH100 = new QTableWidget;
+    multiplicarMatricesPNH(PNH100,Send);
+    int count = PNH100->rowCount();
+    QTableWidget *PNHIc = new QTableWidget;
+    CrearTablaVacia(count+1,PNHIc);
+    clonarTabla(PNH100,PNHIc,count+1);
+    spanEndogenaCell(PNHIc,2,0,false);
+
+    QTableWidget *tw = FI->ui->TableIncidencia;
+    calcularPHCIncidenciaIComponente(PNHIc,tw);
+
+    tabWidget->addTab(new QWidget,QString("PNHIc %1").arg(cantidadPNHincidenciaiComponente));
+    int indice=ObtenerIndice(QString("PNHIc %1").arg(cantidadPNHincidenciaiComponente));
+
+    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+    layoutCentralWidget->addWidget(PNHIc);
+    QWidget *widget = tabWidget->widget(indice);
+    widget->setLayout(layoutCentralWidget);
+    tabWidget->setCurrentIndex(indice);
+    cantidadPNHincidenciaiComponente++;
+    FI->close();
+}
+
+void MainWindow::crearFormularioPNH()
+{
+    formPreciosNoHomogeneos = new FormPreciosNoHomogeneos(this);
+    QHBoxLayout * layoutLateralWidget = new QHBoxLayout;
+    QVBoxLayout * layoutCentralWidget = new QVBoxLayout;
+    QHBoxLayout * layoutAccounts = new QHBoxLayout;
+    QHBoxLayout * labels = new QHBoxLayout;
+    QLabel *label1 = new QLabel;
+    QLabel *label2 = new QLabel;
+    label1->setText("Cuentas");
+    label2->setText("Componentes");
+    labels->addWidget(label1);
+    labels->addWidget(label2);
+    QWidget *nw = new QWidget;
+    nw->setLayout(labels);
+    QGroupBox * groupBoxAccount = new QGroupBox;
+    layoutCentralWidget->addWidget(nw);
+    layoutAccounts->addWidget(stackPNH=new StackPreciosNoHomogeneos(diccCuentasExogenas,groupBoxAccount));
+
+    groupBoxAccount->setObjectName("PNHgroupbox");//Se le asigna nombre al objeto
+    groupBoxAccount->setLayout(layoutAccounts);;
+    groupBoxAccount->setStyleSheet("QGroupBox {border: 1px solid gray; "
+                     "border-radius: 3px; margin-top: 0.5em;} "
+                     "QGroupBox::title { subcontrol-origin: margin; "
+                     "left: 10px; padding: 0 3px 0 3px; } ");
+
+
+    layoutLateralWidget->addWidget(groupBoxAccount);
+
+    /***        Se crean y personalizan los bottones para seleccionar y cancelar    ***/
+    QPushButton * buttonSeleccionar = new QPushButton;
+    buttonSeleccionar->setObjectName("SeleccionarPNH");//Se le asigna nombre al objeto
+    buttonSeleccionar->setText("&Seleccionar");
+    buttonSeleccionar->setFixedWidth(130);
+    buttonSeleccionar->setStyleSheet("background-color: #358ccb; color: #fff;"
+                             "font-weight: bold; height: 30px; border: none;"
+                             "border-radius: 5px; margin-top: 40px;");
+    QPushButton * buttonCancelar = new QPushButton;
+    buttonCancelar->setObjectName("CancelarPNH");//Se le asigna nombre al objeto
+    buttonCancelar->setText("&Cancelar");
+    buttonCancelar->setFixedWidth(130);
+    buttonCancelar->setStyleSheet("background-color: #358ccb; color: #fff;"
+                             "font-weight: bold; height: 30px; border: none;"
+                             "border-radius: 5px; margin-top: 40px;");
+
+    connect(buttonCancelar,SIGNAL(clicked()),this,SLOT(slotCloseformPNH()));
+
+    QHBoxLayout * layoutsButtons = new QHBoxLayout;
+    layoutsButtons->addWidget(buttonSeleccionar);
+    layoutsButtons->addWidget(buttonCancelar);
+    QWidget *buttonWidget = new QWidget;
+    buttonWidget->setLayout(layoutsButtons);
+
+    QWidget *widget = new QWidget;
+    widget->setLayout(layoutLateralWidget);
+    layoutCentralWidget->addWidget(widget);
+    layoutCentralWidget->addWidget(buttonWidget);//Se agregan los botones
+    formPreciosNoHomogeneos->setLayout(layoutCentralWidget);
+    opcionFormPNH++;
 }

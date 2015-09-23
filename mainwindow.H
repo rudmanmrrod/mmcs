@@ -14,11 +14,13 @@
 #include <formcompararmnc.h>
 #include "ui_formincidenciai.h"
 #include <formincidenciai.h>
+#include <formpreciosnohomogeneos.h>
 
 #include <sstream>
 #include <stackwidget.H>
 #include <stackvariablesexogenas.h>
 #include <stackencadenamientos.h>
+#include <stackpreciosnohomogeneos.h>
 
 #include <QTabWidget>
 
@@ -44,6 +46,8 @@ class MainWindow : public QMainWindow
     QMenu PHClasicoIncidencia;
     QMenu PHNoClasico;
     QMenu PHNoClasicoIncidencia;
+    QMenu PreciosNH;
+    QMenu PreciosNHIncidencia;
 
     QAction actionLoadMatrix;
     QAction actionExportMatrix;
@@ -71,6 +75,10 @@ class MainWindow : public QMainWindow
     QAction actionPHNCIncidenciaCuenta;
     QAction actionPHNCIncidenciaComponente;
 
+    QAction actionPNHIncidencia100;
+    QAction actionPNHIncidenciaCuenta;
+    QAction actionPNHIncidenciaComponente;
+
     QTableWidget * tableWidget;
     QTabWidget * tabWidget;
     QMap<QString,QStringList> diccCuentasExogenas;
@@ -86,6 +94,7 @@ class MainWindow : public QMainWindow
 
     stackVariablesExogenas *stackVE;
     stackEncadenamientos *stackEncadenamiento;
+    StackPreciosNoHomogeneos *stackPNH;
 
     Eigen::MatrixXd MatrixMa;
     Eigen::MatrixXd MatrixMb;
@@ -100,6 +109,8 @@ class MainWindow : public QMainWindow
     int precission;
     double  matrix[100][100];
 
+    QString componentePNH;
+
     double MatrizEndogenaEndogena[200][200];
 
     int opcionCuentaExogena;
@@ -113,6 +124,8 @@ class MainWindow : public QMainWindow
     int opcionFormCompararResultadosMNC;
     int opcionMAT;
     int opcionMBT;
+    int opcionPNHT;
+    int opcionFormPNH;
 
     QVector<double> subtotalEnd;
     QVector<double> subtotalExog;
@@ -124,10 +137,16 @@ class MainWindow : public QMainWindow
     int cantidadResultados;
     int cantidadMNC;//Cantidad de Modelos No Clasicos
     int cantidadResultadosMNC;
+    //Cantidad de resultados de incidencia en modelo de precios homogéneos clásico
     int cantidadPHCindidenciaiCuenta;
     int cantidadPHCindidenciaiComponente;
+    //Cantidad de resultados de incidencia en modelo de precios homogéneos no clásico
     int cantidadPHNCindidenciaiCuenta;
     int cantidadPHNCindidenciaiComponente;
+    //Cantidad de resultados de incidencia en modelo de precios no homogéneos
+    int cantidadPNHincidencia100;
+    int cantidadPNHincidenciaiCuenta;
+    int cantidadPNHincidenciaiComponente;
 
     FormLoadMatrix * formLoadMatrix;
     FormViewMatrix * formViewMatrix;
@@ -137,6 +156,7 @@ class MainWindow : public QMainWindow
     FormCompararResultados *formCompararResultados;
     FormCompararMNC *formCompararMNC;
     FormIncidenciaI *FI;
+    FormPreciosNoHomogeneos * formPreciosNoHomogeneos;
 
     void initGUI();
 
@@ -211,7 +231,11 @@ class MainWindow : public QMainWindow
 
     void calcularMbT();
     void calcularMb();
-    void calcularPHNIncidencia100(QTableWidget *);
+    void calcularPHNCIncidencia100(QTableWidget *);
+    void calcularVectorSend(QString componente, QVector<double> &);
+    void multiplicarMatricesPNH(QTableWidget *, QVector<double>);
+    void calcularPNHIncidencia100(QTableWidget *, Eigen::MatrixXd Diagonal);
+    void crearFormularioPNH();
 
     bool ComprobarCuentas();
     int ObtenerIndice(QString );
@@ -282,6 +306,16 @@ private slots:
     void slotCalcularPHNCIncidenciaiCuenta();
     void slotPHNCIncidenciaiComponente();
     void slotCalcularPHNCIncidenciaiComponente();
+
+    void slotPNHIncudencia100();
+    void slotCloseformPNH();
+    void slotSelectPNH();
+    void slotPNHIncidenciaiCuenta();
+    void slotPNHIncidenciaiComponente();
+    void slotSelectPNHi();
+    void slotCalcularPNHIncidenciaiCuenta();
+    void slotSelectPNHic();
+    void slotCalcularPNHIncidenciaiComponente();
 
 public:
     MainWindow();

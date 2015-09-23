@@ -12,7 +12,10 @@ HEADERS += mainwindow.H \
     encadenamientoswidget.h \
     formcompararresultados.h \
     formcompararmnc.h \
-    formincidenciai.h
+    formincidenciai.h \
+    formpreciosnohomogeneos.h \
+    stackpreciosnohomogeneos.h \
+    variablepnh.h
 
 SOURCES += mainwindow.C \
     main.C \
@@ -29,7 +32,10 @@ SOURCES += mainwindow.C \
     encadenamientoswidget.cpp \
     formcompararresultados.cpp \
     formcompararmnc.cpp \
-    formincidenciai.cpp
+    formincidenciai.cpp \
+    formpreciosnohomogeneos.cpp \
+    stackpreciosnohomogeneos.cpp \
+    variablepnh.cpp
 FORMS += formLoadMatrix.ui \
     formMatrixView.ui \
     formvariablesexogenas.ui \
@@ -37,7 +43,8 @@ FORMS += formLoadMatrix.ui \
     formencadenamientos.ui \
     formcompararresultados.ui \
     formcompararmnc.ui \
-    formincidenciai.ui
+    formincidenciai.ui \
+    formpreciosnohomogeneos.ui
 
 INCLUDEPATH += $$PWD/Eigen
 

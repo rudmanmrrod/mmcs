@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FormPreciosNoHomogeneos</class>
+ <widget class="QWidget" name="FormPreciosNoHomogeneos">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>635</width>
+    <height>350</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Modelo de Precios No Homogéneo</string>
+  </property>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
