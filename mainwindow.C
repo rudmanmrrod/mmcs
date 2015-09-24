@@ -195,15 +195,20 @@ void MainWindow::createMenuBar()
 
 void MainWindow::matricesMenuBar()
 {
-    OpMatrices.setTitle("&Herramientas");
+    menuTools.setTitle("&Herramientas");
+
+    CoeficientesTecnicos.setTitle("&Coeficientes Técnicos");
+    CoeficientesTecnicos.setDisabled(true);
 
     actionCH.setText("Coeficientes &Horizontales");
     actionCH.setDisabled(true);
-    OpMatrices.addAction(&actionCH);
+    CoeficientesTecnicos.addAction(&actionCH);
 
     actionCV.setText("Coeficientes &Verticales");
     actionCV.setDisabled(true);
-    OpMatrices.addAction(&actionCV);
+    CoeficientesTecnicos.addAction(&actionCV);
+
+    menuTools.addMenu(&CoeficientesTecnicos);
 
     EndoExo.setTitle("Variables &Exogenas");
     EndoExo.setDisabled(true);
@@ -220,12 +225,12 @@ void MainWindow::matricesMenuBar()
     actionLa.setDisabled(true);
     EndoExo.addAction(&actionLa);
 
-    OpMatrices.addMenu(&EndoExo);
+    menuTools.addMenu(&EndoExo);
 
 
     actionEncadenamiento.setText("E&ncadenamientos");
     actionEncadenamiento.setDisabled(true);
-    OpMatrices.addAction(&actionEncadenamiento);
+    menuTools.addAction(&actionEncadenamiento);
 
     Modelos.setTitle("&Modelos");
     Modelos.setDisabled(true);
@@ -311,9 +316,9 @@ void MainWindow::matricesMenuBar()
     PreciosNH.addMenu(&PreciosNHIncidencia);
     Modelos.addMenu(&PreciosNH);
 
-    OpMatrices.addMenu(&Modelos);
+    menuTools.addMenu(&Modelos);
 
-    menuBar()->addMenu(&OpMatrices);
+    menuBar()->addMenu(&menuTools);
 }
 
 MainWindow::MainWindow()
@@ -724,6 +729,7 @@ void MainWindow::FinalizarCuentas()
             setAccountTitle(tw);
 
             /*       Luego de calcular los totales se habilitan las opciones del menu herramientas       */
+            CoeficientesTecnicos.setEnabled(true);
             actionCH.setEnabled(true);
             actionCV.setEnabled(true);
             EndoExo.setEnabled(true);
@@ -2446,9 +2452,9 @@ void MainWindow::obtenerCuentaComponentes()
         diccCuentasComponentes[key].append(lista);
         lista.clear();
     }
-    foreach (QString key, diccCuentasComponentes.keys())
+    for(int i=2;i<count-1;i++)
     {
-        ComponentesEndogenos.append(diccCuentasComponentes[key]);
+        ComponentesEndogenos.append(tw->item(i,1)->text());
     }
 }
 
@@ -4059,7 +4065,6 @@ void MainWindow::slotPHCIncidenciaiComponente()
     }
     FI = new FormIncidenciaI(this);
     int contador = ComponentesEndogenos.count();
-
     QTableWidget *tw = FI->ui->TableIncidencia;
     crearTablaVaciaEncadenamiento(2,tw,contador);
 
@@ -4587,6 +4592,7 @@ void MainWindow::slotPNHIncidenciaiCuenta()
         crearFormularioPNH();
         QPushButton *buttonSeleccionar = findChild<QPushButton *>("SeleccionarPNH");
         connect(buttonSeleccionar,SIGNAL(clicked()),this,SLOT(slotSelectPNHi()));
+        formPreciosNoHomogeneos->show();
     }
     else
     {

@@ -35,11 +35,12 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
     QMenu menuFile;
-    QMenu OpMatrices;
     QMenu menuTools;
     QMenu menuViews;
     QMenu menuHelp;
+
     QMenu EndoExo;
+    QMenu CoeficientesTecnicos;
 
     QMenu Modelos;
     QMenu PHClasico;
