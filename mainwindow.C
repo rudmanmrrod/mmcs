@@ -948,7 +948,12 @@ void MainWindow::FinalizarCuentas()
             groupbox->setVisible(false);
 
             QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
-            CalcularTotales(tw,2);//Se llama a la funcion que agregue una nueva fila y columna con los totales respectivos
+            bool iguales = true;
+            CalcularTotales(tw,2,iguales);//Se llama a la funcion que agregue una nueva fila y columna con los totales respectivos
+            if(!iguales)
+            {
+                QMessageBox::warning(this,"Alerta","El Total de una(s) fila(s)\n es distinto al Total de\nuna(s) columna(s)");
+            }
             setAccountTitle(tw);
 
             /*       Luego de calcular los totales se habilitan las opciones del menu herramientas       */
@@ -967,9 +972,8 @@ void MainWindow::FinalizarCuentas()
     }
 }
 
-void MainWindow::CalcularTotales(QTableWidget *tableWidget,int inicio)//Se calculan los totales por fila/columna
+void MainWindow::CalcularTotales(QTableWidget *tableWidget,int inicio,bool &iguales)//Se calculan los totales por fila/columna
 {
-    bool iguales = true;
     int filas=tableWidget->rowCount();
     int columnas=tableWidget->columnCount();
     /*******       Se inserta la nueva fila y columna para los totales, asi como es texto corespondiente             *****/
@@ -1026,11 +1030,6 @@ void MainWindow::CalcularTotales(QTableWidget *tableWidget,int inicio)//Se calcu
     //
     int cantidad = tableWidget->rowCount();
     ItemsNoEditable(tableWidget,0,inicio-1,cantidad-1);
-    if(!iguales)
-    {
-        QMessageBox::warning(this,"Alerta","El Total de una(s) fila(s)\n es distinto al Total de\nuna(s) columna(s)");
-    }
-
 }
 
 void MainWindow::RestaurarCeldas()//Slot que permite restaurar el titulo de las cuentas en las celdas
@@ -1455,10 +1454,27 @@ void MainWindow::CellStyle(QTableWidgetItem *ti)
     ti->setFont(font);
 }
 
-/*          Funcion para agregar el estilo de una celda en negrita con fondo de color gris (Componente)       */
+/*          Funcion para agregar el estilo de una celda con fondo de color gris (Componente)       */
 void MainWindow::CellStyleComponente(QTableWidgetItem *ti)
 {
     ti->setBackgroundColor(QColor(221,227,230));
+}
+
+/*              Funcion para obtener las cuentas de la parte endogena        */
+QStringList MainWindow::obtenerCuentas()
+{
+    QStringList cuenta;
+    QTableWidget *tw = findChild<QTableWidget *>("MatrizEndogenaEndogena");
+    int count = tw->rowCount();
+    for(int i=2;i<count-1;i++)
+    {
+        QString valor = tw->item(0,i)->text();
+        if(!cuenta.contains(valor))
+        {
+            cuenta.append(valor);
+        }
+    }
+    return cuenta;
 }
 
 //FH_001
@@ -1812,10 +1828,11 @@ void MainWindow::slotFinalizarExogena()
         //Se crean los vectores para los subtotales endógeno/exógeno
         calcularSubtotal(tablaEE,2,count-1,inicioExogena-1);
 
+        bool var = false;
         clonarTabla(tablaEE,matrizEndogena,inicioExogena);
-        CalcularTotales(matrizEndogena,2);
+        CalcularTotales(matrizEndogena,2,var);
 
-        CalcularTotales(tablaEE,2);
+        CalcularTotales(tablaEE,2,var);
         setEndogenaExogenaCell(tablaEE,inicioExogena,elementos,true);
 
         //Se crea la nueva pestaña
@@ -2285,23 +2302,30 @@ void MainWindow::obtenerCuentaComponentes()
     foreach(int key,diccCuentasEndogenas.keys())
     {
         QStringList list;
-        diccCuentasComponentes.insert(diccCuentasEndogenas[key][0],list);
+        QMap<QString,QStringList>  a;
+        a.insert(diccCuentasEndogenas[key][0],list);
+        int clave = diccCuentasComponentes.count();
+        diccCuentasComponentes.insert(clave,a);
     }
     QStringList lista;
     QTableWidget *tw = findChild<QTableWidget *>("MatrizEndogenaEndogena");
     int count = tw->rowCount();
-    foreach(QString key,diccCuentasComponentes.keys())
+    foreach(int key,diccCuentasComponentes.keys())
     {
-        for(int i=2;i<count-1;i++)
+        foreach (QString name, diccCuentasComponentes[key].keys())
         {
-            QString accTitle = tw->item(i,0)->text();
-            if(accTitle==key)
+            for(int i=2;i<count-1;i++)
             {
-                lista.append(tw->item(i,1)->text());
+                QString accTitle = tw->item(i,0)->text();
+                if(accTitle==name)
+                {
+                    lista.append(tw->item(i,1)->text());
+                }
             }
+            diccCuentasComponentes[key][name].append(lista);
+            lista.clear();
+
         }
-        diccCuentasComponentes[key].append(lista);
-        lista.clear();
     }
     for(int i=2;i<count-1;i++)
     {
@@ -2443,10 +2467,8 @@ void MainWindow::slotEncadenamientos()
         //Radio Button
         QRadioButton *ct = new QRadioButton;
         ct->setObjectName("CTButton");
-        ct->setDisabled(true);
         QRadioButton *ma = new QRadioButton;
         ma->setObjectName("MaButton");
-        ma->setDisabled(true);
         ct->setText("Coeficientes Técnicos");
         ma->setText("Multiplicadores Leontief");
         radioBox->addWidget(ct);
@@ -2501,23 +2523,9 @@ void MainWindow::slotEncadenamientos()
         formEncadenamientos->setLayout(layoutCentralWidget);
         formEncadenamientos->show();
         opcionEncadenamientos = 1;
-        if(opcionMa==1)
-        {
-            QRadioButton *ma = findChild<QRadioButton *>("MaButton");
-            ma->setEnabled(true);
-            QRadioButton *ct = findChild<QRadioButton *>("CTButton");
-            ct->setEnabled(true);
-        }
     }
     else
     {
-        if(opcionMa==1)
-        {
-            QRadioButton *ma = findChild<QRadioButton *>("MaButton");
-            ma->setEnabled(true);
-            QRadioButton *ct = findChild<QRadioButton *>("CTButton");
-            ct->setEnabled(true);
-        }
         formEncadenamientos->show();
     }
 }
@@ -2556,7 +2564,10 @@ void MainWindow::slotAgregarEncadenamiento()
             }
             lw->setDisabled(true);
             opcionCuentaEncadenamientos=1;//Se establece un valor para la variable de la opcion
-            diccCuentasEncadenamientos.insert(nombre_cuenta,componentes_cuenta);
+            QMap<QString,QStringList> a;
+            a.insert(nombre_cuenta,componentes_cuenta);
+            int diccCount = diccCuentasEncadenamientos.count();
+            diccCuentasEncadenamientos.insert(diccCount,a);
         }
     }
     else
@@ -2651,55 +2662,66 @@ void MainWindow::slotVerEncadenamiento()
 void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTable)
 {
     int countEndogena = tw->rowCount();
-    int elementos = contarElementosMap(diccCuentasEncadenamientos);
+    int elementos = 0;
+    foreach(int key,diccCuentasEncadenamientos.keys())
+    {
+        foreach(QString name,diccCuentasEncadenamientos[key].keys())
+        {
+            QStringList prueba = diccCuentasEncadenamientos[key][name];
+            elementos += prueba.count();
+        }
+    }
     crearTablaVaciaEncadenamiento(elementos,enTable);
     int columna=0;
-    foreach(QString key,diccCuentasEncadenamientos.keys())
+    foreach(int key,diccCuentasEncadenamientos.keys())
     {
-        for(int j=2;j<countEndogena;j++)
+        foreach(QString name,diccCuentasEncadenamientos[key].keys())
         {
-            QString titulo =tw->item(0,j)->text();
-            QString componente = tw->item(1,j)->text();
-            double sumaColumna = 0;
-            double sumaFila = 0;
-            if(titulo==key)
+            for(int j=2;j<countEndogena;j++)
             {
-                foreach(QString valor,diccCuentasEncadenamientos[key])
+                QString titulo =tw->item(0,j)->text();
+                QString componente = tw->item(1,j)->text();
+                double sumaColumna = 0;
+                double sumaFila = 0;
+                if(titulo==name)
                 {
-                    if(componente==valor)
+                    foreach(QString valor,diccCuentasEncadenamientos[key][name])
                     {
-                        for(int k=2;k<countEndogena;k++)
+                        if(componente==valor)
                         {
-                            double EncadenamientoAtras;
-                            double EncadenamientoAdelante;
-                            if(tw->objectName()=="MatrizMa")
+                            for(int k=2;k<countEndogena;k++)
                             {
-                                EncadenamientoAtras = MatrixMa(k-2,j-2);
-                                EncadenamientoAdelante = MatrixMa(j-2,k-2);
+                                double EncadenamientoAtras;
+                                double EncadenamientoAdelante;
+                                if(tw->objectName()=="MatrizMa")
+                                {
+                                    EncadenamientoAtras = MatrixMa(k-2,j-2);
+                                    EncadenamientoAdelante = MatrixMa(j-2,k-2);
+                                }
+                                else
+                                {
+                                    EncadenamientoAtras = tw->item(k,j)->text().toDouble();//Suma Columna(Encadenamiento hacia atras)
+                                    EncadenamientoAdelante = tw->item(j,k)->text().toDouble();//Suma Fila(Encadenamiento hacia adelante)
+                                }
+                                sumaColumna+=EncadenamientoAtras;
+                                sumaFila+=EncadenamientoAdelante;
                             }
-                            else
-                            {
-                                EncadenamientoAtras = tw->item(k,j)->text().toDouble();//Suma Columna(Encadenamiento hacia atras)
-                                EncadenamientoAdelante = tw->item(j,k)->text().toDouble();//Suma Fila(Encadenamiento hacia adelante)
-                            }
-                            sumaColumna+=EncadenamientoAtras;
-                            sumaFila+=EncadenamientoAdelante;
+                            //Elementos del encadenamiento hacia atras
+                            QTableWidgetItem *valorAtras = new QTableWidgetItem(QString::number(sumaColumna,'f',precission));
+                            QString value = Separador(valorAtras,false);
+                            valorAtras->setText(value);
+                            valorAtras->setFlags(valorAtras->flags() ^ Qt::ItemIsEditable);
+                            valorAtras->setTextAlignment(Qt::AlignCenter);
+                            enTable->setItem(columna,2,valorAtras);
+                            //Elementos del encadenamiento hacia adelante
+                            QTableWidgetItem *valorAdelante = new QTableWidgetItem(QString::number(sumaFila,'f',precission));
+                            value = Separador(valorAdelante,false);
+                            valorAdelante->setText(value);
+                            valorAdelante->setFlags(valorAdelante->flags() ^ Qt::ItemIsEditable);
+                            valorAdelante->setTextAlignment(Qt::AlignCenter);
+                            enTable->setItem(columna,3,valorAdelante);
+                            columna++;
                         }
-                        //Elementos del encadenamiento hacia atras
-                        QTableWidgetItem *valorAtras = new QTableWidgetItem(QString::number(sumaColumna,'f',precission));
-                        QString value = Separador(valorAtras,false);
-                        valorAtras->setText(value);
-                        valorAtras->setFlags(valorAtras->flags() ^ Qt::ItemIsEditable);
-                        valorAtras->setTextAlignment(Qt::AlignCenter);
-                        enTable->setItem(columna,2,valorAtras);
-                        //Elementos del encadenamiento hacia adelante
-                        QTableWidgetItem *valorAdelante = new QTableWidgetItem(QString::number(sumaFila,'f',precission));
-                        value = Separador(valorAdelante,false);
-                        valorAdelante->setText(value);
-                        valorAdelante->setFlags(valorAdelante->flags() ^ Qt::ItemIsEditable);
-                        valorAdelante->setTextAlignment(Qt::AlignCenter);
-                        enTable->setItem(columna,3,valorAdelante);
-                        columna++;
                     }
                 }
             }
@@ -2715,7 +2737,7 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
     enTable->setItem(0,3,encAdelante);
     noEditColZero(enTable);
     //Se agregan las cuentas y sus componentes
-    cuentacomponentesResultado(enTable,elementos);
+    cuentacomponentesEncadenamiento(enTable,elementos);
     //Se agregan los totales
     calcularTotalesEncadenamientos(enTable);
     //Se auto ajustan las tablas al contenido
@@ -2728,6 +2750,51 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
         QListWidget *lw=new QListWidget;
         lw = findChild<QListWidget *>(QString("encadenamientosAccList %1").arg(i + 1));
         lw->setEnabled(true);
+    }
+}
+
+void MainWindow::cuentacomponentesEncadenamiento(QTableWidget *to,int count)
+{
+    QStringList cuentaTitulos;
+    noEditColZero(to);
+    QTableWidgetItem *zero = new QTableWidgetItem;
+    zero->setFlags(zero->flags() ^ Qt::ItemIsEditable);
+    to->setItem(0,1,zero);
+    int i=1;
+    foreach(int key,diccCuentasEncadenamientos.keys())
+    {
+        foreach (QString name, diccCuentasEncadenamientos[key].keys())
+        {
+            foreach (QString Item, diccCuentasEncadenamientos[key][name])
+            {
+                //Se agregan cuentas y componentes
+                QString accName=name;
+                QTableWidgetItem *cuenta = new QTableWidgetItem(accName);
+                cuenta->setFlags(cuenta->flags() ^ Qt::ItemIsEditable);
+                CellStyle(cuenta);
+                QTableWidgetItem *componente = new QTableWidgetItem(Item);
+                componente->setFlags(componente->flags() ^ Qt::ItemIsEditable);
+                CellStyleComponente(componente);
+                to->setItem(i,0,cuenta);
+                to->setItem(i,1,componente);
+                cuentaTitulos.append(accName);
+                i++;
+            }
+        }
+    }
+    for(int i=0;i<count-1;i++)
+    {
+        QString accName=to->item(i+1,0)->text();
+        if(cuentaTitulos.contains(accName))
+        {
+            int contar = cuentaTitulos.count(accName);
+            to->setSpan(i+1,0,contar,1);
+            cuentaTitulos.removeAll(accName);
+        }
+        if(cuentaTitulos.isEmpty())
+        {
+            break;
+        }
     }
 }
 
@@ -2803,37 +2870,54 @@ void MainWindow::encademientosStyle(QTableWidgetItem *ti)
 void MainWindow::calcularTotalesEncadenamientos(QTableWidget *tw)
 {
     int count = tw->rowCount();
-    double sumaAdelante=0;
-    double sumaAtras=0;
-    //Se realizan los calculos
-    for(int i=1;i<count;i++)
+    QStringList accName;
+    for(int i=0;i<count-1;i++)
     {
-        QString stringAtras = Separador(tw->item(i,2),true);
-        double itemAtras = stringAtras.toDouble();
-        sumaAtras+=itemAtras;
-        QString stringAdelante = Separador(tw->item(i,3),true);
-        double itemAdelante = stringAdelante.toDouble();
-        sumaAdelante+=itemAdelante;
+        QString cuenta = tw->item(i+1,0)->text();
+        if(!accName.contains(cuenta))
+        {
+            accName.append(cuenta);
+        }
     }
-    //Se inserta la fila donde iran los totales
-    tw->insertRow(count);
-    //Se insertan las celdas con los respectivos valores totales
-    QTableWidgetItem *zero = new QTableWidgetItem;
-    zero->setFlags(zero->flags() ^ Qt::ItemIsEditable);
-    tw->setItem(count,0,zero);
-    QTableWidgetItem *titulo = new QTableWidgetItem("Encadenamiento Parcial, Total");
-    encademientosStyle(titulo);
-    tw->setItem(count,1,titulo);
-    QTableWidgetItem *totalAtras = new QTableWidgetItem(QString::number(sumaAtras,'f',precission));
-    QString value = Separador(totalAtras,false);
-    totalAtras->setText(value);
-    encademientosStyle(totalAtras);
-    QTableWidgetItem *totalAdelante = new QTableWidgetItem(QString::number(sumaAdelante,'f',precission));
-    value = Separador(totalAdelante,false);
-    totalAdelante->setText(value);
-    encademientosStyle(totalAdelante);
-    tw->setItem(count,2,totalAtras);
-    tw->setItem(count,3,totalAdelante);
+    int cantidad = accName.count();
+    for(int k=0;k<cantidad;k++)
+    {
+        count = tw->rowCount();
+        double sumaAdelante=0;
+        double sumaAtras=0;
+        //Se realizan los calculos
+        for(int i=1;i<count;i++)
+        {
+            if(tw->item(i,0)->text()==accName.at(k))
+            {
+                QString stringAtras = Separador(tw->item(i,2),true);
+                double itemAtras = stringAtras.toDouble();
+                sumaAtras+=itemAtras;
+                QString stringAdelante = Separador(tw->item(i,3),true);
+                double itemAdelante = stringAdelante.toDouble();
+                sumaAdelante+=itemAdelante;
+            }
+        }
+        //Se inserta la fila donde iran los totales
+        tw->insertRow(count);
+        //Se insertan las celdas con los respectivos valores totales
+        QTableWidgetItem *zero = new QTableWidgetItem;
+        zero->setFlags(zero->flags() ^ Qt::ItemIsEditable);
+        tw->setItem(count,0,zero);
+        QTableWidgetItem *titulo = new QTableWidgetItem(QString("Encadenamiento Parcial %1, Total").arg(accName.at(k)));
+        encademientosStyle(titulo);
+        tw->setItem(count,1,titulo);
+        QTableWidgetItem *totalAtras = new QTableWidgetItem(QString::number(sumaAtras,'f',precission));
+        QString value = Separador(totalAtras,false);
+        totalAtras->setText(value);
+        encademientosStyle(totalAtras);
+        QTableWidgetItem *totalAdelante = new QTableWidgetItem(QString::number(sumaAdelante,'f',precission));
+        value = Separador(totalAdelante,false);
+        totalAdelante->setText(value);
+        encademientosStyle(totalAdelante);
+        tw->setItem(count,2,totalAtras);
+        tw->setItem(count,3,totalAdelante);
+    }
 }
 
 //FH_005
@@ -3631,7 +3715,7 @@ void MainWindow::estimarMb(QTableWidget *Bn,QTableWidget *Mb)
     layoutCentralWidget->addWidget(Mb);
     QWidget *widget = tabWidget->widget(indice);
     widget->setLayout(layoutCentralWidget);
-    tabWidget->setCurrentIndex(indice);
+    tabWidget->removeTab(indice);
 }
 
 void MainWindow::calcularEscenarioNC()
@@ -3950,9 +4034,9 @@ void MainWindow::slotPHCIncidenciaiCuenta()
     }
     FI = new FormIncidenciaI(this);
     QTableWidget *tw = FI->ui->TableIncidencia;
-    int cuentas = totalCuentas.count();
+    QStringList nombreCuenta = obtenerCuentas();
+    int cuentas = nombreCuenta.count();
     crearTablaVaciaEncadenamiento(2,tw,cuentas);
-    QStringList nombreCuenta = totalCuentas.keys();
     for(int i=0;i<cuentas;i++)
     {
         QTableWidgetItem *titulo = new QTableWidgetItem(nombreCuenta.at(i));
@@ -3973,7 +4057,8 @@ void MainWindow::slotPHCIncidenciaiCuenta()
 void MainWindow::slotCalcularPHCIncidenciaiCuenta()
 {
     QTableWidget *tw = FI->ui->TableIncidencia;
-    int cuentas = totalCuentas.count();
+    QStringList nombreCuenta = obtenerCuentas();
+    int cuentas = nombreCuenta.count();
     QMap<QString,double> cantidades;
     for(int i=0;i<cuentas;i++)
     {
@@ -4165,7 +4250,7 @@ void MainWindow::calcularMbT()
     layoutCentralWidget->addWidget(MbT);
     QWidget *widget = tabWidget->widget(indice);
     widget->setLayout(layoutCentralWidget);
-    tabWidget->setCurrentIndex(indice);
+    tabWidget->removeTab(indice);
     opcionMBT++;
 }
 
@@ -4257,9 +4342,9 @@ void MainWindow::slotPHNCIncidenciaiCuenta()
     }
     FI = new FormIncidenciaI(this);
     QTableWidget *tw = FI->ui->TableIncidencia;
-    int cuentas = totalCuentas.count();
+    QStringList nombreCuenta = obtenerCuentas();
+    int cuentas = nombreCuenta.count();
     crearTablaVaciaEncadenamiento(2,tw,cuentas);
-    QStringList nombreCuenta = totalCuentas.keys();
     for(int i=0;i<cuentas;i++)
     {
         QTableWidgetItem *titulo = new QTableWidgetItem(nombreCuenta.at(i));
@@ -4280,7 +4365,8 @@ void MainWindow::slotPHNCIncidenciaiCuenta()
 void MainWindow::slotCalcularPHNCIncidenciaiCuenta()
 {
     QTableWidget *tw = FI->ui->TableIncidencia;
-    int cuentas = totalCuentas.count();
+    QStringList nombreCuenta = obtenerCuentas();
+    int cuentas = nombreCuenta.count();
     QMap<QString,double> cantidades;
     for(int i=0;i<cuentas;i++)
     {
@@ -4608,9 +4694,9 @@ void MainWindow::slotSelectPNHi()
         formPreciosNoHomogeneos->close();
         FI = new FormIncidenciaI(this);
         QTableWidget *tw = FI->ui->TableIncidencia;
-        int cuentas = totalCuentas.count();
-        crearTablaVaciaEncadenamiento(2,tw,cuentas);
-        QStringList nombreCuenta = totalCuentas.keys();
+        QStringList nombreCuenta = obtenerCuentas();
+        int cuentas = nombreCuenta.count();
+        crearTablaVaciaEncadenamiento(2,tw,cuentas);        
         for(int i=0;i<cuentas;i++)
         {
             QTableWidgetItem *titulo = new QTableWidgetItem(nombreCuenta.at(i));
@@ -4642,7 +4728,8 @@ void MainWindow::slotCalcularPNHIncidenciaiCuenta()
     spanEndogenaCell(PNHI,2,0,false);
 
     QTableWidget *tw = FI->ui->TableIncidencia;
-    int cuentas = totalCuentas.count();
+    QStringList nombreCuenta = obtenerCuentas();
+    int cuentas = nombreCuenta.count();
     QMap<QString,double> cantidades;
     for(int i=0;i<cuentas;i++)
     {

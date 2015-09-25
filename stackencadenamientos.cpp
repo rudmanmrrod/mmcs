@@ -1,6 +1,6 @@
 #include "stackencadenamientos.h"
 
-stackEncadenamientos::stackEncadenamientos(QMap<QString,QStringList> Cuentas, QWidget *parent):
+stackEncadenamientos::stackEncadenamientos(QMap<int, QMap<QString, QStringList> > Cuentas, QWidget *parent):
     QWidget(parent)
 {
     layoutMain = new QHBoxLayout;
@@ -12,22 +12,24 @@ stackEncadenamientos::stackEncadenamientos(QMap<QString,QStringList> Cuentas, QW
     QStringList Componentes;
 
     int i= 0;
-    foreach(QString key,Cuentas.keys())
+    foreach(int key,Cuentas.keys())
     {
-        comboAccount->addItem(QString(key));
+        foreach (QString name, Cuentas[key].keys())
+        {
+            comboAccount->addItem(QString(name));
 
-        comboAccount->setObjectName(QString("CuentaExogena %1").arg(i+1));
+            comboAccount->setObjectName(QString("CuentaExogena %1").arg(i+1));
 
-        Componentes = Cuentas[key];
+            Componentes = Cuentas[key][name];
 
-        encadenamientosWidget = new EncadenamientosWidget(i,Componentes,stackedWidget);
+            encadenamientosWidget = new EncadenamientosWidget(i,Componentes,stackedWidget);
 
-        stackedWidget->addWidget(encadenamientosWidget);
+            stackedWidget->addWidget(encadenamientosWidget);
 
-        widgetList.append(encadenamientosWidget);
+            widgetList.append(encadenamientosWidget);
 
-        i++;
-
+            i++;
+        }
     }
 
     comboAccount->addItem("Sub-Matriz Endógena-Endógena");

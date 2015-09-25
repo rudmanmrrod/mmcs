@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'formLoadMatrix.ui'
 **
-** Created: Fri Sep 11 09:48:15 2015
+** Created: Fri Sep 25 11:00:03 2015
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -115,7 +115,7 @@ public:
 
         spinNumber = new QSpinBox(FormLoadMatrix);
         spinNumber->setObjectName(QString::fromUtf8("spinNumber"));
-        spinNumber->setMinimum(1);
+        spinNumber->setMinimum(2);
 
         gridLayout->addWidget(spinNumber, 2, 1, 1, 1);
 

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'stackencadenamientos.h'
 **
-** Created: Fri Aug 14 11:42:37 2015
+** Created: Fri Sep 25 09:51:21 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.2)
 **
 ** WARNING! All changes made in this file will be lost!

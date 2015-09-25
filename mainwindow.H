@@ -86,8 +86,8 @@ class MainWindow : public QMainWindow
     QMap<QString,QStringList> diccCuentasExogenas;
     QMap<int,QVector<QString> > diccCuentasEndogenas;
     QMap<int,QVector<QString> > espacioCuentasExogenas;
-    QMap<QString,QStringList> diccCuentasComponentes;
-    QMap<QString,QStringList> diccCuentasEncadenamientos;
+    QMap<int, QMap<QString,QStringList> > diccCuentasComponentes;
+    QMap<int, QMap<QString,QStringList> > diccCuentasEncadenamientos;
     QMap<QString,double> totalCuentas;
 
     QStringList ComponentesEndogenos;
@@ -169,7 +169,7 @@ class MainWindow : public QMainWindow
     void createMenuBar();
     void matricesMenuBar();
     void populateTable(QTableWidget *);
-    void CalcularTotales(QTableWidget *, int inicio);
+    void CalcularTotales(QTableWidget *, int inicio, bool &);
     void loadMatrizExogena();
     void clonarTabla(QTableWidget *,QTableWidget *, int cantidad);
     void noEditColZero(QTableWidget *);
@@ -202,6 +202,7 @@ class MainWindow : public QMainWindow
     void crearMatrizEncadenamientoEndogena(QTableWidget *, QTableWidget *);
     void calcularTotalesEncadenamientos(QTableWidget *);
     void encademientosStyle(QTableWidgetItem *);
+    void cuentacomponentesEncadenamiento(QTableWidget *, int count);
 
     void calcularSubtotal(QTableWidget *,int inicio, int fin,int exogena);
     void llenarEscenario(QTableWidget *, bool clasico=true);
@@ -238,6 +239,7 @@ class MainWindow : public QMainWindow
     void multiplicarMatricesPNH(QTableWidget *, QVector<double>);
     void calcularPNHIncidencia100(QTableWidget *, Eigen::MatrixXd Diagonal);
     void crearFormularioPNH();
+    QStringList obtenerCuentas();
 
     void titleSeleccionar(QTableWidget *);
 

@@ -122,7 +122,7 @@
      <item row="2" column="1">
       <widget class="QSpinBox" name="spinNumber">
        <property name="minimum">
-        <number>1</number>
+        <number>2</number>
        </property>
       </widget>
      </item>

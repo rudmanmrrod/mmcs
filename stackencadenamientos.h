@@ -13,7 +13,7 @@ class stackEncadenamientos : public QWidget
 {
     Q_OBJECT
 public:
-    explicit stackEncadenamientos(QMap<QString,QStringList> Cuentas,QWidget *parent = 0);
+    explicit stackEncadenamientos(QMap<int, QMap<QString,QStringList> > Cuentas,QWidget *parent = 0);
 
     QStackedWidget * stackedWidget;
     QList<QWidget *> widgetList;
