@@ -39,8 +39,8 @@ class MainWindow : public QMainWindow
     QMenu menuViews;
     QMenu menuHelp;
 
-    QMenu EndoExo;
     QMenu CoeficientesTecnicos;
+    QMenu Encadenamientos;
 
     QMenu Modelos;
     QMenu PHClasico;
@@ -58,10 +58,9 @@ class MainWindow : public QMainWindow
     QAction actionCH;
     QAction actionCV;
     QAction actionVariableExogena;
-    QAction actionCTVEndEx;
-    QAction actionLa;
 
     QAction actionEncadenamiento;
+    QAction actionClasificarCuentas;
 
     QAction actionModeloClasico;
     QAction actionCompararResultados;
@@ -79,6 +78,8 @@ class MainWindow : public QMainWindow
     QAction actionPNHIncidencia100;
     QAction actionPNHIncidenciaCuenta;
     QAction actionPNHIncidenciaComponente;
+
+    QAction actionSeleccionarTabla;
 
     QTableWidget * tableWidget;
     QTabWidget * tabWidget;
@@ -133,6 +134,7 @@ class MainWindow : public QMainWindow
     QVector<double> subtotalExogEnd;
     QVector<double> Vpond;
 
+    int cantidadSelecciones;
     int cantidadEncadenamientos;
     int cantidadEscenarios;
     int cantidadResultados;
@@ -192,7 +194,7 @@ class MainWindow : public QMainWindow
     void EndogenaAn();
 
     void calcularTotalCuentas(QTableWidget *);
-    void estimarVectorPonderacion(QTableWidget *);
+    void estimarVectorPonderacion();
 
     void obtenerCuentaComponentes();
     void crearTablaVaciaEncadenamiento(int filas, QTableWidget *, int columnas=4);
@@ -208,7 +210,6 @@ class MainWindow : public QMainWindow
     QStringList obtenerNombreResultadoEscenario();
     void crearTablaComparar(QTableWidget *, QTableWidget *);
     void cuentacomponentesResultado(QTableWidget *, int count, bool clasico = true);
-    void validar();
 
     void obtenerMatrizExgEnd();
     void crearMatrizExgEnd(QTableWidget *,QTableWidget *,int elementos,int inicioExogena);
@@ -237,6 +238,8 @@ class MainWindow : public QMainWindow
     void multiplicarMatricesPNH(QTableWidget *, QVector<double>);
     void calcularPNHIncidencia100(QTableWidget *, Eigen::MatrixXd Diagonal);
     void crearFormularioPNH();
+
+    void titleSeleccionar(QTableWidget *);
 
     bool ComprobarCuentas();
     int ObtenerIndice(QString );
@@ -269,7 +272,6 @@ private slots:
     void slotAgregarExogena();
     void slotFinalizarExogena();
     void slotDeshacerExogena();
-    void AnMa();
 
     void slotMa();
 
@@ -318,6 +320,8 @@ private slots:
     void slotSelectPNHic();
     void slotCalcularPNHIncidenciaiComponente();
 
+    void slotSeleccionarTabla();
+
 public:
     MainWindow();
     std::vector<std::string> csv_read_row(std::string , char);
@@ -325,7 +329,6 @@ public:
     QString numberFormat(double &);
 
     int contarElementosMap(QMap<QString, QStringList> diccionario);
-    int retornarIndiceCuenta(QString nombre_cuenta);
 };
 
 #endif // MAINWINDOW_H
