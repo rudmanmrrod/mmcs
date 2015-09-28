@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.H'
 **
-** Created: Fri Sep 25 11:00:29 2015
+** Created: Mon Sep 28 11:46:38 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.2)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      56,   14, // methods
+      57,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -54,39 +54,40 @@ static const uint qt_meta_data_MainWindow[] = {
      447,   11,   11,   11, 0x08,
      475,   11,   11,   11, 0x08,
      499,   11,   11,   11, 0x08,
-     517,   11,   11,   11, 0x08,
-     534,   11,   11,   11, 0x08,
-     553,   11,   11,   11, 0x08,
-     581,  573,   11,   11, 0x08,
-     605,   11,   11,   11, 0x28,
-     625,   11,   11,   11, 0x08,
-     646,   11,   11,   11, 0x08,
-     668,   11,   11,   11, 0x08,
-     690,   11,   11,   11, 0x08,
-     713,   11,   11,   11, 0x08,
-     741,   11,   11,   11, 0x08,
-     763,   11,   11,   11, 0x08,
-     786,   11,   11,   11, 0x08,
-     813,   11,   11,   11, 0x08,
-     848,   11,   11,   11, 0x08,
-     879,   11,   11,   11, 0x08,
-     918,   11,   11,   11, 0x08,
-     943,   11,   11,   11, 0x08,
-     962,   11,   11,   11, 0x08,
+     523,   11,   11,   11, 0x08,
+     541,   11,   11,   11, 0x08,
+     558,   11,   11,   11, 0x08,
+     577,   11,   11,   11, 0x08,
+     605,  597,   11,   11, 0x08,
+     629,   11,   11,   11, 0x28,
+     649,   11,   11,   11, 0x08,
+     670,   11,   11,   11, 0x08,
+     692,   11,   11,   11, 0x08,
+     714,   11,   11,   11, 0x08,
+     737,   11,   11,   11, 0x08,
+     765,   11,   11,   11, 0x08,
+     787,   11,   11,   11, 0x08,
+     810,   11,   11,   11, 0x08,
+     837,   11,   11,   11, 0x08,
+     872,   11,   11,   11, 0x08,
+     903,   11,   11,   11, 0x08,
+     942,   11,   11,   11, 0x08,
+     967,   11,   11,   11, 0x08,
      986,   11,   11,   11, 0x08,
-    1014,   11,   11,   11, 0x08,
-    1050,   11,   11,   11, 0x08,
-    1082,   11,   11,   11, 0x08,
-    1122,   11,   11,   11, 0x08,
-    1145,   11,   11,   11, 0x08,
-    1164,   11,   11,   11, 0x08,
-    1180,   11,   11,   11, 0x08,
-    1207,   11,   11,   11, 0x08,
-    1238,   11,   11,   11, 0x08,
-    1255,   11,   11,   11, 0x08,
-    1290,   11,   11,   11, 0x08,
-    1308,   11,   11,   11, 0x08,
-    1347,   11,   11,   11, 0x08,
+    1010,   11,   11,   11, 0x08,
+    1038,   11,   11,   11, 0x08,
+    1074,   11,   11,   11, 0x08,
+    1106,   11,   11,   11, 0x08,
+    1146,   11,   11,   11, 0x08,
+    1169,   11,   11,   11, 0x08,
+    1188,   11,   11,   11, 0x08,
+    1204,   11,   11,   11, 0x08,
+    1231,   11,   11,   11, 0x08,
+    1262,   11,   11,   11, 0x08,
+    1279,   11,   11,   11, 0x08,
+    1314,   11,   11,   11, 0x08,
+    1332,   11,   11,   11, 0x08,
+    1371,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -104,12 +105,13 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "slotDeshacerExogena()\0slotMa()\0"
     "slotEncadenamientos()\0slotCloseEncadenamiento()\0"
     "slotAgregarEncadenamiento()\0"
-    "slotVerEncadenamiento()\0slotCloseExport()\0"
-    "slotSaveExport()\0slotSearchExport()\0"
-    "slotModeloClasico()\0clasico\0"
-    "calcularEscenario(bool)\0calcularEscenario()\0"
-    "finalizarEscenario()\0slotModeloNoClasico()\0"
-    "calcularEscenarioNC()\0finalizarEscenarioNC()\0"
+    "slotVerEncadenamiento()\0slotClasificarCuentas()\0"
+    "slotCloseExport()\0slotSaveExport()\0"
+    "slotSearchExport()\0slotModeloClasico()\0"
+    "clasico\0calcularEscenario(bool)\0"
+    "calcularEscenario()\0finalizarEscenario()\0"
+    "slotModeloNoClasico()\0calcularEscenarioNC()\0"
+    "finalizarEscenarioNC()\0"
     "slotCompararResultadosMNC()\0"
     "slotVerResultadoMNC()\0slotPHCIncidencia100()\0"
     "slotPHCIncidenciaiCuenta()\0"
@@ -159,40 +161,41 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 19: _t->slotCloseEncadenamiento(); break;
         case 20: _t->slotAgregarEncadenamiento(); break;
         case 21: _t->slotVerEncadenamiento(); break;
-        case 22: _t->slotCloseExport(); break;
-        case 23: _t->slotSaveExport(); break;
-        case 24: _t->slotSearchExport(); break;
-        case 25: _t->slotModeloClasico(); break;
-        case 26: _t->calcularEscenario((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 27: _t->calcularEscenario(); break;
-        case 28: _t->finalizarEscenario(); break;
-        case 29: _t->slotModeloNoClasico(); break;
-        case 30: _t->calcularEscenarioNC(); break;
-        case 31: _t->finalizarEscenarioNC(); break;
-        case 32: _t->slotCompararResultadosMNC(); break;
-        case 33: _t->slotVerResultadoMNC(); break;
-        case 34: _t->slotPHCIncidencia100(); break;
-        case 35: _t->slotPHCIncidenciaiCuenta(); break;
-        case 36: _t->slotCalcularPHCIncidenciaiCuenta(); break;
-        case 37: _t->slotPHCIncidenciaiComponente(); break;
-        case 38: _t->slotCalcularPHCIncidenciaiComponente(); break;
-        case 39: _t->slotCompararResultados(); break;
-        case 40: _t->slotVerResultado(); break;
-        case 41: _t->slotPHNCIncidencia100(); break;
-        case 42: _t->slotPHNCIncidenciaiCuenta(); break;
-        case 43: _t->slotCalcularPHNCIncidenciaiCuenta(); break;
-        case 44: _t->slotPHNCIncidenciaiComponente(); break;
-        case 45: _t->slotCalcularPHNCIncidenciaiComponente(); break;
-        case 46: _t->slotPNHIncudencia100(); break;
-        case 47: _t->slotCloseformPNH(); break;
-        case 48: _t->slotSelectPNH(); break;
-        case 49: _t->slotPNHIncidenciaiCuenta(); break;
-        case 50: _t->slotPNHIncidenciaiComponente(); break;
-        case 51: _t->slotSelectPNHi(); break;
-        case 52: _t->slotCalcularPNHIncidenciaiCuenta(); break;
-        case 53: _t->slotSelectPNHic(); break;
-        case 54: _t->slotCalcularPNHIncidenciaiComponente(); break;
-        case 55: _t->slotSeleccionarTabla(); break;
+        case 22: _t->slotClasificarCuentas(); break;
+        case 23: _t->slotCloseExport(); break;
+        case 24: _t->slotSaveExport(); break;
+        case 25: _t->slotSearchExport(); break;
+        case 26: _t->slotModeloClasico(); break;
+        case 27: _t->calcularEscenario((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 28: _t->calcularEscenario(); break;
+        case 29: _t->finalizarEscenario(); break;
+        case 30: _t->slotModeloNoClasico(); break;
+        case 31: _t->calcularEscenarioNC(); break;
+        case 32: _t->finalizarEscenarioNC(); break;
+        case 33: _t->slotCompararResultadosMNC(); break;
+        case 34: _t->slotVerResultadoMNC(); break;
+        case 35: _t->slotPHCIncidencia100(); break;
+        case 36: _t->slotPHCIncidenciaiCuenta(); break;
+        case 37: _t->slotCalcularPHCIncidenciaiCuenta(); break;
+        case 38: _t->slotPHCIncidenciaiComponente(); break;
+        case 39: _t->slotCalcularPHCIncidenciaiComponente(); break;
+        case 40: _t->slotCompararResultados(); break;
+        case 41: _t->slotVerResultado(); break;
+        case 42: _t->slotPHNCIncidencia100(); break;
+        case 43: _t->slotPHNCIncidenciaiCuenta(); break;
+        case 44: _t->slotCalcularPHNCIncidenciaiCuenta(); break;
+        case 45: _t->slotPHNCIncidenciaiComponente(); break;
+        case 46: _t->slotCalcularPHNCIncidenciaiComponente(); break;
+        case 47: _t->slotPNHIncudencia100(); break;
+        case 48: _t->slotCloseformPNH(); break;
+        case 49: _t->slotSelectPNH(); break;
+        case 50: _t->slotPNHIncidenciaiCuenta(); break;
+        case 51: _t->slotPNHIncidenciaiComponente(); break;
+        case 52: _t->slotSelectPNHi(); break;
+        case 53: _t->slotCalcularPNHIncidenciaiCuenta(); break;
+        case 54: _t->slotSelectPNHic(); break;
+        case 55: _t->slotCalcularPNHIncidenciaiComponente(); break;
+        case 56: _t->slotSeleccionarTabla(); break;
         default: ;
         }
     }
@@ -230,9 +233,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 56)
+        if (_id < 57)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 56;
+        _id -= 57;
     }
     return _id;
 }

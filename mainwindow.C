@@ -1869,6 +1869,9 @@ void MainWindow::slotFinalizarExogena()
         Encadenamientos.setEnabled(true);
         connect(&actionEncadenamiento,SIGNAL(triggered()),this,SLOT(slotEncadenamientos()));
         actionEncadenamiento.setEnabled(true);
+        //Clasificador de Cuentas
+        connect(&actionClasificarCuentas,SIGNAL(triggered()),this,SLOT(slotClasificarCuentas()));
+        actionClasificarCuentas.setEnabled(true);
 
         //Se activa la opción de modelo clásico
         Modelos.setEnabled(true);
@@ -2918,6 +2921,153 @@ void MainWindow::calcularTotalesEncadenamientos(QTableWidget *tw)
         tw->setItem(count,2,totalAtras);
         tw->setItem(count,3,totalAdelante);
     }
+}
+
+//Clasificador de cuentas
+void MainWindow::slotClasificarCuentas()
+{
+    QTableWidget *An = findChild<QTableWidget *>("MatrizAn");
+    QTableWidget *Ma = findChild<QTableWidget *>("MatrizMa");
+    int count = An->rowCount()-1;
+    QTableWidget *CC = new QTableWidget;
+    CC->setObjectName("Clasificador de Cuentas");
+    crearTablaVaciaEncadenamiento(count,CC,8);
+    cuentacomponentesResultado(CC,count-1,true);
+    QVector<double> vectorFila;
+    QVector<double> vectorColumna;
+    obtenerUiUj(An,vectorFila,vectorColumna);
+    calcularClasificador(CC,vectorFila,vectorColumna);
+    vectorFila.clear();
+    vectorColumna.clear();
+    obtenerUiUj(Ma,vectorFila,vectorColumna);
+    calcularClasificador(CC,vectorFila,vectorColumna,5);
+    CC->resizeColumnsToContents();//Ajuste de Columnas
+    agregarPrimeraCelda(CC);
+
+    tabWidget->addTab(new QWidget,"Clasificador");
+    int indice=ObtenerIndice("Clasificador");
+    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+    layoutCentralWidget->addWidget(CC);
+    QWidget *widget = tabWidget->widget(indice);
+    widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
+    actionClasificarCuentas.setDisabled(true);
+    tabWidget->setCurrentIndex(indice);
+}
+
+/*      Funcion que calcular los Ui y Uj para los clasificadores    */
+void MainWindow::obtenerUiUj(QTableWidget *tw, QVector<double> &ui, QVector<double> &uj)
+{
+    int contador = tw->rowCount();
+    double totalFila = 0;
+    double totalColumna = 0;
+    QVector<double> vectorFila;
+    QVector<double> vectorColumna;
+    for(int i=2;i<contador;i++)
+    {
+        double sumaFila = 0;
+        double sumaColumna = 0;
+        for(int j=2;j<contador;j++)
+        {
+            QString itemFila = Separador(tw->item(i,j),true);
+            QString itemColumna = Separador(tw->item(j,i),true);
+            double fila = itemFila.toDouble();
+            double columna = itemColumna.toDouble();
+            sumaFila+=fila;
+            sumaColumna+=columna;
+            totalFila+=fila;
+            totalColumna+=columna;
+        }
+        vectorFila.append(sumaFila);
+        vectorColumna.append(sumaColumna);
+    }
+    int cantidad = vectorFila.count();
+    for(int i=0;i<cantidad;i++)
+    {
+        double fila = vectorFila.at(i)/totalFila;
+        ui.append(fila);
+        double columna = vectorColumna.at(i)/totalColumna;
+        uj.append(columna);
+    }
+}
+
+/*          Funcion que hace los cálculos de los clasificadores            */
+void MainWindow::calcularClasificador(QTableWidget *tw, QVector<double> ui, QVector<double> uj,int init)
+{
+    int count = tw->rowCount()-1;
+    //Fuente Negrita
+    QFont font;
+    font.setBold(true);
+    //Titulos Ui, Uj y Tipo de Cuenta
+    QTableWidgetItem *uiItem = new QTableWidgetItem("Ui");
+    uiItem->setFlags(uiItem->flags() ^ Qt::ItemIsEditable);
+    uiItem->setFont(font);
+    tw->setItem(0,init,uiItem);
+    QTableWidgetItem *ujItem = new QTableWidgetItem("Uj");
+    ujItem->setFlags(ujItem->flags() ^ Qt::ItemIsEditable);
+    ujItem->setFont(font);
+    tw->setItem(0,init+1,ujItem);
+    QTableWidgetItem *tcItem = new QTableWidgetItem("Tipo de Cuenta");
+    tcItem->setFlags(tcItem->flags() ^ Qt::ItemIsEditable);
+    tcItem->setFont(font);
+    tw->setItem(0,init+2,tcItem);
+    for(int i=0;i<count;i++)
+    {
+        QTableWidgetItem *vFila = new QTableWidgetItem(QString::number(ui.at(i),'f',precission));
+        vFila->setFlags(vFila->flags() ^ Qt::ItemIsEditable);
+        QString itemFila = Separador(vFila,false);
+        vFila->setText(itemFila);
+        tw->setItem(i+1,init,vFila);
+        QTableWidgetItem *vColumna = new QTableWidgetItem(QString::number(uj.at(i),'f',precission));
+        vColumna->setFlags(vColumna->flags() ^ Qt::ItemIsEditable);
+        QString itemColumna = Separador(vColumna,false);
+        vColumna->setText(itemColumna);
+        tw->setItem(i+1,init+1,vColumna);
+        QTableWidgetItem *tipo = new QTableWidgetItem;
+        tipo->setFlags(tipo->flags() ^ Qt::ItemIsEditable);
+        //Se determina que tipo de cuenta es
+        if(ui.at(i)<1 and uj.at(i)<1)
+        {
+            tipo->setText("Independiente");
+        }
+        else if(ui.at(i)>1 and uj.at(i)<1)
+        {
+            tipo->setText("Impulsor de Economía");
+        }
+        else if(ui.at(i)<1 and uj.at(i)>1)
+        {
+            tipo->setText("Base");
+        }
+        else if(ui.at(i)>1 and uj.at(i)>1)
+        {
+            tipo->setText("Clave");
+        }
+        tw->setItem(i+1,init+2,tipo);
+    }
+}
+
+void MainWindow::agregarPrimeraCelda(QTableWidget *tw)
+{
+    tw->insertRow(0);
+    //Se colocan no editables la celda 0 y 1
+    noEditColZero(tw);
+    QTableWidgetItem *one = new QTableWidgetItem;
+    one->setFlags(one->flags() ^ Qt::ItemIsEditable);
+    tw->setItem(0,1,one);
+    for(int i=0;i<3;i++)
+    {
+        QTableWidgetItem *cAn = new QTableWidgetItem("Clasificador por An");
+        cAn->setTextAlignment(Qt::AlignCenter);
+        cAn->setFlags(cAn->flags() ^ Qt::ItemIsEditable);
+        CellStyleExEn(cAn);
+        tw->setItem(0,i+2,cAn);
+        QTableWidgetItem *cMa = new QTableWidgetItem("Clasificador por Ma");
+        cMa->setTextAlignment(Qt::AlignCenter);
+        cMa->setFlags(cMa->flags() ^ Qt::ItemIsEditable);
+        CellStyleExEn(cMa);
+        tw->setItem(0,5+i,cMa);
+    }
+    tw->setSpan(0,2,1,3);
+    tw->setSpan(0,5,1,3);
 }
 
 //FH_005
@@ -4920,7 +5070,7 @@ void MainWindow::slotSeleccionarTabla()
 {
     int index = tabWidget->currentIndex();
     QString tabName = tabWidget->tabText(index);
-    if(tabName.contains("Inicio") or tabName.contains("Encadenamiento") or tabName.contains("Escenario")
+    if(tabName.contains("Inicio") or tabName.contains("Encadenamiento") or tabName.contains("Escenario") or tabName.contains("Clasificador")
             or tabName.contains("Resultado") or tabName.contains("Comparacion") or tabName.contains("Seleccion"))
     {
         QMessageBox::warning(this,"Alerta","Esta pestaña no se puede\nseleccionar");
@@ -5016,6 +5166,7 @@ void MainWindow::slotSeleccionarTabla()
                     probFila++;
                 }
             }
+            ItemsNoEditable(nuevaTabla,0,2,1);
 
             titleSeleccionar(nuevaTabla);
             tabWidget->addTab(new QWidget,QString("Seleccion %1").arg(cantidadSelecciones));

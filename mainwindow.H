@@ -203,6 +203,9 @@ class MainWindow : public QMainWindow
     void calcularTotalesEncadenamientos(QTableWidget *);
     void encademientosStyle(QTableWidgetItem *);
     void cuentacomponentesEncadenamiento(QTableWidget *, int count);
+    void obtenerUiUj(QTableWidget *, QVector<double> &, QVector<double> &);
+    void calcularClasificador(QTableWidget *, QVector<double>, QVector<double>, int init = 2);
+    void agregarPrimeraCelda(QTableWidget *);
 
     void calcularSubtotal(QTableWidget *,int inicio, int fin,int exogena);
     void llenarEscenario(QTableWidget *, bool clasico=true);
@@ -281,6 +284,7 @@ private slots:
     void slotCloseEncadenamiento();
     void slotAgregarEncadenamiento();
     void slotVerEncadenamiento();
+    void slotClasificarCuentas();
 
     void slotCloseExport();
     void slotSaveExport();
