@@ -169,7 +169,9 @@ class MainWindow : public QMainWindow
     void createMenuBar();
     void matricesMenuBar();
     void populateTable(QTableWidget *);
+
     void CalcularTotales(QTableWidget *, int inicio, bool &);
+    bool comprobarNombreCuenta(QString, int indice);
     void loadMatrizExogena();
     void clonarTabla(QTableWidget *,QTableWidget *, int cantidad);
     void noEditColZero(QTableWidget *);

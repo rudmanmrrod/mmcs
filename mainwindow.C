@@ -804,6 +804,8 @@ void MainWindow::AgregarCuenta()
         int fin=SBEnd->value();
         QString nombreCuenta=le->text();
 
+        bool cuenta = comprobarNombreCuenta(nombreCuenta,index);
+
         if(nombreCuenta.isEmpty() or nombreCuenta.isNull())
         {
             QMessageBox::warning(this,"Alerta","El nombre de la cuenta esta vacio");
@@ -811,6 +813,10 @@ void MainWindow::AgregarCuenta()
         else if(!le->isEnabled())
         {
             QMessageBox::warning(this,"Alerta","Esta cuenta ya fue\nagregada");
+        }
+        else if(cuenta)
+        {
+            QMessageBox::warning(this,"Alerta","Este nombre de cuenta\nya existe");
         }
         else
         {
@@ -1101,6 +1107,20 @@ bool MainWindow::ComprobarCuentas()//Se verifica que las lineas de texto y spin 
         }
     }
     return centinela;
+}
+
+bool MainWindow::comprobarNombreCuenta(QString nombre,int indice)
+{
+    bool cuenta = false;
+    for(int i=0;i<numAccounts;i++)
+    {
+        QLineEdit *le= findChild<QLineEdit *>(QString("linedit %1").arg(i + 1));
+        if(le->text()==nombre and indice+1!=i+1)
+        {
+            cuenta = true;
+        }
+    }
+    return cuenta;
 }
 
 /***        Funcion que obtiene el nombre las cuentas a traves de los lineeidt y los retorna en una lista de string     ***/
