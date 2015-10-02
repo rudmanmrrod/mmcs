@@ -1,3 +1,6 @@
+/*
+    realizado por Rodrigo Boet Agosto/2015
+*/
 #include "formexportmatrix.h"
 #include "ui_formexportmatrix.h"
 

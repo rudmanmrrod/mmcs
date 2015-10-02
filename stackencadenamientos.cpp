@@ -1,3 +1,6 @@
+/*
+    realizado por Rodrigo Boet Agosto/2015
+*/
 #include "stackencadenamientos.h"
 
 stackEncadenamientos::stackEncadenamientos(QMap<int, QMap<QString, QStringList> > Cuentas, QWidget *parent):

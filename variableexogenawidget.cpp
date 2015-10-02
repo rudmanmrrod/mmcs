@@ -1,3 +1,6 @@
+/*
+    realizado por Rodrigo Boet Julio/2015
+*/
 #include "variableexogenawidget.h"
 
 VariableExogenaWidget::VariableExogenaWidget(int number,QStringList lista,QWidget *parent) :

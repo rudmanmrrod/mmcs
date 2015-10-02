@@ -1,3 +1,6 @@
+/*
+    realizado por Rodrigo Boet Septiembre/2015
+*/
 #include "formcompararresultados.h"
 #include "ui_formcompararresultados.h"
 

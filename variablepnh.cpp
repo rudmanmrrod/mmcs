@@ -1,3 +1,6 @@
+/*
+    realizado por Rodrigo Boet Septiembre/2015
+*/
 #include "variablepnh.h"
 
 variablePNH::variablePNH(int number, QStringList lista, QWidget *parent):

@@ -1,3 +1,6 @@
+/*
+    realizado por Rodrigo Boet Julio/2015
+*/
 #include "stackvariablesexogenas.h"
 
 stackVariablesExogenas::stackVariablesExogenas(QStringList Lista,QStringList Componentes,QList<int> inicio,

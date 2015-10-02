@@ -1,3 +1,6 @@
+/*
+    realizado por Rodrigo Boet Agosto/2015
+*/
 #include "formencadenamientos.h"
 #include "ui_formencadenamientos.h"
 

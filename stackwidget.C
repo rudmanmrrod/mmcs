@@ -1,3 +1,6 @@
+/*
+    realizado por José Ruiz en Mayo de 2015
+*/
 #include "stackwidget.H"
 
 StackWidget::StackWidget(int accountNumber, QWidget *parent) :

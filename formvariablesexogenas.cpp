@@ -1,3 +1,6 @@
+/*
+    realizado por Rodrigo Boet Julio/2015
+*/
 #include "formvariablesexogenas.h"
 #include "ui_formvariablesexogenas.h"
 

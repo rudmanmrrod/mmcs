@@ -1,3 +1,6 @@
+/*
+    realizado por Rodrigo Boet Julio/2015
+*/
 #include "encadenamientoswidget.h"
 
 EncadenamientosWidget::EncadenamientosWidget(int number, QStringList lista, QWidget *parent) :

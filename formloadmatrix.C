@@ -1,3 +1,6 @@
+/*
+    realizado por José Ruiz en Mayo de 2015
+*/
 #include "formloadmatrix.H"
 #include "ui_formLoadMatrix.h"
 

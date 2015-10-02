@@ -1,3 +1,9 @@
+/*
+    Creado bajo la Licencia GPL v.2.0 de la Free Software Foundation.
+    primer aporte realizado por José Ruiz en Mayo de 2015
+    resto del proyecto realizado por Rodrigo Boet desde Junio/2015
+*/
+
 #include "mainwindow.H"
 #include "accountwidget.H"
 #include "stackvariablesexogenas.h"
@@ -5143,7 +5149,7 @@ void MainWindow::slotSeleccionarTabla()
             {
                 crearTablaVaciaEncadenamiento(filas+2,nuevaTabla,columnas+2);
             }
-
+            bool centinela = false;
             int probFila = 2;
             for(int i = 0; i<fila; i++)
             {
@@ -5153,32 +5159,40 @@ void MainWindow::slotSeleccionarTabla()
                 {
                     if(tw->item(i,j)->isSelected())
                     {
-                        //Cuentas
-                        QTableWidgetItem *cuentaFila = new QTableWidgetItem(tw->item(cuentaNumber,j)->text());
-                        cuentaFila->setFlags(cuentaFila->flags() ^ Qt::ItemIsEditable);
-                        cuentaFila->setTextAlignment(Qt::AlignCenter);
-                        QTableWidgetItem *cuentaColumna = new QTableWidgetItem(tw->item(i,cuentaNumber)->text());
-                        cuentaColumna->setFlags(cuentaColumna->flags() ^ Qt::ItemIsEditable);
-                        cuentaColumna->setTextAlignment(Qt::AlignCenter);
-                        CellStyle(cuentaFila);
-                        CellStyle(cuentaColumna);
-                        nuevaTabla->setItem(0,probCol,cuentaFila);
-                        nuevaTabla->setItem(probFila,0,cuentaColumna);
-                        //Componentes
-                        QTableWidgetItem *componenteFila = new QTableWidgetItem(tw->item(componenteNumber,j)->text());
-                        componenteFila->setFlags(componenteFila->flags() ^ Qt::ItemIsEditable);
-                        QTableWidgetItem *componenteColumna = new QTableWidgetItem(tw->item(i,componenteNumber)->text());
-                        componenteColumna->setFlags(componenteColumna->flags() ^ Qt::ItemIsEditable);
-                        CellStyleComponente(componenteFila);
-                        CellStyleComponente(componenteColumna);
-                        nuevaTabla->setItem(1,probCol,componenteFila);
-                        nuevaTabla->setItem(probFila,1,componenteColumna);
-                        //Valor
-                        QTableWidgetItem *valoraInsertar = new QTableWidgetItem(tw->item(i,j)->text());
-                        valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
-                        nuevaTabla->setItem(probFila,probCol,valoraInsertar);
-                        probCol++;
-                        select = true;
+                        if(i<inicio or j<inicio)
+                        {
+                            centinela=true;
+                            break;
+                        }
+                        else
+                        {
+                            //Cuentas
+                            QTableWidgetItem *cuentaFila = new QTableWidgetItem(tw->item(cuentaNumber,j)->text());
+                            cuentaFila->setFlags(cuentaFila->flags() ^ Qt::ItemIsEditable);
+                            cuentaFila->setTextAlignment(Qt::AlignCenter);
+                            QTableWidgetItem *cuentaColumna = new QTableWidgetItem(tw->item(i,cuentaNumber)->text());
+                            cuentaColumna->setFlags(cuentaColumna->flags() ^ Qt::ItemIsEditable);
+                            cuentaColumna->setTextAlignment(Qt::AlignCenter);
+                            CellStyle(cuentaFila);
+                            CellStyle(cuentaColumna);
+                            nuevaTabla->setItem(0,probCol,cuentaFila);
+                            nuevaTabla->setItem(probFila,0,cuentaColumna);
+                            //Componentes
+                            QTableWidgetItem *componenteFila = new QTableWidgetItem(tw->item(componenteNumber,j)->text());
+                            componenteFila->setFlags(componenteFila->flags() ^ Qt::ItemIsEditable);
+                            QTableWidgetItem *componenteColumna = new QTableWidgetItem(tw->item(i,componenteNumber)->text());
+                            componenteColumna->setFlags(componenteColumna->flags() ^ Qt::ItemIsEditable);
+                            CellStyleComponente(componenteFila);
+                            CellStyleComponente(componenteColumna);
+                            nuevaTabla->setItem(1,probCol,componenteFila);
+                            nuevaTabla->setItem(probFila,1,componenteColumna);
+                            //Valor
+                            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(tw->item(i,j)->text());
+                            valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
+                            nuevaTabla->setItem(probFila,probCol,valoraInsertar);
+                            probCol++;
+                            select = true;
+                        }
                     }
                 }
                 if(select)
@@ -5186,17 +5200,24 @@ void MainWindow::slotSeleccionarTabla()
                     probFila++;
                 }
             }
-            ItemsNoEditable(nuevaTabla,0,2,1);
+            if(centinela)
+            {
+                QMessageBox::warning(this,"Alerta","No es necesario seleccionar cuenta/componente");
+            }
+            else
+            {
+                ItemsNoEditable(nuevaTabla,0,2,1);
 
-            titleSeleccionar(nuevaTabla);
-            tabWidget->addTab(new QWidget,QString("Seleccion %1").arg(cantidadSelecciones));
-            int indice=ObtenerIndice(QString("Seleccion %1").arg(cantidadSelecciones));
-            QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-            layoutCentralWidget->addWidget(nuevaTabla);
-            QWidget *widget = tabWidget->widget(indice);
-            widget->setLayout(layoutCentralWidget);
-            tabWidget->setCurrentIndex(indice);
-            cantidadSelecciones++;
+                titleSeleccionar(nuevaTabla);
+                tabWidget->addTab(new QWidget,QString("Seleccion %1").arg(cantidadSelecciones));
+                int indice=ObtenerIndice(QString("Seleccion %1").arg(cantidadSelecciones));
+                QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+                layoutCentralWidget->addWidget(nuevaTabla);
+                QWidget *widget = tabWidget->widget(indice);
+                widget->setLayout(layoutCentralWidget);
+                tabWidget->setCurrentIndex(indice);
+                cantidadSelecciones++;
+            }
         }
     }
 }

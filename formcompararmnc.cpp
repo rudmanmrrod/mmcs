@@ -1,3 +1,6 @@
+/*
+    realizado por Rodrigo Boet Spetiembre/2015
+*/
 #include "formcompararmnc.h"
 #include "ui_formcompararmnc.h"
 

@@ -1,3 +1,6 @@
+/*
+    realizado por Rodrigo Boet Septiembre/2015
+*/
 #include "formincidenciai.h"
 #include "ui_formincidenciai.h"
 

@@ -1,3 +1,6 @@
+/*
+    realizado por Rodrigo Boet Septiembre/2015
+*/
 #include "formpreciosnohomogeneos.h"
 #include "ui_formpreciosnohomogeneos.h"
 

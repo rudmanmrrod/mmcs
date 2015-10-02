@@ -1,3 +1,6 @@
+/*
+    realizado por Rodrigo Boet Septiembre/2015
+*/
 #include "stackpreciosnohomogeneos.h"
 
 StackPreciosNoHomogeneos::StackPreciosNoHomogeneos(QMap<QString,QStringList> Cuentas,QWidget *parent):
