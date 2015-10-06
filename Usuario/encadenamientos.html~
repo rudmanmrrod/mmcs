@@ -55,7 +55,43 @@
 				<div class="col-xs-12 col-md-12" id="section">
 					<h3>Encadenamiento</h3>
 					<p>En el menú principal <b id="palabra"> Herramientas --> Encadenamientos</b> se desplegan dos elementos: Estimar Encadenamientos y clasificar cuentas. Con el primero de ellos, el sistema muestra los encademientos por cuenta, componente o de toda la submatriz Endógena-Endógena.</p>
-					<p>El sistema le mostrará una ventana emergente, como la que se present en la Figura 11, solicitando que seleccione las cuentas y componentes que desea visualizar, además de seleccionar los coeficientes técnicos o los multiplicadores de Leontief para calcular los encadenamientos. </p>			
+					<p>El sistema le mostrará una ventana emergente, como la que se present en la Figura 11, solicitando que seleccione las cuentas y componentes que desea visualizar, además de seleccionar los coeficientes técnicos o los multiplicadores de Leontief para calcular los encadenamientos. </p>		
+            	<center><figure>
+						<img id="img" src="img/Imagen-13.png" alt="Figura 11" class="img-thumbnail">
+						<figcaption><b>Figura 11:</b> Ventana Emergente -- Estimar Encadenamientos</figcaption>
+					</center></figure> <br>	
+					<p>El ususario debe definir las cuentas y los componentes que desea visualizar, seleccionando la cuenta y luego los componentes, presionar el botón <b id="palabra"> Agregar</b>, una vez que defina todos los elementos que desea visualizar y si es por Coeficiente Técnico o Multiplicadores de Leontief, presione el Botón <b id="palabra">Ver</b>.
+					<center><figure>
+						<img id="img" src="img/Imagen-14.png" alt="Figura 12" class="img-thumbnail">
+						<figcaption><b>Figura 12:</b> Ventana Emergente -- Resultados</figcaption>
+					</center></figure> <br>
+					<p>El sistema le permite seleccionar tambien toda la submatriz Endógena-Endógena, es el último elemento que se encuentra en la lista de cuentas, presione el botón <b id="palabra">Agregar</b> y luego <b id="palabra">Ver</b>.</p>
+					<center><figure>
+						<img id="img" src="img/Imagen-11.png" alt="Figura 13" class="img-thumbnail">
+						<figcaption><b>Figura 13:</b> Ventana Emergente -- Estimar Encadenamientos</figcaption>
+					</center></figure> <br>	
+					<center><figure>
+						<img id="img" src="img/Imagen-12.png" alt="Figura 14" class="img-thumbnail">
+						<figcaption><b>Figura 14:</b> Ventana Emergente -- Resultados</figcaption>
+					</center></figure> <br>
+					<center> <article class="col-xs-12 col-md-12"  id="ecuaciones">
+					<p> La matriz de coefientes técnicos (con las mismas dimensiones de la submatriz Endógena-Endógena (A)), recoge los efectos directos que se generan en la economía: </p>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+						<mi>A</mi><mi>n</mi><mo>&#160;</mo><mo>=</mo><mo>&#160;</mo><mfenced open="[" close="]"><mtable><mtr><mtd><msub><mi>a</mi><mn>11</mn></msub></mtd><mtd><mo>&#8943;</mo></mtd><mtd><msub><mi>a</mi><mrow><mn>1</mn><mi>j</mi></mrow></msub></mtd></mtr><mtr><mtd><mo>&#8942;</mo></mtd><mtd><mo>&#8943;</mo></mtd><mtd><mo>&#8942;</mo></mtd></mtr><mtr><mtd><msub><mi>a</mi><mrow><mi>i</mi><mn>1</mn></mrow></msub></mtd><mtd><mo>&#8943;</mo></mtd><mtd><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mtd></mtr></mtable></mfenced>
+					</math>
+					<p>Por su parte la Matriz de los Multiplicadores de Leontief, representan los efectos directos e indirectos, de acuerdo a los expresado por Shuschny(2006) estos valores indican: <em style="color:white" La cantidad de producción que debería realizar el sector i-ésimo, para satisfacer, cereris paribus, una unidad de demanda final neta de importaciones del productos j-ésimo></em> (cuando se trabaja con la matris insumo-producto).</p>
+					<p>En caso de la matriz de Contabilidad Social, se interpreta como el incremento producido sobre una cuenta endógena i-ésima, cuando una cuenta endógena j-ésima recibe una unidad de inyección monetaria (BCV, 2014)</p> 
+        			<p>Para estimar la Matriz de <b id="palabra">Multiplicadores de Leontief (Ma)</b>, se utiliza <b id="palabra">An</b>, y una matriz identidad de las mismas dimensiones de An.</p>
+					
+
+					<p><b style="color:white">Tipos de Encadenamientos:</b></p>
+					<li><b style="color:white"> Encadenamiento hacia atrás:</b> Representa el efecto difusión, y representa el monto en que aumenta el ingreso de las cuentas que conforman la submatriz Endógena-Endógena, al incrementarse el ingreso de la j-ésimo componente.</li>	
+						
+					<li><b style="color:white">Encadenamiento hacia adelante:</b> Mide el efecto absorsción, y representa en cuánto se incrementa el ingreso del sector i-ésimo, cuando se incrementa de forma exógena el valor del ingreso total de la economía.</li>					
+
+					</article> </center><br>
+
+
 
 				<a href="coeficientes.html"><p id="derecha"><b id="palabra">Coeficientes Técnicos</b></p></a>
 				<a href="clasico.html"><p id="izquierda"> <b id="palabra">Modelo Clásico</b></p></a>
