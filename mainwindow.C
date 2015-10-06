@@ -3041,6 +3041,8 @@ void MainWindow::obtenerUiUj(QTableWidget *tw, QVector<double> &ui, QVector<doub
         vectorColumna.append(sumaColumna);
     }
     int cantidad = vectorFila.count();
+    totalFila/=cantidad;
+    totalColumna/=cantidad;
     for(int i=0;i<cantidad;i++)
     {
         double fila = vectorFila.at(i)/totalFila;
