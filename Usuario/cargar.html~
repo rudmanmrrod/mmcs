@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+   	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+   	<img src="img/Banner.png" alt="Banner Institucional" id="banner" />
+   	<title>Manual de Usuario: Sistema para el Manejo de Matrices de Contabilidad Social</title>
+		<link rel="stylesheet" href="css/bootstrap.min.css"/>
+   	<link rel="stylesheet" href="css/Estilos.css" type="text/css" />   
+    	<link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    	<script type="text/javascript">
+      	var DOCUMENTATION_OPTIONS = {
+        		URL_ROOT:    '',
+        		VERSION:     '1.0.0',
+        		COLLAPSE_INDEX: false,
+        		FILE_SUFFIX: '.html',
+        		HAS_SOURCE:  true
+      	};
+      </script>
+    	<script type="text/javascript" src="_static/jquery.js"></script>
+    	<script type="text/javascript" src="_static/underscore.js"></script>
+    	<script type="text/javascript" src="_static/doctools.js"></script>  	
+  	</head>
+	<body>
+		<header>
+			<h2>Sistema para el Manejo de las Matrices de Contabilidad Social</h2>
+		</header>
+		<div class="container" >
+			<nav class="navbar navbar-default" id="barra-principal">
+				<div class="container" >
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#barra1">
+							<span class="sr-only">Toglle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>	
+					</div>	
+					<div class="collapse navbar-collapse" >	
+						<ul class="nav navbar-nav">			
+							<li><a href="Entrada.html">Introducción</a></li>
+							<li class="active"><a href="cargar.html">Cargar Matriz</a></li>
+							<li><a href="coeficientes.html">Coeficientes Técnicos</a></li>
+			 				<li><a href="encadenamientos.html">Encadenamientos</a></li>
+			 				<li><a href="clasico.html">Modelo Clásico</a></li>
+			  				<li><a href="noclasico.html">Modelo No Clásico</a></li>
+			  				<li><a href="precioshomogeneos.html">Modelo Precios Homogeneos</a></li>
+						</ul>					
+					</div>
+				</div>
+			</nav>
+		</div>		
+
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-md-12" id="section">
+					<h3>Cargar una Matriz</h3>
+					<p>El primer paso para utilizar el SMCS, es cargar una matriz, para lo cual debe dirigirse al menú <b id="palabra">Archivo</b> (acceso rápido: Alt+a) y presionar la opción <b id="palabra">Cargar Matriz</b>. El sistema le mostrará una ventana solicitándole el archivo .csv donde tiene la matriz de contabilidad social.</p>
+					<center><figure>
+						<img src="img/Imagen-2.png" alt="Figura 2" class="img-thumbnail">
+						<figcaption><b>Figura 2:</b> Cargar Matriz</figcaption>
+					</center></figure> <br>
+					<article class="col-xs-12 col-md-12"  id="nota">
+						<p><b style="color:white">Estructura del archivo base:</b> En la primera fila del archivo deben estar los nombres de cada uno de los componentes de la matriz, tal y como se muestra en la Figura 3. Como se está trabajando con matrices de contabilidad social, por lo que los componentes de las columnas deben repetirse en las filas.Es importante que guarde el archivo como un <b style="color:white"> .csv</b>.</p>
+						<center><figure>
+							<img id="img" src="img/Imagen-3.png" alt="Figura 3" class="img-thumbnail">
+							<figcaption style="color:white"><b>Figura 2:</b> Cargar Matriz</figcaption>
+					</center></figure> <br>
+					</article>
+					<p>Para cargar la matriz debe introducir el <b id="palabra">número de cuentas</b> que componen la matriz, y el separador utilizado en el archivo .csv (<b id="palabra">; </b> ). El año y el país es opcional y permite recordarle al usuario las características de la matriz objeto de estudio. En la segunda sección de la ventana especificará el directorio donde se encuentra el archivo. Por último, presione el botón <b id="palabra">Abrir.</b></p>
+					<p>La matriz cargada se muestra en una pestaña, bajo el nombre de <b id="palabra">MCS</b>, como se observa en la Figura 4 se presenta una tabla de doble entrada, con los mismos componentes tanto en las filas como en las columnas. En el lado derecho se muestra un panel, donde deberá señalar que componentes forman parte de cada una de las cuentas, también le podrá dar un nombre.</p>
+					<center><figure>
+						<img id="img" src="img/Imagen-4.png" alt="Figura 4" class="img-thumbnail">
+						<figcaption><b>Figura 4:</b> Pestaña -- MCS</figcaption>
+					</center></figure> <br>
+					<p><b id="palabra">Nombre de las cuentas:</b> Seleccione la cuenta (cuenta 1, cuenta 2, ... cuenta n), en el campo de texto introduzca el nombre de la cuenta (producto, actividades, factores de producción, distribución del ingreso, entre otros.) e indique en los campos correspondientes el número de fila donde inicia de cuenta seguido de la celda que finaliza la cuenta, tal y como se muestra en la figura 5, luego presione el botón <b id="palabra">Agregar</b>. El sistema le preguntará si está seguro en agregar el nombre a la cuenta. </p>
+					<center><figure>
+						<img src="img/Imagen-5.png" alt="Figura 5" class="img-thumbnail" width="20%">
+						<figcaption><b>Figura 5:</b> Panel -- Cuentas</figcaption>
+					</center></figure> <br>
+				<p>A medida que el indique al sistema el nombre de las cuentas, este le mostrará la matriz indicado las cuentas (color azul) y componentes</p>
+					<center><figure>
+						<img id="img" src="img/Imagen-6.png" alt="Figura 6" class="img-thumbnail">
+						<figcaption><b>Figura 6:</b> Pestaña -- Matriz</figcaption>
+					</center></figure> <br>
+					<article class="col-xs-12 col-md-12"  id="nota">
+						<p>Las opciones que se encuentran en el menú se activarán una vez que indique el nombre y tamaño (<b style="color:white">Celda de inicio y fin</b> ) de cada una de las cuentas y presione el botón <b style="color:white">Finalizar</b>.</p>
+					</article>
+
+				<a href="Entrada.html"><p id="derecha"><b id="palabra">Introducción</b></p></a>
+				<a href="cargar.html"><p id="izquierda"> <b id="palabra">Coeficientes Técnicos</b></p></a>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery.js"> </script>
+		<script src="js/bootstrap.min.js"></script>
+		<div class="container">
+		<footer>
+			Centro Nacional de Desarrollo e Investigación en Tecnologías Libres (CENDITEL) - GPL V2.0 - Copyleft 2015 -2015.
+		</footer>
+	</body>
+
+</html>
