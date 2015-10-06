@@ -278,6 +278,7 @@ void MainWindow::createMenuBar()
 void MainWindow::matricesMenuBar()
 {
     menuTools.setTitle("&Herramientas");
+    menuTools.setDisabled(true);
 
     CoeficientesTecnicos.setTitle("&Coeficientes Técnicos");
     CoeficientesTecnicos.setDisabled(true);
@@ -400,12 +401,24 @@ void MainWindow::matricesMenuBar()
 
     //Menu Visualizacion
     menuViews.setTitle("&Visualización");
+    menuViews.setDisabled(true);
 
     actionSeleccionarTabla.setText("&Seleccionar");
     actionSeleccionarTabla.setDisabled(true);
     menuViews.addAction(&actionSeleccionarTabla);
 
     menuBar()->addMenu(&menuViews);
+
+    //Menu Ayuda
+    menuHelp.setTitle("A&yuda");
+
+    actionManual.setText("&Manual de Usuario");
+    menuHelp.addAction(&actionManual);
+
+    actionAcercaDe.setText("&Acerca De");
+    menuHelp.addAction(&actionAcercaDe);
+
+    menuBar()->addMenu(&menuHelp);
 
 }
 
@@ -550,7 +563,10 @@ void MainWindow::createMatrixCentralWidget()
         tableWidget->setItem(i,0,ValoraInsertar2);
     }
 
-    matricesMenuBar();//Al terminar la carga de la tabla se ejecuta la accion para el menu de Operaciones
+    //Al terminar la carga de la tabla se activa el menu de Operaciones
+    menuTools.setEnabled(true);
+    menuViews.setEnabled(true);
+
     tabWidget->setCurrentIndex(1);//Se seleciona la pestaña MCS
 
     actionLoadMatrix.setDisabled(true);
@@ -700,6 +716,21 @@ QString MainWindow::numberFormat(double & d) {
     return stringNumber;
 }
 
+//  FA_002
+/*                  Aquí se encuentra el menú de ayuda                */
+void MainWindow::abrirManual()//Funcion para abrir el manual
+{
+    QDesktopServices::openUrl(QUrl("manual.html"));
+}
+
+void MainWindow::acercaDe()//Funcion para el mensaje acerca de
+{
+    QString Mensaje = "Sistema de Manejo de Matrices de Contabilidad Social\n\n";
+    Mensaje+="Fundación Centro Nacional de Desarrollo e Investigación en Tecnologías Libres, 2015.\n";
+    Mensaje+="Distribuido bajo la licencia GNU V.2.0\n\n";
+    Mensaje+="miv.cenditel.gob.ve/mmcs";
+    QMessageBox::information(this,"Acerca de..",Mensaje);
+}
 
 //  Main_001
 /*                      Aquí se encuentra el centro de la aplicación                   */
@@ -709,7 +740,7 @@ MainWindow::MainWindow()
       actionCompararResultados(this),actionModeloNoClasico(this),actionCompararResultadosMNC(this),actionPHClasicoIncidencia100(this),
       actionPHCIncidenciaCuenta(this),actionPHCIncidenciaComponente(this),actionPHNoClasicoIncidencia100(this),actionPHNCIncidenciaCuenta(this),
       actionPHNCIncidenciaComponente(this),actionPNHIncidencia100(this),actionPNHIncidenciaCuenta(this),actionPNHIncidenciaComponente(this),
-      actionSeleccionarTabla(this),formLoadMatrix(0)
+      actionSeleccionarTabla(this),actionManual(this),actionAcercaDe(this),formLoadMatrix(0)
 {
     tabWidget = new QTabWidget;
 
@@ -761,6 +792,9 @@ void MainWindow::initGUI()
 {
     createMenuBar();
     createCentralWidget();
+    matricesMenuBar();
+    connect(&actionManual,SIGNAL(triggered()),this,SLOT(abrirManual()));
+    connect(&actionAcercaDe,SIGNAL(triggered()),this,SLOT(acercaDe()));
 }
 
 //Main_002
