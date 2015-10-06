@@ -720,7 +720,7 @@ QString MainWindow::numberFormat(double & d) {
 /*                  Aquí se encuentra el menú de ayuda                */
 void MainWindow::abrirManual()//Funcion para abrir el manual
 {
-    QDesktopServices::openUrl(QUrl("manual.html"));
+    QDesktopServices::openUrl(QUrl("Usuario/Entrada.html"));
 }
 
 void MainWindow::acercaDe()//Funcion para el mensaje acerca de
