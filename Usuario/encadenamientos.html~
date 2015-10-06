@@ -75,30 +75,51 @@
 						<figcaption><b>Figura 14:</b> Ventana Emergente -- Resultados</figcaption>
 					</center></figure> <br>
 					<center> <article class="col-xs-12 col-md-12"  id="ecuaciones">
-					<p> La matriz de coefientes técnicos (con las mismas dimensiones de la submatriz Endógena-Endógena (A)), recoge los efectos directos que se generan en la economía: </p>
+					<p> <b style="color:white">La matriz de coefientes técnicos</b> (con las mismas dimensiones de la submatriz Endógena-Endógena (A)), recoge los efectos directos que se generan en la economía: </p>
 					<math xmlns="http://www.w3.org/1998/Math/MathML">
 						<mi>A</mi><mi>n</mi><mo>&#160;</mo><mo>=</mo><mo>&#160;</mo><mfenced open="[" close="]"><mtable><mtr><mtd><msub><mi>a</mi><mn>11</mn></msub></mtd><mtd><mo>&#8943;</mo></mtd><mtd><msub><mi>a</mi><mrow><mn>1</mn><mi>j</mi></mrow></msub></mtd></mtr><mtr><mtd><mo>&#8942;</mo></mtd><mtd><mo>&#8943;</mo></mtd><mtd><mo>&#8942;</mo></mtd></mtr><mtr><mtd><msub><mi>a</mi><mrow><mi>i</mi><mn>1</mn></mrow></msub></mtd><mtd><mo>&#8943;</mo></mtd><mtd><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mtd></mtr></mtable></mfenced>
 					</math>
-					<p>Por su parte la Matriz de los Multiplicadores de Leontief, representan los efectos directos e indirectos, de acuerdo a los expresado por Shuschny(2006) estos valores indican: <em style="color:white" La cantidad de producción que debería realizar el sector i-ésimo, para satisfacer, cereris paribus, una unidad de demanda final neta de importaciones del productos j-ésimo></em> (cuando se trabaja con la matris insumo-producto).</p>
+					<p>Por su parte la Matriz de los Multiplicadores de Leontief, representan los efectos directos e indirectos, de acuerdo a los expresado por Shuschny(2006) estos valores indican: <em style="color:white"> La cantidad de producción que debería realizar el sector i-ésimo, para satisfacer, cereris paribus, una unidad de demanda final neta de importaciones del productos j-ésimo</em> (cuando se trabaja con la matris insumo-producto).</p>
 					<p>En caso de la matriz de Contabilidad Social, se interpreta como el incremento producido sobre una cuenta endógena i-ésima, cuando una cuenta endógena j-ésima recibe una unidad de inyección monetaria (BCV, 2014)</p> 
-        			<p>Para estimar la Matriz de <b id="palabra">Multiplicadores de Leontief (Ma)</b>, se utiliza <b id="palabra">An</b>, y una matriz identidad de las mismas dimensiones de An.</p>
-					
+        			<p>Para estimar la Matriz de <b style="color:white">Multiplicadores de Leontief (Ma)</b>, se utiliza <b style="color:white">An</b>, y una matriz identidad de las mismas dimensiones de An.</p>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+						<mi>I</mi><mo>&#160;</mo><mo>=</mo><mo>&#160;</mo><mfenced open="[" close="]"><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>1</mn></mtd></mtr></mtable></mfenced>
+					</math><br>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+						<mo>(</mo><mi>I</mi><mo>-</mo><mi>A</mi><mo>)</mo>
+					</math>
+					<p>Por último, se estima la inversa de (I-A):</p>
+ 					<math xmlns="http://www.w3.org/1998/Math/MathML">
+						<mi>M</mi><mi>a</mi><mo>&#160;</mo><mo>=</mo><mo>&#160;</mo><msup><mrow><mo>(</mo><mi>I</mi><mo>-</mo><mi>A</mi><mo>)</mo></mrow><mrow><mo>-</mo><mn>1</mn></mrow></msup>
+					</math><br>
+
+ 					<math xmlns="http://www.w3.org/1998/Math/MathML">
+						<mi>M</mi><mi>a</mi><mo>&#160;</mo><mo>=</mo><mo>&#160;</mo><mfenced open="[" close="]"><mtable><mtr><mtd><msub><mi>m</mi><mn>11</mn></msub></mtd><mtd><mo>&#8943;</mo></mtd><mtd><msub><mi>m</mi><mrow><mn>1</mn><mi>j</mi></mrow></msub></mtd></mtr><mtr><mtd><mo>&#8942;</mo></mtd><mtd><mo>&#8943;</mo></mtd><mtd><mo>&#8942;</mo></mtd></mtr><mtr><mtd><msub><mi>m</mi><mrow><mi>i</mi><mn>1</mn></mrow></msub></mtd><mtd><mo>&#8943;</mo></mtd><mtd><msub><mi>m</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mtd></mtr></mtable></mfenced>
+					</math>
 
 					<p><b style="color:white">Tipos de Encadenamientos:</b></p>
 					<li><b style="color:white"> Encadenamiento hacia atrás:</b> Representa el efecto difusión, y representa el monto en que aumenta el ingreso de las cuentas que conforman la submatriz Endógena-Endógena, al incrementarse el ingreso de la j-ésimo componente.</li>	
-						
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+						<mi>E</mi><mi>a</mi><msub><mi>t</mi><mi>j</mi></msub><mo>&#160;</mo><mo>=</mo><mo>&#160;</mo><munder><mo>&#8721;</mo><mi>j</mi></munder><mo>&#160;</mo><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#160;</mo><mo>&#160;</mo><mo>&#160;</mo><mo>&#160;</mo><mo>&#160;</mo><mi>o</mi><mo>&#160;</mo><mo>&#160;</mo><mo>&#160;</mo><mo>&#160;</mo><mi>E</mi><mi>a</mi><msub><mi>t</mi><mi>j</mi></msub><mo>&#160;</mo><mo>=</mo><mo>&#160;</mo><munder><mo>&#8721;</mo><mi>j</mi></munder><mo>&#160;</mo><msub><mi>m</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub>
+					</math>
 					<li><b style="color:white">Encadenamiento hacia adelante:</b> Mide el efecto absorsción, y representa en cuánto se incrementa el ingreso del sector i-ésimo, cuando se incrementa de forma exógena el valor del ingreso total de la economía.</li>					
-
+               <math xmlns="http://www.w3.org/1998/Math/MathML">
+						<mi>E</mi><mi>a</mi><msub><mi>d</mi><mi>i</mi></msub><mo>&#160;</mo><mo>=</mo><mo>&#160;</mo><munder><mo>&#8721;</mo><mi>i</mi></munder><mo>&#160;</mo><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>&#160;</mo><mo>&#160;</mo><mo>&#160;</mo><mo>&#160;</mo><mo>&#160;</mo><mi>o</mi><mo>&#160;</mo><mo>&#160;</mo><mo>&#160;</mo><mo>&#160;</mo><mi>E</mi><mi>a</mi><msub><mi>d</mi><mi>i</mi></msub><mo>&#160;</mo><mo>=</mo><mo>&#160;</mo><munder><mo>&#8721;</mo><mi>i</mi></munder><mo>&#160;</mo><msub><mi>m</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub>
+						</math>
 					</article> </center><br>
-
-
-
-				<a href="coeficientes.html"><p id="derecha"><b id="palabra">Coeficientes Técnicos</b></p></a>
-				<a href="clasico.html"><p id="izquierda"> <b id="palabra">Modelo Clásico</b></p></a>
 				</div>
 			</div>
 		</div>
-
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-md-12" id="section">
+					<h3>Clasificador de Cuentas</h3>
+				
+					<a href="coeficientes.html"><p id="derecha"><b id="palabra">Coeficientes Técnicos</b></p></a>
+					<a href="clasico.html"><p id="izquierda"> <b id="palabra">Modelo Clásico</b></p></a>
+				</div>
+			</div>
+		</div>
 		<script src="js/jquery.js"> </script>
 		<script src="js/bootstrap.min.js"></script>
 		<div class="container">
