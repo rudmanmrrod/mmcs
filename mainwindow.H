@@ -81,6 +81,9 @@ class MainWindow : public QMainWindow
 
     QAction actionSeleccionarTabla;
 
+    QAction actionManual;
+    QAction actionAcercaDe;
+
     QTableWidget * tableWidget;
     QTabWidget * tabWidget;
     QMap<QString,QStringList> diccCuentasExogenas;
@@ -329,6 +332,9 @@ private slots:
     void slotCalcularPNHIncidenciaiComponente();
 
     void slotSeleccionarTabla();
+
+    void abrirManual();
+    void acercaDe();
 
 public:
     MainWindow();

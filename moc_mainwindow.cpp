@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.H'
 **
-** Created: Tue Sep 29 08:30:17 2015
+** Created: Tue Oct 6 10:57:11 2015
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.2)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      57,   14, // methods
+      59,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -88,6 +88,8 @@ static const uint qt_meta_data_MainWindow[] = {
     1314,   11,   11,   11, 0x08,
     1332,   11,   11,   11, 0x08,
     1371,   11,   11,   11, 0x08,
+    1394,   11,   11,   11, 0x08,
+    1408,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -130,7 +132,8 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "slotSelectPNHi()\0slotCalcularPNHIncidenciaiCuenta()\0"
     "slotSelectPNHic()\0"
     "slotCalcularPNHIncidenciaiComponente()\0"
-    "slotSeleccionarTabla()\0"
+    "slotSeleccionarTabla()\0abrirManual()\0"
+    "acercaDe()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -196,6 +199,8 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 54: _t->slotSelectPNHic(); break;
         case 55: _t->slotCalcularPNHIncidenciaiComponente(); break;
         case 56: _t->slotSeleccionarTabla(); break;
+        case 57: _t->abrirManual(); break;
+        case 58: _t->acercaDe(); break;
         default: ;
         }
     }
@@ -233,9 +238,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 57)
+        if (_id < 59)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 57;
+        _id -= 59;
     }
     return _id;
 }
