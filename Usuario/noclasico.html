@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+   	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+   	<img src="img/Banner.png" alt="Banner Institucional" id="banner" />
+   	<title>Manual de Usuario: Sistema para el Manejo de Matrices de Contabilidad Social</title>
+		<link rel="stylesheet" href="css/bootstrap.min.css"/>
+   	<link rel="stylesheet" href="css/Estilos.css" type="text/css" />   
+    	<link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    	<script type="text/javascript">
+      	var DOCUMENTATION_OPTIONS = {
+        		URL_ROOT:    '',
+        		VERSION:     '1.0.0',
+        		COLLAPSE_INDEX: false,
+        		FILE_SUFFIX: '.html',
+        		HAS_SOURCE:  true
+      	};
+      </script>
+    	<script type="text/javascript" src="_static/jquery.js"></script>
+    	<script type="text/javascript" src="_static/underscore.js"></script>
+    	<script type="text/javascript" src="_static/doctools.js"></script>  	
+  	</head>
+	<body>
+		<header>
+			<h2>Sistema para el Manejo de las Matrices de Contabilidad Social</h2>
+		</header>
+		<div class="container" >
+			<nav class="navbar navbar-default" id="barra-principal">
+				<div class="container" >
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#barra1">
+							<span class="sr-only">Toglle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>	
+					</div>	
+					<div class="collapse navbar-collapse" >	
+						<ul class="nav navbar-nav">			
+							<li><a href="Entrada.html">Introducción</a></li>
+							<li><a href="cargar.html">Cargar Matriz</a></li>
+							<li><a href="coeficientes.html">Coeficientes Técnicos</a></li>
+			 				<li><a href="encadenamientos.html">Encadenamientos</a></li>
+			 				<li><a href="clasico.html">Modelo Clásico</a></li>
+			  				<li class="active"><a href="noclasico.html">Modelo No Clásico</a></li>
+			  				<li><a href="precioshomogeneos.html">Modelo Precios Homogeneos</a></li>
+			  				<li><a href="preciosNohomogeneos.html">Modelo No Precios Homogeneos</a></li>
+							<li><a href="bibliografia.html">Referencias Bibliográficas</a></li>
+						</ul>					
+					</div>
+				</div>
+			</nav>
+		</div>		
+
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-md-12" id="section">
+					<h3>Modelo No Clásico</h3>
+					<p>El modelo no clásico, permite evaluar política económica, teniendo en cuenta no sólo la submatriz Endógena-Endógena, sino además incorporar el efecto que se estima por medio de los coeficientes técnicos del área endógena-exógena (submatriz <b id="palabra">Bn</b>)</p>.
+					<center>
+						<img id="img" src="img/Imagen-19.png" alt="Figura 19" class="img-thumbnail">
+						<figcaption><b>Figura 19:</b> Coeficientes técnicos del área exógena</figcaption>
+					</center></figure> <br>
+					<p>La matriz de multiplicadores exógenos se obtiene, multiplicando las matrices <b id="palabra">Bn * Ma</b>, generandose la matriz <b id="palabra"></b>, que se muestra en la figura 20, por el lado de las columnas se tienen las cuentas exógenas y por el lado de las filas la cuentas exógenas.</p>
+					<center>
+						<img id="img" src="img/Imagen-20.png" alt="Figura 20" class="img-thumbnail">
+						<figcaption><b>Figura 20:</b> Matriz de Multiplicadores Exógenos</figcaption>
+					</center></figure> <br>
+					<p>Cuando el usuario presiona en el menú principal <b id="palabra">Herramientas --- Modelos --- Modelo No Clásico</b>, se muestra una pestaña con seis columnas: En la primera y segunda columnas se muestran las cuentas y componentes exógenos respectivamente. En la tercera columna,se muestra una columna, donde el usuario determinará el escenario a evaluar, es decir podrá introducir el porcentaje en que se incrementará una o varias cuentas, en la siguiente columna se visualzia el sub-total de la submatriz C. Por último, al presionar el botón <b id="palabra">Calcular</b>, el sistema calcula los valores requeridos por las columnas Inyección (multiplica el porcentaje de ajuste de política y el subtotal de la matriz c) y el subtotal Escneario 1 (suma el valor de la columna 4 y 5).</p>
+					<center>
+						<img id="img" src="img/Imagen-21.png" alt="Figura 21" class="img-thumbnail">
+						<figcaption><b>Figura 21:</b> Escenario Modelo No Clásico</figcaption>
+					</center></figure> <br>
+					<p>AL presionar el botón <b id="palabra">Finalizar</b>, el sistema estima los nuevos valores del total de la submatriz A y los presenta en la pestaña <b id="palabra">Resultado NC 1</b>. Al igual que en el MOelo Clásico, el usuario podrá evaluar "n" escenario y comparar su resultados.</p>
+					<center>
+						<img id="img" src="img/Imagen-22.png" alt="Figura 22" class="img-thumbnail">
+						<figcaption><b>Figura 22:</b> Resultados Modelo No Clásico</figcaption>
+					</center></figure> <br>
+
+				<a href="clasico.html"><p id="derecha"><b id="palabra">Modelo Clásico</b></p></a>
+				<a href="precioshomogeneos.html"><p id="izquierda"> <b id="palabra">Modelo de Precios Homogéneos</b></p></a>	
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery.js"> </script>
+		<script src="js/bootstrap.min.js"></script>
+		<div class="container">
+		<footer>
+			Centro Nacional de Desarrollo e Investigación en Tecnologías Libres (CENDITEL) - GPL V2.0 - Copyleft 2015 -2015.
+		</footer>
+		</div>
+	</body>
+
+</html>

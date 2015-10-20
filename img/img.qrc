@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>edit-deshabilitado.png</file>
+        <file>edit-habilitado.png</file>
+        <file>estructura_matriz.jpg</file>
+        <file>folder_blue.png</file>
+        <file>Imagen-matriz.png</file>
+        <file>img.qrc</file>
+        <file>logo_cenditel.jpg</file>
+        <file>undo-habilitado.png</file>
+    </qresource>
+</RCC>

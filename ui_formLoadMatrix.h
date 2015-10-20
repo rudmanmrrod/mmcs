@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'formLoadMatrix.ui'
 **
-** Created: Fri Sep 25 11:00:03 2015
+** Created: Tue Oct 20 08:15:32 2015
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -136,7 +136,7 @@ public:
         buttonSearch = new QPushButton(FormLoadMatrix);
         buttonSearch->setObjectName(QString::fromUtf8("buttonSearch"));
         QIcon icon;
-        icon.addFile(QString::fromUtf8("img/folder_blue.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QString::fromUtf8(":/img/folder_blue.png"), QSize(), QIcon::Normal, QIcon::Off);
         buttonSearch->setIcon(icon);
         buttonSearch->setFlat(true);
 

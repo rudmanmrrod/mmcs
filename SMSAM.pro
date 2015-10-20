@@ -50,3 +50,6 @@ INCLUDEPATH += $$PWD/Eigen
 
 
 CONFIG += warn_off
+
+RESOURCES += \
+    img/img.qrc

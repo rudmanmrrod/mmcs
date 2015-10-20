@@ -91,7 +91,7 @@ void MainWindow::slotExportMatrix()
         QPushButton * buttonExplorar = new QPushButton;
         buttonExplorar->setObjectName("Exportar-Explorar");
         buttonExplorar->setFlat(true);
-        buttonExplorar->setIcon(QIcon("./img/folder_blue.png"));
+        buttonExplorar->setIcon(QIcon(":/img/folder_blue.png"));
 
         QHBoxLayout *layoutMiddle = new QHBoxLayout;
         layoutMiddle->addWidget(label2);
@@ -228,7 +228,7 @@ void MainWindow::createCentralWidget()
     QHBoxLayout * layoutMatrix = new QHBoxLayout;
     QLabel * lblMatrix = new QLabel;
     lblMatrix->setAlignment(Qt::AlignCenter);
-    lblMatrix->setPixmap(QPixmap("./img/Imagen-matriz.png"));
+    lblMatrix->setPixmap(QPixmap(":/img/Imagen-matriz.png"));
     layoutMatrix->addWidget(lblMatrix);
     layoutCentralWidget->addLayout(layoutMatrix);
 
@@ -239,7 +239,7 @@ void MainWindow::createCentralWidget()
     lblFoot->setFont(QFont("Aero Matics", 19, 1));
     lblFoot->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     QLabel * lblLogo = new QLabel;
-    lblLogo->setPixmap(QPixmap("./img/logo_cenditel.jpg"));
+    lblLogo->setPixmap(QPixmap(":/img/logo_cenditel.jpg"));
     lblLogo->setFixedWidth(lblLogo->pixmap()->width());
     lblLogo->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     layoutFoot->addWidget(lblFoot);
@@ -486,7 +486,7 @@ void MainWindow::createMatrixCentralWidget()
 
     /***********          Nuevo boton para restaurar,editar y finalizar la tabla             *******/
     //buttonRestaurar->setText("&Restaurar");
-    buttonRestaurar->setIcon(QIcon("./img/undo-habilitado.png"));
+    buttonRestaurar->setIcon(QIcon(":/img/undo-habilitado.png"));
     buttonRestaurar->setFlat(true);
     buttonRestaurar->setObjectName("Restaurar");
     buttonRestaurar->setFixedWidth(100);
@@ -495,7 +495,7 @@ void MainWindow::createMatrixCentralWidget()
                              "border-radius: 5px; margin-top: 40px;");*/
 
     //buttonModificar->setText("&Editar ");
-    buttonModificar->setIcon(QIcon("./img/edit-deshabilitado.png"));
+    buttonModificar->setIcon(QIcon(":/img/edit-deshabilitado.png"));
     buttonModificar->setDisabled(true);
     buttonModificar->setFlat(true);
     buttonModificar->setObjectName("Modificar");
@@ -809,12 +809,12 @@ void MainWindow::slotAccChange()
     if(!le->isEnabled())
     {
         Modificar->setEnabled(true);
-        Modificar->setIcon(QIcon("./img/edit-habilitado"));
+        Modificar->setIcon(QIcon(":/img/edit-habilitado"));
     }
     else
     {
         Modificar->setDisabled(true);
-        Modificar->setIcon(QIcon("./img/edit-deshabilitado"));
+        Modificar->setIcon(QIcon(":/img/edit-deshabilitado"));
     }
 }
 
@@ -928,7 +928,7 @@ void MainWindow::AgregarCuenta()
                     SBEnd->setEnabled(false);
                     QPushButton *Modificar = findChild<QPushButton *>("Modificar");
                     Modificar->setEnabled(true);
-                    Modificar->setIcon(QIcon("./img/edit-habilitado"));
+                    Modificar->setIcon(QIcon(":/img/edit-habilitado"));
                 }
                 else if(!centinela)
                 {
