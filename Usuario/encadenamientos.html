@@ -44,7 +44,8 @@
 			 				<li><a href="clasico.html">Modelo Clásico</a></li>
 			  				<li><a href="noclasico.html">Modelo No Clásico</a></li>
 			  				<li><a href="precioshomogeneos.html">Modelo Precios Homogeneos</a></li>
-						</ul>					
+							<li><a href="preciosNohomogeneos.html">Modelo No Precios Homogeneos</a></li>
+							<li><a href="bibliografia.html">Referencias Bibliográficas</a></li>						</ul>					
 					</div>
 				</div>
 			</nav>
@@ -114,7 +115,46 @@
 			<div class="row">
 				<div class="col-xs-12 col-md-12" id="section">
 					<h3>Clasificador de Cuentas</h3>
-				
+					<p>Las cuentas pueden clasificarse en:</p>
+					<li><b id="palabra">Independientes:</b>son sectores económicos que no tienen gran influencia sobre la economía, poder y la sensibiliad de dispersión se encuentran por debajo de la media.</li>
+					<li><b id="palabra">Base:</b> El poder de dispersión se encuentra por debajo del promedio. Sin embargo, son sectores económicos que tienen poder de absorción mayor de uno.</li>
+					<li><b id="palabra">Impulsores de la Economía:</b> Poseen una gran capacidad de arrastre, mientras que su sensibilidad de dispersión está por debajo de la media. </li>
+					<li><b id="palabra">Claves:</b> Son los más importantes, debido al impacto que genera en los sectores "aguas arriba" y "aguas abajo" </li><br>
+					<p>Para obtener el clasificador de cuenta, debe seleccionar en la barra de menú principal <b id="palabra">Herramientas --> Encadenamiento --> Clasificador de Cuentas</b>. El sistema le mostrará el poder de dispersión Uj y la sensibilidad de dispersión Ui de cada uno de los componentes (por medio de An y Ma), también le mostrará los valores de los encadenamientos parciales por cada una de las cuentas que componen la submatriz Endógena-Endógena.</p>
+					<center>
+						<img id="img" src="img/Imagen-15.png" alt="Figura 15" class="img-thumbnail">
+						<figcaption><b>Figura 15:</b> Clasificador de Cuentas</figcaption>
+					</center></figure> <br>
+ 					<center> <article class="col-xs-12 col-md-12"  id="ecuaciones">
+					<p><b style="color:white">Técnica de Rasmussen</b></p>
+					<p>Si asumimos que:</p>
+					<p><b>Multiplicadores de Leontief (efectos directos e indirectos)</b></p>
+				   <math xmlns="http://www.w3.org/1998/Math/MathML">
+						<mi>R</mi><mo>=</mo><mo>&#160;</mo><mo>(</mo><mi>I</mi><mo>-</mo><mi>A</mi><msup><mo>)</mo><mrow><mo>-</mo><mn>1</mn></mrow></msup><mo>&#160;</mo><mo>&#160;</mo><mo>&#160;</mo><mo>&#160;</mo><br>
+						<mspace linebreak="newline"/><mi>o</mi></math>
+						<p><b>Coeficientes Técnicos (Efectos directos)</b></p>
+						<math xmlns="http://www.w3.org/1998/Math/MathML">
+							<mspace linebreak="newline"/><mi>R</mi><mo>&#160;</mo><mo>=</mo><mo>&#160;</mo><mo>(</mo><mi>A</mi><mi>n</mi><mo>)</mo>
+					</math>
+					<p>Luego, se estima el encadenamiento hacia atrás, conocido también como efecto difusión:</p><br>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+						<msub><mi>R</mi><mi>j</mi></msub><mo>&#160;</mo><mo>=</mo><msubsup><mo>&#8721;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></msubsup><mo>&#160;</mo><msub><mi>r</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub>
+					</math><br>
+					<p>Los valores que del vector efecto de dispersión se divide entre el promedio global:</p><br>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+						<msub><mi>U</mi><mi>j</mi></msub><mo>&#160;</mo><mo>=</mo><mfrac><msub><mi>R</mi><mi>j</mi></msub><mrow><mfrac><mn>1</mn><mi>n</mi></mfrac><msubsup><mo>&#8721;</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></msubsup><mo>&#160;</mo><msubsup><mo>&#8721;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></msubsup><msub><mi>r</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></mfrac>
+					</math><br>
+					<p>De acuerdo a lo expresado por García (2009), Uj representa el poder de dispersión, es decir es la magnitud en que aumentaría el ingreso de la economía en promedio, al registrarse un incremento de una unidad monetaria en a cuenta j-ésima.</p><br>
+					<p>El encadenamiento hacia adelante o efecto absorción, se estima:</p><br>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+						<msub><mi>R</mi><mi>i</mi></msub><mo>&#160;</mo><mo>=</mo><msubsup><mo>&#8721;</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></msubsup><mo>&#160;</mo><msub><mi>r</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub>
+					</math><br>
+					<p>De la misma manera que Uj, se calcula Ui, que representa la sensibilidad de dispersión, que representa el incremento del ingreso de la cuenta i-ésima, al aumentar en una unidad monetaria toda la economía.</p>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+						<msub><mi>U</mi><mi>i</mi></msub><mo>&#160;</mo><mo>=</mo><mfrac><msub><mi>R</mi><mi>i</mi></msub><mrow><mfrac><mn>1</mn><mi>n</mi></mfrac><msubsup><mo>&#8721;</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></msubsup><mo>&#160;</mo><msubsup><mo>&#8721;</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></msubsup><msub><mi>r</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></mfrac>
+						</math>
+					</article> </center><br>
+
 					<a href="coeficientes.html"><p id="derecha"><b id="palabra">Coeficientes Técnicos</b></p></a>
 					<a href="clasico.html"><p id="izquierda"> <b id="palabra">Modelo Clásico</b></p></a>
 				</div>
