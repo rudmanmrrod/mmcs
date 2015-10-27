@@ -43,8 +43,8 @@
 			 				<li><a href="encadenamientos.html">Encadenamientos</a></li>
 			 				<li><a href="clasico.html">Modelo Clásico</a></li>
 			  				<li><a href="noclasico.html">Modelo No Clásico</a></li>
-			  				<li><a href="precioshomogeneos.html">Modelo Precios Homogeneos</a></li>
-							<li><a href="preciosNohomogeneos.html">Modelo Precios No Homogeneos</a></li>
+			  				<li><a href="precioshomogeneos.html">Modelo Precios Homogéneos</a></li>
+							<li><a href="preciosNohomogeneos.html">Modelo Precios No Homogéneos</a></li>
                      <li><a href="bibliografia.html">Referencias Bibliográficas</a></li>
 						</ul>					
 					</div>
@@ -56,21 +56,21 @@
 			<div class="row">
 				<div class="col-xs-12 col-md-12" id="section">
 					<h3>Introducción</h3>
-					<p>Para el año 2015, desde la <a href="http://www.cenditel.gob.ve">Fundación Centro Nacional de Desarrollo e Investigación en Tecnologías Libres</a>, se desarrolló una primera versión de un software destinado al manejo de las matrices de contabilidad social, entendiendo que actualmente se maneja por medio de macros en hojas de calculo, dificultando la visualización de los resutados. El Software para el manejo de matrices de contabilidad social (SMCS)</p>
-					<p>El <em id="palabra">Sistema para el manejo de las Matrices de Contabilidad Social</em> (SMCS), fue diseñado con el objetivo de suministrador a los analistas, investigadores de un software libre que permita construir los modelos de multiplicadores clásico, de precios homogeneos, precios no homogeneos y descomposición de multiplicadores y evaluar escenarios. Además de facilitar la visualización de la información. </p>
+					<p>Para el año 2015, desde la <a href="http://www.cenditel.gob.ve">Fundación Centro Nacional de Desarrollo e Investigación en Tecnologías Libres</a>, se desarrolló una primera versión de un software destinado al manejo de las matrices de contabilidad social, entendiendo que actualmente se maneja por medio de macros en hojas de calculo, dificultando la visualización de los resutados.</p>
+					<p>El <em id="palabra">Sistema para el manejo de las Matrices de Contabilidad Social</em> (SMCS), fue diseñado con el objetivo de suministrar a los analistas, investigadores, un software libre que permita construir los modelos de multiplicadores clásico, de precios homogeneos, precios no homogeneos y evaluar escenarios. Además de facilitar la visualización de la información. </p>
 						<center><figure>
 						<img id="img" src="img/Imagen-1.png" alt="Figura 1" class="img-thumbnail">
 						<figcaption><b>Figura 1:</b> Sistema para el Manejo de Matrices de Contabilidad Social</figcaption>
 					</center></figure> <br>
 
-					<p>SMCS, fue desarrollado bajo el lenguaje de programación C++, utilizando el framework Qt y utiliza la lincencia para el código fuente GPL v 2.0 de la Free Software Foundation. Puede acceder al gestor del proyecto por medio de <a href="http://miv.cenditel.gob.ve/mmcs">miv.cenditel.gob.ve/mmcs</a></p>
+					<p>SMCS, fue desarrollado bajo el lenguaje de programación C++, utilizando el framework Qt. El código fuente SMCS está distribuido bajo la licencia GPL v 2.0 de la Free Software Foundation. Puede acceder al gestor del proyecto por medio de <a href="http://miv.cenditel.gob.ve/mmcs">miv.cenditel.gob.ve/mmcs</a></p>
 					<p>La arquitectura del sistema cuenta con tres capas:</p>
 					
 					<li><b id="palabra">Carga de archivos y vizualización de resultados:</b> se encarga de gestionar todas las solicitudes que realiza usuario a la aplicación y de mostrar los resultados de estas operaciones. </li>
-					<li><b id="palabra">Organización y almacenamiento de datos (matrices):</b>se encarga de transformar los datos cargados a través de la primera capa en estructuras de datos matriciales que serán trabajadas por la siguiente capa y de entregar los datos de resultados a la primera capa para ser visualizados. </li>
-					<li><b id="palabra">Operaciones matriciales:</b>se encarga de realizar las distintas operaciones disponibles para el usuario con los datos suministrados, estas en su mayoría son operaciones matriciales que se realizan con la biblioteca <a href="http://www.gnu.org/software/gsl/"> GSL - GNU Scientific Library</a></li> <br>
+					<li><b id="palabra">Organización y almacenamiento de datos (matrices):</b> se encarga de transformar los datos cargados a través de la primera capa en estructuras de datos matriciales que serán trabajadas por la siguiente capa y de entregar los datos de resultados a la primera capa para ser visualizados. </li>
+					<li><b id="palabra">Operaciones matriciales:</b> se encarga de realizar las distintas operaciones disponibles para el usuario con los datos suministrados, estas en su mayoría son operaciones matriciales que se realizan con la biblioteca <a href="http://www.gnu.org/software/gsl/"> GSL - GNU Scientific Library</a></li> <br>
 					
-					<p>Además, cuenta con una capa trasversal que contienela configuración de ciertos parámetros generales para la aplicación que pueden ser accedidos desde cualquiera de las capas anteriores, y algunos de los cuales con definidos por el usuario.</p>
+					<p>Además, cuenta con una capa trasversal que contiene la configuración de ciertos parámetros generales para la aplicación que pueden ser accedidos desde cualquiera de las capas anteriores, y algunos de los cuales con definidos por el usuario.</p>
 				
 				</div>
 			</div>

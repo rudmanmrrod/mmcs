@@ -43,8 +43,8 @@
 			 				<li><a href="encadenamientos.html">Encadenamientos</a></li>
 			 				<li><a href="clasico.html">Modelo Clásico</a></li>
 			  				<li><a href="noclasico.html">Modelo No Clásico</a></li>
-			  				<li class="active"><a href="precioshomogeneos.html">Modelo Precios Homogeneos</a></li>
-			  				<li><a href="preciosNohomogeneos.html">Modelo No Precios Homogeneos</a></li>
+			  				<li class="active"><a href="precioshomogeneos.html">Modelo Precios Homogéneos</a></li>
+			  				<li><a href="preciosNohomogeneos.html">Modelo No Precios Homogéneos</a></li>
 							<li><a href="bibliografia.html">Referencias Bibliográficas</a></li>
 						</ul>					
 					</div>
@@ -55,16 +55,66 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 col-md-12" id="section">
-					<h3>Modelo de Precios Homogeneos: Incidencia 100% </h3>
-					
-
+					<h3>Modelo de Precios Homogéneos: Incidencia 100% </h3>
+						<p>Por medio de la matriz de multiplicadores <b id="palabra">Ma y Mb</b>, se puede evaluar el comportamiento de los precios de cada uno de los componentes de la matriz, ante cambios del 100% de los precios en los componentes que se muestran en la j-ésima columna. Para ello, sólo debe dirigirse al menú principal:</p>
+					<li><b id="palabra"> Herramientas --- Modelo Precios Homogéneos Clásico --- Incidencia al 100%</b>: se utiliza como base la matriz de Multiplicadores <b id="palabra">Ma</b>. Este modelo, estima la matriz de incidencia al variar los precios en un 100%.</li><br>
+					<center>
+						<img id="img" src="img/Imagen-23.png" alt="Figura 23" class="img-thumbnail">
+						<figcaption><b>Figura 23:</b> Matriz de Incidencia de Precios Homogéneos</figcaption>
+					</center></figure> <br>
+					<li><b id="palabra"> Herramientas --- Modelo Precios Homogéneos No Clásico --- Incidencia al 100%</b>: Se estima empleado la matriz de multiplicadores exógenos <b id="palabra">Mb</b>, por lo que el resultado permite conocer la incidencia de cada uno de los componentes de las cuentas endógenas al variar el precio de los componentes exógenos (columnas). </li><br>
+					<center>
+						<img id="img" src="img/Imagen-24.png" alt="Figura 24" class="img-thumbnail">
+						<figcaption><b>Figura 24:</b> Matriz de Incidencia de Precios Homogéneos</figcaption>
+					</center></figure> <br>
 				</div>
 			</div>
 		</div>
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 col-md-12" id="section">
-					<h3>Modelo de Precios Homogeneos: i% de incidencia</h3>
+					<h3>Modelo de Precios Homogéneos: i% de incidencia</h3>
+						<p>Por medio de la matriz de multiplicadores <b id="palabra">Ma y Mb</b>, se puede evaluar el comportamiento de los precios de cada uno de los componentes de la matriz, ante cambios del i% de los precios en los componentes que se muestran en la j-ésima columna. El sistema permite evaluar escenarios por componentes o cuentas. Para ello, sólo debe dirigirse al menú principal:</p>
+					<li><b id="palabra"> Herramientas --- Modelos Precios Homogéneos Clásico --- Incidencia al i%</b>: seleccione si desea construir el escenario por componente o por cuenta, luego el sistema le mostrará una ventana emergente, donde el usuario introducirá los valores correspondiente al escenario a evaluar. El modelo clásico utiliza la matriz de Multiplicadores <b id="palabra">Ma</b>, la matriz generada muestra la matriz de precios implícitos, que no es más que las incidencias que se registran en cada una de las cuentas al variar en i% un componente o cuenta (columna). El sistema muestra la matriz de precios <b id="palabra"> Pc</b> y la matriz de incidencias <b id="palabra">PIHci</b></li><br>
+					<center>
+						<img id="img" src="img/Imagen-25.png" alt="Figura 25" class="img-thumbnail">
+						<figcaption><b>Figura 25:</b> Escenario a evaluar por cuenta</figcaption>
+					</center></figure> <br>
+					<center>
+						<img id="img" src="img/Imagen-26.png" alt="Figura 26" class="img-thumbnail">
+						<figcaption><b>Figura 26:</b> Escenario a evaluar por componente</figcaption>
+					</center></figure> <br>
+					<center>
+						<img id="img" src="img/Imagen-27.png" alt="Figura 27" class="img-thumbnail">
+						<figcaption><b>Figura 27:</b> Resultado: Matriz de Incidencias al i%</figcaption>
+					</center></figure> <br>
+					<li><b id="palabra"> Herramientas --- Modelos Precio Homogéneos No Clásicos --- Incidencia al i%</b>: Se estima empleado la matriz de multiplicadores exógenos <b id="palabra">Mb</b>, al igual que lo expuesto en la sección anterior, el usuario podrá construir los escenarios por cuenta o por componente. Los resultados se muestran en la pestaña <b id="palabra">PIHcni</b>, que representa la matriz de incidencias al i%, así como una pestaña para mostrar la matriz de precios no clásicos <b id="palabra">Pnc</b>. </li><br>
+				
+
+					<center> <article class="col-xs-12 col-md-12"  id="ecuaciones">
+					<p> <b style="color:white">Precios Homogéneos. Modelo Clásico:</b> </p>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+						<mi>M</mi><mi>a</mi><mo>&#160;</mo><mo>=</mo><mo>&#160;</mo><mfenced open="[" close="]"><mtable><mtr><mtd><msub><mi>m</mi><mn>11</mn></msub></mtd><mtd><mo>&#8943;</mo></mtd><mtd><msub><mi>m</mi><mrow><mn>1</mn><mi>j</mi></mrow></msub></mtd></mtr><mtr><mtd><mo>&#8942;</mo></mtd><mtd><mo>&#8943;</mo></mtd><mtd><mo>&#8942;</mo></mtd></mtr><mtr><mtd><msub><mi>m</mi><mrow><mi>i</mi><mn>1</mn></mrow></msub></mtd><mtd><mo>&#8943;</mo></mtd><mtd><msub><mi>m</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mtd></mtr></mtable></mfenced>
+					</math> <br>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+						<mi>Pc</mi><mo>&#160;</mo><mo>=</mo><mo>&#160;</mo><msup><mfenced open="[" close="]"><mrow><mi>M</mi><mi>a</mi></mrow></mfenced><mi>T</mi></msup>
+					</math><br>
+					<p>La matriz <b style="color:white">Pc</b>, representa las variaciones de precios de cada uno de los componentes, por lo que se debe estimar un vector de ponderaciones <b style="color:white">r</b> y multiplicarlo por dicha matriz <b style="color:white">Pc</b>, para así realizar sumatorias y agrupar los efectos generados por cuentas, En otras palabras, estimar las incidencias generadas ante una variación en los precios de los componentes o cuentas.</p>
+					<p>El vector de ponderaciones<b style="color:white">r</b>, se estima dividiendo el total de cada una de las filas de la matriz base, entre el total de la cuenta. Esto, con el objetivo de obtener el peso que tiene cada uno de los componentes, con relación a la cuenta a la que pertenece.</p>
+					<p>Por lo tanto los precios implícitos se estima:</p>
+					<b style="color:white">PIHc100 = Pc * r</b><br>
+					
+					<p> <b style="color:white">Precios Homogéneos. Modelo No Clásico:</b> </p>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+						<mi>M</mi><mi>b</mi><mo>&#160;</mo><mo>=</mo><mo>&#160;</mo><mfenced open="[" close="]"><mtable><mtr><mtd><msub><mi>m</mi><mn>11</mn></msub></mtd><mtd><mo>&#8943;</mo></mtd><mtd><msub><mi>m</mi><mrow><mn>1</mn><mi>j</mi></mrow></msub></mtd></mtr><mtr><mtd><mo>&#8942;</mo></mtd><mtd><mo>&#8943;</mo></mtd><mtd><mo>&#8942;</mo></mtd></mtr><mtr><mtd><msub><mi>m</mi><mrow><mi>i</mi><mn>1</mn></mrow></msub></mtd><mtd><mo>&#8943;</mo></mtd><mtd><msub><mi>m</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mtd></mtr></mtable></mfenced>
+					</math><br>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+						<mi>Pnc</mi><mo>&#160;</mo><mo>=</mo><mo>&#160;</mo><msup><mfenced open="[" close="]"><mrow><mi>M</mi><mi>b</mi></mrow></mfenced><mi>T</mi></msup>
+					</math><br>
+					<p>Los precios implícitos utilizando los multiplicadores exógenos se estima:</p>
+					<center><b style="color:white">PIHnc100 = Pnc * r</b></center><br>
+					</article> </center><br>
+
 
 					<a href="noclasico.html"><p id="derecha"><b id="palabra">Modelo No Clásico</b></p></a>
 					<a href="preciosNohomogeneos.html"><p id="izquierda"> <b id="palabra">Modelo de Precios No Homogéneos</b></p></a>	

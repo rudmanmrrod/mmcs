@@ -43,8 +43,8 @@
 			 				<li><a href="encadenamientos.html">Encadenamientos</a></li>
 			 				<li><a href="clasico.html">Modelo Clásico</a></li>
 			  				<li><a href="noclasico.html">Modelo No Clásico</a></li>
-			  				<li><a href="precioshomogeneos.html">Modelo Precios Homogeneos</a></li>
-			  				<li><a href="preciosNohomogeneos.html">Modelo No Precios Homogeneos</a></li>
+			  				<li><a href="precioshomogeneos.html">Modelo Precios Homogéneos</a></li>
+			  				<li><a href="preciosNohomogeneos.html">Modelo No Precios Homogéneos</a></li>
 							<li><a href="bibliografia.html">Referencias Bibliográficas</a></li>
 						</ul>					
 					</div>
@@ -56,27 +56,28 @@
 			<div class="row">
 				<div class="col-xs-12 col-md-12" id="section">
 					<h3>Definir Submatrices</h3>
-						<p>Como se explicó en el apartado anterior, una matriz de contabilidad social está compuesta por una serie de cuentas (Ejemplo: Productos, Actividades, Factores de Producción, Distribución Primaria del Ingreso, Consumo, Cuenta Capital, Cuenta Financiera, Resto del mundo, entre otras) y cada una de éstas tendrá asociada una serie de componentes (Por ejemplo, la cuenta Factores de producción puede estar compuesta por los elementos: Remuneración de asalariados, Excendente de explotación e ingreso mixto).</p>
-						<p>Ahora bien, para realizar análisis matricial, es necesario determinar en primer lugar los componentes que serán endógenos y exógenos. Para ello, sólo debe dirigirse al menú herramienta y hacer click en <b id="palanra"> Definir Variables Exógenas</b>, el sistema le mostrará una ventana emergente, solicitándole que seleccione una cuenta, en el panel que se encuentra en el lado derecho se presenta una lista de los componentes de la cuenta seleccionada, deberá seleccionar uno o más elementos y presionar el botón <b id="palabra">Agregar</b>, deberá repetir este procedimiento si existe más de una cuenta exógena. Por último, presione el botón <b id="palabra">Finalizar</b></p>
+						<p>Como se explicó en el apartado anterior, una matriz de contabilidad social está compuesta por una serie de cuentas (Ejemplo: Productos, Actividades, Factores de Producción, Distribución Primaria del Ingreso, Consumo, Cuenta Capital, Cuenta Financiera, Resto del mundo, entre otras) y cada una de estas tendrá asociada una serie de componentes (Por ejemplo, la cuenta Factores de producción puede estar compuesta por los elementos: Remuneración de asalariados, Excendente de explotación e ingreso mixto).</p>
+						<p>Ahora bien, para realizar análisis matricial, es necesario determinar en primer lugar los componentes que serán endógenos y exógenos. Para ello, sólo debe dirigirse al menú herramienta y hacer click en <b id="palanra"> Definir Variables Exógenas</b>, el sistema le mostrará una ventana emergente, solicitándole que seleccione una cuenta, mientras que en el panel ubicado en el lado derecho se presenta una lista de los componentes de la cuenta seleccionada. El usuario deberá seleccionar uno o más elementos y presionar el botón <b id="palabra">Agregar</b>, deberá repetir este procedimiento si existe más de una cuenta exógena. Por último, se presiona el botón <b id="palabra">Finalizar</b></p>
 					<center><figure>
 						<img id="img" src="img/Imagen-7.png" alt="Figura 7" class="img-thumbnail">
 						<figcaption><b>Figura 7:</b> Definir Submatrices</figcaption>
 					</center></figure> <br>
 					<p>Como resultado, el sistema se mostrará dos pestañas:</p>
-					<li><b id="palabra">1.- Tipo de Variable:</b> Muestra la matriz base en la columna y fila 1 el sistema define si es exógena o endógena.</li>
+					<li><b id="palabra">1.- Tipo de Variable:</b> Muestra la matriz base en la columna y fila 1 el sistema define si es exógena o endógena.</li><br>
 					<center><figure>
 						<img id="img" src="img/Imagen-8.png" alt="Figura 8" class="img-thumbnail">
 						<figcaption><b>Figura 8:</b> Tipo de Variables</figcaption>
 					</center></figure> <br>
 
-					<li><b id="palabra"> Endógena-Endógena.</b></li>
+					<li><b id="palabra"> Endógena-Endógena.</b></li><br>
 					<center><figure>
 						<img id="img" src="img/Imagen-9.png" alt="Figura 9" class="img-thumbnail">
 						<figcaption><b>Figura 9:</b> Endogena-Endogena</figcaption>
 					</center></figure> <br>
   					<article class="col-xs-12 col-md-12"  id="nota">
-						<p><b style="color:white">Definir Tipo de Cuentas</b> Para la construcción de los modelos de multiplicadores, es necesario definir las cuentas endógenas y exógenas, entendiendo que está última representa aquellas variables de políticas, que son estimadas fuera del modelo. En la Figura 10, se presentan las cuatro submatrices que se crean una vez que se definen las variables:</p>
-							<li><b style="color:white">A Endógena-Endógena:</b> Esta submatriz es la utilizada para estimar los multiplicadores de Leontief, por lo general las cuentas endógenas de una matriz de contabilidad social son: Productos, Actividades, Factores de Producción, Distribución Primaria del Ingreso y el Consumo.</li>
+						<p><b style="color:white">Definir Tipo de Cuentas</b> Para la construcción de los modelos de multiplicadores, es necesario definir las cuentas endógenas y exógenas, entendiendo que está última representa aquellas variables de políticas, que son estimadas fuera del modelo.</p> 
+						<p>En la Figura 10, se presentan las cuatro submatrices que se crean una vez que se definen las variables:</p>
+							<li><b style="color:white">A Endógena-Endógena:</b> Esta submatriz es utilizada para estimar los multiplicadores de Leontief, por lo general las cuentas endógenas de una matriz de contabilidad social son: Productos, Actividades, Factores de Producción, Distribución Primaria del Ingreso y el Consumo.</li>
 							<li><b style="color:white">B Endógena-Exógena:</b> Se concentran aquellas cuentas y componentes que son variables de política, son empleadas para construir escenarios y estimar los efectos que la variación de éstas ejercen sobre el sistema económico.</li>
 							<li><b style="color:white">C Exógena-Endógena:</b> Permite calcular los multiplicadores exógenos, requeridos para estimar el impacto que se genera en el sistema y que afecta a la submatriz A.</li>
 							<li><b style="color:white">D Exógena-Exógena:</b> Esta submatriz no es utilizada para construir los modelos de multiplicadores, ni para evaluar impactos de políticas.</li><br>
