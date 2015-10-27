@@ -91,7 +91,7 @@ void MainWindow::slotExportMatrix()
         QPushButton * buttonExplorar = new QPushButton;
         buttonExplorar->setObjectName("Exportar-Explorar");
         buttonExplorar->setFlat(true);
-        buttonExplorar->setIcon(QIcon(":/img/folder_blue.png"));
+        buttonExplorar->setIcon(QIcon(":/imgs/folder_blue.png"));
 
         QHBoxLayout *layoutMiddle = new QHBoxLayout;
         layoutMiddle->addWidget(label2);
@@ -228,7 +228,7 @@ void MainWindow::createCentralWidget()
     QHBoxLayout * layoutMatrix = new QHBoxLayout;
     QLabel * lblMatrix = new QLabel;
     lblMatrix->setAlignment(Qt::AlignCenter);
-    lblMatrix->setPixmap(QPixmap(":/img/Imagen-matriz.png"));
+    lblMatrix->setPixmap(QPixmap(":/imgs/Imagen-matriz.png"));
     layoutMatrix->addWidget(lblMatrix);
     layoutCentralWidget->addLayout(layoutMatrix);
 
@@ -239,7 +239,7 @@ void MainWindow::createCentralWidget()
     lblFoot->setFont(QFont("Aero Matics", 19, 1));
     lblFoot->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     QLabel * lblLogo = new QLabel;
-    lblLogo->setPixmap(QPixmap(":/img/logo_cenditel.jpg"));
+    lblLogo->setPixmap(QPixmap(":/imgs/logo_cenditel.jpg"));
     lblLogo->setFixedWidth(lblLogo->pixmap()->width());
     lblLogo->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     layoutFoot->addWidget(lblFoot);
@@ -486,7 +486,7 @@ void MainWindow::createMatrixCentralWidget()
 
     /***********          Nuevo boton para restaurar,editar y finalizar la tabla             *******/
     //buttonRestaurar->setText("&Restaurar");
-    buttonRestaurar->setIcon(QIcon(":/img/undo-habilitado.png"));
+    buttonRestaurar->setIcon(QIcon(":/imgs/undo-habilitado.png"));
     buttonRestaurar->setFlat(true);
     buttonRestaurar->setObjectName("Restaurar");
     buttonRestaurar->setFixedWidth(100);
@@ -495,7 +495,7 @@ void MainWindow::createMatrixCentralWidget()
                              "border-radius: 5px; margin-top: 40px;");*/
 
     //buttonModificar->setText("&Editar ");
-    buttonModificar->setIcon(QIcon(":/img/edit-deshabilitado.png"));
+    buttonModificar->setIcon(QIcon(":/imgs/edit-deshabilitado.png"));
     buttonModificar->setDisabled(true);
     buttonModificar->setFlat(true);
     buttonModificar->setObjectName("Modificar");
@@ -720,7 +720,7 @@ QString MainWindow::numberFormat(double & d) {
 /*                  Aquí se encuentra el menú de ayuda                */
 void MainWindow::abrirManual()//Funcion para abrir el manual
 {
-    QDesktopServices::openUrl(QUrl("Usuario/Entrada.html"));
+    QDesktopServices::openUrl(QUrl(QDir::currentPath()+"/Usuario/Entrada.html"));
 }
 
 void MainWindow::acercaDe()//Funcion para el mensaje acerca de
@@ -809,12 +809,12 @@ void MainWindow::slotAccChange()
     if(!le->isEnabled())
     {
         Modificar->setEnabled(true);
-        Modificar->setIcon(QIcon(":/img/edit-habilitado"));
+        Modificar->setIcon(QIcon(":/imgs/edit-habilitado"));
     }
     else
     {
         Modificar->setDisabled(true);
-        Modificar->setIcon(QIcon(":/img/edit-deshabilitado"));
+        Modificar->setIcon(QIcon(":/imgs/edit-deshabilitado"));
     }
 }
 
@@ -928,7 +928,7 @@ void MainWindow::AgregarCuenta()
                     SBEnd->setEnabled(false);
                     QPushButton *Modificar = findChild<QPushButton *>("Modificar");
                     Modificar->setEnabled(true);
-                    Modificar->setIcon(QIcon(":/img/edit-habilitado"));
+                    Modificar->setIcon(QIcon(":/imgs/edit-habilitado"));
                 }
                 else if(!centinela)
                 {
@@ -2210,7 +2210,6 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw)
         widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
 
         opcionMa = 1;
-        tabWidget->removeTab(indice);
     }
 }
 
@@ -3927,7 +3926,6 @@ void MainWindow::estimarMb(QTableWidget *Bn,QTableWidget *Mb)
     layoutCentralWidget->addWidget(Mb);
     QWidget *widget = tabWidget->widget(indice);
     widget->setLayout(layoutCentralWidget);
-    tabWidget->removeTab(indice);
 }
 
 void MainWindow::calcularEscenarioNC()
@@ -4153,11 +4151,11 @@ void MainWindow::slotPHCIncidencia100()
         calcularMaT();
     }
     QTableWidget *MatrizMi = new QTableWidget;
-    MatrizMi->setObjectName("PHC100");
+    MatrizMi->setObjectName("PIHc100");
     calcularPHCIncidencia100(MatrizMi);
 
-    tabWidget->addTab(new QWidget,"PHC100");
-    int indice=ObtenerIndice("PHC100");
+    tabWidget->addTab(new QWidget,"PIHc100");
+    int indice=ObtenerIndice("PIHc100");
 
     QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
     layoutCentralWidget->addWidget(MatrizMi);
@@ -4196,14 +4194,13 @@ void MainWindow::calcularMaT()
     }
     titleEndogena(MaT);
     spanEndogenaCell(MaT,2,0,false);
-    tabWidget->addTab(new QWidget,"Ma^T");
-    int indice=ObtenerIndice("Ma^T");
+    tabWidget->addTab(new QWidget,"Pc");
+    int indice=ObtenerIndice("Pc");
 
     QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
     layoutCentralWidget->addWidget(MaT);
     QWidget *widget = tabWidget->widget(indice);
     widget->setLayout(layoutCentralWidget);
-    tabWidget->removeTab(indice);
     opcionMAT++;
 }
 
@@ -4284,8 +4281,8 @@ void MainWindow::slotCalcularPHCIncidenciaiCuenta()
     calcularPHCIncidencia100(MatrizIC);
     calcularPHCIncidenciaI(MatrizIC,cantidades);
 
-    tabWidget->addTab(new QWidget,QString("PHCI %1").arg(cantidadPHCindidenciaiCuenta));
-    int indice=ObtenerIndice(QString("PHCI %1").arg(cantidadPHCindidenciaiCuenta));
+    tabWidget->addTab(new QWidget,QString("PIHci %1").arg(cantidadPHCindidenciaiCuenta));
+    int indice=ObtenerIndice(QString("PIHci %1").arg(cantidadPHCindidenciaiCuenta));
 
     QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
     layoutCentralWidget->addWidget(MatrizIC);
@@ -4359,8 +4356,8 @@ void MainWindow::slotCalcularPHCIncidenciaiComponente()
     calcularPHCIncidencia100(MatrizIComp);
     calcularPHCIncidenciaIComponente(MatrizIComp,tw);
 
-    tabWidget->addTab(new QWidget,QString("PHCIc %1").arg(cantidadPHCindidenciaiComponente));
-    int indice=ObtenerIndice(QString("PHCIc %1").arg(cantidadPHCindidenciaiComponente));
+    tabWidget->addTab(new QWidget,QString("PIHcic %1").arg(cantidadPHCindidenciaiComponente));
+    int indice=ObtenerIndice(QString("PIHcic %1").arg(cantidadPHCindidenciaiComponente));
 
     QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
     layoutCentralWidget->addWidget(MatrizIComp);
@@ -4455,14 +4452,13 @@ void MainWindow::calcularMbT()
         }
     }
     titlespanMatrizExgEnd(MbT);
-    tabWidget->addTab(new QWidget,"Mb^T");
-    int indice=ObtenerIndice("Mb^T");
+    tabWidget->addTab(new QWidget,"Pnc");
+    int indice=ObtenerIndice("Pnc");
 
     QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
     layoutCentralWidget->addWidget(MbT);
     QWidget *widget = tabWidget->widget(indice);
     widget->setLayout(layoutCentralWidget);
-    tabWidget->removeTab(indice);
     opcionMBT++;
 }
 
@@ -4474,11 +4470,11 @@ void MainWindow::slotPHNCIncidencia100()
         calcularMbT();
     }
     QTableWidget *MatrizMi = new QTableWidget;
-    MatrizMi->setObjectName("PHNC100");
+    MatrizMi->setObjectName("PIHnc100");
     calcularPHNCIncidencia100(MatrizMi);
 
-    tabWidget->addTab(new QWidget,"PHNC100");
-    int indice=ObtenerIndice("PHNC100");
+    tabWidget->addTab(new QWidget,"PIHnc100");
+    int indice=ObtenerIndice("PIHnc100");
 
     QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
     layoutCentralWidget->addWidget(MatrizMi);
@@ -4592,8 +4588,8 @@ void MainWindow::slotCalcularPHNCIncidenciaiCuenta()
     calcularPHNCIncidencia100(MatrizIC);
     calcularPHCIncidenciaI(MatrizIC,cantidades);
 
-    tabWidget->addTab(new QWidget,QString("PHNCI %1").arg(cantidadPHNCindidenciaiCuenta));
-    int indice=ObtenerIndice(QString("PHNCI %1").arg(cantidadPHNCindidenciaiCuenta));
+    tabWidget->addTab(new QWidget,QString("PIHnci %1").arg(cantidadPHNCindidenciaiCuenta));
+    int indice=ObtenerIndice(QString("PIHnci %1").arg(cantidadPHNCindidenciaiCuenta));
 
     QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
     layoutCentralWidget->addWidget(MatrizIC);
@@ -4641,8 +4637,8 @@ void MainWindow::slotCalcularPHNCIncidenciaiComponente()
     calcularPHNCIncidencia100(MatrizIComp);
     calcularPHCIncidenciaIComponente(MatrizIComp,tw);
 
-    tabWidget->addTab(new QWidget,QString("PHNCIc %1").arg(cantidadPHNCindidenciaiComponente));
-    int indice=ObtenerIndice(QString("PHNCIc %1").arg(cantidadPHNCindidenciaiComponente));
+    tabWidget->addTab(new QWidget,QString("PIHncic %1").arg(cantidadPHNCindidenciaiComponente));
+    int indice=ObtenerIndice(QString("PIHncic %1").arg(cantidadPHNCindidenciaiComponente));
 
     QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
     layoutCentralWidget->addWidget(MatrizIComp);
@@ -4811,8 +4807,8 @@ void MainWindow::multiplicarMatricesPNH(QTableWidget *tw,QVector<double> vector)
     calcularPNHIncidencia100(tw,trans);
     if(opcionPNHT == 0)
     {
-        tabWidget->addTab(new QWidget,QString("PNH100 %1").arg(cantidadPNHincidencia100));
-        int indice=ObtenerIndice(QString("PNH100 %1").arg(cantidadPNHincidencia100));
+        tabWidget->addTab(new QWidget,QString("PINH100 %1").arg(cantidadPNHincidencia100));
+        int indice=ObtenerIndice(QString("PINH100 %1").arg(cantidadPNHincidencia100));
         QHBoxLayout * layoutCentralWidget3 = new QHBoxLayout;
         layoutCentralWidget3->addWidget(tw);
         QWidget *widget3 = tabWidget->widget(indice);
@@ -4952,8 +4948,8 @@ void MainWindow::slotCalcularPNHIncidenciaiCuenta()
 
     calcularPHCIncidenciaI(PNHI,cantidades);
 
-    tabWidget->addTab(new QWidget,QString("PNHI %1").arg(cantidadPNHincidenciaiCuenta));
-    int indice=ObtenerIndice(QString("PNHI %1").arg(cantidadPNHincidenciaiCuenta));
+    tabWidget->addTab(new QWidget,QString("PINHi %1").arg(cantidadPNHincidenciaiCuenta));
+    int indice=ObtenerIndice(QString("PINHi %1").arg(cantidadPNHincidenciaiCuenta));
 
     QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
     layoutCentralWidget->addWidget(PNHI);
@@ -5052,8 +5048,8 @@ void MainWindow::slotCalcularPNHIncidenciaiComponente()
     QTableWidget *tw = FI->ui->TableIncidencia;
     calcularPHCIncidenciaIComponente(PNHIc,tw);
 
-    tabWidget->addTab(new QWidget,QString("PNHIc %1").arg(cantidadPNHincidenciaiComponente));
-    int indice=ObtenerIndice(QString("PNHIc %1").arg(cantidadPNHincidenciaiComponente));
+    tabWidget->addTab(new QWidget,QString("PINHic %1").arg(cantidadPNHincidenciaiComponente));
+    int indice=ObtenerIndice(QString("PINHic %1").arg(cantidadPNHincidenciaiComponente));
 
     QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
     layoutCentralWidget->addWidget(PNHIc);
@@ -5258,7 +5254,7 @@ void MainWindow::slotSeleccionarTabla()
     }
 }
 
-/*          Funcion para agregar el span en los titulos de la mtriz seleccionada    */
+/*          Funcion para agregar el span en los titulos de la matriz seleccionada    */
 void MainWindow::titleSeleccionar(QTableWidget *tw)
 {
     QStringList CuentaFila;
