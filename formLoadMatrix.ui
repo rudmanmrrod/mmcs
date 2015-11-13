@@ -154,8 +154,8 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="img/img.qrc">
-         <normaloff>:/img/folder_blue.png</normaloff>:/img/folder_blue.png</iconset>
+        <iconset resource="img/images.qrc">
+         <normaloff>:/imgs/folder_blue.png</normaloff>:/imgs/folder_blue.png</iconset>
        </property>
        <property name="flat">
         <bool>true</bool>
@@ -212,7 +212,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="img/img.qrc"/>
+  <include location="img/images.qrc"/>
  </resources>
  <connections/>
 </ui>
