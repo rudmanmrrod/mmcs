@@ -11,19 +11,19 @@
 #define UI_FORMLOADMATRIX_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QFrame>
-#include <QtGui/QGridLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QSpinBox>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QFrame>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -172,18 +172,18 @@ public:
 
     void retranslateUi(QWidget *FormLoadMatrix)
     {
-        FormLoadMatrix->setWindowTitle(QApplication::translate("FormLoadMatrix", "Cargar Matriz", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("FormLoadMatrix", "2.- Cargar Matriz", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("FormLoadMatrix", "1.- Estructura de la Matriz", 0, QApplication::UnicodeUTF8));
-        buttonOpen->setText(QApplication::translate("FormLoadMatrix", "A&brir", 0, QApplication::UnicodeUTF8));
-        label_4->setText(QApplication::translate("FormLoadMatrix", "N\303\272mero de Decimales", 0, QApplication::UnicodeUTF8));
-        label_3->setText(QApplication::translate("FormLoadMatrix", "N\303\272mero de Cuentas:", 0, QApplication::UnicodeUTF8));
+        FormLoadMatrix->setWindowTitle(QApplication::translate("FormLoadMatrix", "Cargar Matriz", 0));
+        label_2->setText(QApplication::translate("FormLoadMatrix", "2.- Cargar Matriz", 0));
+        label->setText(QApplication::translate("FormLoadMatrix", "1.- Estructura de la Matriz", 0));
+        buttonOpen->setText(QApplication::translate("FormLoadMatrix", "A&brir", 0));
+        label_4->setText(QApplication::translate("FormLoadMatrix", "N\303\272mero de Decimales", 0));
+        label_3->setText(QApplication::translate("FormLoadMatrix", "N\303\272mero de Cuentas:", 0));
 #ifndef QT_NO_TOOLTIP
-        buttonSearch->setToolTip(QApplication::translate("FormLoadMatrix", "Examinar", 0, QApplication::UnicodeUTF8));
+        buttonSearch->setToolTip(QApplication::translate("FormLoadMatrix", "Examinar", 0));
 #endif // QT_NO_TOOLTIP
         buttonSearch->setText(QString());
-        label_7->setText(QApplication::translate("FormLoadMatrix", "Archivo:", 0, QApplication::UnicodeUTF8));
-        buttonCancel->setText(QApplication::translate("FormLoadMatrix", "&Cancelar", 0, QApplication::UnicodeUTF8));
+        label_7->setText(QApplication::translate("FormLoadMatrix", "Archivo:", 0));
+        buttonCancel->setText(QApplication::translate("FormLoadMatrix", "&Cancelar", 0));
     } // retranslateUi
 
 };

@@ -11,14 +11,14 @@
 #define UI_FORMINCIDENCIAI_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QPushButton>
-#include <QtGui/QTableWidget>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -67,8 +67,8 @@ public:
 
     void retranslateUi(QWidget *FormIncidenciaI)
     {
-        FormIncidenciaI->setWindowTitle(QApplication::translate("FormIncidenciaI", "Seleccione la Variaci\303\263n", 0, QApplication::UnicodeUTF8));
-        CalcularIncidencia->setText(QApplication::translate("FormIncidenciaI", "&Calcular", 0, QApplication::UnicodeUTF8));
+        FormIncidenciaI->setWindowTitle(QApplication::translate("FormIncidenciaI", "Seleccione la Variaci\303\263n", 0));
+        CalcularIncidencia->setText(QApplication::translate("FormIncidenciaI", "&Calcular", 0));
     } // retranslateUi
 
 };

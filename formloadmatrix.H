@@ -1,7 +1,7 @@
 #ifndef FORMLOADMATRIX_H
 #define FORMLOADMATRIX_H
 
-#include<QtGui>
+#include<QtWidgets>
 #include<ui_formLoadMatrix.h>
 
 class FormLoadMatrix : public QWidget

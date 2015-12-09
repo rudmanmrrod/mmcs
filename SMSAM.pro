@@ -1,3 +1,5 @@
+QT += widgets
+
 HEADERS += mainwindow.H \
     formloadmatrix.H \
     formviewmatrix.H \

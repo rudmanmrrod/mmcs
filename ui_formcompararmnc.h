@@ -11,14 +11,14 @@
 #define UI_FORMCOMPARARMNC_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QListWidget>
-#include <QtGui/QPushButton>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QListWidget>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -68,8 +68,8 @@ public:
 
     void retranslateUi(QWidget *FormCompararMNC)
     {
-        FormCompararMNC->setWindowTitle(QApplication::translate("FormCompararMNC", "Comparar Resultados", 0, QApplication::UnicodeUTF8));
-        verMNC->setText(QApplication::translate("FormCompararMNC", "&Ver", 0, QApplication::UnicodeUTF8));
+        FormCompararMNC->setWindowTitle(QApplication::translate("FormCompararMNC", "Comparar Resultados", 0));
+        verMNC->setText(QApplication::translate("FormCompararMNC", "&Ver", 0));
     } // retranslateUi
 
 };

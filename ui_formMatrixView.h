@@ -11,17 +11,17 @@
 #define UI_FORMMATRIXVIEW_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QComboBox>
-#include <QtGui/QGroupBox>
-#include <QtGui/QHeaderView>
-#include <QtGui/QPushButton>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QTabWidget>
-#include <QtGui/QTableView>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QTableView>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -93,11 +93,11 @@ public:
 
     void retranslateUi(QWidget *FormMatrixView)
     {
-        FormMatrixView->setWindowTitle(QApplication::translate("FormMatrixView", "MatrixView", 0, QApplication::UnicodeUTF8));
-        Cuentas->setTitle(QApplication::translate("FormMatrixView", "Cuentas", 0, QApplication::UnicodeUTF8));
-        loadButton->setText(QApplication::translate("FormMatrixView", "Finalizar Carga", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("FormMatrixView", "Tab 1", 0, QApplication::UnicodeUTF8));
-        tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("FormMatrixView", "Tab 2", 0, QApplication::UnicodeUTF8));
+        FormMatrixView->setWindowTitle(QApplication::translate("FormMatrixView", "MatrixView", 0));
+        Cuentas->setTitle(QApplication::translate("FormMatrixView", "Cuentas", 0));
+        loadButton->setText(QApplication::translate("FormMatrixView", "Finalizar Carga", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("FormMatrixView", "Tab 1", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_4), QApplication::translate("FormMatrixView", "Tab 2", 0));
     } // retranslateUi
 
 };

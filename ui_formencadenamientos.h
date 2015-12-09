@@ -11,11 +11,11 @@
 #define UI_FORMENCADENAMIENTOS_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QHeaderView>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -36,7 +36,7 @@ public:
 
     void retranslateUi(QWidget *FormEncadenamientos)
     {
-        FormEncadenamientos->setWindowTitle(QApplication::translate("FormEncadenamientos", "Encadenamiento", 0, QApplication::UnicodeUTF8));
+        FormEncadenamientos->setWindowTitle(QApplication::translate("FormEncadenamientos", "Encadenamiento", 0));
     } // retranslateUi
 
 };

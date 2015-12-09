@@ -1,7 +1,7 @@
 #ifndef VARIABLEPNH_H
 #define VARIABLEPNH_H
 
-#include <QtGui>
+#include <QtWidgets>
 
 class variablePNH : public QWidget
 {

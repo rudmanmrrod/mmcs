@@ -11,11 +11,11 @@
 #define UI_FORMPRECIOSNOHOMOGENEOS_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QHeaderView>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -37,7 +37,7 @@ public:
 
     void retranslateUi(QWidget *FormPreciosNoHomogeneos)
     {
-        FormPreciosNoHomogeneos->setWindowTitle(QApplication::translate("FormPreciosNoHomogeneos", "Modelo de Precios No Homog\303\251neo", 0, QApplication::UnicodeUTF8));
+        FormPreciosNoHomogeneos->setWindowTitle(QApplication::translate("FormPreciosNoHomogeneos", "Modelo de Precios No Homog\303\251neo", 0));
     } // retranslateUi
 
 };

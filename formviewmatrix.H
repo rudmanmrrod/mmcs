@@ -1,7 +1,7 @@
 #ifndef FORMVIEWMATRIX_H
 #define FORMVIEWMATRIX_H
 
-#include <QtGui>
+#include <QtWidgets>
 #include <ui_formMatrixView.h>
 
 class FormViewMatrix : public QWidget

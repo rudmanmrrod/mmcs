@@ -11,14 +11,14 @@
 #define UI_FORMCOMPARARRESULTADOS_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QListWidget>
-#include <QtGui/QPushButton>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QListWidget>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -69,8 +69,8 @@ public:
 
     void retranslateUi(QWidget *FormCompararResultados)
     {
-        FormCompararResultados->setWindowTitle(QApplication::translate("FormCompararResultados", "Comparar Resultados", 0, QApplication::UnicodeUTF8));
-        buttonVerResultados->setText(QApplication::translate("FormCompararResultados", "&Ver", 0, QApplication::UnicodeUTF8));
+        FormCompararResultados->setWindowTitle(QApplication::translate("FormCompararResultados", "Comparar Resultados", 0));
+        buttonVerResultados->setText(QApplication::translate("FormCompararResultados", "&Ver", 0));
     } // retranslateUi
 
 };

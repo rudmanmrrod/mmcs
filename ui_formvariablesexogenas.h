@@ -11,11 +11,11 @@
 #define UI_FORMVARIABLESEXOGENAS_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QHeaderView>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -37,7 +37,7 @@ public:
 
     void retranslateUi(QWidget *FormVariablesExogenas)
     {
-        FormVariablesExogenas->setWindowTitle(QApplication::translate("FormVariablesExogenas", "Defina Variables Ex\303\263genas", 0, QApplication::UnicodeUTF8));
+        FormVariablesExogenas->setWindowTitle(QApplication::translate("FormVariablesExogenas", "Defina Variables Ex\303\263genas", 0));
     } // retranslateUi
 
 };
