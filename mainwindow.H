@@ -338,8 +338,6 @@ private slots:
 
 public:
     MainWindow();
-    std::vector<std::string> csv_read_row(std::string , char);
-    std::vector<std::string> csv_read_row(std::istream &, char);
     QString numberFormat(double &);
 
     int contarElementosMap(QMap<QString, QStringList> diccionario);

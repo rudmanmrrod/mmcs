@@ -580,111 +580,61 @@ void MainWindow::createMatrixCentralWidget()
     connect(&actionVariableExogena,SIGNAL(triggered()),this,SLOT(slotVariableExogena()));
 }
 
-void MainWindow::populateTable(QTableWidget * tableWidget) {
-
+void MainWindow::populateTable(QTableWidget * tableWidget)
+{
+    //Se abre el archivo en modo lectura
     QFile file(csvFilePath);
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    file.open(QFile::ReadOnly | QFile::Text);
+    QTextStream in(&file);
+    QString linea = in.readLine();//Se lee la primera linea(con los nombres)
+    QStringList lines = linea.split(";");//Se separan por ; y se guardan en una lista
+    int column = lines.count();
+    CrearTablaVacia(column+2,tableWidget);//Se crea una tabla vacia a modo de matriz cuadrada
+    //Se leen los componentes y se distribuyen en filas y columnas
+    for(int i=1;i<=column;i++)
     {
-        int row = 0;
-        QString lineHead = file.readLine();
-        const std::vector<std::string> rowVH =
-                csv_read_row(lineHead.toStdString(), csvSeparator);
-
-
-        matrixSize = rowVH.size();
-        tableWidget->setRowCount(matrixSize+1);
-        tableWidget->setColumnCount(matrixSize+1);
-
-        for(int column=0; column<matrixSize; column++) {
-            QTableWidgetItem *newItem = new QTableWidgetItem(
-                    QString::fromUtf8(rowVH[column].c_str()).
-                    toLocal8Bit().constData());
-            newItem->setFlags(newItem->flags() ^ Qt::ItemIsEditable);//Se coloca como no editable
-            CellStyleComponente(newItem);
-            tableWidget->setItem(row, column+1, newItem);
-        }
-        ++row;
-
-        while (!file.atEnd() and row<=matrixSize)
-        {
-            QTableWidgetItem *newItem = new QTableWidgetItem(
-                    QString::fromUtf8(rowVH[row-1].c_str()).
-                    toLocal8Bit().constData());
-            newItem->setFlags(newItem->flags() ^ Qt::ItemIsEditable);//Se coloca como no editable
-            CellStyleComponente(newItem);
-            tableWidget->setItem(row, 0, newItem);
-
-            QString line = file.readLine();
-
-            std::vector<std::string> rowV =
-                    csv_read_row(line.toStdString(), csvSeparator);
-            for(int column=0, leng=rowV.size();
-            column < leng and column<matrixSize; column++) {
-
-                /*              Aqui se incorporan los valores luego de la coma(,)          */
-                QString rowVal = QString::fromUtf8(rowV[column].c_str());
-                double value = rowVal.toDouble();
-
-
-                QTableWidgetItem *newItem = new QTableWidgetItem(
-                        numberFormat(value).
-                        toLocal8Bit().constData());
-                newItem->setFlags(newItem->flags() ^ Qt::ItemIsEditable);//Se coloca como no editable
-                newItem->setTextAlignment(Qt::AlignCenter);
-                tableWidget->setItem(row, column+1, newItem);
-                matrix[row-1][column] =  atof(rowV[column].c_str());
-            }
-            ++row;
-        }
-        file.close();
+        QTableWidgetItem *itemFila = new QTableWidgetItem(lines.at(i-1));
+        CellStyleComponente(itemFila);
+        itemFila->setFlags(itemFila->flags() ^ Qt::ItemIsEditable);
+        tableWidget->setItem(0,i,itemFila);
+        QTableWidgetItem *itemColumna = new QTableWidgetItem(lines.at(i-1));
+        CellStyleComponente(itemColumna);
+        itemColumna->setFlags(itemColumna->flags() ^ Qt::ItemIsEditable);
+        tableWidget->setItem(i,0,itemColumna);
     }
-}
-
-std::vector<std::string> MainWindow::csv_read_row(std::string line,
-                                                  char delimiter)
-{
-    std::stringstream ss(line);    void msghere();
-    return csv_read_row(ss, delimiter);
-}
-
-std::vector<std::string> MainWindow::csv_read_row(std::istream &in,
-                                                  char delimiter)
-{
-    std::stringstream ss;
-    bool inquotes = false;
-    std::vector<std::string> row;//relying on RVO
-    while(in.good())
+    int row = 1;
+    while(!in.atEnd())//Se lee el archivo hasta el final
     {
-        char c = in.get();
-        if (!inquotes && c=='"') //beginquotechar
+        linea = in.readLine();
+        lines = linea.split(";");
+        //Se recorre el resto del archivo y se anexan los valores
+        for(int i=1;i<=column;i++)
         {
-            inquotes=true;
-        }
-        else if (inquotes && c=='"') //quotechar
-        {
-            if ( in.peek() == '"')//2 consecutive quotes resolve to 1
+            double value = 0;
+            if(i<lines.count())//En caso de que hallan mas componentes que columnas
             {
-                ss << (char)in.get();
+                value = lines.at(i-1).toDouble();
             }
-            else //endquotechar
+            QTableWidgetItem *tw = new QTableWidgetItem(numberFormat(value));
+            tw->setFlags(tw->flags() ^ Qt::ItemIsEditable);
+            tableWidget->setItem(row,i,tw);
+        }
+        row++;
+    }
+    file.close();
+    //Aqui se evalua el caso particular de que las falten filas con respecto a los componentes
+    if(row-1<column)
+    {
+        for (int j=row-1;j<=column;j++)
+        {
+            for(int i=1;i<=column;i++)
             {
-                inquotes=false;
+                double value = 0;
+                QTableWidgetItem *tw = new QTableWidgetItem(numberFormat(value));
+                tw->setFlags(tw->flags() ^ Qt::ItemIsEditable);
+                tableWidget->setItem(row-1,i,tw);
             }
-        }
-        else if (!inquotes && c==delimiter) //end of field
-        {
-            row.push_back( ss.str() );
-            ss.str("");
-        }
-        else if (!inquotes && (c=='\r' || c=='\n') )
-        {
-            if(in.peek()=='\n') { in.get(); }
-            row.push_back( ss.str() );
-            return row;
-        }
-        else
-        {
-            ss << c;
+            row++;
         }
     }
 }
@@ -720,7 +670,8 @@ QString MainWindow::numberFormat(double & d) {
 /*                  Aquí se encuentra el menú de ayuda                */
 void MainWindow::abrirManual()//Funcion para abrir el manual
 {
-    QDesktopServices::openUrl(QUrl("/usr/share/mmcs/Usuario/Entrada.html",QUrl::TolerantMode));
+    QDesktopServices::openUrl(QString(QCoreApplication::applicationDirPath()+
+                                      "/Usuario/Entrada.html"));
 }
 
 void MainWindow::acercaDe()//Funcion para el mensaje acerca de
