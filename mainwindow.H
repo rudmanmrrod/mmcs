@@ -112,7 +112,6 @@ class MainWindow : public QMainWindow
     int numAccounts;
     int matrixSize;
     int precission;
-    double  matrix[100][100];
 
     QString componentePNH;
 
