@@ -112,7 +112,6 @@ class MainWindow : public QMainWindow
     int numAccounts;
     int matrixSize;
     int precission;
-    double  matrix[100][100];
 
     QString componentePNH;
 
@@ -338,8 +337,6 @@ private slots:
 
 public:
     MainWindow();
-    std::vector<std::string> csv_read_row(std::string , char);
-    std::vector<std::string> csv_read_row(std::istream &, char);
     QString numberFormat(double &);
 
     int contarElementosMap(QMap<QString, QStringList> diccionario);
