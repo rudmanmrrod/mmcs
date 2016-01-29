@@ -611,7 +611,7 @@ void MainWindow::populateTable(QTableWidget * tableWidget)
         for(int i=1;i<=column;i++)
         {
             double value = 0;
-            if(i<lines.count())//En caso de que hallan mas componentes que columnas
+            if(i<=lines.count())//En caso de que hallan mas componentes que columnas
             {
                 value = lines.at(i-1).toDouble();
             }
