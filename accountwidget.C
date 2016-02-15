@@ -28,6 +28,8 @@ AccountWidget::AccountWidget(int number,QWidget *parent) :
     spinBoxAccountStart = new QSpinBox(this);
     spinBoxAccountStart->setFixedWidth(100);
     spinBoxAccountStart->setObjectName(QString("accountstart %1").arg(number+1));//Nombre para el objeto Comienzo de la Cuenta
+    spinBoxAccountStart->setMinimum(3);
+    spinBoxAccountStart->setMaximum(9999);
     layoutAccountConf->addWidget(spinBoxAccountStart);
 
     labelAccountEnd = new QLabel(this);
@@ -37,6 +39,8 @@ AccountWidget::AccountWidget(int number,QWidget *parent) :
     spinBoxAccountEnd = new QSpinBox(this);
     spinBoxAccountEnd->setFixedWidth(100);
     spinBoxAccountEnd->setObjectName(QString("accountend %1").arg(number+1));//Nombre para el objeto Final de la Cuenta
+    spinBoxAccountEnd->setMinimum(3);
+    spinBoxAccountEnd->setMaximum(9999);
     layoutAccountConf->addWidget(spinBoxAccountEnd);
 
 }
