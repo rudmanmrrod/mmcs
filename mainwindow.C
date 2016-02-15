@@ -233,7 +233,7 @@ void MainWindow::createCentralWidget()
     layoutCentralWidget->addLayout(layoutMatrix);
 
     QHBoxLayout * layoutFoot = new QHBoxLayout;
-    QLabel * lblFoot = new QLabel("Fundación Centro Nacional de Desarrollo e" \
+    QLabel * lblFoot = new QLabel("Centro Nacional de Desarrollo e" \
                                   " Investigación en\nTecnologías Libres." \
                                   " Nodo Mérida.");
     lblFoot->setFont(QFont("Aero Matics", 19, 1));
