@@ -676,9 +676,9 @@ void MainWindow::abrirManual()//Funcion para abrir el manual
 void MainWindow::acercaDe()//Funcion para el mensaje acerca de
 {
     QString Mensaje = "Sistema de Manejo de Matrices de Contabilidad Social\n\n";
-    Mensaje+="Fundación Centro Nacional de Desarrollo e Investigación en Tecnologías Libres, 2015.\n";
+    Mensaje+="Centro Nacional de Desarrollo e Investigación en Tecnologías Libres, 2015.\n";
     Mensaje+="Distribuido bajo la licencia GNU V.2.0\n\n";
-    Mensaje+="miv.cenditel.gob.ve/mmcs";
+    Mensaje+="https://mpv.cenditel.gob.ve/mmcs";
     QMessageBox::information(this,"Acerca de..",Mensaje);
 }
 
@@ -782,7 +782,6 @@ void MainWindow::AgregarCuenta()
         /* ******   Se leen los campos del widget izquierdo   ******* */;
 
         int index=sw->comboAccount->currentIndex();
-
 
         /*****       Se cargan la linea y las spin box correpondientes a la cuenta seleccionada       *****/
 
