@@ -1013,7 +1013,7 @@ void MainWindow::CalcularTotales(QTableWidget *tableWidget,int inicio,bool &igua
         CellStyle(Valor2);//Estilo de la Celda
         tableWidget->setItem(filas,i,Valor1);//Inserta en Filas
         tableWidget->setItem(i,filas,Valor2);//Inserta en Columnas
-        if(SumaFila!=SumaColumna)
+        if(!(qAbs(SumaFila-SumaColumna)<0.1))
         {
             iguales = false;
         }
