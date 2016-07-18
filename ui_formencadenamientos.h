@@ -1,8 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'formencadenamientos.ui'
 **
-** Created: Fri Aug 14 12:33:46 2015
-**      by: Qt User Interface Compiler version 4.8.2
+** Created by: Qt User Interface Compiler version 4.8.6
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/

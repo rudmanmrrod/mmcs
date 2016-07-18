@@ -1754,7 +1754,6 @@ void MainWindow::slotFinalizarExogena()
     if(opcionCuentaExogena==1)//Si seleccionaron componentes
     {
         int elementos = contarElementosMap(diccCuentasExogenas);
-
         /*****      Se llena la tabla vacia con los valores de la tabla principal ****/
         for(int i=0;i<count-1;i++)
         {
@@ -1798,30 +1797,48 @@ void MainWindow::slotFinalizarExogena()
         }
 
         /***                    Se acomodan los componentes de las cuentas exogenas                 ***/
-        int cantidad =tablaEE->rowCount();
+        int cantidad = tablaEE->rowCount()-elementos;
         foreach(QString key,diccCuentasExogenas.keys())
         {
             foreach(QString key2,diccCuentasExogenas[key])
             {
-                for(int i=2;i<cantidad;i++)
+                for(int i=2;i<=cantidad;i++)
                 {
-                    QString cuenta=tablaEE->item(1,i)->text();
-                    QString componente =tablaEE->item(2,i)->text();
+                    QString cuenta=tablaEE->item(0,i)->text();
+                    QString componente =tablaEE->item(1,i)->text();
                     if(key==cuenta and key2==componente)
                     {
+                        int position = cantidad+elementos-1;
                         QList<QString> fila;
                         fila=llenarLista(fila,tablaEE,i,1);
-                        tablaEE->removeRow(i-1);
+                        tablaEE->removeRow(i);
                         tablaEE->insertRow(tablaEE->rowCount());
                         insertRowExogena(fila,tablaEE,1);
                         fila.clear();
+                        //Se agregan los estilos correspondientes a las cuentas y componentes de las filas
+                        QString nombre_cuenta = tablaEE->item(position,0)->text();
+                        QTableWidgetItem *ValoraInsertarCuentaF = new QTableWidgetItem(nombre_cuenta);
+                        CellStyle(ValoraInsertarCuentaF);
+                        tablaEE->setItem(position,0,ValoraInsertarCuentaF);
+                        QString nombre_componente = tablaEE->item(position,1)->text();
+                        QTableWidgetItem *ValoraInsertarComponenteF = new QTableWidgetItem(nombre_componente);
+                        CellStyleComponente(ValoraInsertarComponenteF);
+                        tablaEE->setItem(position,1,ValoraInsertarComponenteF);
+
 
                         QList<QString> columna;
                         columna=llenarLista(columna,tablaEE,i,0);
-                        tablaEE->removeColumn(i-1);
+                        tablaEE->removeColumn(i);
                         tablaEE->insertColumn(tablaEE->columnCount());
                         insertRowExogena(columna,tablaEE,0);
                         columna.clear();
+                        //Se agregan los estilos correspondientes a las cuentas y componentes de las columnas
+                        QTableWidgetItem *ValoraInsertarCuentaC = new QTableWidgetItem(nombre_cuenta);
+                        CellStyle(ValoraInsertarCuentaC);
+                        tablaEE->setItem(0,position,ValoraInsertarCuentaC);
+                        QTableWidgetItem *ValoraInsertarComponenteC = new QTableWidgetItem(nombre_componente);
+                        CellStyleComponente(ValoraInsertarComponenteC);
+                        tablaEE->setItem(1,position,ValoraInsertarComponenteC);
                     }
                 }
             }
