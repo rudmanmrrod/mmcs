@@ -2112,6 +2112,8 @@ void MainWindow::setEndogenaExogenaCell(QTableWidget *tw,int inicioExogena,int e
 void MainWindow::crearMatrizEndogena(QTableWidget *tw)
 {
     int cantidad=tw->rowCount();
+    MatrixXd ident = MatrixXd::Identity(cantidad-1,cantidad-1);
+    MatrizEndogenaEndogena = ident;
     for(int i=0;i<cantidad;i++)
     {
         for(int j=0;j<cantidad;j++)
@@ -2119,7 +2121,7 @@ void MainWindow::crearMatrizEndogena(QTableWidget *tw)
             if(i>=2 && j>=2)
             {
                 double valor=tw->item(i,j)->text().toDouble();
-                MatrizEndogenaEndogena[i-2][j-2]=valor;
+                MatrizEndogenaEndogena(i-2,j-2) = valor;
             }
 
          }
@@ -2136,7 +2138,7 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw)
     {
         for(int j=0;j<cantidad-1;j++)
         {
-            A(i,j) = ident(i,j)-MatrizEndogenaEndogena[i][j];
+            A(i,j) = ident(i,j)-MatrizEndogenaEndogena(i,j);
         }
     }
 

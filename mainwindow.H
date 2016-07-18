@@ -115,7 +115,7 @@ class MainWindow : public QMainWindow
 
     QString componentePNH;
 
-    double MatrizEndogenaEndogena[200][200];
+    Eigen::MatrixXd MatrizEndogenaEndogena;
 
     int opcionCuentaExogena;
     int opcionVentanaExogena;
