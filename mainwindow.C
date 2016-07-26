@@ -943,6 +943,7 @@ void MainWindow::FinalizarCuentas()
             groupbox->setVisible(false);
 
             QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
+            TotalPrincipalTable(tw,PrincipalTable,2);
             bool iguales = true;
             CalcularTotales(tw,2,iguales);//Se llama a la funcion que agregue una nueva fila y columna con los totales respectivos
             if(!iguales)
@@ -964,6 +965,37 @@ void MainWindow::FinalizarCuentas()
         {
             QMessageBox::warning(this,"Alerta","Debe llenar correctamente y agregar todas las cuentas");
         }
+    }
+}
+
+/*
+    Función que almacena los valores de la tabla principal en una matriz
+    Autor: Rodrigo Boet
+    Fecha: 21/06/2016
+    @param <QTableWidget> *tw -> Recibe como parametro una widget de tabla de qt
+*/
+void MainWindow::TotalPrincipalTable(QTableWidget *tw,MatrixXd &Matriz,int init)
+{
+    int cantidad=tw->rowCount();
+    Matriz.resize(cantidad-1,cantidad-1);
+    for(int i=init;i<cantidad;i++)
+    {
+        double totalFila = 0;
+        double totalColumna = 0;
+        for(int j=init;j<cantidad;j++)
+        {
+            QString itemf=Separador(tw->item(i,j),true);
+            double thisFila=itemf.toDouble();
+            QString itemc=Separador(tw->item(j,i),true);
+            double thisCol=itemc.toDouble();
+            Matriz(i-init,j-init) = thisFila;
+            Matriz(j-init,i-init) = thisCol;
+            totalFila += Matriz(i-init,j-init);
+            totalColumna += Matriz(j-init,i-init);
+        }
+        Matriz(i-init,cantidad-init) = totalFila;
+        Matriz(cantidad-init,i-init) = totalColumna;
+
     }
 }
 
@@ -1022,7 +1054,6 @@ void MainWindow::CalcularTotales(QTableWidget *tableWidget,int inicio,bool &igua
     QTableWidgetItem *Valor = new QTableWidgetItem;
     Valor->setFlags(Valor->flags() ^ Qt::ItemIsEditable);
     tableWidget->setItem(filas,columnas,Valor);
-    //
     int cantidad = tableWidget->rowCount();
     ItemsNoEditable(tableWidget,0,inicio-1,cantidad-1);
 }
@@ -1150,6 +1181,10 @@ QList<int> MainWindow::ObtenerLimitesCuenta(int contador,int opccion)
 
 void MainWindow::CalcularAn(QTableWidget *tw,QTableWidget *nuevaTabla,QTableWidget *tablaOriginal,int count,bool endogena)//Funcion para calcular el Coeficiente Tecnico Horizontal (An)
 {
+    if(endogena)
+    {
+        An.resize(count-3,count-3);
+    }
     for(int i=0;i<count-1;i++)
     {
         double total;
@@ -1167,13 +1202,9 @@ void MainWindow::CalcularAn(QTableWidget *tw,QTableWidget *nuevaTabla,QTableWidg
                 }
                 else
                 {
-                    value = Separador(tw->item(count-1,i),true);
-                    value = QString::number(value.toDouble(),'f',precission);
-                    total=value.toDouble();
+                    total = PrincipalTable(count-3,i-2);
                 }
-                QString values = Separador(tw->item(j,i),true);
-                values = QString::number(values.toDouble(),'f',precission);
-                double valor=values.toDouble();
+                double valor=PrincipalTable(j-2,i-2);
                 if(total==0)//Se comprueba en caso de que el total sea zero
                 {
                     valor=0;
@@ -1189,6 +1220,10 @@ void MainWindow::CalcularAn(QTableWidget *tw,QTableWidget *nuevaTabla,QTableWidg
                 ValoraInsertar->setText(value);
                 ValoraInsertar->setTextAlignment(Qt::AlignCenter);
                 nuevaTabla->setItem(j,i,ValoraInsertar);
+                if(endogena)
+                {
+                    An(j-2,i-2) = valor;
+                }
             }
             /****           En este else se llenan las celdas con fila y columna 0, es decir las que tienen nombre *****/
             else if(((i==0 && j>1)||(j==0 && i>1))or((i==1 && j>1)||(j==1 && i>1)))
@@ -1531,14 +1566,13 @@ void MainWindow::slotCoeficienteHorizontal()
     /*****      Se llena la tabla vacia con los valores de la tabla principal ****/
     for(int i=0;i<count-1;i++)
     {
-        QString STotal = Separador(tw->item(i,count-1),true);
-        double total=STotal.toDouble();//Se obtiene el total de esa columna
+        //Se obtiene el total de esa columna
+        double total = PrincipalTable(i,count-3);
         for(int j=0;j<count-1;j++)
         {
             if(i!=0 && j!=0)
             {
-                QString value = Separador(tw->item(i,j),true);
-                double valor=value.toDouble();
+                double valor = PrincipalTable(i-1,j-1);
                 if(total==0)//Se comprueba en caso de que el total sea zero
                 {
                     valor=0;
@@ -1550,7 +1584,7 @@ void MainWindow::slotCoeficienteHorizontal()
                 QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',precission));
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
                 ValoraInsertar->setTextAlignment(Qt::AlignCenter);
-                value = Separador(ValoraInsertar,false);
+                QString value = Separador(ValoraInsertar,false);
                 ValoraInsertar->setText(value);
                 CT_HorizontalTW->setItem(i,j,ValoraInsertar);
             }
@@ -1761,8 +1795,8 @@ void MainWindow::slotFinalizarExogena()
             {
                 if(i>=2 && j>=2)
                 {
-                    QString value = Separador(tablaPPAL->item(i,j),true);
-                    double valor=value.toDouble();
+                    QString value;
+                    double valor=PrincipalTable(i-2,j-2);
                     QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',precission));
                     value = Separador(ValoraInsertar,false);
                     ValoraInsertar->setText(value);
@@ -1790,12 +1824,12 @@ void MainWindow::slotFinalizarExogena()
                 {
                     QTableWidgetItem *ValoraInsertar = new QTableWidgetItem;
                     ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
+                    ValoraInsertar->setTextAlignment(Qt::AlignCenter);
                     tablaEE->setItem(i,j,ValoraInsertar);
                 }
 
              }
         }
-
         /***                    Se acomodan los componentes de las cuentas exogenas                 ***/
         int cantidad = tablaEE->rowCount()-elementos;
         foreach(QString key,diccCuentasExogenas.keys())
@@ -1858,6 +1892,7 @@ void MainWindow::slotFinalizarExogena()
         clonarTabla(tablaEE,matrizEndogena,inicioExogena);
         CalcularTotales(matrizEndogena,2,var);
 
+        TotalPrincipalTable(tablaEE,EndogenasyExogenas,2);
         CalcularTotales(tablaEE,2,var);
         setEndogenaExogenaCell(tablaEE,inicioExogena,elementos,true);
 
@@ -1971,7 +2006,6 @@ void MainWindow::EndogenaAn()
     widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
     spanEndogenaCell(tablaAn,2,0,false);//Se juntan los espacios de las cuentas
     tabWidget->removeTab(indice);
-    crearMatrizEndogena(tablaAn);
 }
 
 void MainWindow::slotMa()
@@ -1980,11 +2014,6 @@ void MainWindow::slotMa()
     restarIdentidadAn(tw);
 }
 
-
-void MainWindow::loadMatrizExogena()
-{
-
-}
 
 /***     Funcion para retornar todos los componentes en una lista     ***/
 QStringList MainWindow::ObtenerComponentes(QTableWidget *tw)
@@ -2108,26 +2137,6 @@ void MainWindow::setEndogenaExogenaCell(QTableWidget *tw,int inicioExogena,int e
     }
 }
 
-/*              Funcion que crea la matriz endogena-endogena        */
-void MainWindow::crearMatrizEndogena(QTableWidget *tw)
-{
-    int cantidad=tw->rowCount();
-    MatrixXd ident = MatrixXd::Identity(cantidad-1,cantidad-1);
-    MatrizEndogenaEndogena = ident;
-    for(int i=0;i<cantidad;i++)
-    {
-        for(int j=0;j<cantidad;j++)
-        {
-            if(i>=2 && j>=2)
-            {
-                double valor=tw->item(i,j)->text().toDouble();
-                MatrizEndogenaEndogena(i-2,j-2) = valor;
-            }
-
-         }
-    }
-}
-
 /*          Funcion que determina los Multiplicadores de Leontief       */
 void MainWindow::restarIdentidadAn(QTableWidget *tw)
 {
@@ -2138,7 +2147,7 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw)
     {
         for(int j=0;j<cantidad-1;j++)
         {
-            A(i,j) = ident(i,j)-MatrizEndogenaEndogena(i,j);
+            A(i,j) = ident(i,j)-An(i,j);
         }
     }
 
@@ -2418,14 +2427,13 @@ void MainWindow::calcularTotalCuentas(QTableWidget *tw)
     {
         QString cuenta = tw->item(i,1)->text();
         QString value = Separador(tw->item(i,cantidad-1),true);
-        double total = value.toDouble();
         if(totalCuentas.contains(cuenta))
         {
-            totalCuentas[cuenta] += total;
+            totalCuentas[cuenta] += EndogenasyExogenas(i-3,cantidad-4);
         }
         else
         {
-            totalCuentas.insert(cuenta,total);
+            totalCuentas.insert(cuenta,EndogenasyExogenas(i-3,cantidad-4));
         }
     }
     estimarVectorPonderacion();
@@ -3637,6 +3645,7 @@ void MainWindow::calcularMb()
     crearTablaVaciaEncadenamiento(elementos+2,Mb,inicioExogena-1);
 
     crearMatrizExgEnd(MatrizEndogenaExogena,MatrizExgEnd,elementos,inicioExogena);
+    TotalEndoExoTable(elementos,inicioExogena);
     calcularMatrizExgEnd(MatrizExgEnd);
     ctvMatrizExgEnd(MatrizExgEnd,Bn);
     titlespanMatrizExgEnd(Bn);
@@ -3679,6 +3688,26 @@ void MainWindow::crearMatrizExgEnd(QTableWidget *MatrizEndogenaExogena,QTableWid
     }
 }
 
+/*
+    Función que almacena los valores del fragmento exogeno/endogeno la tabla Tipo de variables
+    Autor: Rodrigo Boet
+    Fecha: 22/06/2016
+    @param <int> elementos -> Recibe como párametro la cantidad de elemntos que tiene esa sección
+    @param <int> cantidad -> Recibe como parametro el inicio de del fragmento exogeno/endogeno
+*/
+void MainWindow::TotalEndoExoTable(int elementos, int cantidad)
+{
+    ExoEndo.resize(elementos,cantidad-3);
+    for(int i = 0;i<elementos;i++)
+    {
+        for(int j=0;j<cantidad-3;j++)
+        {
+            int value = (cantidad-3)+i;
+            ExoEndo(i,j) = EndogenasyExogenas(value,j);
+        }
+    }
+}
+
 /*      Funcion para calcular los totales de la matriz Exógena-Endógena     */
 void MainWindow::calcularMatrizExgEnd(QTableWidget *MatrizExgEnd)
 {
@@ -3708,19 +3737,17 @@ void MainWindow::ctvMatrizExgEnd(QTableWidget *MatrizExgEnd,QTableWidget *Bn)
     //Calcular CTV
     int fila = MatrizExgEnd->rowCount()-1;
     int columna = MatrizExgEnd->columnCount();
+    MBn.resize(fila-2,columna-2);
     QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
     int totalLocal = tw->rowCount()-1;
     for(int i = 0; i<columna; i++)
     {
-
-        QString value;
         double total;
         for(int j = 0;j<fila;j++)
         {
             if(i>=2 and j>=2)
             {
-                value = Separador(tw->item(totalLocal,i),true);
-                total = value.toDouble();
+                total = PrincipalTable(totalLocal-2,i-2);
                 double valoraInsertar;
                 if(total==0)
                 {
@@ -3728,10 +3755,10 @@ void MainWindow::ctvMatrizExgEnd(QTableWidget *MatrizExgEnd,QTableWidget *Bn)
                 }
                 else
                 {
-                    QString valor = Separador(MatrizExgEnd->item(j,i),true);
-                    valoraInsertar = valor.toDouble();
+                    valoraInsertar = ExoEndo(j-2,i-2);
                     valoraInsertar /= total;
                 }
+                MBn(j-2,i-2) = valoraInsertar;
                 QTableWidgetItem *item = new QTableWidgetItem(QString::number(valoraInsertar,'f',precission));
                 QString value = Separador(item,false);
                 item->setText(value);
@@ -3823,29 +3850,7 @@ void MainWindow::estimarMb(QTableWidget *Bn,QTableWidget *Mb)
 {
     int fila = Bn->rowCount();
     int columna = Bn->columnCount();
-    QTableWidget *Ma = findChild<QTableWidget *>("MatrizMa");
-    int count = Ma->rowCount();
-    MatrixXd Mbn(fila-2,columna-2);
-    MatrixXd Mma(count-2,count-2);
-    for(int i=2;i<columna;i++)
-    {
-        for(int j=2;j<fila;j++)
-        {
-            QString valueb = Separador(Bn->item(j,i),true);
-            double doubleb = valueb.toDouble();
-            Mbn(j-2,i-2) = doubleb;
-        }
-    }
-    for(int i=2;i<count;i++)
-    {
-        for(int j=2;j<count;j++)
-        {
-            QString valuem = Separador(Ma->item(i,j),true);
-            double doublem = valuem.toDouble();
-            Mma(i-2,j-2) = doublem;
-        }
-    }
-    MatrixMb = Mbn*Mma;
+    MatrixMb = MBn*MatrixMa;
     for(int i=0;i<columna;i++)
     {
         for(int j=0;j<fila;j++)

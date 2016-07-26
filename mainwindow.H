@@ -101,6 +101,16 @@ class MainWindow : public QMainWindow
     stackEncadenamientos *stackEncadenamiento;
     StackPreciosNoHomogeneos *stackPNH;
 
+    //Matriz con la tabla principal
+    Eigen::MatrixXd PrincipalTable;
+    //Tabla de Exogenas y Endogenas
+    Eigen::MatrixXd EndogenasyExogenas;
+    //Tabla del sector B (exogena/endogena)
+    Eigen::MatrixXd ExoEndo;
+    //Matriz del Coeficiente Técnico
+    Eigen::MatrixXd An;
+    Eigen::MatrixXd MBn;
+    //Matrices de los múltiplicadores de lontief
     Eigen::MatrixXd MatrixMa;
     Eigen::MatrixXd MatrixMb;
     Eigen::MatrixXd MatrizMat;
@@ -173,8 +183,8 @@ class MainWindow : public QMainWindow
     void populateTable(QTableWidget *);
 
     void CalcularTotales(QTableWidget *, int inicio, bool &);
+    void TotalPrincipalTable(QTableWidget *, Eigen::MatrixXd & , int init);
     bool comprobarNombreCuenta(QString, int indice);
-    void loadMatrizExogena();
     void clonarTabla(QTableWidget *,QTableWidget *, int cantidad);
     void noEditColZero(QTableWidget *);
     void setAccountTitle(QTableWidget *);
@@ -185,6 +195,8 @@ class MainWindow : public QMainWindow
     void spanEndogenaCell(QTableWidget *, int inicio, int celda, bool endex=true);
     void spanExogenaCell(QTableWidget *,int celda);
     void tableItem(QTableWidget *, int inicio, int fin, QString texto);
+
+    void TotalEndoExoTable(int elementos, int cantidad);
 
     QList<QString> llenarLista(QList<QString>, QTableWidget *, int valor, int opcion);
     void insertRowExogena(QList<QString>, QTableWidget *, int opcion);
@@ -230,7 +242,6 @@ class MainWindow : public QMainWindow
     void calcularFinEscenarioMNC(QTableWidget *);
     QStringList obtenerNombreResultadoEscenarioMNC();
 
-    void crearMatrizEndogena(QTableWidget *);
     void restarIdentidadAn(QTableWidget *);
     void titleEndogena(QTableWidget *);
 
