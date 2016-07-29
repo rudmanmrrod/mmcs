@@ -21,6 +21,8 @@ void MainWindow::slotLoadMatrix()
     formLoadMatrix->show();
     connect(formLoadMatrix, SIGNAL(formAccepted(QString,int,int)),
             this, SLOT(slotFormLoadMatrixAccepted(QString,int,int)));
+    connect(formLoadMatrix->ui.radioAccount,SIGNAL(clicked()),this,SLOT(slotOnlyaccount()));
+    connect(formLoadMatrix->ui.radioComponent,SIGNAL(clicked()),this,SLOT(slotOnlycomponent()));
 }
 
 void MainWindow::slotFormLoadMatrixAccepted(const QString & filePath,
@@ -30,8 +32,8 @@ void MainWindow::slotFormLoadMatrixAccepted(const QString & filePath,
     csvSeparator = ';';
     numAccounts = accountNumber;
     precission = pre;
-
     createMatrixCentralWidget();
+
 }
 
 void MainWindow::slotFormLoadMatrixClosed()
@@ -40,6 +42,28 @@ void MainWindow::slotFormLoadMatrixClosed()
                this, SLOT(slotFormLoadMatrixAccepted(QString,int)));
     formLoadMatrix = 0;
 }
+
+/*
+    Función que permite agregar un mensaje en el label cuando se selecciona la opción de cuentas
+    Autor: Rodrigo Boet
+    Fecha: 29/07/2016
+*/
+void MainWindow::slotOnlyaccount()
+{
+    formLoadMatrix->ui.label_info->setText("Info: Para esta opción debe agregar debe cargar un csv con las cuentas y componentes");
+
+}
+
+/*
+    Función que permite agregar un mensaje en el label cuando se selecciona la opción de componentes
+    Autor: Rodrigo Boet
+    Fecha: 29/07/2016
+*/
+void MainWindow::slotOnlycomponent()
+{
+    formLoadMatrix->ui.label_info->setText("Info: Para esta opción debe agregar debe cargar un csv con sólo los componentes");
+}
+
 
 /*      Funcion para crear un nuevo proyecto        */
 void MainWindow::slotNuevoProyecto()
@@ -547,20 +571,26 @@ void MainWindow::createMatrixCentralWidget()
 
 
     /*  ***********         Se agrega la columna en la que se asignan los nombre            **************           */
-    tableWidget->insertRow(0);
-    tableWidget->insertColumn(0);
-    noEditColZero(tableWidget);
-    /*              Se agregan elementos a la recien creada fila/columna        */
-    int contador=tableWidget->rowCount();
-    for(int i=1;i<contador;i++)
+    if(formLoadMatrix->ui.radioComponent->isChecked())
     {
-        QTableWidgetItem *ValoraInsertar = new QTableWidgetItem;
-        ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
-        tableWidget->setItem(0,i,ValoraInsertar);
+        tableWidget->insertRow(0);
+        tableWidget->insertColumn(0);
+        noEditColZero(tableWidget);
+        /*              Se agregan elementos a la recien creada fila/columna        */
+        int contador=tableWidget->rowCount();
+        for(int i=1;i<contador;i++)
+        {
+            QTableWidgetItem *ValoraInsertar = new QTableWidgetItem;
+            ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
+            tableWidget->setItem(0,i,ValoraInsertar);
 
-        QTableWidgetItem *ValoraInsertar2 = new QTableWidgetItem;
-        ValoraInsertar2->setFlags(ValoraInsertar2->flags() ^ Qt::ItemIsEditable);
-        tableWidget->setItem(i,0,ValoraInsertar2);
+            QTableWidgetItem *ValoraInsertar2 = new QTableWidgetItem;
+            ValoraInsertar2->setFlags(ValoraInsertar2->flags() ^ Qt::ItemIsEditable);
+            tableWidget->setItem(i,0,ValoraInsertar2);
+        }
+    }
+    else if(formLoadMatrix->ui.radioAccount->isChecked()){
+        loadsAccounts(tableWidget);
     }
 
     //Al terminar la carga de la tabla se activa el menu de Operaciones
@@ -590,6 +620,13 @@ void MainWindow::populateTable(QTableWidget * tableWidget)
     QStringList lines = linea.split(";");//Se separan por ; y se guardan en una lista
     int column = lines.count();
     CrearTablaVacia(column+2,tableWidget);//Se crea una tabla vacia a modo de matriz cuadrada
+    QStringList Accounts;
+    if(formLoadMatrix->ui.radioAccount->isChecked())
+    {
+        Accounts = lines;
+        linea = in.readLine();
+        lines = linea.split(";");
+    }
     //Se leen los componentes y se distribuyen en filas y columnas
     for(int i=1;i<=column;i++)
     {
@@ -637,6 +674,99 @@ void MainWindow::populateTable(QTableWidget * tableWidget)
             row++;
         }
     }
+    //Se agregan las cuentas si se selecciono la opción correspondiente
+    if(formLoadMatrix->ui.radioAccount->isChecked())
+    {
+        noEditColZero(tableWidget);
+        tableWidget->insertColumn(0);
+        tableWidget->insertRow(0);
+        int limit = tableWidget->rowCount();
+        for(int i = 2;i<limit;i++)
+        {
+            QTableWidgetItem *itemFila = new QTableWidgetItem(Accounts.at(i-2));
+            CellStyle(itemFila);
+            itemFila->setFlags(itemFila->flags() ^ Qt::ItemIsEditable);
+            itemFila->setTextAlignment(Qt::AlignCenter);
+            tableWidget->setItem(0,i,itemFila);
+            QTableWidgetItem *itemColumna = new QTableWidgetItem(Accounts.at(i-2));
+            CellStyle(itemColumna);
+            itemColumna->setFlags(itemColumna->flags() ^ Qt::ItemIsEditable);
+            itemColumna->setTextAlignment(Qt::AlignCenter);
+            tableWidget->setItem(i,0,itemColumna);
+        }
+        ItemsNoEditable(tableWidget,1,2,0);
+    }
+
+}
+
+/*
+    Función para cargar las cuentas
+    Autor: Rodrigo Boet
+    Fecha: 29/07/2016
+    @param <QTableWidget> *tw -> Recibe como parametro una widget de tabla de qt
+*/
+void MainWindow::loadsAccounts(QTableWidget *tw)
+{
+    int column = tw->rowCount();
+    QStringList numberAccounts;
+    for(int i = 2;i<column;i++)
+    {
+        numberAccounts.append(tw->item(0,i)->text());
+    }
+    QVector<QString> vector;
+    int init = 3;
+    foreach (QString item,numberAccounts) {
+        if(!vector.contains(item))
+        {
+            int inicio = init;
+            int fin = (inicio+numberAccounts.count(item))-1;
+            init = fin+1;
+            vector.append(item);
+            vector.append(QString::number(inicio));
+            vector.append(QString::number(fin));
+            tw->setSpan(0,inicio-1,1,numberAccounts.count(item));
+            tw->setSpan(inicio-1,0,numberAccounts.count(item),1);
+        }
+    }
+    //Se cargan los datos en la cuenta
+    for(int i=0;i<numAccounts;i++)
+    {
+        QLineEdit *le= findChild<QLineEdit *>(QString("linedit %1").arg(i + 1));
+        QSpinBox *SBStart = findChild<QSpinBox *>(QString("accountstart %1").arg(i+1));
+        QSpinBox *SBEnd = findChild<QSpinBox *>(QString("accountend %1").arg(i+1));
+        if(i==0)
+        {
+            le->setText(vector.at(i));
+            SBStart->setValue(vector.at(i+1).toInt());
+            SBEnd->setValue(vector.at(i+2).toInt());
+        }
+        else
+        {
+            le->setText(vector.at(i+2));
+            SBStart->setValue(vector.at(i+3).toInt());
+            SBEnd->setValue(vector.at(i+4).toInt());
+        }
+    }
+    TotalPrincipalTable(tw,PrincipalTable,2);
+    bool iguales = true;
+    CalcularTotales(tw,2,iguales);//Se llama a la funcion que agregue una nueva fila y columna con los totales respectivos
+    if(!iguales)
+    {
+        QMessageBox::warning(this,"Alerta","El Total de una(s) fila(s)\n es distinto al Total de\nuna(s) columna(s)");
+    }
+    setAccountTitle(tw);
+
+    //Se ocultan el StackedWidget con los datos de la cuenta
+    hideStackedWidget();
+
+    /*       Luego de calcular los totales se habilitan las opciones del menu herramientas       */
+    CoeficientesTecnicos.setEnabled(true);
+    actionCH.setEnabled(true);
+    actionCV.setEnabled(true);
+    actionVariableExogena.setEnabled(true);
+    /*              Se habilitan las opciones del menú visualización            */
+    actionSeleccionarTabla.setEnabled(true);
+    connect(&actionSeleccionarTabla,SIGNAL(triggered()),this,SLOT(slotSeleccionarTabla()));
 }
 
 QString MainWindow::numberFormat(double & d) {
@@ -766,6 +896,43 @@ void MainWindow::slotAccChange()
         Modificar->setDisabled(true);
         Modificar->setIcon(QIcon(":/imgs/edit-deshabilitado"));
     }
+}
+
+/*
+    Función para esconder el StackWidget que tiene los datos de las cuentas
+    Autor: Rodrigo Boet
+    Fecha: 29/07/2016
+*/
+void MainWindow::hideStackedWidget()
+{
+    QPushButton *Agregar = findChild<QPushButton *>("AgregarCuentas");
+    QPushButton *Restaurar = findChild<QPushButton *>("Restaurar");
+    Agregar->setStyleSheet("background-color: gray; color: #fff;"
+                             "font-weight: bold; height: 30px; border: none;"
+                             "border-radius: 5px; margin-top: 40px;");
+    Agregar->setEnabled(false);
+    Agregar->setVisible(false);
+    Restaurar->setStyleSheet("background-color: gray; color: #fff;"
+                             "font-weight: bold; height: 30px; border: none;"
+                             "border-radius: 5px; margin-top: 40px;");
+    Restaurar->setEnabled(false);
+    Restaurar->setVisible(false);
+    QPushButton *Modificar = findChild<QPushButton *>("Modificar");
+    Modificar->setStyleSheet("background-color: gray; color: #fff;"
+                             "font-weight: bold; height: 30px; border: none;"
+                             "border-radius: 5px; margin-top: 40px;");
+    Modificar->setEnabled(false);
+    Modificar->setVisible(false);
+
+    QPushButton *Finalizar = findChild<QPushButton *>("Finalizar");
+    Finalizar->setStyleSheet("background-color: gray; color: #fff;"
+                             "font-weight: bold; height: 30px; border: none;"
+                             "border-radius: 5px; margin-top: 40px;");
+    Finalizar->setEnabled(false);
+    Finalizar->setVisible(false);
+
+    QGroupBox *groupbox = findChild<QGroupBox *>("GrupoCuentas");
+    groupbox->setVisible(false);
 }
 
 void MainWindow::AgregarCuenta()
@@ -913,34 +1080,8 @@ void MainWindow::FinalizarCuentas()
         bool Centinela=ComprobarCuentas();//Se llama a la funcion que comprueba si todos los campos de las cuentas estan llenos
         if(Centinela)
         {
-            QPushButton *Agregar = findChild<QPushButton *>("AgregarCuentas");
-            QPushButton *Restaurar = findChild<QPushButton *>("Restaurar");
-            Agregar->setStyleSheet("background-color: gray; color: #fff;"
-                                     "font-weight: bold; height: 30px; border: none;"
-                                     "border-radius: 5px; margin-top: 40px;");
-            Agregar->setEnabled(false);
-            Agregar->setVisible(false);
-            Restaurar->setStyleSheet("background-color: gray; color: #fff;"
-                                     "font-weight: bold; height: 30px; border: none;"
-                                     "border-radius: 5px; margin-top: 40px;");
-            Restaurar->setEnabled(false);
-            Restaurar->setVisible(false);
-            QPushButton *Modificar = findChild<QPushButton *>("Modificar");
-            Modificar->setStyleSheet("background-color: gray; color: #fff;"
-                                     "font-weight: bold; height: 30px; border: none;"
-                                     "border-radius: 5px; margin-top: 40px;");
-            Modificar->setEnabled(false);
-            Modificar->setVisible(false);
-
-            QPushButton *Finalizar = findChild<QPushButton *>("Finalizar");
-            Finalizar->setStyleSheet("background-color: gray; color: #fff;"
-                                     "font-weight: bold; height: 30px; border: none;"
-                                     "border-radius: 5px; margin-top: 40px;");
-            Finalizar->setEnabled(false);
-            Finalizar->setVisible(false);
-
-            QGroupBox *groupbox = findChild<QGroupBox *>("GrupoCuentas");
-            groupbox->setVisible(false);
+            //Se oculta el widget con los datos de las cuentas
+            hideStackedWidget();
 
             QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
             TotalPrincipalTable(tw,PrincipalTable,2);

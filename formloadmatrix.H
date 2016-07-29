@@ -8,7 +8,6 @@ class FormLoadMatrix : public QWidget
 {
     Q_OBJECT
 
-    Ui_FormLoadMatrix ui;
 
 signals:
     void formAccepted(const QString &, int, int);
@@ -20,6 +19,7 @@ protected:
 
 public:
     FormLoadMatrix(QWidget * parent = 0);
+    Ui_FormLoadMatrix ui;
 
 public slots:
     void slotLoadMatrixFile();

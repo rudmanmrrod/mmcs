@@ -43,6 +43,12 @@ void FormLoadMatrix::slotButtonAcceptClicked()
         ui.editFilePath->setFocus();
         return;
     }
+    else if(!ui.radioAccount->isChecked() and !ui.radioComponent->isChecked()){
+        QMessageBox::critical(this, "Faltan datos",
+                              "Debe seleccionar si cargará cuentas y componentes o sólo componentes");
+        ui.editFilePath->setFocus();
+        return;
+    }
 
     emit formAccepted(ui.editFilePath->text(), ui.spinNumber->value(),ui.spinBox->value());
 

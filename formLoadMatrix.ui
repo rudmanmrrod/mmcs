@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>607</width>
-    <height>303</height>
+    <height>304</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -88,7 +88,7 @@
        </property>
       </widget>
      </item>
-     <item row="10" column="6">
+     <item row="11" column="6">
       <widget class="QPushButton" name="buttonOpen">
        <property name="text">
         <string>A&amp;brir</string>
@@ -162,6 +162,13 @@
        </property>
       </widget>
      </item>
+     <item row="11" column="4">
+      <widget class="QPushButton" name="buttonCancel">
+       <property name="text">
+        <string>&amp;Cancelar</string>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="1">
       <spacer name="verticalSpacer_6">
        <property name="orientation">
@@ -187,13 +194,6 @@
        </property>
       </widget>
      </item>
-     <item row="10" column="4">
-      <widget class="QPushButton" name="buttonCancel">
-       <property name="text">
-        <string>&amp;Cancelar</string>
-       </property>
-      </widget>
-     </item>
      <item row="8" column="1">
       <spacer name="verticalSpacer">
        <property name="orientation">
@@ -207,10 +207,46 @@
        </property>
       </spacer>
      </item>
+     <item row="10" column="0">
+      <widget class="QRadioButton" name="radioAccount">
+       <property name="text">
+        <string>Con Cuentas</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="2">
+      <widget class="QRadioButton" name="radioComponent">
+       <property name="text">
+        <string>Componentes</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0" colspan="7">
+      <widget class="QLabel" name="label_info">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;
+color: #358ccb;
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>spinNumber</tabstop>
+  <tabstop>spinBox</tabstop>
+  <tabstop>editFilePath</tabstop>
+  <tabstop>buttonSearch</tabstop>
+  <tabstop>radioAccount</tabstop>
+  <tabstop>radioComponent</tabstop>
+  <tabstop>buttonCancel</tabstop>
+  <tabstop>buttonOpen</tabstop>
+ </tabstops>
  <resources>
   <include location="img/images.qrc"/>
  </resources>

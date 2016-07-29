@@ -177,6 +177,8 @@ class MainWindow : public QMainWindow
 
     void createCentralWidget();
     void createMatrixCentralWidget();
+    void loadsAccounts(QTableWidget *);
+    void hideStackedWidget();
 
     void createMenuBar();
     void matricesMenuBar();
@@ -278,6 +280,8 @@ private slots:
     void slotExportMatrix();
     void slotFormLoadMatrixAccepted(const QString &, int, int);
     void slotFormLoadMatrixClosed();
+    void slotOnlyaccount();
+    void slotOnlycomponent();
 
     void AgregarCuenta();
     void RestaurarCeldas();
