@@ -278,6 +278,7 @@ private slots:
     void slotNuevoProyecto();
     void slotLoadMatrix();
     void slotExportMatrix();
+
     void slotFormLoadMatrixAccepted(const QString &, int, int);
     void slotFormLoadMatrixClosed();
     void slotOnlyaccount();

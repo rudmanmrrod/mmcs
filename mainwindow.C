@@ -728,24 +728,16 @@ void MainWindow::loadsAccounts(QTableWidget *tw)
             tw->setSpan(inicio-1,0,numberAccounts.count(item),1);
         }
     }
+    qDebug()<<vector;
     //Se cargan los datos en la cuenta
     for(int i=0;i<numAccounts;i++)
     {
         QLineEdit *le= findChild<QLineEdit *>(QString("linedit %1").arg(i + 1));
         QSpinBox *SBStart = findChild<QSpinBox *>(QString("accountstart %1").arg(i+1));
         QSpinBox *SBEnd = findChild<QSpinBox *>(QString("accountend %1").arg(i+1));
-        if(i==0)
-        {
-            le->setText(vector.at(i));
-            SBStart->setValue(vector.at(i+1).toInt());
-            SBEnd->setValue(vector.at(i+2).toInt());
-        }
-        else
-        {
-            le->setText(vector.at(i+2));
-            SBStart->setValue(vector.at(i+3).toInt());
-            SBEnd->setValue(vector.at(i+4).toInt());
-        }
+        le->setText(vector.at(i*3));
+        SBStart->setValue(vector.at((i*3)+1).toInt());
+        SBEnd->setValue(vector.at((i*3)+2).toInt());
     }
     TotalPrincipalTable(tw,PrincipalTable,2);
     bool iguales = true;
@@ -757,7 +749,7 @@ void MainWindow::loadsAccounts(QTableWidget *tw)
     setAccountTitle(tw);
 
     //Se ocultan el StackedWidget con los datos de la cuenta
-    hideStackedWidget();
+    //hideStackedWidget();
 
     /*       Luego de calcular los totales se habilitan las opciones del menu herramientas       */
     CoeficientesTecnicos.setEnabled(true);
