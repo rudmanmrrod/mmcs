@@ -15,6 +15,7 @@
 #include "ui_formincidenciai.h"
 #include <formincidenciai.h>
 #include <formpreciosnohomogeneos.h>
+#include <genericFunctions.h>
 
 #include <sstream>
 #include <stackwidget.H>
@@ -217,7 +218,7 @@ class MainWindow : public QMainWindow
     void obtenerCuentaComponentes();
     void crearTablaVaciaEncadenamiento(int filas, QTableWidget *, int columnas=4);
     void crearMatrizEncadenamiento(QTableWidget *, QTableWidget *);
-    void crearMatrizEncadenamientoEndogena(QTableWidget *, QTableWidget *);
+    void crearMatrizEncadenamientoEndogena(QTableWidget *, QTableWidget *, Eigen::MatrixXd Matrix);
     void calcularTotalesEncadenamientos(QTableWidget *);
     void encademientosStyle(QTableWidgetItem *);
     void cuentacomponentesEncadenamiento(QTableWidget *, int count);

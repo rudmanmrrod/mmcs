@@ -483,6 +483,11 @@ void MainWindow::createMatrixCentralWidget()
     layoutCentralWidget->addWidget(tableWidget);
     //layoutCentralWidget->addStretch();
 
+    if(formLoadMatrix->ui.radioAccount->isChecked()){
+        QStringList accounts = get_list(tableWidget,0,2,tableWidget->columnCount());
+        numAccounts = diferent_elements(accounts);
+    }
+
     QVBoxLayout * layoutAccounts = new QVBoxLayout;
 
     StackWidget *sw = new StackWidget(numAccounts, groupBoxAccount);
@@ -708,11 +713,7 @@ void MainWindow::populateTable(QTableWidget * tableWidget)
 void MainWindow::loadsAccounts(QTableWidget *tw)
 {
     int column = tw->rowCount();
-    QStringList numberAccounts;
-    for(int i = 2;i<column;i++)
-    {
-        numberAccounts.append(tw->item(0,i)->text());
-    }
+    QStringList numberAccounts = get_list(tw,0,2,column);
     QVector<QString> vector;
     int init = 3;
     foreach (QString item,numberAccounts) {
@@ -728,7 +729,6 @@ void MainWindow::loadsAccounts(QTableWidget *tw)
             tw->setSpan(inicio-1,0,numberAccounts.count(item),1);
         }
     }
-    qDebug()<<vector;
     //Se cargan los datos en la cuenta
     for(int i=0;i<numAccounts;i++)
     {
@@ -749,7 +749,7 @@ void MainWindow::loadsAccounts(QTableWidget *tw)
     setAccountTitle(tw);
 
     //Se ocultan el StackedWidget con los datos de la cuenta
-    //hideStackedWidget();
+    hideStackedWidget();
 
     /*       Luego de calcular los totales se habilitan las opciones del menu herramientas       */
     CoeficientesTecnicos.setEnabled(true);
@@ -1382,7 +1382,6 @@ void MainWindow::CalcularAn(QTableWidget *tw,QTableWidget *nuevaTabla,QTableWidg
                 nuevaTabla->setItem(i,j,ValoraInsertar);
             }
        }
-
     }
 }
 
@@ -2138,7 +2137,7 @@ void MainWindow::EndogenaAn()
     QWidget *widget = tabWidget->widget(indice);
     widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
     spanEndogenaCell(tablaAn,2,0,false);//Se juntan los espacios de las cuentas
-    tabWidget->removeTab(indice);
+    //tabWidget->removeTab(indice);
 }
 
 void MainWindow::slotMa()
@@ -2796,16 +2795,17 @@ void MainWindow::slotVerEncadenamiento()
         else if (opcionCuentaEncadenamientos==2)//opcion para encadenar por la matriz endogena-endogena
         {
             QTableWidget *tw;
+            QTableWidget *enTable = new QTableWidget;
             if(opcion==0)
             {
                  tw= findChild<QTableWidget *>("MatrizAn");
+                 crearMatrizEncadenamientoEndogena(tw,enTable,An);
             }
             else
             {
                 tw = findChild<QTableWidget *>("MatrizMa");
+                crearMatrizEncadenamientoEndogena(tw,enTable,MatrixMa);
             }
-            QTableWidget *enTable = new QTableWidget;
-            crearMatrizEncadenamientoEndogena(tw,enTable);//Se llama a la funcion que realiza todo el procedimiento
             tabWidget->addTab(new QWidget,QString("Encadenamiento %1").arg(cantidadEncadenamientos));
             int indice=ObtenerIndice(QString("Encadenamiento %1").arg(cantidadEncadenamientos));//Se obtiene el indice de la pestaña
             cantidadEncadenamientos++;
@@ -2869,8 +2869,8 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
                                 }
                                 else
                                 {
-                                    EncadenamientoAtras = tw->item(k,j)->text().toDouble();//Suma Columna(Encadenamiento hacia atras)
-                                    EncadenamientoAdelante = tw->item(j,k)->text().toDouble();//Suma Fila(Encadenamiento hacia adelante)
+                                    EncadenamientoAtras = An(k-2,j-2);//Suma Columna(Encadenamiento hacia atras)
+                                    EncadenamientoAdelante = An(k-2,j-2);//Suma Fila(Encadenamiento hacia adelante)
                                 }
                                 sumaColumna+=EncadenamientoAtras;
                                 sumaFila+=EncadenamientoAdelante;
@@ -2968,7 +2968,7 @@ void MainWindow::cuentacomponentesEncadenamiento(QTableWidget *to,int count)
 }
 
 /*          Funcion para crear  los encadenamientos de toda la matrix endógena-endógena     */
-void MainWindow::crearMatrizEncadenamientoEndogena(QTableWidget *tw,QTableWidget *enTable)
+void MainWindow::crearMatrizEncadenamientoEndogena(QTableWidget *tw,QTableWidget *enTable, Eigen::MatrixXd Matrix)
 {
     int countEndogena = tw->rowCount();
     crearTablaVaciaEncadenamiento(countEndogena-2,enTable);
@@ -2979,9 +2979,9 @@ void MainWindow::crearMatrizEncadenamientoEndogena(QTableWidget *tw,QTableWidget
         double sumaFila = 0;
         for(int j=2;j<countEndogena;j++)
         {
-            double EncadenamientoAtras = tw->item(j,i)->text().toDouble();//Suma Columna(Encadenamiento hacia atras)
+            double EncadenamientoAtras = Matrix(j-2,i-2);
             sumaColumna+=EncadenamientoAtras;
-            double EncadenamientoAdelante = tw->item(i,j)->text().toDouble();//Suma Fila(Encadenamiento hacia adelante)
+            double EncadenamientoAdelante = Matrix(i-2,j-2);
             sumaFila+=EncadenamientoAdelante;
         }
         //Elementos del encadenamiento hacia atras

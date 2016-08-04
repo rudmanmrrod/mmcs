@@ -15,7 +15,8 @@ HEADERS += mainwindow.H \
     formincidenciai.h \
     formpreciosnohomogeneos.h \
     stackpreciosnohomogeneos.h \
-    variablepnh.h
+    variablepnh.h \
+    genericFunctions.h
 
 SOURCES += mainwindow.C \
     main.C \
@@ -35,7 +36,8 @@ SOURCES += mainwindow.C \
     formincidenciai.cpp \
     formpreciosnohomogeneos.cpp \
     stackpreciosnohomogeneos.cpp \
-    variablepnh.cpp
+    variablepnh.cpp \
+    genericFunctions.cpp
 FORMS += formLoadMatrix.ui \
     formMatrixView.ui \
     formvariablesexogenas.ui \
