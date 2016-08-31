@@ -3,7 +3,7 @@
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QWidget>
+#include <QtWidgets>
 #include <QStackedWidget>
 #include <QList>
 #include <QComboBox>

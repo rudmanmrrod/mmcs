@@ -1,3 +1,6 @@
+QT += widgets \
+    printsupport
+
 HEADERS += mainwindow.H \
     formloadmatrix.H \
     formviewmatrix.H \
@@ -16,7 +19,8 @@ HEADERS += mainwindow.H \
     formpreciosnohomogeneos.h \
     stackpreciosnohomogeneos.h \
     variablepnh.h \
-    genericFunctions.h
+    genericFunctions.h \
+    formexportreport.h
 
 SOURCES += mainwindow.C \
     main.C \
@@ -37,16 +41,18 @@ SOURCES += mainwindow.C \
     formpreciosnohomogeneos.cpp \
     stackpreciosnohomogeneos.cpp \
     variablepnh.cpp \
-    genericFunctions.cpp
+    genericFunctions.cpp \
+    formexportreport.cpp
 FORMS += formLoadMatrix.ui \
-    formMatrixView.ui \
     formvariablesexogenas.ui \
     formexportmatrix.ui \
     formencadenamientos.ui \
     formcompararresultados.ui \
     formcompararmnc.ui \
     formincidenciai.ui \
-    formpreciosnohomogeneos.ui
+    formpreciosnohomogeneos.ui \
+    formexportreport.ui \
+    formViewMatrix.ui
 
 INCLUDEPATH += $$PWD/Eigen
 

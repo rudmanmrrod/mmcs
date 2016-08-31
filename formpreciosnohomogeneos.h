@@ -1,7 +1,7 @@
 #ifndef FORMPRECIOSNOHOMOGENEOS_H
 #define FORMPRECIOSNOHOMOGENEOS_H
 
-#include <QWidget>
+#include <QtWidgets>
 
 namespace Ui {
 class FormPreciosNoHomogeneos;

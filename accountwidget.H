@@ -1,7 +1,7 @@
 #ifndef ACCOUNTWIDGET_H
 #define ACCOUNTWIDGET_H
 
-#include <QWidget>
+#include <QtWidgets>
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QLabel>

@@ -1,9 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui>
+#include <QtWidgets>
 
 #include <formloadmatrix.H>
+#include <ui_formLoadMatrix.h>
 #include <formviewmatrix.H>
 #include <formvariablesexogenas.h>
 #include <formexportmatrix.h>
@@ -15,6 +16,8 @@
 #include "ui_formincidenciai.h"
 #include <formincidenciai.h>
 #include <formpreciosnohomogeneos.h>
+#include <formexportreport.h>
+#include <ui_formexportreport.h>
 #include <genericFunctions.h>
 
 #include <sstream>
@@ -27,6 +30,7 @@
 
 #include <QMap>
 #include <QVector>
+#include <QPrinter>
 
 #include <Eigen>
 
@@ -165,7 +169,7 @@ class MainWindow : public QMainWindow
     int cantidadPNHincidenciaiComponente;
 
     FormLoadMatrix * formLoadMatrix;
-    FormViewMatrix * formViewMatrix;
+    FormMatrixView * formViewMatrix;
     FormVariablesExogenas * formVariablesExogenas;
     FormExportMatrix * formExportMatriz;
     FormEncadenamientos * formEncadenamientos;
@@ -189,7 +193,6 @@ class MainWindow : public QMainWindow
     void TotalPrincipalTable(QTableWidget *, Eigen::MatrixXd & , int init);
     bool comprobarNombreCuenta(QString, int indice);
     void clonarTabla(QTableWidget *,QTableWidget *, int cantidad);
-    void noEditColZero(QTableWidget *);
     void setAccountTitle(QTableWidget *);
     void insertremoveRowCol(QTableWidget *, int rowcol, bool opcion);
     void crearDiccionario(QTableWidget *, bool endogena=true);
@@ -197,30 +200,21 @@ class MainWindow : public QMainWindow
     QStringList obtenerCuentasExogenas(QTableWidget *,QStringList );
     void spanEndogenaCell(QTableWidget *, int inicio, int celda, bool endex=true);
     void spanExogenaCell(QTableWidget *,int celda);
-    void tableItem(QTableWidget *, int inicio, int fin, QString texto);
 
     void TotalEndoExoTable(int elementos, int cantidad);
 
-    QList<QString> llenarLista(QList<QString>, QTableWidget *, int valor, int opcion);
-    void insertRowExogena(QList<QString>, QTableWidget *, int opcion);
     void setEndogenaExogenaCell(QTableWidget *, int inicioExogena, int elementos,bool condicion);
     void CalcularAn(QTableWidget *, QTableWidget *, QTableWidget *, int count, bool endogena = false);
     QString Separador(QTableWidgetItem *,bool quitar);
-    void ItemsNoEditable(QTableWidget *, int inicio, int fin, int col=0);
-    void CellStyle(QTableWidgetItem *);
-    void CellStyleComponente(QTableWidgetItem *);
-    void CellStyleExEn(QTableWidgetItem *);
     void EndogenaAn();
 
     void calcularTotalCuentas(QTableWidget *);
     void estimarVectorPonderacion();
 
     void obtenerCuentaComponentes();
-    void crearTablaVaciaEncadenamiento(int filas, QTableWidget *, int columnas=4);
     void crearMatrizEncadenamiento(QTableWidget *, QTableWidget *);
     void crearMatrizEncadenamientoEndogena(QTableWidget *, QTableWidget *, Eigen::MatrixXd Matrix);
     void calcularTotalesEncadenamientos(QTableWidget *);
-    void encademientosStyle(QTableWidgetItem *);
     void cuentacomponentesEncadenamiento(QTableWidget *, int count);
     void obtenerUiUj(QTableWidget *, QVector<double> &, QVector<double> &);
     void calcularClasificador(QTableWidget *, QVector<double>, QVector<double>, int init = 2);
@@ -231,7 +225,6 @@ class MainWindow : public QMainWindow
     void calcularFinEscenario(QTableWidget *);
     QVector<double> obtenerResultadoEscenario(QVector<double>);
     QStringList obtenerNombreResultadoEscenario();
-    void crearTablaComparar(QTableWidget *, QTableWidget *);
     void cuentacomponentesResultado(QTableWidget *, int count, bool clasico = true);
 
     void obtenerMatrizExgEnd();
@@ -262,15 +255,11 @@ class MainWindow : public QMainWindow
     void crearFormularioPNH();
     QStringList obtenerCuentas();
 
-    void titleSeleccionar(QTableWidget *);
-
     bool ComprobarCuentas();
     int ObtenerIndice(QString );
 
     QStringList ObtenerNombreCuenta(int contador);
     QList<int> ObtenerLimitesCuenta(int contador,int opccion);
-    QStringList ObtenerComponentes(QTableWidget *);
-    void CrearTablaVacia(int contador,QTableWidget *);
 
 protected:
     void closeEvent(QCloseEvent *);
@@ -293,6 +282,7 @@ private slots:
     void slotCoeficienteVertical();
     void slotAccChange();
 
+    //Slots para las variables exógenas
     void slotVariableExogena();
     void slotCloseExogena();
     void slotAgregarExogena();
@@ -301,20 +291,28 @@ private slots:
 
     void slotMa();
 
+    //Slots para encadenamientos
     void slotEncadenamientos();
     void slotCloseEncadenamiento();
     void slotAgregarEncadenamiento();
     void slotVerEncadenamiento();
     void slotClasificarCuentas();
 
+    //Slots para reportes
+    void slotEncadenamientoReport();
+    void slotGenerarEncadenamientoReport(QString);
+
+    //Slots para exportar
     void slotCloseExport();
     void slotSaveExport();
     void slotSearchExport();
 
+    //Slots para el modelo clásico
     void slotModeloClasico();
     void calcularEscenario(bool clasico = true);
     void finalizarEscenario();
 
+    //Slots para el modelo no clásico
     void slotModeloNoClasico();
     void calcularEscenarioNC();
     void finalizarEscenarioNC();
@@ -349,14 +347,13 @@ private slots:
 
     void slotSeleccionarTabla();
 
+    //Slots del menú de ayuda
     void abrirManual();
     void acercaDe();
 
 public:
     MainWindow();
     QString numberFormat(double &);
-
-    int contarElementosMap(QMap<QString, QStringList> diccionario);
 };
 
 #endif // MAINWINDOW_H

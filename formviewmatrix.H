@@ -1,21 +1,19 @@
 #ifndef FORMVIEWMATRIX_H
 #define FORMVIEWMATRIX_H
 
-#include <QtGui>
-#include <ui_formMatrixView.h>
+#include <QtWidgets>
 
-class FormViewMatrix : public QWidget
+namespace Ui {
+class FormMatrixView;
+}
+
+class FormMatrixView : public QWidget
 {
     Q_OBJECT
 
-    Ui_FormMatrixView ui;
-
 public:
-    FormViewMatrix(QWidget *parent = 0);
-
-signals:
-
-public slots:
+    explicit FormMatrixView(QWidget *parent = 0);
+    Ui::FormMatrixView *ui;
 
 };
 

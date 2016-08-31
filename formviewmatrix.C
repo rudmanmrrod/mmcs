@@ -2,13 +2,13 @@
     realizado por José Ruiz Mayo/2015
 */
 #include "formviewmatrix.H"
-#include <QtGui>
-#include <QtCore>
+#include "ui_formViewMatrix.h"
 
 
-FormViewMatrix::FormViewMatrix(QWidget *parent) :
-    QWidget(parent)
+FormMatrixView::FormMatrixView(QWidget *parent) :
+    QWidget(parent,Qt::Tool),
+    ui(new Ui::FormMatrixView)
 {
-    ui.setupUi(this);
+    ui->setupUi(this);
 }
 

@@ -10,21 +10,41 @@
 #include "formexportmatrix.h"
 #include <stackencadenamientos.h>
 #include <QDebug>
+/**
+    Sistema de Manejo de Matrices de Contabilidad Social, desarrollado a partir de Mayo de 2015.
+    @file mainwindow.c
+    @brief Cuerpo Principal de funciones del Sistema de Matrices de Contabilidad Social
+    @author <a href='http://www.cenditel.gob.ve'>Centro Nacional de Desarrollo e Investigación en Tecnologías Libres (CENDITEL) nodo Mérida - Venezuela</a>
+    @copyright <a href='http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
+*/
 
 using namespace Eigen;
 
 //  FA_001
 /*                      A partir de aquí comienzan las operaciones del menu Archivo                   */
+/**
+    @brief Función que permite desplegar el formulario de carga de matriz
+    @date 05/05/2015
+    @author José Ruiz
+*/
 void MainWindow::slotLoadMatrix()
 {
     formLoadMatrix = new  FormLoadMatrix(this);
     formLoadMatrix->show();
     connect(formLoadMatrix, SIGNAL(formAccepted(QString,int,int)),
             this, SLOT(slotFormLoadMatrixAccepted(QString,int,int)));
-    connect(formLoadMatrix->ui.radioAccount,SIGNAL(clicked()),this,SLOT(slotOnlyaccount()));
-    connect(formLoadMatrix->ui.radioComponent,SIGNAL(clicked()),this,SLOT(slotOnlycomponent()));
+    connect(formLoadMatrix->ui->radioAccount,SIGNAL(clicked()),this,SLOT(slotOnlyaccount()));
+    connect(formLoadMatrix->ui->radioComponent,SIGNAL(clicked()),this,SLOT(slotOnlycomponent()));
 }
 
+/**
+    @brief Función que carga la matriz en el widget principal si pasó las validaciones del formulario
+    @date 05/05/2015
+    @author José Ruiz
+    @param <filePath> Recibe la ruta del directorio
+    @param <accountNumber> Recibe el número de cuentas
+    @param <pre> Recibe el valor de la cantidad de décimales
+*/
 void MainWindow::slotFormLoadMatrixAccepted(const QString & filePath,
                                             int accountNumber, int pre)
 {
@@ -36,6 +56,11 @@ void MainWindow::slotFormLoadMatrixAccepted(const QString & filePath,
 
 }
 
+/**
+    @brief Función que permite cerrar el formulario de carga de matriz
+    @date 03/04/2015
+    @author José Ruiz
+*/
 void MainWindow::slotFormLoadMatrixClosed()
 {
     disconnect(formLoadMatrix, SIGNAL(formAccepted(QString,int)),
@@ -43,29 +68,33 @@ void MainWindow::slotFormLoadMatrixClosed()
     formLoadMatrix = 0;
 }
 
-/*
-    Función que permite agregar un mensaje en el label cuando se selecciona la opción de cuentas
-    Autor: Rodrigo Boet
-    Fecha: 29/07/2016
+/**
+    @brief Función que permite agregar un mensaje en el label cuando se selecciona la opción de cuentas
+    @date 29/07/2016
+    @author Rodrigo Boet
 */
 void MainWindow::slotOnlyaccount()
 {
-    formLoadMatrix->ui.label_info->setText("Info: Para esta opción debe agregar debe cargar un csv con las cuentas y componentes");
+    formLoadMatrix->ui->label_info->setText("Info: Para esta opción debe agregar debe cargar un csv con cuentas y componentes");
 
 }
 
-/*
-    Función que permite agregar un mensaje en el label cuando se selecciona la opción de componentes
-    Autor: Rodrigo Boet
-    Fecha: 29/07/2016
+/**
+    @brief Función que permite agregar un mensaje en el label cuando se selecciona la opción de componentes
+    @date 29/07/2016
+    @author Rodrigo Boet
 */
 void MainWindow::slotOnlycomponent()
 {
-    formLoadMatrix->ui.label_info->setText("Info: Para esta opción debe agregar debe cargar un csv con sólo los componentes");
+    formLoadMatrix->ui->label_info->setText("Info: Para esta opción debe agregar debe cargar un csv con sólo los componentes");
 }
 
 
-/*      Funcion para crear un nuevo proyecto        */
+/**
+    @brief Función que permite crear un nuevo proyecto
+    @date 10/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotNuevoProyecto()
 {
     QMessageBox msBox(QMessageBox::Question,"Nuevo Proyecto","¿Desea crear un nuevo proyecto?",
@@ -79,6 +108,11 @@ void MainWindow::slotNuevoProyecto()
     }
 }
 
+/**
+    @brief Función que permite crear el formulario para exportar una matriz a csv
+    @date 10/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotExportMatrix()
 {
 
@@ -166,12 +200,22 @@ void MainWindow::slotExportMatrix()
 
 }
 
+/**
+    @brief Función que permite cerrar el formulario para exportar la matriz
+    @date 10/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotCloseExport()
 {
     formExportMatriz->ExportLine->setText("");
     formExportMatriz->close();
 }
 
+/**
+    @brief Función que permite exportar una matriz a csv
+    @date 10/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotSaveExport()
 {
 
@@ -223,6 +267,11 @@ void MainWindow::slotSaveExport()
     }
 }
 
+/**
+    @brief Función que permite seleccionar la ruta en la que se guardará la matriz en csv
+    @date 10/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotSearchExport()
 {
     QString format = ".csv";
@@ -237,6 +286,11 @@ void MainWindow::slotSearchExport()
     formExportMatriz->ExportLine->setText(filename);
 }
 
+/**
+    @brief Función que permite cargar la matriz mostrada al inicio
+    @date 10/04/2015
+    @author José Ruiz
+*/
 void MainWindow::createCentralWidget()
 {
     QVBoxLayout * layoutCentralWidget = new QVBoxLayout;
@@ -277,7 +331,11 @@ void MainWindow::createCentralWidget()
 
 }
 
-
+/**
+    @brief Función que permite crear el apartado <b>Archivo</b> del menú principal de la aplicación
+    @date 10/04/2015
+    @author José Ruiz
+*/
 void MainWindow::createMenuBar()
 {
     menuFile.setTitle("&Archivo");
@@ -299,6 +357,11 @@ void MainWindow::createMenuBar()
     menuBar()->addMenu(&menuFile);
 }
 
+/**
+    @brief Función que permite crear el apartado <b>Herramientas</b> del menú principal de la aplicación
+    @date 10/06/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::matricesMenuBar()
 {
     menuTools.setTitle("&Herramientas");
@@ -446,6 +509,11 @@ void MainWindow::matricesMenuBar()
 
 }
 
+/**
+    @brief Función que permite cerrar todo el programa
+    @date 03/04/2015
+    @author José Ruiz
+*/
 void MainWindow::closeEvent(QCloseEvent * event)
 {
     QMessageBox msBox(QMessageBox::Question,"Alerta","¿Desea Salir?", QMessageBox::Yes | QMessageBox::No,this);
@@ -456,6 +524,13 @@ void MainWindow::closeEvent(QCloseEvent * event)
     }
 }
 
+/**
+    @brief Función que cargar crear la matriz en base al csv cargado
+    @date 10/05/2015
+    @author José Ruiz
+    Modificado por:
+    @author Rodrigo Boet
+*/
 void MainWindow::createMatrixCentralWidget()
 {
     QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
@@ -483,7 +558,7 @@ void MainWindow::createMatrixCentralWidget()
     layoutCentralWidget->addWidget(tableWidget);
     //layoutCentralWidget->addStretch();
 
-    if(formLoadMatrix->ui.radioAccount->isChecked()){
+    if(formLoadMatrix->ui->radioAccount->isChecked()){
         QStringList accounts = get_list(tableWidget,0,2,tableWidget->columnCount());
         numAccounts = diferent_elements(accounts);
     }
@@ -576,7 +651,7 @@ void MainWindow::createMatrixCentralWidget()
 
 
     /*  ***********         Se agrega la columna en la que se asignan los nombre            **************           */
-    if(formLoadMatrix->ui.radioComponent->isChecked())
+    if(formLoadMatrix->ui->radioComponent->isChecked())
     {
         tableWidget->insertRow(0);
         tableWidget->insertColumn(0);
@@ -594,7 +669,7 @@ void MainWindow::createMatrixCentralWidget()
             tableWidget->setItem(i,0,ValoraInsertar2);
         }
     }
-    else if(formLoadMatrix->ui.radioAccount->isChecked()){
+    else if(formLoadMatrix->ui->radioAccount->isChecked()){
         loadsAccounts(tableWidget);
     }
 
@@ -615,6 +690,14 @@ void MainWindow::createMatrixCentralWidget()
     connect(&actionVariableExogena,SIGNAL(triggered()),this,SLOT(slotVariableExogena()));
 }
 
+/**
+    @brief Función que se encarga de cargar los datos de un csv en Widget de tabla
+    @date 15/05/2015
+    @author José Ruiz
+    Modificado por
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+*/
 void MainWindow::populateTable(QTableWidget * tableWidget)
 {
     //Se abre el archivo en modo lectura
@@ -626,7 +709,7 @@ void MainWindow::populateTable(QTableWidget * tableWidget)
     int column = lines.count();
     CrearTablaVacia(column+2,tableWidget);//Se crea una tabla vacia a modo de matriz cuadrada
     QStringList Accounts;
-    if(formLoadMatrix->ui.radioAccount->isChecked())
+    if(formLoadMatrix->ui->radioAccount->isChecked())
     {
         Accounts = lines;
         linea = in.readLine();
@@ -680,7 +763,7 @@ void MainWindow::populateTable(QTableWidget * tableWidget)
         }
     }
     //Se agregan las cuentas si se selecciono la opción correspondiente
-    if(formLoadMatrix->ui.radioAccount->isChecked())
+    if(formLoadMatrix->ui->radioAccount->isChecked())
     {
         noEditColZero(tableWidget);
         tableWidget->insertColumn(0);
@@ -704,11 +787,11 @@ void MainWindow::populateTable(QTableWidget * tableWidget)
 
 }
 
-/*
-    Función para cargar las cuentas
-    Autor: Rodrigo Boet
-    Fecha: 29/07/2016
-    @param <QTableWidget> *tw -> Recibe como parametro una widget de tabla de qt
+/**
+    @brief Función que permite cargar las cuentas
+    @date 29/07/2016
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
 */
 void MainWindow::loadsAccounts(QTableWidget *tw)
 {
@@ -761,6 +844,15 @@ void MainWindow::loadsAccounts(QTableWidget *tw)
     connect(&actionSeleccionarTabla,SIGNAL(triggered()),this,SLOT(slotSeleccionarTabla()));
 }
 
+/**
+    @brief Función que permite transformar un flotante en string y darle formato a los números con separador de miles
+    @date 05/05/2015
+    @author José Ruiz
+    Modificado por
+    @author Rodrigo Boet
+    @param <d> Recibe el número al que se le dará formato
+    @return <stringNumber> retorna el número con formato como un string
+*/
 QString MainWindow::numberFormat(double & d) {
 
     bool controlador = false;
@@ -790,11 +882,21 @@ QString MainWindow::numberFormat(double & d) {
 
 //  FA_002
 /*                  Aquí se encuentra el menú de ayuda                */
-void MainWindow::abrirManual()//Funcion para abrir el manual
+/**
+    @brief Función para abrir el manual
+    @date 20/10/2015
+    @author Rodrigo Boet
+*/
+void MainWindow::abrirManual()
 {
     QDesktopServices::openUrl(QUrl("/usr/share/mmcs/Usuario/Entrada.html",QUrl::TolerantMode));
 }
 
+/**
+    @brief Función para abrir la sección acerca de
+    @date 20/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::acercaDe()//Funcion para el mensaje acerca de
 {
     QString Mensaje = "Sistema de Manejo de Matrices de Contabilidad Social\n\n";
@@ -806,6 +908,13 @@ void MainWindow::acercaDe()//Funcion para el mensaje acerca de
 
 //  Main_001
 /*                      Aquí se encuentra el centro de la aplicación                   */
+/**
+    @brief Función núcleo de la aplicación
+    @date 11/04/2015
+    @author José Ruiz
+    Modificada por
+    @author Rodrigo Boet
+*/
 MainWindow::MainWindow()
     : actionNewProject(this),actionLoadMatrix(this), actionExportMatrix(this), actionQuit(this),actionCH(this), actionCV(this),
       actionVariableExogena(this),actionEncadenamiento(this),actionClasificarCuentas(this), actionModeloClasico(this),
@@ -860,6 +969,11 @@ MainWindow::MainWindow()
     showMaximized();
 }
 
+/**
+    @brief Función que inicializar la interfaz gráfica de la aplicación
+    @date 01/04/2015
+    @author José Ruiz
+*/
 void MainWindow::initGUI()
 {
     createMenuBar();
@@ -871,7 +985,11 @@ void MainWindow::initGUI()
 
 //Main_002
 /*              Aqui comienzan las funciones luego de cargar la matriz        */
-
+/**
+    @brief Función para cambiar los iconos de habilitado/deshabilitado en el widget derecho
+    @date 10/06/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotAccChange()
 {
     StackWidget *sw = findChild<StackWidget *>();
@@ -890,10 +1008,10 @@ void MainWindow::slotAccChange()
     }
 }
 
-/*
-    Función para esconder el StackWidget que tiene los datos de las cuentas
-    Autor: Rodrigo Boet
-    Fecha: 29/07/2016
+/**
+    @brief Función para esconder el StackWidget que tiene los datos de las cuentas
+    @date 29/07/2016
+    @author Rodrigo Boet
 */
 void MainWindow::hideStackedWidget()
 {
@@ -927,6 +1045,11 @@ void MainWindow::hideStackedWidget()
     groupbox->setVisible(false);
 }
 
+/**
+    @brief Función que permite agregar una cuenta siempre y cuando cumpla con la validación
+    @date 10/06/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::AgregarCuenta()
 {
     QMessageBox msBox(QMessageBox::Question,"Agregar cuenta","¿Está seguro que agregar la cuenta?",
@@ -1061,6 +1184,11 @@ void MainWindow::AgregarCuenta()
     }
 }
 
+/**
+    @brief Función que permite finalizar las cuentas y calcular totales is se llenaron todas las cuentas
+    @date 10/06/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::FinalizarCuentas()
 {
     QMessageBox msBox(QMessageBox::Question,"Finalizar Carga","¿Está seguro que desea finalizar?",
@@ -1101,11 +1229,13 @@ void MainWindow::FinalizarCuentas()
     }
 }
 
-/*
-    Función que almacena los valores de la tabla principal en una matriz
-    Autor: Rodrigo Boet
-    Fecha: 21/06/2016
-    @param <QTableWidget> *tw -> Recibe como parametro una widget de tabla de qt
+/**
+    @brief Función que almacena los valores de la tabla principal en una matriz
+    @date 21/06/2016
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <Matriz> Recibe la matriz donde se almacenaran los resultados
+    @param <init> Recibe el inicio de donde comenzarán las iteraciones
 */
 void MainWindow::TotalPrincipalTable(QTableWidget *tw,MatrixXd &Matriz,int init)
 {
@@ -1132,6 +1262,14 @@ void MainWindow::TotalPrincipalTable(QTableWidget *tw,MatrixXd &Matriz,int init)
     }
 }
 
+/**
+    @brief Función que calcula los totales por fila/columna
+    @date 12/06/2015
+    @author Rodrigo Boet
+    @param <tableWidget> Recibe el widget de la tabla
+    @param <inicio> Recibe el párametro por donde iniciaran las iteraciones
+    @param <iguales> Recibe el parametro que verifica si el total la columna i es igual al total de la columna j
+*/
 void MainWindow::CalcularTotales(QTableWidget *tableWidget,int inicio,bool &iguales)//Se calculan los totales por fila/columna
 {
     int filas=tableWidget->rowCount();
@@ -1191,7 +1329,12 @@ void MainWindow::CalcularTotales(QTableWidget *tableWidget,int inicio,bool &igua
     ItemsNoEditable(tableWidget,0,inicio-1,cantidad-1);
 }
 
-void MainWindow::RestaurarCeldas()//Slot que permite restaurar el titulo de las cuentas en las celdas
+/**
+    @brief Función que permite restaurar el titulo de las cuentas en las celdas
+    @date 15/06/2015
+    @author Rodrigo Boet
+*/
+void MainWindow::RestaurarCeldas()
 {
     QMessageBox msBox(QMessageBox::Question,"Restaurar Celdas","¿Desea Restaurar el titulo de todas las celdas?",
                       QMessageBox::Yes | QMessageBox::No,this);
@@ -1215,7 +1358,12 @@ void MainWindow::RestaurarCeldas()//Slot que permite restaurar el titulo de las 
     }
 }
 
-void MainWindow::ModificarCuenta()//Slot que permite habilitar la edicion de una cuenta una vez agregada
+/**
+    @brief Función ue permite habilitar la edicion de una cuenta una vez agregada
+    @date 16/06/2015
+    @author Rodrigo Boet
+*/
+void MainWindow::ModificarCuenta()
 {
     QMessageBox msBox(QMessageBox::Question,"Modificar Cuenta","¿Desea Modificar la Cuenta Actual?",
                       QMessageBox::Yes | QMessageBox::No,this);
@@ -1234,7 +1382,13 @@ void MainWindow::ModificarCuenta()//Slot que permite habilitar la edicion de una
     }
 }
 
-bool MainWindow::ComprobarCuentas()//Se verifica que las lineas de texto y spin box de todas las cuentas no esten vacios
+/**
+    @brief Función que verifica que las lineas de texto y spin box de todas las cuentas no esten vacíos
+    @date 18/06/2015
+    @author Rodrigo Boet
+    @return <centinela> retorna si se cumple o no con la condición
+*/
+bool MainWindow::ComprobarCuentas()
 {
     bool centinela=true;
     StackWidget *sw = findChild<StackWidget *>();
@@ -1262,6 +1416,14 @@ bool MainWindow::ComprobarCuentas()//Se verifica que las lineas de texto y spin 
     return centinela;
 }
 
+/**
+    @brief Función que comprueba que no existan nombre de cuentas iguales
+    @date 20/06/2015
+    @author Rodrigo Boet
+    @param <nombre> Recibe el nombre que se comprobará
+    @param <indice> Recibe el indice de la cuenta que se comprueba
+    @return <cuenta> retorna verdadero si el nombre se repite y falso en caso contrario
+*/
 bool MainWindow::comprobarNombreCuenta(QString nombre,int indice)
 {
     bool cuenta = false;
@@ -1276,7 +1438,13 @@ bool MainWindow::comprobarNombreCuenta(QString nombre,int indice)
     return cuenta;
 }
 
-/***        Funcion que obtiene el nombre las cuentas a traves de los lineeidt y los retorna en una lista de string     ***/
+/**
+    @brief Función que obtiene el nombre las cuentas a traves de los lineeidt y los retorna en una lista de string
+    @date 10/06/2015
+    @author Rodrigo Boet
+    @param <contador> Recibe el número de cuentas
+    @return <MiLista> retorna una lista de los nombres de las cuentas
+*/
 QStringList MainWindow::ObtenerNombreCuenta(int contador)
 {
     QStringList MiLista;
@@ -1288,8 +1456,14 @@ QStringList MainWindow::ObtenerNombreCuenta(int contador)
     return MiLista;
 }
 
-/***        Funcion que obtiene los inicios/fin de las cuentas y las retorna como entero en una lista
-                si la oopcion es cero crea la lista por el inicio, de lo contrario la crea por el fin   ***/
+/**
+    @brief Función que obtiene los inicios/fin de las cuentas y las retorna como entero en una lista si la opción es cero crea la lista por el inicio, de lo contrario la crea por el fin
+    @date 01/07/2015
+    @author Rodrigo Boet
+    @param <contador> Recibe el limite de la iteración
+    @param <opcion> Recibe la opción (0 para inicio de la cuenta y 1 para fin de la cuenta)
+    @return <Lista> retorna una lista con los elementos
+*/
 QList<int> MainWindow::ObtenerLimitesCuenta(int contador,int opccion)
 {
     QList<int> Lista;
@@ -1312,6 +1486,16 @@ QList<int> MainWindow::ObtenerLimitesCuenta(int contador,int opccion)
 
 //FG_001
 
+/**
+    @brief Función que permite calcular el Coeficiente Tecnico Horizontal (An)
+    @date 05/07/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <nuevaTabla> Recibe el widget de la tabla en la que agregaran los valores
+    @param <tablaOriginal> Recibe el widget de la tabla original
+    @param <count> Recibe el limite para las iteraciones
+    @param <endogena> Recibe si se calculará el An para una tabla endogeno o no
+*/
 void MainWindow::CalcularAn(QTableWidget *tw,QTableWidget *nuevaTabla,QTableWidget *tablaOriginal,int count,bool endogena)//Funcion para calcular el Coeficiente Tecnico Horizontal (An)
 {
     if(endogena)
@@ -1385,7 +1569,14 @@ void MainWindow::CalcularAn(QTableWidget *tw,QTableWidget *nuevaTabla,QTableWidg
     }
 }
 
-int MainWindow::ObtenerIndice(QString text)//Funcion para obtener el indice de una pestaña buscada por un nombre dado
+/**
+    @brief Función que permite obtener el indice de una pestaña buscada por un nombre dado
+    @date 10/07/2015
+    @author Rodrigo Boet
+    @param <text> Recibe el nombre que se desea buscar
+    @return <indice> retorna el número de la pestaña
+*/
+int MainWindow::ObtenerIndice(QString text)
 {
     int cantidad=tabWidget->count();
     int indice=0;
@@ -1400,39 +1591,12 @@ int MainWindow::ObtenerIndice(QString text)//Funcion para obtener el indice de u
     return indice;
 }
 
-void MainWindow::CrearTablaVacia(int contador, QTableWidget *tw)//Funcion para crear una tabla vacia
-{
-    for(int k=0;k<contador-1;k++)
-    {
-        tw->insertRow(k);
-        tw->insertColumn(k);
-    }
-}
-
-/*          Funcion para crear una tabla vacia, específicamente para los encadenamientos        */
-void MainWindow::crearTablaVaciaEncadenamiento(int filas, QTableWidget *tw,int columnas)
-{
-    for(int j=0;j<columnas;j++)
-    {
-        tw->insertColumn(0);
-    }
-    for(int k=0;k<filas;k++)
-    {
-        tw->insertRow(k);
-    }
-}
-
-int MainWindow::contarElementosMap(QMap<QString,QStringList> diccionario)//Funcion para contar los elementos en el map o diccionario
-{
-    int contador=0;
-    foreach(QString key,diccionario.keys())
-    {
-        contador+=diccionario[key].count();
-    }
-    return contador;
-}
-
-/*Funcion para agregar los componentes y cuentas a partir de la matriz endogena-endogena*/
+/**
+    @brief Función que agregar los componentes y cuentas a partir de la matriz endogena-endogena
+    @date 10/07/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+*/
 void MainWindow::titleEndogena(QTableWidget *tw)
 {
     QTableWidget *endogena = findChild<QTableWidget *>("MatrizEndogenaEndogena");
@@ -1476,15 +1640,12 @@ void MainWindow::titleEndogena(QTableWidget *tw)
     }
 }
 
-/*       Funcion para volver la celda(0,0) no editable     */
-void MainWindow::noEditColZero(QTableWidget *tw)
-{
-    QTableWidgetItem *ValoraInsertar = new QTableWidgetItem;
-    ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
-    tw->setItem(0,0,ValoraInsertar);
-}
-
-/*          Funcion para colocar los titulos de las cuentas         */
+/**
+    @brief Función que permite colocar los titulos de las cuentas
+    @date 10/07/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+*/
 void MainWindow::setAccountTitle(QTableWidget *tw)
 {
     int myinicio=999;
@@ -1528,6 +1689,15 @@ void MainWindow::setAccountTitle(QTableWidget *tw)
 }
 
 /*                  Funcion para agregar/quitar columnas y filas                    */
+/**
+    @brief Función que permite agregar/quitar columnas y filas
+    @date 10/07/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <rowcol> Recibe el sitio donde se agregarán las columnas y filas
+    @param <opcion> Recibe la opción (Verdadero para agregar y Falso para quitar)
+    @return <elements> retorna una lista con los elementos
+*/
 void MainWindow::insertremoveRowCol(QTableWidget *tw, int rowcol, bool opcion)
 {
     if(opcion)//Si la opcion es verdadero se agrega
@@ -1544,7 +1714,14 @@ void MainWindow::insertremoveRowCol(QTableWidget *tw, int rowcol, bool opcion)
     }
 }
 
-/*                      Funcion para agregar/quitar el separador de miles y la coma en las tablas           */
+/**
+    @brief Función que permite agregar/quitar el separador de miles y la coma en las tablas
+    @date 25/09/2015
+    @author Rodrigo Boet
+    @param <ti> Recibe el item que se modificará
+    @param <quitar> Recibe la un booleano (Verdadero para quitar y Falso para colocar)
+    @return <elements> retorna el elemento con/sin separador
+*/
 QString MainWindow::Separador(QTableWidgetItem *ti,bool quitar)
 {
     QString value=ti->text();
@@ -1561,6 +1738,14 @@ QString MainWindow::Separador(QTableWidgetItem *ti,bool quitar)
     return value;
 }
 
+/**
+    @brief Función que permite clonar una tabla y todo su contenido
+    @date 10/09/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla de la que se copiarán los datos
+    @param <nuevaTabla> Recibe el widget de la tabla en la que se copiarán los datos
+    @param <cantidad> Recibe el tamaño de la tabla
+*/
 void MainWindow::clonarTabla(QTableWidget *tw,QTableWidget *nuevaTabla,int cantidad)
 {
     for(int i=0;i<cantidad-1;i++)
@@ -1604,39 +1789,11 @@ void MainWindow::clonarTabla(QTableWidget *tw,QTableWidget *nuevaTabla,int canti
     }
 }
 
-/* Funcion estandar para hacer algunas celdas no editables debido a que son dificiles de manipular(por motivos de colocado y borrado dinamico)*/
-void MainWindow::ItemsNoEditable(QTableWidget *tw,int inicio,int fin,int col)
-{
-    noEditColZero(tw);
-    for(int i=inicio;i<fin;i++)
-    {
-        QTableWidgetItem *ValoraInsertarFila = new QTableWidgetItem;
-        ValoraInsertarFila->setFlags(ValoraInsertarFila->flags() ^ Qt::ItemIsEditable);
-        tw->setItem(i,col,ValoraInsertarFila);
-        QTableWidgetItem *ValoraInsertarColumna = new QTableWidgetItem;
-        ValoraInsertarColumna->setFlags(ValoraInsertarColumna->flags() ^ Qt::ItemIsEditable);
-        tw->setItem(col,i,ValoraInsertarColumna);
-
-    }
-}
-
-/*          Funcion para agregar el estilo de una celda en negrita(letra blanca) con fondo de color azul (Cuenta)       */
-void MainWindow::CellStyle(QTableWidgetItem *ti)
-{
-    ti->setBackgroundColor(QColor(53,140,203));
-    ti->setTextColor(Qt::white);
-    QFont font;
-    font.setBold(true);
-    ti->setFont(font);
-}
-
-/*          Funcion para agregar el estilo de una celda con fondo de color gris (Componente)       */
-void MainWindow::CellStyleComponente(QTableWidgetItem *ti)
-{
-    ti->setBackgroundColor(QColor(221,227,230));
-}
-
-/*              Funcion para obtener las cuentas de la parte endogena        */
+/**
+    @brief Función que permite obtener las cuentas de la parte endogena
+    @date 10/09/2015
+    @author Rodrigo Boet
+*/
 QStringList MainWindow::obtenerCuentas()
 {
     QStringList cuenta;
@@ -1655,6 +1812,12 @@ QStringList MainWindow::obtenerCuentas()
 
 //FH_001
 /*          Aqui empiezan las funciones de la barra herramientas*/
+
+/**
+    @brief Función que permite calcular el coeficiente técnico vertical
+    @date 10/05/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotCoeficienteVertical()
 {
     actionCV.setDisabled(true);
@@ -1681,6 +1844,11 @@ void MainWindow::slotCoeficienteVertical()
     tabWidget->setCurrentIndex(indice);
 }
 
+/**
+    @brief Función que permite calcular el coeficiente técnico horizontal
+    @date 11/05/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotCoeficienteHorizontal()
 {
     actionCH.setDisabled(true);
@@ -1747,6 +1915,11 @@ void MainWindow::slotCoeficienteHorizontal()
 }
 
 //FH_002
+/**
+    @brief Función que permite mostrar el formulario para seleccionar las cuentas exógenas
+    @date 10/09/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotVariableExogena()
 {
     if(opcionVentanaExogena==0)
@@ -1848,11 +2021,22 @@ void MainWindow::slotVariableExogena()
     }
 }
 
+/**
+    @brief Función que permite cerrar el formulario de selección de cuentas exógenas
+    @date 10/07/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotCloseExogena()
 {
     formVariablesExogenas->close();
 }
 
+
+/**
+    @brief Función que permite deshacer la selección de cuentas el formulario de selección de cuentas exógenas
+    @date 14/07/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotDeshacerExogena()
 {
     QMessageBox msBox(QMessageBox::Question,"Deshacer","¿Desea deshacer todos los cambios?",
@@ -1874,12 +2058,16 @@ void MainWindow::slotDeshacerExogena()
     }
 }
 
+/**
+    @brief Función que permite agregar la selección de cuentas el formulario de selección de cuentas exógenas
+    @date 18/07/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotAgregarExogena()
 {
     actionVariableExogena.setDisabled(true);//Se deshabilita la opcion de agregar variables exogenas
     QString nombre_cuenta=stackVE->comboAccount->currentText();//Se obtiene el nombre de la cuenta seleccionado
     QListWidget *lw=new QListWidget;
-    //lw=stackVE->veWidget->accounListWidget;
     int index=stackVE->comboAccount->currentIndex();//Se obtiene el indice selecionado
     lw = findChild<QListWidget *>(QString("accountlist %1").arg(index + 1));//Se obtiene la lista seleccionada
     QStringList componentes_cuenta;
@@ -1908,6 +2096,11 @@ void MainWindow::slotAgregarExogena()
     }
 }
 
+/**
+    @brief Función que permite finalizar la selección de cuentas el formulario de selección de cuentas exógenas
+    @date 20/07/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotFinalizarExogena()
 {
     QTableWidget *tablaEE = new QTableWidget;
@@ -2111,7 +2304,11 @@ void MainWindow::slotFinalizarExogena()
 }
 
 //FH_003
-/***        Slot para calcular el coeficiente tecnico vertical de la matriz endogena/exogena      ***/
+/**
+    @brief Función que permite calcular el coeficiente tecnico vertical de la matriz endogena/exogena
+    @date 05/07/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::EndogenaAn()
 {
     tabWidget->addTab(new QWidget,"An");
@@ -2140,65 +2337,26 @@ void MainWindow::EndogenaAn()
     //tabWidget->removeTab(indice);
 }
 
+/**
+    @brief Función que permite habilitar la función de restar la matriz indentidad menos la matriz de coeficientes técnicos
+    @date 05/07/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotMa()
 {
     QTableWidget *tw = findChild<QTableWidget *>("MatrizAn");
     restarIdentidadAn(tw);
 }
 
-
-/***     Funcion para retornar todos los componentes en una lista     ***/
-QStringList MainWindow::ObtenerComponentes(QTableWidget *tw)
-{
-    QStringList MiLista;
-    int contador=tw->rowCount();
-    for(int i=1;i<contador-1;i++)
-    {
-        MiLista.append(tw->item(0,i)->text());
-    }
-    return MiLista;
-}
-
-
-/***        Funcion que permite llenar una lista con los elementos en un intervalo dado(fila o columna)         ***/
-QList<QString> MainWindow::llenarLista(QList<QString> lista,QTableWidget *tw,int valor,int opcion)
-{
-    int cantidad = tw->rowCount();
-    for(int i=0;i<cantidad;i++)
-    {
-        if(opcion==1)
-        {
-            lista.append(tw->item(valor,i)->text());
-        }
-        else
-        {
-            lista.append(tw->item(i,valor)->text());
-        }
-    }
-    return lista;
-}
-
-/***        Funcion que escribe en una columna o fila con la lista dada              ***/
-void MainWindow::insertRowExogena(QList<QString> lista,QTableWidget *tw,int opcion)
-{
-    for(int i=0;i<tw->rowCount();i++)
-    {
-        QTableWidgetItem *twi =new QTableWidgetItem;
-        twi->setText(lista[i]);
-        twi->setFlags(twi->flags() ^ Qt::ItemIsEditable);
-        int fin=tw->rowCount();
-        if(opcion==1)
-        {
-            tw->setItem(fin-1,i,twi);
-        }
-        else
-        {
-            tw->setItem(i,fin-1,twi);
-        }
-    }
-}
-
-/***        Funcion que permite insertar, alinear y combinar las celdas con los titulos endogena/exogena        ***/
+/**
+    @brief Función que permite insertar, alinear y combinar las celdas con los titulos endogena/exogena
+    @date 07/07/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la Tabla
+    @param <inicioExogena> Recibe el inicio de las wxógenas
+    @param <inicioExogena> Recibe la cantidad de elementos
+    @param <condicion> Recibe la condicion (Verdadero si tiene cuentas endgenas y Falso en caso contrario)
+*/
 void MainWindow::setEndogenaExogenaCell(QTableWidget *tw,int inicioExogena,int elementos,bool condicion)
 {
     tw->insertRow(0);
@@ -2269,7 +2427,12 @@ void MainWindow::setEndogenaExogenaCell(QTableWidget *tw,int inicioExogena,int e
     }
 }
 
-/*          Funcion que determina los Multiplicadores de Leontief       */
+/**
+    @brief Función que permite determinar los Multiplicadores de Leontief
+    @date 08/07/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+*/
 void MainWindow::restarIdentidadAn(QTableWidget *tw)
 {
     int cantidad=tw->rowCount()-1;
@@ -2322,7 +2485,13 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw)
     }
 }
 
-/*          Funcion que crea un diccionario con cuenta/cantidad de veces que se repiten para el espacio de las celdas          */
+/**
+    @brief Función que permite crear un diccionario con cuenta/cantidad de veces que se repiten para el espacio de las celdas
+    @date 10/07/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <endogena> Recibe un booleando (Verdadero si es endogena, Falso de lo contrario)
+*/
 void MainWindow::crearDiccionario(QTableWidget *tw, bool endogena)
 {
     QStringList CuentasE;
@@ -2366,7 +2535,14 @@ void MainWindow::crearDiccionario(QTableWidget *tw, bool endogena)
     map.clear();
 }
 
-/*              Crea una lista de las cuentas endogenas          s*/
+/**
+    @brief Función que permite crear una lista de las cuentas endógenas
+    @date 10/07/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <list> Recibe la lista en la que se agregan los elementos
+    @return <list> retorna la lista con los elementos
+*/
 QStringList MainWindow::obtenerCuentasEndogenas(QTableWidget *tw,QStringList list)
 {
     int elementos = contarElementosMap(diccCuentasExogenas);
@@ -2380,7 +2556,14 @@ QStringList MainWindow::obtenerCuentasEndogenas(QTableWidget *tw,QStringList lis
     return list;
 }
 
-/*              Crea una lista de las cuentas exogenas          */
+/**
+    @brief Función que permite crear una lista de las cuentas exógenas
+    @date 10/07/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <list> Recibe la lista en la que se agregan los elementos
+    @return <list> retorna la lista con los elementos
+*/
 QStringList MainWindow::obtenerCuentasExogenas(QTableWidget *tw,QStringList list)
 {
     int elementos = contarElementosMap(diccCuentasExogenas);
@@ -2395,7 +2578,15 @@ QStringList MainWindow::obtenerCuentasExogenas(QTableWidget *tw,QStringList list
     return list;
 }
 
-/*              Permite crear los espacios en las celdas de las cuentas en la matriz endogena          */
+/**
+    @brief Función que permite crear los espacios en las celdas de las cuentas en la matriz endogena
+    @date 15/07/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <inicio> Recibe el inicio de la tabla
+    @param <celda> Recibe el número de la celda
+    @param <endex> Recibe un booleano (Verdadero si la matriz es endógena/exógena, Falso en caso contrario)
+*/
 void MainWindow::spanEndogenaCell(QTableWidget *tw,int inicio,int celda,bool endex)
 {
     int elementos = contarElementosMap(diccCuentasExogenas);
@@ -2435,6 +2626,13 @@ void MainWindow::spanEndogenaCell(QTableWidget *tw,int inicio,int celda,bool end
     }
 }
 
+/**
+    @brief Función que permite crear los espacios en las celdas de las cuentas en la matriz exógena
+    @date 11/07/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <contador> Recibe el limite de la iteración
+*/
 void MainWindow::spanExogenaCell(QTableWidget *tw,int celda)
 {
     int elementos = contarElementosMap(diccCuentasExogenas);
@@ -2467,7 +2665,11 @@ void MainWindow::spanExogenaCell(QTableWidget *tw,int celda)
     }
 }
 
-/*          obtiene un diccionario de cuentas/componentes de la matriz endogena/endogena         */
+/**
+    @brief Función que permite obtener un diccionario de cuentas/componentes de la matriz endógena/endógena
+    @date 20/07/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::obtenerCuentaComponentes()
 {
     foreach(int key,diccCuentasEndogenas.keys())
@@ -2504,17 +2706,15 @@ void MainWindow::obtenerCuentaComponentes()
     }
 }
 
-/*          Funcion para agregar el estilo de una celda en negrita(letras blancas) con fondo de color gris oscuro (endogéna-exogéna)       */
-void MainWindow::CellStyleExEn(QTableWidgetItem *ti)
-{
-    ti->setBackgroundColor(QColor(110,110,110));
-    ti->setTextColor(Qt::white);
-    QFont font;
-    font.setBold(true);
-    ti->setFont(font);
-}
 
-/*      Funcion que determina los totales de la matriz end-end y end-exog       */
+/**
+    @brief Función que permite determinar los totales de la matriz end-end y end-exog
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <inicio> Recibe el inicio de la tabla
+    @param <fin> Recibe el fin de la tabla
+    @param <exogena> Recibe el comienzo de las cuentas exógenas
+*/
 void MainWindow::calcularSubtotal(QTableWidget *tw, int inicio, int fin,int exogena)
 {
     for(int i=inicio;i<exogena;i++)
@@ -2538,20 +2738,12 @@ void MainWindow::calcularSubtotal(QTableWidget *tw, int inicio, int fin,int exog
     }
 }
 
-void MainWindow::tableItem(QTableWidget *tw, int inicio, int fin, QString texto)
-{
-    for(int i=inicio;i<fin;i++)
-    {
-        QTableWidgetItem *itemFila = new QTableWidgetItem(texto);
-        itemFila->setFlags(itemFila->flags() ^ Qt::ItemIsEditable);
-        QTableWidgetItem *itemColumna = new QTableWidgetItem(texto);
-        itemColumna->setFlags(itemColumna->flags() ^ Qt::ItemIsEditable);
-        tw->setItem(0,i,itemFila);
-        tw->setItem(i,0,itemColumna);
-    }
-}
-
-/*      Funcion que crea un vector con el total de las cuentas      */
+/**
+    @brief Función que permite crear un vector con el total de las cuentas
+    @date 25/07/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+*/
 void MainWindow::calcularTotalCuentas(QTableWidget *tw)
 {
     int cantidad = tw->rowCount();
@@ -2571,7 +2763,11 @@ void MainWindow::calcularTotalCuentas(QTableWidget *tw)
     estimarVectorPonderacion();
 }
 
-/*      Funcion que calcula el vector ponderacion       */
+/**
+    @brief Función que permite calcular el vector ponderación
+    @date 10/08/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::estimarVectorPonderacion()
 {
     QTableWidget *tw = findChild<QTableWidget *>("MatrizEndogenaEndogena");
@@ -2590,7 +2786,11 @@ void MainWindow::estimarVectorPonderacion()
 
 
 //FH_004
-/*                      Funcion para crear la ventana de los encadenamientos                     */
+/**
+    @brief Función que permite crear la ventana de los encadenamientos
+    @date 01/08/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotEncadenamientos()
 {
     if(opcionEncadenamientos == 0)
@@ -2698,12 +2898,21 @@ void MainWindow::slotEncadenamientos()
     }
 }
 
+/**
+    @brief Función que permite cerrar la ventana de los encadenamientos
+    @date 01/08/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotCloseEncadenamiento()
 {
     formEncadenamientos->close();
 }
 
-
+/**
+    @brief Función que permite agregar elementos en la ventana de los encadenamientos
+    @date 01/08/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotAgregarEncadenamiento()
 {
     QString nombre_cuenta=stackEncadenamiento->comboAccount->currentText();//Se obtiene el nombre de la cuenta seleccionado
@@ -2753,6 +2962,11 @@ void MainWindow::slotAgregarEncadenamiento()
 
 }
 
+/**
+    @brief Función que permite ver los encadenamientos
+    @date 01/08/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotVerEncadenamiento()
 {
     QRadioButton *rbCT = findChild<QRadioButton *>("CTButton");
@@ -2786,6 +3000,35 @@ void MainWindow::slotVerEncadenamiento()
             cantidadEncadenamientos++;
             QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
             layoutCentralWidget->addWidget(enTable);
+            //Se genera el panel lateral para los botones
+            QVBoxLayout * layoutLateralWidget = new QVBoxLayout;
+            //Se genera el boton de reporte
+            QPushButton * buttonReport = new QPushButton;
+            buttonReport->setText("&Reporte");
+            buttonReport->setObjectName("ReportButton");
+            buttonReport->setFixedWidth(100);
+            buttonReport->setStyleSheet("background-color: #358ccb; color: #fff;"
+                                     "font-weight: bold; height: 30px; border: none;"
+                                     "border-radius: 5px; margin-top: 40px;");
+
+            //Se genera la caja de grupo que contendrá el botón
+            QGroupBox * groupBoxAccount = new QGroupBox;
+            groupBoxAccount->setFixedWidth(220);
+            groupBoxAccount->setTitle("Operaciones");
+            groupBoxAccount->setStyleSheet("QGroupBox {border: 1px solid gray; "
+                             "border-radius: 3px; margin-top: 0.5em;} "
+                             "QGroupBox::title { subcontrol-origin: margin; "
+                             "left: 10px; padding: 0 3px 0 3px; } ");
+
+            QHBoxLayout * layoutButtons = new QHBoxLayout;
+            layoutButtons->addWidget(buttonReport);
+            groupBoxAccount->setLayout(layoutButtons);
+            //Se conecta el boton de reporte
+            connect(buttonReport,SIGNAL(clicked()),this,SLOT(slotEncadenamientoReport()));
+
+            layoutLateralWidget->addWidget(groupBoxAccount);
+            layoutCentralWidget->addLayout(layoutLateralWidget);
+
             QWidget *widget = tabWidget->widget(indice);
             widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
             formEncadenamientos->close();
@@ -2811,6 +3054,35 @@ void MainWindow::slotVerEncadenamiento()
             cantidadEncadenamientos++;
             QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
             layoutCentralWidget->addWidget(enTable);
+            //Se genera el panel lateral para los botones
+            QVBoxLayout * layoutLateralWidget = new QVBoxLayout;
+            //Se genera el boton de reporte
+            QPushButton * buttonReport = new QPushButton;
+            buttonReport->setText("&Reporte");
+            buttonReport->setObjectName("ReportButton");
+            buttonReport->setFixedWidth(100);
+            buttonReport->setStyleSheet("background-color: #358ccb; color: #fff;"
+                                     "font-weight: bold; height: 30px; border: none;"
+                                     "border-radius: 5px; margin-top: 40px;");
+
+            //Se genera la caja de grupo que contendrá el botón
+            QGroupBox * groupBoxAccount = new QGroupBox;
+            groupBoxAccount->setFixedWidth(220);
+            groupBoxAccount->setTitle("Operaciones");
+            groupBoxAccount->setStyleSheet("QGroupBox {border: 1px solid gray; "
+                             "border-radius: 3px; margin-top: 0.5em;} "
+                             "QGroupBox::title { subcontrol-origin: margin; "
+                             "left: 10px; padding: 0 3px 0 3px; } ");
+
+            QHBoxLayout * layoutButtons = new QHBoxLayout;
+            layoutButtons->addWidget(buttonReport);
+            groupBoxAccount->setLayout(layoutButtons);
+            //Se conecta el boton de reporte
+            connect(buttonReport,SIGNAL(clicked()),this,SLOT(slotEncadenamientoReport()));
+
+            layoutLateralWidget->addWidget(groupBoxAccount);
+            layoutCentralWidget->addLayout(layoutLateralWidget);
+
             QWidget *widget = tabWidget->widget(indice);
             widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
             formEncadenamientos->close();
@@ -2827,7 +3099,13 @@ void MainWindow::slotVerEncadenamiento()
     }
 }
 
-/*          Funcion para crear la tabla con los encadenamientos         */
+/**
+    @brief Función que permite crear la tabla con los encadenamientos
+    @date 18/08/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <enTable> Recibe el widget de la tabla donde se colocarán los encadenamientos
+*/
 void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTable)
 {
     int countEndogena = tw->rowCount();
@@ -2899,9 +3177,9 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
     //Se agregan los titulos
     enTable->insertRow(0);
     QTableWidgetItem *encAtras = new QTableWidgetItem("Encadenamiento Parcial\nhacia atrás");
-    encademientosStyle(encAtras);
+    encadenamientosStyle(encAtras);
     QTableWidgetItem *encAdelante = new QTableWidgetItem("Encadenamiento Parcial\nhacia adelante");
-    encademientosStyle(encAdelante);
+    encadenamientosStyle(encAdelante);
     enTable->setItem(0,2,encAtras);
     enTable->setItem(0,3,encAdelante);
     noEditColZero(enTable);
@@ -2922,6 +3200,13 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
     }
 }
 
+/**
+    @brief Función que permite agregar las cuentas y componentes en la tabla de encadenamientos
+    @date 19/08/2015
+    @author Rodrigo Boet
+    @param <to> Recibe el widget de la tabla de encadenamientos
+    @param <count> Recibe el limite de la tabla
+*/
 void MainWindow::cuentacomponentesEncadenamiento(QTableWidget *to,int count)
 {
     QStringList cuentaTitulos;
@@ -2967,7 +3252,14 @@ void MainWindow::cuentacomponentesEncadenamiento(QTableWidget *to,int count)
     }
 }
 
-/*          Funcion para crear  los encadenamientos de toda la matrix endógena-endógena     */
+/**
+    @brief Función que crear los encadenamientos de toda la matrix endógena-endógena
+    @date 28/08/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <enTable> Recibe el widget de la tabla de los encadenamientos
+    @param <Matrix> Recibe la matriz de donde se sacarán los valores númericos
+*/
 void MainWindow::crearMatrizEncadenamientoEndogena(QTableWidget *tw,QTableWidget *enTable, Eigen::MatrixXd Matrix)
 {
     int countEndogena = tw->rowCount();
@@ -3003,9 +3295,9 @@ void MainWindow::crearMatrizEncadenamientoEndogena(QTableWidget *tw,QTableWidget
     //Se agregan los titulos
     enTable->insertRow(0);
     QTableWidgetItem *encAtras = new QTableWidgetItem("Encadenamiento Parcial\nhacia atrás");
-    encademientosStyle(encAtras);
+    encadenamientosStyle(encAtras);
     QTableWidgetItem *encAdelante = new QTableWidgetItem("Encadenamiento Parcial\nhacia adelante");
-    encademientosStyle(encAdelante);
+    encadenamientosStyle(encAdelante);
     enTable->setItem(0,2,encAtras);
     enTable->setItem(0,3,encAdelante);
     noEditColZero(enTable);
@@ -3025,17 +3317,12 @@ void MainWindow::crearMatrizEncadenamientoEndogena(QTableWidget *tw,QTableWidget
     }
 }
 
-/*          Funcion para agregar los estilos de la tabla de encadenamientos     */
-void MainWindow::encademientosStyle(QTableWidgetItem *ti)
-{
-    QFont font;
-    font.setBold(true);
-    ti->setFont(font);
-    ti->setFlags(ti->flags() ^ Qt::ItemIsEditable);
-    ti->setTextAlignment(Qt::AlignCenter);
-}
-
-/*          Funcion para agregar los totales en la matriz de encadenamientos        */
+/**
+    @brief Función que permite agregar y calcular los totales en la matriz de encadenamientos
+    @date 28/08/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+*/
 void MainWindow::calcularTotalesEncadenamientos(QTableWidget *tw)
 {
     int count = tw->rowCount();
@@ -3074,22 +3361,26 @@ void MainWindow::calcularTotalesEncadenamientos(QTableWidget *tw)
         zero->setFlags(zero->flags() ^ Qt::ItemIsEditable);
         tw->setItem(count,0,zero);
         QTableWidgetItem *titulo = new QTableWidgetItem(QString("Encadenamiento Parcial %1, Total").arg(accName.at(k)));
-        encademientosStyle(titulo);
+        encadenamientosStyle(titulo);
         tw->setItem(count,1,titulo);
         QTableWidgetItem *totalAtras = new QTableWidgetItem(QString::number(sumaAtras,'f',precission));
         QString value = Separador(totalAtras,false);
         totalAtras->setText(value);
-        encademientosStyle(totalAtras);
+        encadenamientosStyle(totalAtras);
         QTableWidgetItem *totalAdelante = new QTableWidgetItem(QString::number(sumaAdelante,'f',precission));
         value = Separador(totalAdelante,false);
         totalAdelante->setText(value);
-        encademientosStyle(totalAdelante);
+        encadenamientosStyle(totalAdelante);
         tw->setItem(count,2,totalAtras);
         tw->setItem(count,3,totalAdelante);
     }
 }
 
-//Clasificador de cuentas
+/**
+    @brief Función que permite accionar el clasificador de cuentas
+    @date 01/09/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotClasificarCuentas()
 {
     QTableWidget *An = findChild<QTableWidget *>("MatrizAn");
@@ -3120,7 +3411,11 @@ void MainWindow::slotClasificarCuentas()
     tabWidget->setCurrentIndex(indice);
 }
 
-/*      Funcion que calcular los Ui y Uj para los clasificadores    */
+/**
+    @brief Función que permite calcular los Ui y Uj para los clasificadores
+    @date 03/09/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::obtenerUiUj(QTableWidget *tw, QVector<double> &ui, QVector<double> &uj)
 {
     int contador = tw->rowCount();
@@ -3158,7 +3453,15 @@ void MainWindow::obtenerUiUj(QTableWidget *tw, QVector<double> &ui, QVector<doub
     }
 }
 
-/*          Funcion que hace los cálculos de los clasificadores            */
+/**
+    @brief Función que permite hacer los cálculos de los clasificadores
+    @date 05/09/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <ui> Recibe el vector Ui
+    @param <uj> Recibe el vector Uj
+    @param <init> Recibe el valor guía para cuentas y componentes
+*/
 void MainWindow::calcularClasificador(QTableWidget *tw, QVector<double> ui, QVector<double> uj,int init)
 {
     int count = tw->rowCount()-1;
@@ -3213,6 +3516,12 @@ void MainWindow::calcularClasificador(QTableWidget *tw, QVector<double> ui, QVec
     }
 }
 
+/**
+    @brief Función que permite agregar la primera celda en los clasificadores
+    @date 10/09/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla de clasificadores
+*/
 void MainWindow::agregarPrimeraCelda(QTableWidget *tw)
 {
     tw->insertRow(0);
@@ -3238,7 +3547,59 @@ void MainWindow::agregarPrimeraCelda(QTableWidget *tw)
     tw->setSpan(0,5,1,3);
 }
 
+/**
+    @brief Función que permite abir el formulario de creación del reporte de los encadenamientos
+    @date 31/08/2015
+    @author Rodrigo Boet
+*/
+void MainWindow::slotEncadenamientoReport()
+{
+    FormExportReport *formularioReporte = new FormExportReport(this);
+    connect(formularioReporte,SIGNAL(formAccepted(QString)),this,SLOT(slotGenerarEncadenamientoReport(QString)));
+    formularioReporte->show();
+}
+
+/**
+    @brief Función que crear el reporte de los encadenamientos
+    @date 31/08/2015
+    @author Rodrigo Boet
+*/
+void MainWindow::slotGenerarEncadenamientoReport(QString filename)
+{
+    int indice = tabWidget->currentIndex();
+    QWidget *widget = tabWidget->widget(indice);
+    QTableWidget *tw = widget->findChild<QTableWidget *>();
+    int row = tw->rowCount();
+    int col = tw->columnCount();
+    QStringList myHtml;
+    myHtml.append("<table>");
+    for(int i=0;i<row;i++)
+    {
+        myHtml.append("<tr>");
+        for(int j=0;j<col;j++)
+        {
+            QString item = tw->item(i,j)->text();
+            myHtml.append("<td>"+item+"</td>");
+        }
+        myHtml.append("</tr>");
+    }
+    myHtml.append("</table>");
+    QTextDocument report;
+    report.setHtml(myHtml.join(""));
+    QPrinter printer;
+    printer.setOutputFileName(filename);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    report.print(&printer);
+    printer.newPage();
+}
+
+
 //FH_005
+/**
+    @brief Función que ejecuta la acción del botón de modelo clásico
+    @date 15/09/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotModeloClasico()
 {
     if(opcionMa == 0)
@@ -3296,7 +3657,15 @@ void MainWindow::slotModeloClasico()
     tabWidget->setCurrentIndex(indice);
 
 }
-/*          Funcion que realiza las operaciones en el escenario         */
+
+
+/**
+    @brief Función que permite realizar las operaciones en el escenario
+    @date 15/09/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <clasico> Recibe un booleano (Verdadero si para el modelo clásico, Falso en caso contrario)
+*/
 void MainWindow::llenarEscenario(QTableWidget *tw,bool clasico)
 {
     QTableWidget *tablaEndogena = findChild<QTableWidget *>("MatrizEndogenaEndogena");
@@ -3360,6 +3729,13 @@ void MainWindow::llenarEscenario(QTableWidget *tw,bool clasico)
     tw->resizeColumnsToContents();
 }
 
+/**
+    @brief Función que permite calcular un escenario
+    @date 18/09/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <clasico> Recibe un booleano (Verdadero si para el modelo clásico, Falso en caso contrario)
+*/
 void MainWindow::calcularEscenario(bool clasico)
 {
     QMessageBox msBox(QMessageBox::Question,"Calcular Escenario","¿Está seguro que desea calcular?",
@@ -3422,6 +3798,11 @@ void MainWindow::calcularEscenario(bool clasico)
     }
 }
 
+/**
+    @brief Función que permite finalizar un escenario
+    @date 18/09/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::finalizarEscenario()
 {
     QMessageBox msBox(QMessageBox::Question,"Finalizar Escenario","¿Está seguro que desea finalizar\ este escenario?",
@@ -3462,6 +3843,11 @@ void MainWindow::finalizarEscenario()
     }
 }
 
+/**
+    @brief Función que permite realizar el cálculo al finalizar un escenario
+    @date 18/09/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::calcularFinEscenario(QTableWidget *tw)
 {
     QVector<double> resultado;
@@ -3510,7 +3896,13 @@ void MainWindow::calcularFinEscenario(QTableWidget *tw)
     }
 }
 
-/*          funcion que calcula el resultado de multiplicar Ma por el subtotal del escenario y lo retorna en un vector      */
+/**
+    @brief Función que calcular el resultado de multiplicar Ma por el subtotal del escenario y lo retorna en un vector
+    @date 25/09/2015
+    @author Rodrigo Boet
+    @param <res> Recibe el vector donde se almacenarán los resultados
+    @return <res> retorna el vector con los elementos
+*/
 QVector<double> MainWindow::obtenerResultadoEscenario(QVector<double> res)
 {
     QTableWidget *Ma = findChild<QTableWidget *>("MatrizMa");
@@ -3531,6 +3923,11 @@ QVector<double> MainWindow::obtenerResultadoEscenario(QVector<double> res)
     return res;
 }
 
+/**
+    @brief Función que permite abrir el formulario de comparación de resultados
+    @date 01/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotCompararResultados()
 {
     if(opcionFormCompararResultados == 0)
@@ -3550,6 +3947,12 @@ void MainWindow::slotCompararResultados()
     formCompararResultados->show();
 }
 
+/**
+    @brief Función que permite obtener los nombres de los resultados de un escenario
+    @date 02/10/2015
+    @author Rodrigo Boet
+    @return <nombres> retorna los nombres de los resultados del escenario
+*/
 QStringList MainWindow::obtenerNombreResultadoEscenario()
 {
     QStringList nombres;
@@ -3561,6 +3964,11 @@ QStringList MainWindow::obtenerNombreResultadoEscenario()
     return nombres;
 }
 
+/**
+    @brief Función que permite generar el resultado de la comparación de los escenarios
+    @date 05/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotVerResultado()
 {
     QTableWidget *tablaComparar = new QTableWidget;
@@ -3615,35 +4023,14 @@ void MainWindow::slotVerResultado()
     cantidadResultados++;
 }
 
-void MainWindow::crearTablaComparar(QTableWidget *to, QTableWidget *tw)
-{
-    int count = to->rowCount();
-    int col = to->columnCount();
-    to->insertColumn(col);
-    to->insertColumn(col);
-    for(int i=0;i<count;i++)
-    {
-        QTableWidgetItem *item1 = new QTableWidgetItem(tw->item(i,2)->text());
-        item1->setTextAlignment(Qt::AlignCenter);
-        item1->setFlags(item1->flags() ^ Qt::ItemIsEditable);
-        QTableWidgetItem *item2 = new QTableWidgetItem(tw->item(i,3)->text());
-        item2->setTextAlignment(Qt::AlignCenter);
-        item2->setFlags(item2->flags() ^ Qt::ItemIsEditable);
-        if(i==0)
-        {
-            QFont font;
-            font.setBold(true);
-            item1->setFont(font);
-            item2->setFont(font);
-        }
-        to->setItem(i,col,item1);
-        to->setItem(i,col+1,item2);
-    }
-    to->resizeColumnsToContents();
-    to->resizeRowsToContents();
-}
-
-/*      Funcion para colocar cuenta/componentes en las tablas de modelo clasico, resultados y comparar resultados*/
+/**
+    @brief Función que permite colocar cuenta/componentes en las tablas de modelo clasico, resultados y comparar resultados
+    @date 08/10/2015
+    @author Rodrigo Boet
+    @param <to> Recibe el widget de la tabla
+    @param <count> Recibe el limite de la tabla
+    @param <clasico> Recibe un booleano (Verdadero si es para el módelo clásico, Falso en caso contrario)
+*/
 void MainWindow::cuentacomponentesResultado(QTableWidget *to, int count,bool clasico)
 {
     QStringList cuentaTitulos;
@@ -3694,6 +4081,11 @@ void MainWindow::cuentacomponentesResultado(QTableWidget *to, int count,bool cla
 }
 
 //FH_006
+/**
+    @brief Función que permite ejecutar la acción del botón del modelo no clásico
+    @date 10/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotModeloNoClasico()
 {
     if(opcionMa == 0)
@@ -3704,6 +4096,11 @@ void MainWindow::slotModeloNoClasico()
     actionModeloNoClasico.setDisabled(true);
 }
 
+/**
+    @brief Función que permite obtener las Matriz Exógena/Endógena
+    @date 12/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::obtenerMatrizExgEnd()
 {
     if(cantidadMNC==1 or opcionMb == 0)
@@ -3762,6 +4159,11 @@ void MainWindow::obtenerMatrizExgEnd()
 
 }
 
+/**
+    @brief Función que permite calcular los multiplicadores de Leontief en la matriz Exógena/Endógena
+    @date 14/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::calcularMb()
 {
     QTableWidget *MatrizEndogenaExogena = findChild<QTableWidget *>("MatrizExogenaEndogena");
@@ -3795,7 +4197,12 @@ void MainWindow::calcularMb()
     calcularSubtotalEndExg();
     opcionMb++;
 }
-/*      Funcion para crear la Matriz Exógena Endógena*/
+
+/**
+    @brief Función que permite crear la Matriz Exógena Endógena
+    @date 10/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::crearMatrizExgEnd(QTableWidget *MatrizEndogenaExogena,QTableWidget *MatrizExgEnd,int elementos,int inicioExogena)
 {
     //Crear Matriz ExgEnd
@@ -3821,12 +4228,12 @@ void MainWindow::crearMatrizExgEnd(QTableWidget *MatrizEndogenaExogena,QTableWid
     }
 }
 
-/*
-    Función que almacena los valores del fragmento exogeno/endogeno la tabla Tipo de variables
-    Autor: Rodrigo Boet
-    Fecha: 22/06/2016
-    @param <int> elementos -> Recibe como párametro la cantidad de elemntos que tiene esa sección
-    @param <int> cantidad -> Recibe como parametro el inicio de del fragmento exogeno/endogeno
+/**
+    @brief Función que almacena los valores del fragmento exogeno/endogeno la tabla Tipo de variables
+    @date 22/06/2016
+    @author Rodrigo Boet
+    @param <elementos> Recibe como párametro la cantidad de elemntos que tiene esa sección
+    @param <cantidad> Recibe como parametro el inicio de del fragmento exogeno/endogeno
 */
 void MainWindow::TotalEndoExoTable(int elementos, int cantidad)
 {
@@ -3841,7 +4248,12 @@ void MainWindow::TotalEndoExoTable(int elementos, int cantidad)
     }
 }
 
-/*      Funcion para calcular los totales de la matriz Exógena-Endógena     */
+/**
+    @brief Función que permite calcular los totales de la matriz Exógena-Endógena
+    @date 22/06/2016
+    @author Rodrigo Boet
+    @param <MatrizExgEnd> Recibe como párametro el widget de la matriz Exógena-Endógena
+*/
 void MainWindow::calcularMatrizExgEnd(QTableWidget *MatrizExgEnd)
 {
     //Calcular resultados
@@ -3865,6 +4277,13 @@ void MainWindow::calcularMatrizExgEnd(QTableWidget *MatrizExgEnd)
     }
 }
 
+/**
+    @brief Función que permite calcular los coeficientes técnicos verticales de la matriz Exógena-Endógena
+    @date 18/10/2015
+    @author Rodrigo Boet
+    @param <MatrizExgEnd> Recibe como párametro el widget de la matriz Exógena-Endógena
+    @param <Bn> Recibe como párametro el widget de la matriz Bn
+*/
 void MainWindow::ctvMatrizExgEnd(QTableWidget *MatrizExgEnd,QTableWidget *Bn)
 {
     //Calcular CTV
@@ -3926,7 +4345,12 @@ void MainWindow::ctvMatrizExgEnd(QTableWidget *MatrizExgEnd,QTableWidget *Bn)
     }
 }
 
-/*      Funcion para colocar los espacios de los títulos de las cuentas*/
+/**
+    @brief Función que permite colocar los espacios de los títulos de las cuenta
+    @date 15/10/2015
+    @author Rodrigo Boet
+    @param <Bn> Recibe el widget de la tabla
+*/
 void MainWindow::titlespanMatrizExgEnd(QTableWidget *Bn)
 {
     int fila = Bn->rowCount();
@@ -3979,6 +4403,13 @@ void MainWindow::titlespanMatrizExgEnd(QTableWidget *Bn)
     }
 }
 
+/**
+    @brief Función que permite calcular los multiplicadores de leontief para Bn
+    @date 25/10/2015
+    @author Rodrigo Boet
+    @param <Bn> Recibe el widget de la tabla Bn
+    @param <Mb> Recibe el widget de la tabla Mb
+*/
 void MainWindow::estimarMb(QTableWidget *Bn,QTableWidget *Mb)
 {
     int fila = Bn->rowCount();
@@ -4032,11 +4463,21 @@ void MainWindow::estimarMb(QTableWidget *Bn,QTableWidget *Mb)
     widget->setLayout(layoutCentralWidget);
 }
 
+/**
+    @brief Función que permite calcular un escenario no clásico
+    @date 25/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::calcularEscenarioNC()
 {
     calcularEscenario(false);
 }
 
+/**
+    @brief Función que permite finalizar un escenario no clásico
+    @date 25/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::finalizarEscenarioNC()
 {
     QMessageBox msBox(QMessageBox::Question,"Finalizar Escenario","¿Está seguro que desea finalizar\ este escenario?",
@@ -4077,6 +4518,13 @@ void MainWindow::finalizarEscenarioNC()
     }
 }
 
+/**
+    @brief Función que calcular el resultado de multiplicar Ma por el subtotal del escenario y lo retorna en un vector
+    @date 25/10/2015
+    @author Rodrigo Boet
+    @param <res> Recibe el vector donde se almacenarán los resultados
+    @return <res> retorna el vector con los elementos
+*/
 QVector<double> MainWindow::obtenerResultadoEscenarioMNC(QVector<double> res)
 {
     QTableWidget *Ma = findChild<QTableWidget *>("MatrizMa");
@@ -4098,6 +4546,11 @@ QVector<double> MainWindow::obtenerResultadoEscenarioMNC(QVector<double> res)
     return res;
 }
 
+/**
+    @brief Función que permite realizar el cálculo al finalizar un escenario no clásico
+    @date 18/09/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::calcularFinEscenarioMNC(QTableWidget *tw)
 {
     QVector<double> resultado;
@@ -4146,6 +4599,11 @@ void MainWindow::calcularFinEscenarioMNC(QTableWidget *tw)
     }
 }
 
+/**
+    @brief Función que permite calcular el subtotal de la matriz Exógena/Endógena
+    @date 28/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::calcularSubtotalEndExg()
 {
     int fila = MatrizExgEnd->rowCount()-1;
@@ -4162,6 +4620,11 @@ void MainWindow::calcularSubtotalEndExg()
     }
 }
 
+/**
+    @brief Función que permite abrir el formulario de comparación de resultados del modelo no clásico
+    @date 28/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotCompararResultadosMNC()
 {
     if(opcionFormCompararResultadosMNC == 0)
@@ -4181,6 +4644,12 @@ void MainWindow::slotCompararResultadosMNC()
     formCompararMNC->show();
 }
 
+/**
+    @brief Función que permite obtener los nombres de los resultados de un escenario no clásico
+    @date 29/10/2015
+    @author Rodrigo Boet
+    @return <nombres> retorna los nombres de los resultados del escenario
+*/
 QStringList MainWindow::obtenerNombreResultadoEscenarioMNC()
 {
     QStringList nombres;
@@ -4192,6 +4661,11 @@ QStringList MainWindow::obtenerNombreResultadoEscenarioMNC()
     return nombres;
 }
 
+/**
+    @brief Función que permite generar el resultado de la comparación de los escenarios no clásicos
+    @date 05/10/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotVerResultadoMNC()
 {
     QTableWidget *tablaComparar = new QTableWidget;
@@ -4248,6 +4722,11 @@ void MainWindow::slotVerResultadoMNC()
 
 
 //FH_007
+/**
+    @brief Función que permite calcular la incidencia según el modelo clásico
+    @date 01/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotPHCIncidencia100()
 {
     if(opcionMAT == 0)
@@ -4269,7 +4748,11 @@ void MainWindow::slotPHCIncidencia100()
     actionPHClasicoIncidencia100.setDisabled(true);
 }
 
-/*          Funcion que determina Ma Transpuesta o Ma^T        */
+/**
+    @brief Función que permite determinar Ma Transpuesta o Ma^T
+    @date 01/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::calcularMaT()
 {
     if(opcionMa == 0)
@@ -4308,7 +4791,12 @@ void MainWindow::calcularMaT()
     opcionMAT++;
 }
 
-/*          Calcula la incidencia al 100%       */
+/**
+    @brief Función que permite calcular la incidencia al 100%
+    @date 01/11/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+*/
 void MainWindow::calcularPHCIncidencia100(QTableWidget *tw)
 {
     int count = Vpond.count();
@@ -4339,6 +4827,11 @@ void MainWindow::calcularPHCIncidencia100(QTableWidget *tw)
     spanEndogenaCell(tw,2,0,false);
 }
 
+/**
+    @brief Función que permite generar una tabla con las incidencias "i" por cuenta
+    @date 15/09/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotPHCIncidenciaiCuenta()
 {
     if(opcionMAT == 0)
@@ -4367,6 +4860,11 @@ void MainWindow::slotPHCIncidenciaiCuenta()
     FI->show();
 }
 
+/**
+    @brief Función que permite calcular la incidencia según el modelo clásico por una cuenta seleccionada
+    @date 02/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotCalcularPHCIncidenciaiCuenta()
 {
     QTableWidget *tw = FI->ui->TableIncidencia;
@@ -4396,7 +4894,13 @@ void MainWindow::slotCalcularPHCIncidenciaiCuenta()
     cantidadPHCindidenciaiCuenta++;
 }
 
-/*          Funcion para calcular la incidencia "i" en los precios homogéneos clásico (cuenta)       */
+/**
+    @brief Función que permite calcular la incidencia "i" en los precios homogéneos clásico (cuenta)
+    @date 02/11/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <inci> Recibe el diccionario con las cuentas-valor
+*/
 void MainWindow::calcularPHCIncidenciaI(QTableWidget *tw,QMap<QString,double> inci)
 {
     int fila = tw->rowCount();
@@ -4423,6 +4927,11 @@ void MainWindow::calcularPHCIncidenciaI(QTableWidget *tw,QMap<QString,double> in
     FI->close();
 }
 
+/**
+    @brief Función que permite calcular la incidencia según el modelo clásico por un componente seleccionado
+    @date 03/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotPHCIncidenciaiComponente()
 {
     if(opcionMAT == 0)
@@ -4451,6 +4960,11 @@ void MainWindow::slotPHCIncidenciaiComponente()
     FI->show();
 }
 
+/**
+    @brief Función que permite calcular la incidencia "i" según el modelo clásico por un componente seleccionado
+    @date 03/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotCalcularPHCIncidenciaiComponente()
 {
     QTableWidget *tw = FI->ui->TableIncidencia;
@@ -4471,7 +4985,13 @@ void MainWindow::slotCalcularPHCIncidenciaiComponente()
     cantidadPHCindidenciaiComponente++;
 }
 
-/*      Funcion para calcular la incidencia "i" en los precios homogéneos clásico (componente)      */
+/**
+    @brief Función que permite calcular la incidencia "i" en los precios homogéneos clásico (componente)
+    @date 03/11/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <ot> Recibe el widget de la tabla donde se colocarán las incidencias
+*/
 void MainWindow::calcularPHCIncidenciaIComponente(QTableWidget *tw,QTableWidget *ot)
 {
     int fila = tw->rowCount();
@@ -4498,6 +5018,11 @@ void MainWindow::calcularPHCIncidenciaIComponente(QTableWidget *tw,QTableWidget 
     FI->close();
 }
 
+/**
+    @brief Función que calcular la Ma Transpuesta
+    @date 04/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::calcularMbT()
 {
     if(opcionMa == 0)
@@ -4567,6 +5092,11 @@ void MainWindow::calcularMbT()
 }
 
 //FH_008
+/**
+    @brief Función que permite calcular la incidencia al 100% según el modelo no clásico
+    @date 04/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotPHNCIncidencia100()
 {
     if(opcionMBT == 0)
@@ -4588,7 +5118,12 @@ void MainWindow::slotPHNCIncidencia100()
     actionPHNoClasicoIncidencia100.setDisabled(true);
 }
 
-/*      Funcion para calcular la incidencia "i" en los precios homogéneos no clásico (cuenta)*/
+/**
+    @brief Función que permite calcular la incidencia "i" en los precios homogéneos no clásico (cuenta)
+    @date 05/11/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+*/
 void MainWindow::calcularPHNCIncidencia100(QTableWidget *tw)
 {
     QTableWidget *Mbt = findChild<QTableWidget *>("MatrizMbT");
@@ -4646,6 +5181,11 @@ void MainWindow::calcularPHNCIncidencia100(QTableWidget *tw)
     titlespanMatrizExgEnd(tw);
 }
 
+/**
+    @brief Función que permite generar una tabla con las incidencias "i" por cuenta segn el modelo no clásico
+    @date 05/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotPHNCIncidenciaiCuenta()
 {
     if(opcionMBT == 0)
@@ -4674,6 +5214,11 @@ void MainWindow::slotPHNCIncidenciaiCuenta()
     FI->show();
 }
 
+/**
+    @brief Función que permite calcular la incidencia según el modelo no clásico por una cuenta seleccionada
+    @date 05/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotCalcularPHNCIncidenciaiCuenta()
 {
     QTableWidget *tw = FI->ui->TableIncidencia;
@@ -4703,6 +5248,11 @@ void MainWindow::slotCalcularPHNCIncidenciaiCuenta()
     cantidadPHNCindidenciaiCuenta++;
 }
 
+/**
+    @brief Función que permite calcular la incidencia según el modelo no clásico por un componente seleccionado
+    @date 05/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotPHNCIncidenciaiComponente()
 {
     if(opcionMBT == 0)
@@ -4732,6 +5282,11 @@ void MainWindow::slotPHNCIncidenciaiComponente()
     FI->show();
 }
 
+/**
+    @brief Función que permite calcular la incidencia "i" en los precios homogéneos no clásico (componente)
+    @date 05/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotCalcularPHNCIncidenciaiComponente()
 {
     QTableWidget *tw = FI->ui->TableIncidencia;
@@ -4753,6 +5308,11 @@ void MainWindow::slotCalcularPHNCIncidenciaiComponente()
 }
 
 //FH_009
+/**
+    @brief Función que permite abrir el formulario para las incidencias al 100%
+    @date 06/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotPNHIncudencia100()
 {
     if(opcionFormPNH==0)
@@ -4773,11 +5333,21 @@ void MainWindow::slotPNHIncudencia100()
     }
 }
 
+/**
+    @brief Función que permite cerrar el formulario para las incidencias al 100%
+    @date 06/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotCloseformPNH()
 {
     formPreciosNoHomogeneos->close();
 }
 
+/**
+    @brief Función que permite seleccionar los componentes en el formulario para las incidencias al 100%
+    @date 06/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotSelectPNH()
 {
     int cantidad=stackPNH->comboAccount->count();
@@ -4816,8 +5386,12 @@ void MainWindow::slotSelectPNH()
     }
 }
 
-/*      Funcion para calcular el vector Send, que se utiliza para crear una matriz identidad con una diagonal conformada
-                                    por los valores de un componente previamente seleccionado           */
+/**
+    @brief Funcion para calcular el vector Send, que se utiliza para crear una matriz identidad con una diagonal conformada
+                                    por los valores de un componente previamente seleccionado
+    @date 06/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::calcularVectorSend(QString componente,QVector<double> &vector)
 {
     if(opcionMa == 0)
@@ -4845,6 +5419,13 @@ void MainWindow::calcularVectorSend(QString componente,QVector<double> &vector)
     }
 }
 
+/**
+    @brief Función que permite realizar la multiplicación de matrices en los precios no homogéneos
+    @date 08/11/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <vector> Recibe el vector con los valores que irán en la diagonal principal
+*/
 void MainWindow::multiplicarMatricesPNH(QTableWidget *tw,QVector<double> vector)
 {
     int count = MatrixMa.rows();
@@ -4923,6 +5504,13 @@ void MainWindow::multiplicarMatricesPNH(QTableWidget *tw,QVector<double> vector)
     }
 }
 
+/**
+    @brief Función que permite realizar la multiplicación de matrices en los precios no homogéneos con incidencia al 100%
+    @date 10/11/2015
+    @author Rodrigo Boet
+    @param <tw> Recibe el widget de la tabla
+    @param <Diagonal> Recibe el vector con la diagonal principal
+*/
 void MainWindow::calcularPNHIncidencia100(QTableWidget *tw,MatrixXd Diagonal)
 {
     int count = Vpond.count();
@@ -4953,6 +5541,11 @@ void MainWindow::calcularPNHIncidencia100(QTableWidget *tw,MatrixXd Diagonal)
     spanEndogenaCell(tw,2,0,false);
 }
 
+/**
+    @brief Función que permite abrir el formulario para las incidencias por cuenta en los precios no homogéneos
+    @date 06/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotPNHIncidenciaiCuenta()
 {
     if(opcionFormPNH==0)
@@ -4974,6 +5567,11 @@ void MainWindow::slotPNHIncidenciaiCuenta()
 
 }
 
+/**
+    @brief Función que permite seleccionar los componentes el formulario para las incidencias por cuenta en los precios no homogéneos
+    @date 06/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotSelectPNHi()
 {
     int cantidad=stackPNH->comboAccount->count();
@@ -5027,6 +5625,11 @@ void MainWindow::slotSelectPNHi()
     }
 }
 
+/**
+    @brief Función que permite calcular las incidencias "i" por cuenta en los precios no homogéneos
+    @date 08/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotCalcularPNHIncidenciaiCuenta()
 {
     QVector<double> Send;
@@ -5064,6 +5667,11 @@ void MainWindow::slotCalcularPNHIncidenciaiCuenta()
     FI->close();
 }
 
+/**
+    @brief Función que permite generar una tabla con las incidencias "i" por cuenta en los precios no homogéneos
+    @date 11/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotPNHIncidenciaiComponente()
 {
     if(opcionFormPNH==0)
@@ -5084,6 +5692,11 @@ void MainWindow::slotPNHIncidenciaiComponente()
     }
 }
 
+/**
+    @brief Función que permite seleccionar los componentes en el formulario de precios no homogéneos
+    @date 11/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotSelectPNHic()
 {
     int cantidad=stackPNH->comboAccount->count();
@@ -5137,6 +5750,11 @@ void MainWindow::slotSelectPNHic()
     }
 }
 
+/**
+    @brief Función que permite calcular las incidencias "i" por componentes
+    @date 12/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotCalcularPNHIncidenciaiComponente()
 {
     QVector<double> Send;
@@ -5164,6 +5782,11 @@ void MainWindow::slotCalcularPNHIncidenciaiComponente()
     FI->close();
 }
 
+/**
+    @brief Función que permite generar el formularios para precios no homogéneos
+    @date 05/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::crearFormularioPNH()
 {
     formPreciosNoHomogeneos = new FormPreciosNoHomogeneos(this);
@@ -5227,7 +5850,11 @@ void MainWindow::crearFormularioPNH()
 
 //  FV_001
 /*                      A partir de aquí comienzan las operaciones del menu Visualización                   */
-
+/**
+    @brief Función que permite seleccionar un fragmento de una tabla y mostrarla en una pestaña a parte
+    @date 15/11/2015
+    @author Rodrigo Boet
+*/
 void MainWindow::slotSeleccionarTabla()
 {
     int index = tabWidget->currentIndex();
@@ -5358,53 +5985,3 @@ void MainWindow::slotSeleccionarTabla()
     }
 }
 
-/*          Funcion para agregar el span en los titulos de la matriz seleccionada    */
-void MainWindow::titleSeleccionar(QTableWidget *tw)
-{
-    QStringList CuentaFila;
-    QStringList CuentaColumna;
-    int fila = tw->rowCount();
-    int columna = tw->columnCount();
-    /*      Se crea una lista con las veces que se repiten cuentas en filas/columnas*/
-    //Fila
-    for(int i = 2;i<fila;i++)
-    {
-        CuentaFila.append(tw->item(i,0)->text());
-    }
-    //Columna
-    for(int j = 2;j<columna;j++)
-    {
-        CuentaColumna.append(tw->item(0,j)->text());
-    }
-    /*      Se crea el span tomando en cuenta las veces que se repite una cuenta en las listas      */
-    //Fila
-    for(int i=2;i<fila-1;i++)
-    {
-        QString accName=tw->item(i,0)->text();
-        if(CuentaFila.contains(accName))
-        {
-            int contar = CuentaFila.count(accName);
-            tw->setSpan(i,0,contar,1);
-            CuentaFila.removeAll(accName);
-        }
-        if(CuentaFila.isEmpty())
-        {
-            break;
-        }
-    }
-    //Columna
-    for(int j=2;j<columna-1;j++)
-    {
-        QString accName=tw->item(0,j)->text();
-        if(CuentaColumna.contains(accName))
-        {
-            int contar = CuentaColumna.count(accName);
-            tw->setSpan(0,j,1,contar);
-            CuentaColumna.removeAll(accName);
-        }
-        if(CuentaColumna.isEmpty())
-        {
-            break;
-        }
-    }
-}

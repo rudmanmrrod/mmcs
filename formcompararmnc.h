@@ -1,7 +1,7 @@
 #ifndef FORMCOMPARARMNC_H
 #define FORMCOMPARARMNC_H
 
-#include <QWidget>
+#include <QtWidgets>
 
 namespace Ui {
 class FormCompararMNC;

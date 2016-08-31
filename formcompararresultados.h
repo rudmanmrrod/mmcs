@@ -1,7 +1,7 @@
 #ifndef FORMCOMPARARRESULTADOS_H
 #define FORMCOMPARARRESULTADOS_H
 
-#include <QWidget>
+#include <QtWidgets>
 
 namespace Ui {
 class FormCompararResultados;

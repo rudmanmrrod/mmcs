@@ -1,25 +1,44 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'formviewmatrix.H'
 **
-** Created by: The Qt Meta Object Compiler version 63 (Qt 4.8.6)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.3.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
 #include "formviewmatrix.H"
+#include <QtCore/qbytearray.h>
+#include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'formviewmatrix.H' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 63
-#error "This file was generated using the moc from 4.8.6. It"
+#elif Q_MOC_OUTPUT_REVISION != 67
+#error "This file was generated using the moc from 5.3.2. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
-static const uint qt_meta_data_FormViewMatrix[] = {
+struct qt_meta_stringdata_FormMatrixView_t {
+    QByteArrayData data[1];
+    char stringdata[15];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_FormMatrixView_t, stringdata) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_FormMatrixView_t qt_meta_stringdata_FormMatrixView = {
+    {
+QT_MOC_LITERAL(0, 0, 14)
+    },
+    "FormMatrixView"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_FormMatrixView[] = {
 
  // content:
-       6,       // revision
+       7,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -32,11 +51,7 @@ static const uint qt_meta_data_FormViewMatrix[] = {
        0        // eod
 };
 
-static const char qt_meta_stringdata_FormViewMatrix[] = {
-    "FormViewMatrix\0"
-};
-
-void FormViewMatrix::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void FormMatrixView::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     Q_UNUSED(_o);
     Q_UNUSED(_id);
@@ -44,33 +59,26 @@ void FormViewMatrix::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
     Q_UNUSED(_a);
 }
 
-const QMetaObjectExtraData FormViewMatrix::staticMetaObjectExtraData = {
-    0,  qt_static_metacall 
+const QMetaObject FormMatrixView::staticMetaObject = {
+    { &QWidget::staticMetaObject, qt_meta_stringdata_FormMatrixView.data,
+      qt_meta_data_FormMatrixView,  qt_static_metacall, 0, 0}
 };
 
-const QMetaObject FormViewMatrix::staticMetaObject = {
-    { &QWidget::staticMetaObject, qt_meta_stringdata_FormViewMatrix,
-      qt_meta_data_FormViewMatrix, &staticMetaObjectExtraData }
-};
 
-#ifdef Q_NO_DATA_RELOCATION
-const QMetaObject &FormViewMatrix::getStaticMetaObject() { return staticMetaObject; }
-#endif //Q_NO_DATA_RELOCATION
-
-const QMetaObject *FormViewMatrix::metaObject() const
+const QMetaObject *FormMatrixView::metaObject() const
 {
-    return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *FormViewMatrix::qt_metacast(const char *_clname)
+void *FormMatrixView::qt_metacast(const char *_clname)
 {
     if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_FormViewMatrix))
-        return static_cast<void*>(const_cast< FormViewMatrix*>(this));
+    if (!strcmp(_clname, qt_meta_stringdata_FormMatrixView.stringdata))
+        return static_cast<void*>(const_cast< FormMatrixView*>(this));
     return QWidget::qt_metacast(_clname);
 }
 
-int FormViewMatrix::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int FormMatrixView::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)

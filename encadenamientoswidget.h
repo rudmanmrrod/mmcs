@@ -1,9 +1,8 @@
 #ifndef ENCADENAMIENTOSWIDGET_H
 #define ENCADENAMIENTOSWIDGET_H
 
-#include <QWidget>
-#include <QHBoxLayout>
-#include <QListWidget>
+#include <QtWidgets>
+
 
 class EncadenamientosWidget : public QWidget
 {

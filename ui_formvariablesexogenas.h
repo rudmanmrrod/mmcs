@@ -1,8 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'formvariablesexogenas.ui'
 **
-** Created: Thu Aug 6 16:13:25 2015
-**      by: Qt User Interface Compiler version 4.8.2
+** Created by: Qt User Interface Compiler version 5.3.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -11,11 +10,11 @@
 #define UI_FORMVARIABLESEXOGENAS_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QHeaderView>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -26,7 +25,7 @@ public:
     void setupUi(QWidget *FormVariablesExogenas)
     {
         if (FormVariablesExogenas->objectName().isEmpty())
-            FormVariablesExogenas->setObjectName(QString::fromUtf8("FormVariablesExogenas"));
+            FormVariablesExogenas->setObjectName(QStringLiteral("FormVariablesExogenas"));
         FormVariablesExogenas->setWindowModality(Qt::ApplicationModal);
         FormVariablesExogenas->resize(697, 345);
 
@@ -37,7 +36,7 @@ public:
 
     void retranslateUi(QWidget *FormVariablesExogenas)
     {
-        FormVariablesExogenas->setWindowTitle(QApplication::translate("FormVariablesExogenas", "Defina Variables Ex\303\263genas", 0, QApplication::UnicodeUTF8));
+        FormVariablesExogenas->setWindowTitle(QApplication::translate("FormVariablesExogenas", "Defina Variables Ex\303\263genas", 0));
     } // retranslateUi
 
 };

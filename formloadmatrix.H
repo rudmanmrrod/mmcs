@@ -1,8 +1,11 @@
 #ifndef FORMLOADMATRIX_H
 #define FORMLOADMATRIX_H
 
-#include<QtGui>
-#include<ui_formLoadMatrix.h>
+#include <QtWidgets>
+
+namespace Ui {
+class FormLoadMatrix;
+}
 
 class FormLoadMatrix : public QWidget
 {
@@ -18,8 +21,8 @@ protected:
     void closeEvent(QCloseEvent *);
 
 public:
-    FormLoadMatrix(QWidget * parent = 0);
-    Ui_FormLoadMatrix ui;
+    explicit FormLoadMatrix(QWidget * parent = 0);
+    Ui::FormLoadMatrix *ui;
 
 public slots:
     void slotLoadMatrixFile();

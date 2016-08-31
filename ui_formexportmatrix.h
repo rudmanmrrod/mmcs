@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'formexportmatrix.ui'
 **
-** Created by: Qt User Interface Compiler version 4.8.6
+** Created by: Qt User Interface Compiler version 5.3.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,11 +10,11 @@
 #define UI_FORMEXPORTMATRIX_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QHeaderView>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -25,7 +25,7 @@ public:
     void setupUi(QWidget *FormExportMatrix)
     {
         if (FormExportMatrix->objectName().isEmpty())
-            FormExportMatrix->setObjectName(QString::fromUtf8("FormExportMatrix"));
+            FormExportMatrix->setObjectName(QStringLiteral("FormExportMatrix"));
         FormExportMatrix->setWindowModality(Qt::ApplicationModal);
         FormExportMatrix->resize(650, 336);
 
@@ -36,7 +36,7 @@ public:
 
     void retranslateUi(QWidget *FormExportMatrix)
     {
-        FormExportMatrix->setWindowTitle(QApplication::translate("FormExportMatrix", "Exportar Matriz", 0, QApplication::UnicodeUTF8));
+        FormExportMatrix->setWindowTitle(QApplication::translate("FormExportMatrix", "Exportar Matriz", 0));
     } // retranslateUi
 
 };

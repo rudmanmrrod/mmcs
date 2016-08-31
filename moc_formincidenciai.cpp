@@ -1,26 +1,44 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'formincidenciai.h'
 **
-** Created: Fri Sep 18 09:49:10 2015
-**      by: The Qt Meta Object Compiler version 63 (Qt 4.8.2)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.3.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
 #include "formincidenciai.h"
+#include <QtCore/qbytearray.h>
+#include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'formincidenciai.h' doesn't include <QObject>."
-#elif Q_MOC_OUTPUT_REVISION != 63
-#error "This file was generated using the moc from 4.8.2. It"
+#elif Q_MOC_OUTPUT_REVISION != 67
+#error "This file was generated using the moc from 5.3.2. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
+struct qt_meta_stringdata_FormIncidenciaI_t {
+    QByteArrayData data[1];
+    char stringdata[16];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_FormIncidenciaI_t, stringdata) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_FormIncidenciaI_t qt_meta_stringdata_FormIncidenciaI = {
+    {
+QT_MOC_LITERAL(0, 0, 15)
+    },
+    "FormIncidenciaI"
+};
+#undef QT_MOC_LITERAL
+
 static const uint qt_meta_data_FormIncidenciaI[] = {
 
  // content:
-       6,       // revision
+       7,       // revision
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
@@ -33,10 +51,6 @@ static const uint qt_meta_data_FormIncidenciaI[] = {
        0        // eod
 };
 
-static const char qt_meta_stringdata_FormIncidenciaI[] = {
-    "FormIncidenciaI\0"
-};
-
 void FormIncidenciaI::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     Q_UNUSED(_o);
@@ -45,28 +59,21 @@ void FormIncidenciaI::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int 
     Q_UNUSED(_a);
 }
 
-const QMetaObjectExtraData FormIncidenciaI::staticMetaObjectExtraData = {
-    0,  qt_static_metacall 
-};
-
 const QMetaObject FormIncidenciaI::staticMetaObject = {
-    { &QWidget::staticMetaObject, qt_meta_stringdata_FormIncidenciaI,
-      qt_meta_data_FormIncidenciaI, &staticMetaObjectExtraData }
+    { &QWidget::staticMetaObject, qt_meta_stringdata_FormIncidenciaI.data,
+      qt_meta_data_FormIncidenciaI,  qt_static_metacall, 0, 0}
 };
 
-#ifdef Q_NO_DATA_RELOCATION
-const QMetaObject &FormIncidenciaI::getStaticMetaObject() { return staticMetaObject; }
-#endif //Q_NO_DATA_RELOCATION
 
 const QMetaObject *FormIncidenciaI::metaObject() const
 {
-    return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
 void *FormIncidenciaI::qt_metacast(const char *_clname)
 {
     if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_FormIncidenciaI))
+    if (!strcmp(_clname, qt_meta_stringdata_FormIncidenciaI.stringdata))
         return static_cast<void*>(const_cast< FormIncidenciaI*>(this));
     return QWidget::qt_metacast(_clname);
 }

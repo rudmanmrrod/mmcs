@@ -2,7 +2,7 @@
 #define STACKWIDGET_H
 
 #include <QVBoxLayout>
-#include <QWidget>
+#include <QtWidgets>
 #include <QStackedWidget>
 #include <QList>
 #include <QComboBox>

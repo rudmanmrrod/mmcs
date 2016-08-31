@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'formcompararresultados.ui'
 **
-** Created by: Qt User Interface Compiler version 4.8.6
+** Created by: Qt User Interface Compiler version 5.3.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,14 +10,14 @@
 #define UI_FORMCOMPARARRESULTADOS_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QListWidget>
-#include <QtGui/QPushButton>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QListWidget>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -31,13 +31,13 @@ public:
     void setupUi(QWidget *FormCompararResultados)
     {
         if (FormCompararResultados->objectName().isEmpty())
-            FormCompararResultados->setObjectName(QString::fromUtf8("FormCompararResultados"));
+            FormCompararResultados->setObjectName(QStringLiteral("FormCompararResultados"));
         FormCompararResultados->setWindowModality(Qt::ApplicationModal);
         FormCompararResultados->resize(569, 301);
         horizontalLayout = new QHBoxLayout(FormCompararResultados);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         resultadosListWidget = new QListWidget(FormCompararResultados);
-        resultadosListWidget->setObjectName(QString::fromUtf8("resultadosListWidget"));
+        resultadosListWidget->setObjectName(QStringLiteral("resultadosListWidget"));
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -48,14 +48,14 @@ public:
         horizontalLayout->addWidget(resultadosListWidget);
 
         buttonVerResultados = new QPushButton(FormCompararResultados);
-        buttonVerResultados->setObjectName(QString::fromUtf8("buttonVerResultados"));
+        buttonVerResultados->setObjectName(QStringLiteral("buttonVerResultados"));
         QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Fixed);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(buttonVerResultados->sizePolicy().hasHeightForWidth());
         buttonVerResultados->setSizePolicy(sizePolicy1);
         buttonVerResultados->setMinimumSize(QSize(100, 0));
-        buttonVerResultados->setStyleSheet(QString::fromUtf8("background-color: #358ccb; color: #fff; font-weight: bold; height: 30px; border: none; border-radius: 5px;\n"
+        buttonVerResultados->setStyleSheet(QLatin1String("background-color: #358ccb; color: #fff; font-weight: bold; height: 30px; border: none; border-radius: 5px;\n"
 ""));
 
         horizontalLayout->addWidget(buttonVerResultados);
@@ -68,8 +68,8 @@ public:
 
     void retranslateUi(QWidget *FormCompararResultados)
     {
-        FormCompararResultados->setWindowTitle(QApplication::translate("FormCompararResultados", "Comparar Resultados", 0, QApplication::UnicodeUTF8));
-        buttonVerResultados->setText(QApplication::translate("FormCompararResultados", "&Ver", 0, QApplication::UnicodeUTF8));
+        FormCompararResultados->setWindowTitle(QApplication::translate("FormCompararResultados", "Comparar Resultados", 0));
+        buttonVerResultados->setText(QApplication::translate("FormCompararResultados", "&Ver", 0));
     } // retranslateUi
 
 };

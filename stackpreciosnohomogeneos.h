@@ -1,7 +1,7 @@
 #ifndef STACKPRECIOSNOHOMOGENEOS_H
 #define STACKPRECIOSNOHOMOGENEOS_H
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QStringList>
 #include <variablepnh.h>
 

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'formLoadMatrix.ui'
 **
-** Created by: Qt User Interface Compiler version 4.8.6
+** Created by: Qt User Interface Compiler version 5.3.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,20 +10,20 @@
 #define UI_FORMLOADMATRIX_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QFrame>
-#include <QtGui/QGridLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
-#include <QtGui/QRadioButton>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QSpinBox>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QFrame>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -56,21 +56,27 @@ public:
     void setupUi(QWidget *FormLoadMatrix)
     {
         if (FormLoadMatrix->objectName().isEmpty())
-            FormLoadMatrix->setObjectName(QString::fromUtf8("FormLoadMatrix"));
+            FormLoadMatrix->setObjectName(QStringLiteral("FormLoadMatrix"));
         FormLoadMatrix->setWindowModality(Qt::ApplicationModal);
-        FormLoadMatrix->resize(607, 304);
+        FormLoadMatrix->resize(642, 304);
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(FormLoadMatrix->sizePolicy().hasHeightForWidth());
+        FormLoadMatrix->setSizePolicy(sizePolicy);
+        FormLoadMatrix->setMinimumSize(QSize(600, 300));
         verticalLayout = new QVBoxLayout(FormLoadMatrix);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         gridLayout = new QGridLayout();
-        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         gridLayout->addItem(horizontalSpacer, 2, 2, 1, 2);
 
         label_2 = new QLabel(FormLoadMatrix);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
+        label_2->setObjectName(QStringLiteral("label_2"));
         QFont font;
-        font.setFamily(QString::fromUtf8("Aero Matics"));
+        font.setFamily(QStringLiteral("Aero Matics"));
         font.setPointSize(14);
         font.setBold(false);
         font.setWeight(50);
@@ -87,43 +93,43 @@ public:
         gridLayout->addItem(verticalSpacer_3, 4, 0, 1, 1);
 
         label = new QLabel(FormLoadMatrix);
-        label->setObjectName(QString::fromUtf8("label"));
+        label->setObjectName(QStringLiteral("label"));
         label->setFont(font);
 
         gridLayout->addWidget(label, 0, 0, 1, 2);
 
         buttonOpen = new QPushButton(FormLoadMatrix);
-        buttonOpen->setObjectName(QString::fromUtf8("buttonOpen"));
+        buttonOpen->setObjectName(QStringLiteral("buttonOpen"));
 
         gridLayout->addWidget(buttonOpen, 11, 6, 1, 1);
 
         label_4 = new QLabel(FormLoadMatrix);
-        label_4->setObjectName(QString::fromUtf8("label_4"));
+        label_4->setObjectName(QStringLiteral("label_4"));
 
         gridLayout->addWidget(label_4, 2, 4, 1, 2);
 
         spinBox = new QSpinBox(FormLoadMatrix);
-        spinBox->setObjectName(QString::fromUtf8("spinBox"));
+        spinBox->setObjectName(QStringLiteral("spinBox"));
         spinBox->setMinimum(3);
         spinBox->setMaximum(15);
 
         gridLayout->addWidget(spinBox, 2, 6, 1, 1);
 
         line = new QFrame(FormLoadMatrix);
-        line->setObjectName(QString::fromUtf8("line"));
+        line->setObjectName(QStringLiteral("line"));
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);
 
         gridLayout->addWidget(line, 3, 0, 1, 7);
 
         spinNumber = new QSpinBox(FormLoadMatrix);
-        spinNumber->setObjectName(QString::fromUtf8("spinNumber"));
+        spinNumber->setObjectName(QStringLiteral("spinNumber"));
         spinNumber->setMinimum(2);
 
         gridLayout->addWidget(spinNumber, 2, 1, 1, 1);
 
         label_3 = new QLabel(FormLoadMatrix);
-        label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_3->setObjectName(QStringLiteral("label_3"));
         QFont font1;
         font1.setPointSize(10);
         label_3->setFont(font1);
@@ -131,22 +137,22 @@ public:
         gridLayout->addWidget(label_3, 2, 0, 1, 1);
 
         editFilePath = new QLineEdit(FormLoadMatrix);
-        editFilePath->setObjectName(QString::fromUtf8("editFilePath"));
+        editFilePath->setObjectName(QStringLiteral("editFilePath"));
         editFilePath->setReadOnly(true);
 
         gridLayout->addWidget(editFilePath, 7, 1, 1, 5);
 
         buttonSearch = new QPushButton(FormLoadMatrix);
-        buttonSearch->setObjectName(QString::fromUtf8("buttonSearch"));
+        buttonSearch->setObjectName(QStringLiteral("buttonSearch"));
         QIcon icon;
-        icon.addFile(QString::fromUtf8(":/imgs/folder_blue.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QStringLiteral(":/imgs/folder_blue.png"), QSize(), QIcon::Normal, QIcon::Off);
         buttonSearch->setIcon(icon);
         buttonSearch->setFlat(true);
 
         gridLayout->addWidget(buttonSearch, 7, 6, 1, 1);
 
         buttonCancel = new QPushButton(FormLoadMatrix);
-        buttonCancel->setObjectName(QString::fromUtf8("buttonCancel"));
+        buttonCancel->setObjectName(QStringLiteral("buttonCancel"));
 
         gridLayout->addWidget(buttonCancel, 11, 4, 1, 1);
 
@@ -155,7 +161,7 @@ public:
         gridLayout->addItem(verticalSpacer_6, 1, 1, 1, 1);
 
         label_7 = new QLabel(FormLoadMatrix);
-        label_7->setObjectName(QString::fromUtf8("label_7"));
+        label_7->setObjectName(QStringLiteral("label_7"));
         label_7->setFont(font1);
 
         gridLayout->addWidget(label_7, 7, 0, 1, 1);
@@ -165,18 +171,18 @@ public:
         gridLayout->addItem(verticalSpacer, 8, 1, 1, 1);
 
         radioAccount = new QRadioButton(FormLoadMatrix);
-        radioAccount->setObjectName(QString::fromUtf8("radioAccount"));
+        radioAccount->setObjectName(QStringLiteral("radioAccount"));
 
         gridLayout->addWidget(radioAccount, 10, 0, 1, 1);
 
         radioComponent = new QRadioButton(FormLoadMatrix);
-        radioComponent->setObjectName(QString::fromUtf8("radioComponent"));
+        radioComponent->setObjectName(QStringLiteral("radioComponent"));
 
         gridLayout->addWidget(radioComponent, 10, 2, 1, 1);
 
         label_info = new QLabel(FormLoadMatrix);
-        label_info->setObjectName(QString::fromUtf8("label_info"));
-        label_info->setStyleSheet(QString::fromUtf8("font-weight: bold;\n"
+        label_info->setObjectName(QStringLiteral("label_info"));
+        label_info->setStyleSheet(QLatin1String("font-weight: bold;\n"
 "color: #358ccb;\n"
 ""));
 
@@ -200,20 +206,20 @@ public:
 
     void retranslateUi(QWidget *FormLoadMatrix)
     {
-        FormLoadMatrix->setWindowTitle(QApplication::translate("FormLoadMatrix", "Cargar Matriz", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("FormLoadMatrix", "2.- Cargar Matriz", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("FormLoadMatrix", "1.- Estructura de la Matriz", 0, QApplication::UnicodeUTF8));
-        buttonOpen->setText(QApplication::translate("FormLoadMatrix", "A&brir", 0, QApplication::UnicodeUTF8));
-        label_4->setText(QApplication::translate("FormLoadMatrix", "N\303\272mero de Decimales", 0, QApplication::UnicodeUTF8));
-        label_3->setText(QApplication::translate("FormLoadMatrix", "N\303\272mero de Cuentas:", 0, QApplication::UnicodeUTF8));
+        FormLoadMatrix->setWindowTitle(QApplication::translate("FormLoadMatrix", "Cargar Matriz", 0));
+        label_2->setText(QApplication::translate("FormLoadMatrix", "2.- Cargar Matriz", 0));
+        label->setText(QApplication::translate("FormLoadMatrix", "1.- Estructura de la Matriz", 0));
+        buttonOpen->setText(QApplication::translate("FormLoadMatrix", "A&brir", 0));
+        label_4->setText(QApplication::translate("FormLoadMatrix", "N\303\272mero de Decimales", 0));
+        label_3->setText(QApplication::translate("FormLoadMatrix", "N\303\272mero de Cuentas:", 0));
 #ifndef QT_NO_TOOLTIP
-        buttonSearch->setToolTip(QApplication::translate("FormLoadMatrix", "Examinar", 0, QApplication::UnicodeUTF8));
+        buttonSearch->setToolTip(QApplication::translate("FormLoadMatrix", "Examinar", 0));
 #endif // QT_NO_TOOLTIP
         buttonSearch->setText(QString());
-        buttonCancel->setText(QApplication::translate("FormLoadMatrix", "&Cancelar", 0, QApplication::UnicodeUTF8));
-        label_7->setText(QApplication::translate("FormLoadMatrix", "Archivo:", 0, QApplication::UnicodeUTF8));
-        radioAccount->setText(QApplication::translate("FormLoadMatrix", "Con Cuentas", 0, QApplication::UnicodeUTF8));
-        radioComponent->setText(QApplication::translate("FormLoadMatrix", "Componentes", 0, QApplication::UnicodeUTF8));
+        buttonCancel->setText(QApplication::translate("FormLoadMatrix", "&Cancelar", 0));
+        label_7->setText(QApplication::translate("FormLoadMatrix", "Archivo:", 0));
+        radioAccount->setText(QApplication::translate("FormLoadMatrix", "Con Cuentas", 0));
+        radioComponent->setText(QApplication::translate("FormLoadMatrix", "Componentes", 0));
         label_info->setText(QString());
     } // retranslateUi
 

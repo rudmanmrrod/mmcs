@@ -1,7 +1,7 @@
 #ifndef STACKENCADENAMIENTOS_H
 #define STACKENCADENAMIENTOS_H
 
-#include <QWidget>
+#include <QtWidgets>
 #include <QHBoxLayout>
 #include <QStackedWidget>
 #include <QList>

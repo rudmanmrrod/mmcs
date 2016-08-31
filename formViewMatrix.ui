@@ -73,9 +73,7 @@
      </rect>
     </property>
     <widget class="QWidget" name="page"/>
-    <widget class="QWidget" name="page_2">
-     <zorder>loadButton</zorder>
-    </widget>
+    <widget class="QWidget" name="page_2"/>
    </widget>
   </widget>
   <widget class="QPushButton" name="loadButton">
@@ -100,11 +98,13 @@
      <height>581</height>
     </rect>
    </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
    <widget class="QWidget" name="tab_3">
     <attribute name="title">
      <string>Tab 1</string>
     </attribute>
-    <zorder>loadButton</zorder>
    </widget>
    <widget class="QWidget" name="tab_4">
     <attribute name="title">

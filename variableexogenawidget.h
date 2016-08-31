@@ -1,7 +1,7 @@
 #ifndef VARIABLEEXOGENAWIDGET_H
 #define VARIABLEEXOGENAWIDGET_H
 
-#include <QWidget>
+#include <QtWidgets>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QListWidget>

@@ -1,7 +1,7 @@
 #ifndef FORMENCADENAMIENTOS_H
 #define FORMENCADENAMIENTOS_H
 
-#include <QWidget>
+#include <QtWidgets>
 
 namespace Ui {
 class FormEncadenamientos;

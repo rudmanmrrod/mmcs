@@ -1,9 +1,7 @@
 #ifndef FORMEXPORTMATRIX_H
 #define FORMEXPORTMATRIX_H
 
-#include <QWidget>
-#include <QLineEdit>
-#include <QComboBox>
+#include <QtWidgets>
 
 namespace Ui {
 class FormExportMatrix;
