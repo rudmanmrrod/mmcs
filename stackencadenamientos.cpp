@@ -1,8 +1,20 @@
-/*
-    realizado por Rodrigo Boet Agosto/2015
+/**
+    Sistema de Manejo de Matrices de Contabilidad Social, desarrollado a partir de Mayo de 2015.
+    @file stackencadenamientos.cpp
+    @brief Clases y métodos del stack para los encadenamientos
+    @date 15/08/2015
+    @author Rodrigo Boet
+    @copyright <a href='http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
 */
 #include "stackencadenamientos.h"
 
+/**
+    @brief Clase principal que realiza la funcionalidad
+    @date 15/08/2015
+    @author Rodrigo Boet
+    @param <Cuentas> Recibe un mapa con las nombre,cuentas como llave,valor
+    @param <parent> Recibe el widget que será el padre
+*/
 stackEncadenamientos::stackEncadenamientos(QMap<int, QMap<QString, QStringList> > Cuentas, QWidget *parent):
     QWidget(parent)
 {

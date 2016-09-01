@@ -1,9 +1,20 @@
-/*
-    realizado por José Ruiz en Mayo de 2015
-    modificado por Rodrigo Boet
+/**
+    Sistema de Manejo de Matrices de Contabilidad Social, desarrollado a partir de Mayo de 2015.
+    @file accountwidget.cpp
+    @brief Clases y métodos del widget que permite manipular las cuentas
+    @date 10/05/2015
+    @author José Ruiz
+    @copyright <a href='http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
 */
 #include "accountwidget.H"
 
+/**
+    @brief Clase principal que realiza la funcionalidad
+    @date 10/05/2015
+    @author José Ruiz
+    @param <number> Recibe el número de widget a tratar
+    @param <parent> Recibe el widget que será el padre
+*/
 AccountWidget::AccountWidget(int number,QWidget *parent) :
     QWidget(parent)
 {

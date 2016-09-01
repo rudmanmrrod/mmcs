@@ -1,14 +1,12 @@
-/*
-    Creado bajo la Licencia GPL v.2.0 de la Free Software Foundation.
-    Autor: Rodrigo Boet
-    Fecha: 01/08/2016
-*/
-
-#include <genericFunctions.h>
 /**
     @file genericFunctions.cpp
     @brief Serie de funciones genéricas para el Sistema de Matrices de Contabilidad Social
+    @date 01/08/2016
+    @author Rodrigo Boet
+    @copyright <a href='http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
 */
+#include <genericFunctions.h>
+
 
 /**
     @brief Función que permite obtener los elementos distintos en una lista

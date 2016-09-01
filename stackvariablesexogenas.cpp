@@ -1,8 +1,24 @@
-/*
-    realizado por Rodrigo Boet Julio/2015
+/**
+    Sistema de Manejo de Matrices de Contabilidad Social, desarrollado a partir de Mayo de 2015.
+    @file stackvariablesexogenas.cpp
+    @brief Clases y métodos del stack para las variables exógenas
+    @date 15/07/2015
+    @author Rodrigo Boet
+    @copyright <a href='http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
 */
 #include "stackvariablesexogenas.h"
 
+/**
+    @brief Clase principal que realiza la funcionalidad
+    @date 15/07/2015
+    @author Rodrigo Boet
+    @param <Lista> Recibe una lista con los titulos
+    @param <Componentes> Recibe una lista con los componentes
+    @param <inicio> Recibe una lista con el inicio del componente <i>
+    @param <fin> Recibe una lista con el fin del componente <i>
+    @param <parent> Recibe el widget que será el padre
+    @param <contar> Recibe el limite de las iteraciones
+*/
 stackVariablesExogenas::stackVariablesExogenas(QStringList Lista,QStringList Componentes,QList<int> inicio,
                                                QList<int> fin,QWidget *parent,int contar) :
     QWidget(parent)
@@ -41,6 +57,14 @@ stackVariablesExogenas::stackVariablesExogenas(QStringList Lista,QStringList Com
             stackedWidget, SLOT(setCurrentIndex(int)));
 }
 
+/**
+    @brief Método que obtiene los componentes de una lista
+    @date 15/07/2015
+    @author Rodrigo Boet
+    @param <Componentes> Recibe la lista de los componentes
+    @param <inicio> Recibe el inicio del componente en la lista
+    @param <fin> Recibe el fin del componente en la lista
+*/
 QStringList stackVariablesExogenas::generarComponentes(QStringList Componentes, int inicio, int fin)
 {
     QStringList mylista;

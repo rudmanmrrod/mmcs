@@ -1,7 +1,10 @@
-/*
-    Creado bajo la Licencia GPL v.2.0 de la Free Software Foundation.
-    primer aporte realizado por José Ruiz en Mayo de 2015
-    resto del proyecto realizado por Rodrigo Boet desde Junio/2015
+/**
+    Sistema de Manejo de Matrices de Contabilidad Social, desarrollado a partir de Mayo de 2015.
+    @file mainwindow.c
+    @brief Cuerpo Principal de funciones del Sistema de Matrices de Contabilidad Social
+    @author José Ruiz at 05/15, Rodrigo Boet
+    @author <a href='http://www.cenditel.gob.ve'>Centro Nacional de Desarrollo e Investigación en Tecnologías Libres (CENDITEL) nodo Mérida - Venezuela</a>
+    @copyright <a href='http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
 */
 
 #include "mainwindow.H"
@@ -10,13 +13,6 @@
 #include "formexportmatrix.h"
 #include <stackencadenamientos.h>
 #include <QDebug>
-/**
-    Sistema de Manejo de Matrices de Contabilidad Social, desarrollado a partir de Mayo de 2015.
-    @file mainwindow.c
-    @brief Cuerpo Principal de funciones del Sistema de Matrices de Contabilidad Social
-    @author <a href='http://www.cenditel.gob.ve'>Centro Nacional de Desarrollo e Investigación en Tecnologías Libres (CENDITEL) nodo Mérida - Venezuela</a>
-    @copyright <a href='http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
-*/
 
 using namespace Eigen;
 

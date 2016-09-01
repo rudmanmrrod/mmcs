@@ -1180,7 +1180,8 @@ formloadmatrix.o: formloadmatrix.C formloadmatrix.H \
 		ui_formLoadMatrix.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o formloadmatrix.o formloadmatrix.C
 
-formviewmatrix.o: formviewmatrix.C formviewmatrix.H
+formviewmatrix.o: formviewmatrix.C formviewmatrix.H \
+		ui_formViewMatrix.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o formviewmatrix.o formviewmatrix.C
 
 stackwidget.o: stackwidget.C stackwidget.H \
