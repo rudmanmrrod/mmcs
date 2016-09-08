@@ -380,3 +380,51 @@ int contarElementosMap(QMap<QString,QStringList> diccionario)
     return contador;
 }
 
+/**
+    @brief Funcion que sumar todos los elementos de un vector
+    @date 08/09/2016
+    @author Rodrigo Boet
+    @param <valor> Recibe un vector de tipo <double>
+    @return <suma> retorna la suma de los elementos
+*/
+double sumElements(QVector<double> valor)
+{
+    int cantidad = valor.count();
+    double suma = 0;
+    for(int i=0;i<cantidad;i++)
+    {
+        suma+= valor.at(i);
+    }
+    return suma;
+}
+
+/**
+   @brief Funcion que permite
+   @date 08/09/2016
+   @author Rodrigo Boet
+   @param <tw> Recibe el widget de la tabla
+   @param <inicio> Recibe el inicio
+   @param <fin> Recibe el fin
+   @param <item> Recibe el indice de la fila/columna
+   @param <fila> Recibe un booleano (True si es fila, de lo contrario es una columna)
+*/
+void RowColNoEditable(QTableWidget *tw,int inicio,int fin,int item, bool fila)
+{
+    for(int i=inicio;i<=fin;i++)
+    {
+        if(fila)
+        {
+            QTableWidgetItem *ValoraInsertarFila = new QTableWidgetItem;
+            ValoraInsertarFila->setFlags(ValoraInsertarFila->flags() ^ Qt::ItemIsEditable);
+            tw->setItem(item,i,ValoraInsertarFila);
+        }
+        else
+        {
+            QTableWidgetItem *ValoraInsertarColumna = new QTableWidgetItem;
+            ValoraInsertarColumna->setFlags(ValoraInsertarColumna->flags() ^ Qt::ItemIsEditable);
+            tw->setItem(i,item,ValoraInsertarColumna);
+        }
+
+    }
+}
+

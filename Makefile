@@ -65,7 +65,8 @@ SOURCES       = mainwindow.C \
 		stackpreciosnohomogeneos.cpp \
 		variablepnh.cpp \
 		genericFunctions.cpp \
-		formexportreport.cpp qrc_images.cpp \
+		formexportreport.cpp \
+		qcustomplot.cpp qrc_images.cpp \
 		moc_mainwindow.cpp \
 		moc_formloadmatrix.cpp \
 		moc_formviewmatrix.cpp \
@@ -84,7 +85,8 @@ SOURCES       = mainwindow.C \
 		moc_formpreciosnohomogeneos.cpp \
 		moc_stackpreciosnohomogeneos.cpp \
 		moc_variablepnh.cpp \
-		moc_formexportreport.cpp
+		moc_formexportreport.cpp \
+		moc_qcustomplot.cpp
 OBJECTS       = mainwindow.o \
 		main.o \
 		formloadmatrix.o \
@@ -106,6 +108,7 @@ OBJECTS       = mainwindow.o \
 		variablepnh.o \
 		genericFunctions.o \
 		formexportreport.o \
+		qcustomplot.o \
 		qrc_images.o \
 		moc_mainwindow.o \
 		moc_formloadmatrix.o \
@@ -125,7 +128,8 @@ OBJECTS       = mainwindow.o \
 		moc_formpreciosnohomogeneos.o \
 		moc_stackpreciosnohomogeneos.o \
 		moc_variablepnh.o \
-		moc_formexportreport.o
+		moc_formexportreport.o \
+		moc_qcustomplot.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -200,7 +204,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		stackpreciosnohomogeneos.cpp \
 		variablepnh.cpp \
 		genericFunctions.cpp \
-		formexportreport.cpp
+		formexportreport.cpp \
+		qcustomplot.cpp
 QMAKE_TARGET  = SMSAM
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = SMSAM
@@ -361,7 +366,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/SMSAM1.0.0 || mkdir -p .tmp/SMSAM1.0.0
-	$(COPY_FILE) --parents $(DIST) .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents img/images.qrc .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents mainwindow.H formloadmatrix.H formviewmatrix.H stackwidget.H accountwidget.H formvariablesexogenas.h stackvariablesexogenas.h variableexogenawidget.h formexportmatrix.h formencadenamientos.h stackencadenamientos.h encadenamientoswidget.h formcompararresultados.h formcompararmnc.h formincidenciai.h formpreciosnohomogeneos.h stackpreciosnohomogeneos.h variablepnh.h genericFunctions.h formexportreport.h .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents mainwindow.C main.C formloadmatrix.C formviewmatrix.C stackwidget.C accountwidget.C formvariablesexogenas.cpp stackvariablesexogenas.cpp variableexogenawidget.cpp formexportmatrix.cpp formencadenamientos.cpp stackencadenamientos.cpp encadenamientoswidget.cpp formcompararresultados.cpp formcompararmnc.cpp formincidenciai.cpp formpreciosnohomogeneos.cpp stackpreciosnohomogeneos.cpp variablepnh.cpp genericFunctions.cpp formexportreport.cpp .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents formLoadMatrix.ui formvariablesexogenas.ui formexportmatrix.ui formencadenamientos.ui formcompararresultados.ui formcompararmnc.ui formincidenciai.ui formpreciosnohomogeneos.ui formexportreport.ui formViewMatrix.ui .tmp/SMSAM1.0.0/ && (cd `dirname .tmp/SMSAM1.0.0` && $(TAR) SMSAM1.0.0.tar SMSAM1.0.0 && $(COMPRESS) SMSAM1.0.0.tar) && $(MOVE) `dirname .tmp/SMSAM1.0.0`/SMSAM1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/SMSAM1.0.0
+	$(COPY_FILE) --parents $(DIST) .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents img/images.qrc .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents mainwindow.H formloadmatrix.H formviewmatrix.H stackwidget.H accountwidget.H formvariablesexogenas.h stackvariablesexogenas.h variableexogenawidget.h formexportmatrix.h formencadenamientos.h stackencadenamientos.h encadenamientoswidget.h formcompararresultados.h formcompararmnc.h formincidenciai.h formpreciosnohomogeneos.h stackpreciosnohomogeneos.h variablepnh.h genericFunctions.h formexportreport.h qcustomplot.h .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents mainwindow.C main.C formloadmatrix.C formviewmatrix.C stackwidget.C accountwidget.C formvariablesexogenas.cpp stackvariablesexogenas.cpp variableexogenawidget.cpp formexportmatrix.cpp formencadenamientos.cpp stackencadenamientos.cpp encadenamientoswidget.cpp formcompararresultados.cpp formcompararmnc.cpp formincidenciai.cpp formpreciosnohomogeneos.cpp stackpreciosnohomogeneos.cpp variablepnh.cpp genericFunctions.cpp formexportreport.cpp qcustomplot.cpp .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents formLoadMatrix.ui formvariablesexogenas.ui formexportmatrix.ui formencadenamientos.ui formcompararresultados.ui formcompararmnc.ui formincidenciai.ui formpreciosnohomogeneos.ui formexportreport.ui formViewMatrix.ui .tmp/SMSAM1.0.0/ && (cd `dirname .tmp/SMSAM1.0.0` && $(TAR) SMSAM1.0.0.tar SMSAM1.0.0 && $(COMPRESS) SMSAM1.0.0.tar) && $(MOVE) `dirname .tmp/SMSAM1.0.0`/SMSAM1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/SMSAM1.0.0
 
 
 clean:compiler_clean 
@@ -395,9 +400,9 @@ qrc_images.cpp: img/images.qrc \
 		img/undo-habilitado.png
 	/usr/lib/x86_64-linux-gnu/qt5/bin/rcc -name images img/images.qrc -o qrc_images.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_formloadmatrix.cpp moc_formviewmatrix.cpp moc_stackwidget.cpp moc_accountwidget.cpp moc_formvariablesexogenas.cpp moc_stackvariablesexogenas.cpp moc_variableexogenawidget.cpp moc_formexportmatrix.cpp moc_formencadenamientos.cpp moc_stackencadenamientos.cpp moc_encadenamientoswidget.cpp moc_formcompararresultados.cpp moc_formcompararmnc.cpp moc_formincidenciai.cpp moc_formpreciosnohomogeneos.cpp moc_stackpreciosnohomogeneos.cpp moc_variablepnh.cpp moc_formexportreport.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_formloadmatrix.cpp moc_formviewmatrix.cpp moc_stackwidget.cpp moc_accountwidget.cpp moc_formvariablesexogenas.cpp moc_stackvariablesexogenas.cpp moc_variableexogenawidget.cpp moc_formexportmatrix.cpp moc_formencadenamientos.cpp moc_stackencadenamientos.cpp moc_encadenamientoswidget.cpp moc_formcompararresultados.cpp moc_formcompararmnc.cpp moc_formincidenciai.cpp moc_formpreciosnohomogeneos.cpp moc_stackpreciosnohomogeneos.cpp moc_variablepnh.cpp moc_formexportreport.cpp moc_qcustomplot.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_formloadmatrix.cpp moc_formviewmatrix.cpp moc_stackwidget.cpp moc_accountwidget.cpp moc_formvariablesexogenas.cpp moc_stackvariablesexogenas.cpp moc_variableexogenawidget.cpp moc_formexportmatrix.cpp moc_formencadenamientos.cpp moc_stackencadenamientos.cpp moc_encadenamientoswidget.cpp moc_formcompararresultados.cpp moc_formcompararmnc.cpp moc_formincidenciai.cpp moc_formpreciosnohomogeneos.cpp moc_stackpreciosnohomogeneos.cpp moc_variablepnh.cpp moc_formexportreport.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_formloadmatrix.cpp moc_formviewmatrix.cpp moc_stackwidget.cpp moc_accountwidget.cpp moc_formvariablesexogenas.cpp moc_stackvariablesexogenas.cpp moc_variableexogenawidget.cpp moc_formexportmatrix.cpp moc_formencadenamientos.cpp moc_stackencadenamientos.cpp moc_encadenamientoswidget.cpp moc_formcompararresultados.cpp moc_formcompararmnc.cpp moc_formincidenciai.cpp moc_formpreciosnohomogeneos.cpp moc_stackpreciosnohomogeneos.cpp moc_variablepnh.cpp moc_formexportreport.cpp moc_qcustomplot.cpp
 moc_mainwindow.cpp: formloadmatrix.H \
 		ui_formLoadMatrix.h \
 		formviewmatrix.H \
@@ -414,6 +419,7 @@ moc_mainwindow.cpp: formloadmatrix.H \
 		formexportreport.h \
 		ui_formexportreport.h \
 		genericFunctions.h \
+		qcustomplot.h \
 		stackwidget.H \
 		accountwidget.H \
 		stackvariablesexogenas.h \
@@ -681,6 +687,9 @@ moc_variablepnh.cpp: variablepnh.h
 moc_formexportreport.cpp: formexportreport.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/rodrigo/Proyectos/Matrices/mmcs -I/home/rodrigo/Proyectos/Matrices/mmcs/Eigen -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/4.9 -I/usr/include/x86_64-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include formexportreport.h -o moc_formexportreport.cpp
 
+moc_qcustomplot.cpp: qcustomplot.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/rodrigo/Proyectos/Matrices/mmcs -I/home/rodrigo/Proyectos/Matrices/mmcs/Eigen -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/4.9 -I/usr/include/x86_64-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include qcustomplot.h -o moc_qcustomplot.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
 compiler_uic_make_all: ui_formLoadMatrix.h ui_formvariablesexogenas.h ui_formexportmatrix.h ui_formencadenamientos.h ui_formcompararresultados.h ui_formcompararmnc.h ui_formincidenciai.h ui_formpreciosnohomogeneos.h ui_formexportreport.h ui_formViewMatrix.h
@@ -743,6 +752,7 @@ mainwindow.o: mainwindow.C mainwindow.H \
 		formexportreport.h \
 		ui_formexportreport.h \
 		genericFunctions.h \
+		qcustomplot.h \
 		stackwidget.H \
 		accountwidget.H \
 		stackvariablesexogenas.h \
@@ -968,6 +978,7 @@ main.o: main.C mainwindow.H \
 		formexportreport.h \
 		ui_formexportreport.h \
 		genericFunctions.h \
+		qcustomplot.h \
 		stackwidget.H \
 		accountwidget.H \
 		stackvariablesexogenas.h \
@@ -1247,6 +1258,9 @@ formexportreport.o: formexportreport.cpp formexportreport.h \
 		ui_formexportreport.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o formexportreport.o formexportreport.cpp
 
+qcustomplot.o: qcustomplot.cpp qcustomplot.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qcustomplot.o qcustomplot.cpp
+
 qrc_images.o: qrc_images.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_images.o qrc_images.cpp
 
@@ -1306,6 +1320,9 @@ moc_variablepnh.o: moc_variablepnh.cpp
 
 moc_formexportreport.o: moc_formexportreport.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_formexportreport.o moc_formexportreport.cpp
+
+moc_qcustomplot.o: moc_qcustomplot.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_qcustomplot.o moc_qcustomplot.cpp
 
 ####### Install
 

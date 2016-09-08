@@ -14,6 +14,7 @@
 #include <stackencadenamientos.h>
 #include <QDebug>
 
+
 using namespace Eigen;
 
 //  FA_001
@@ -374,25 +375,16 @@ void MainWindow::matricesMenuBar()
     actionCV.setDisabled(true);
     CoeficientesTecnicos.addAction(&actionCV);
 
+    actionEncadenamiento.setText("Clasificar cu&entas");
+    actionEncadenamiento.setDisabled(true);
+    CoeficientesTecnicos.addAction(&actionEncadenamiento);
+
     menuTools.addMenu(&CoeficientesTecnicos);
 
     actionVariableExogena.setText("Definir Variables &Exogenas");
     actionVariableExogena.setDisabled(true);
 
     menuTools.addAction(&actionVariableExogena);
-
-    Encadenamientos.setTitle("E&ncadenamientos");
-    Encadenamientos.setDisabled(true);
-
-    actionEncadenamiento.setText("&Estimar Encadenamientos");
-    actionEncadenamiento.setDisabled(true);
-    Encadenamientos.addAction(&actionEncadenamiento);
-
-    actionClasificarCuentas.setText("&Clasificar Cuentas");
-    actionClasificarCuentas.setDisabled(true);
-    Encadenamientos.addAction(&actionClasificarCuentas);
-
-    menuTools.addMenu(&Encadenamientos);
 
     Modelos.setTitle("&Modelos");
     Modelos.setDisabled(true);
@@ -885,7 +877,38 @@ QString MainWindow::numberFormat(double & d) {
 */
 void MainWindow::abrirManual()
 {
-    QDesktopServices::openUrl(QUrl("/usr/share/mmcs/Usuario/Entrada.html",QUrl::TolerantMode));
+    //QDesktopServices::openUrl(QUrl("/usr/share/mmcs/Usuario/Entrada.html",QUrl::TolerantMode));
+    // generate some data:
+    /*QCustomPlot *customPlot = new QCustomPlot;
+    QVector<double> x(101), y(101); // initialize with entries 0..100
+    for (int i=0; i<10; ++i)
+    {
+      x[i] = i/5.0 - 1; // x goes from -1 to 1
+      y[i] = x[i]*x[i]; // let's plot a quadratic function
+    }
+    // create graph and assign data to it:
+    customPlot->addGraph();
+    customPlot->graph(0)->setData(x, y);
+    //customPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
+    customPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCross, 4));
+    // give the axes some labels:
+    customPlot->xAxis->setLabel("-y");
+    customPlot->yAxis->setLabel("-x");
+    customPlot->xAxis2->setLabel("y");
+    customPlot->yAxis2->setLabel("x");
+    // set axes ranges, so we see all data:
+    customPlot->xAxis->setRange(-5, 5);
+    customPlot->yAxis->setRange(-5, 5);
+    customPlot->xAxis2->setRange(-5, 5);
+    customPlot->yAxis2->setRange(-5, 5);
+    customPlot->xAxis2->setVisible(true);
+    customPlot->yAxis2->setVisible(true);
+    customPlot->replot();
+    FormExportMatrix *form = new FormExportMatrix(this);
+    QHBoxLayout *layoutHorizontal = new QHBoxLayout;
+    layoutHorizontal->addWidget(customPlot);
+    form->setLayout(layoutHorizontal);
+    form->show();*/
 }
 
 /**
@@ -913,7 +936,7 @@ void MainWindow::acercaDe()//Funcion para el mensaje acerca de
 */
 MainWindow::MainWindow()
     : actionNewProject(this),actionLoadMatrix(this), actionExportMatrix(this), actionQuit(this),actionCH(this), actionCV(this),
-      actionVariableExogena(this),actionEncadenamiento(this),actionClasificarCuentas(this), actionModeloClasico(this),
+      actionVariableExogena(this),actionEncadenamiento(this),actionModeloClasico(this),
       actionCompararResultados(this),actionModeloNoClasico(this),actionCompararResultadosMNC(this),actionPHClasicoIncidencia100(this),
       actionPHCIncidenciaCuenta(this),actionPHCIncidenciaComponente(this),actionPHNoClasicoIncidencia100(this),actionPHNCIncidenciaCuenta(this),
       actionPHNCIncidenciaComponente(this),actionPNHIncidencia100(this),actionPNHIncidenciaCuenta(this),actionPNHIncidenciaComponente(this),
@@ -2248,12 +2271,8 @@ void MainWindow::slotFinalizarExogena()
         //Encadenamientos
         EndogenaAn();
         slotMa();
-        Encadenamientos.setEnabled(true);
         connect(&actionEncadenamiento,SIGNAL(triggered()),this,SLOT(slotEncadenamientos()));
         actionEncadenamiento.setEnabled(true);
-        //Clasificador de Cuentas
-        connect(&actionClasificarCuentas,SIGNAL(triggered()),this,SLOT(slotClasificarCuentas()));
-        actionClasificarCuentas.setEnabled(true);
 
         //Se activa la opción de modelo clásico
         Modelos.setEnabled(true);
@@ -2319,6 +2338,8 @@ void MainWindow::EndogenaAn()
 
     insertremoveRowCol(to,0, false);
     CalcularAn(tw,tablaAn,to,count,true);//Funcion para calcular el Coeficiente Tecnico Horizontal (An)
+    //Función para calcular los totales de matriz An
+    estimarVIFVC();
     /*          Se colocan los titulos de cuenta endogena/exogena en la tabla endogena-exogena(Tipo de Variable)*/
     count=to->rowCount()-1;
     int elementos = contarElementosMap(diccCuentasExogenas);
@@ -2451,6 +2472,7 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw)
     }
     else
     {
+        total_ma = MatrixMa.sum();
         QTableWidget *tablaMa = new QTableWidget;
         tablaMa->setObjectName("MatrizMa");
         CrearTablaVacia(cantidad,tablaMa);
@@ -2919,6 +2941,7 @@ void MainWindow::slotAgregarEncadenamiento()
 
     if(nombre_cuenta!="Sub-Matriz Endógena-Endógena")
     {
+        diccCuentasEncadenamientos.clear();
         if(!lw->isEnabled())
         {
             QMessageBox::warning(this,"Alerta","La Cuenta Actual ya fue Agregada");
@@ -3114,8 +3137,9 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
             elementos += prueba.count();
         }
     }
-    crearTablaVaciaEncadenamiento(elementos,enTable);
+    crearTablaVaciaEncadenamiento(elementos,enTable,7);
     int columna=0;
+    qDebug()<< diccCuentasEncadenamientos;
     foreach(int key,diccCuentasEncadenamientos.keys())
     {
         foreach(QString name,diccCuentasEncadenamientos[key].keys())
@@ -3144,7 +3168,7 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
                                 else
                                 {
                                     EncadenamientoAtras = An(k-2,j-2);//Suma Columna(Encadenamiento hacia atras)
-                                    EncadenamientoAdelante = An(k-2,j-2);//Suma Fila(Encadenamiento hacia adelante)
+                                    EncadenamientoAdelante = An(j-2,k-2);//Suma Fila(Encadenamiento hacia adelante)
                                 }
                                 sumaColumna+=EncadenamientoAtras;
                                 sumaFila+=EncadenamientoAdelante;
@@ -3163,6 +3187,8 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
                             valorAdelante->setFlags(valorAdelante->flags() ^ Qt::ItemIsEditable);
                             valorAdelante->setTextAlignment(Qt::AlignCenter);
                             enTable->setItem(columna,3,valorAdelante);
+                            //Se estiman los clasificadores
+                            determinarClasificador(enTable,columna,j-2,total_ma);
                             columna++;
                         }
                     }
@@ -3178,11 +3204,23 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
     encadenamientosStyle(encAdelante);
     enTable->setItem(0,2,encAtras);
     enTable->setItem(0,3,encAdelante);
+    //Se agregan los titulos para la clasificación de las cuentas
+    QTableWidgetItem *indAdelante = new QTableWidgetItem("Indicador de Encadenamiento Parcial\nhacia adelante");
+    encadenamientosStyle(indAdelante);
+    QTableWidgetItem *indAtras = new QTableWidgetItem("Indicador de  Encadenamiento Parcial\nhacia atrás");
+    encadenamientosStyle(indAtras);
+    QTableWidgetItem *clasificacion = new QTableWidgetItem("Clasificación");
+    encadenamientosStyle(clasificacion);
+    enTable->setItem(0,4,indAdelante);
+    enTable->setItem(0,5,indAtras);
+    enTable->setItem(0,6,clasificacion);
     noEditColZero(enTable);
     //Se agregan las cuentas y sus componentes
     cuentacomponentesEncadenamiento(enTable,elementos);
     //Se agregan los totales
     calcularTotalesEncadenamientos(enTable);
+    //Se colocan como no editables las celdas debajo de los clasificadores
+    RowColNoEditable(enTable,4,6,enTable->rowCount()-1,true);
     //Se auto ajustan las tablas al contenido
     enTable->resizeRowsToContents();
     enTable->resizeColumnsToContents();
@@ -3194,6 +3232,85 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
         lw = findChild<QListWidget *>(QString("encadenamientosAccList %1").arg(i + 1));
         lw->setEnabled(true);
     }
+}
+
+/**
+    @brief Función que permite estimar los valores del clasificador
+    @date 08/09/2016
+    @author Rodrigo Boet
+    @param <fila> Recibe la variable donde se almacenará la fila
+    @param <columna> Recibe la variable donde se almacenará la columna
+    @param <index> Recibe la ubicación del vector de donde se extraerá el valor
+*/
+void MainWindow::estimarClasificador(double &fila, double &columna, int index, int total)
+{
+    //Se buscan los botones para saber si se estimó por coeficientes técnicos o Ma
+    QRadioButton *rbCT = findChild<QRadioButton *>("CTButton");
+    QRadioButton *rbMa = findChild<QRadioButton *>("MaButton");
+    if(rbCT->isChecked())
+    {
+        double total_col = sumElements(vFila);
+        columna = vFila.at(index)/(total_col/vFila.count());
+        double total_row = sumElements(vColumna);
+        fila = vColumna.at(index)/(total_row/vColumna.count());
+    }
+    else if(rbMa->isChecked())
+    {
+        columna = (vFila.at(index)*vFila.count())/total;
+        fila = (vColumna.at(index)*vColumna.count())/total;
+    }
+}
+
+
+/**
+    @brief Función que hace el trabajo de calcular y determinar los clasificadores
+    @date 08/09/2016
+    @author Rodrigo Boet
+    @param <to> Recibe el widget de la tabla de encadenamientos
+    @param <index_table> Recibe el indice de la tabla de encadenamientos
+    @param <element> Recibe el indice de donde se extraerá el valor para calcular el clasificador
+*/
+void MainWindow::determinarClasificador(QTableWidget *tw, int index_table, int element, int total)
+{
+    QString value;
+    //Se estima la clasificación
+    double elementColumna;
+    double elementFila;
+    estimarClasificador(elementFila,elementColumna,element,total);
+    //Elementos de la clasificación columna
+    QTableWidgetItem *clasificacionColumna = new QTableWidgetItem(QString::number(elementColumna,'f',precission));
+    value = Separador(clasificacionColumna,false);
+    clasificacionColumna->setText(value);
+    clasificacionColumna->setFlags(clasificacionColumna->flags() ^ Qt::ItemIsEditable);
+    clasificacionColumna->setTextAlignment(Qt::AlignCenter);
+    tw->setItem(index_table,4,clasificacionColumna);
+    //Elementos de la clasificación fila
+    QTableWidgetItem *clasificacionFila = new QTableWidgetItem(QString::number(elementFila,'f',precission));
+    value = Separador(clasificacionFila,false);
+    clasificacionFila->setText(value);
+    clasificacionFila->setFlags(clasificacionFila->flags() ^ Qt::ItemIsEditable);
+    clasificacionFila->setTextAlignment(Qt::AlignCenter);
+    tw->setItem(index_table,5,clasificacionFila);
+    QTableWidgetItem *tipo = new QTableWidgetItem;
+    tipo->setFlags(tipo->flags() ^ Qt::ItemIsEditable);
+    //Se determina que tipo de cuenta es
+    if(elementColumna<1 and elementFila<1)
+    {
+        tipo->setText("Independiente");
+    }
+    else if(elementColumna>1 and elementFila<1)
+    {
+        tipo->setText("Impulsor de Economía");
+    }
+    else if(elementColumna<1 and elementFila>1)
+    {
+        tipo->setText("Base");
+    }
+    else if(elementColumna>1 and elementFila>1)
+    {
+        tipo->setText("Clave");
+    }
+    tw->setItem(index_table,6,tipo);
 }
 
 /**
@@ -3259,7 +3376,7 @@ void MainWindow::cuentacomponentesEncadenamiento(QTableWidget *to,int count)
 void MainWindow::crearMatrizEncadenamientoEndogena(QTableWidget *tw,QTableWidget *enTable, Eigen::MatrixXd Matrix)
 {
     int countEndogena = tw->rowCount();
-    crearTablaVaciaEncadenamiento(countEndogena-2,enTable);
+    crearTablaVaciaEncadenamiento(countEndogena-2,enTable,7);
     int columna=0;
     for(int i=2;i<countEndogena;i++)
     {
@@ -3286,6 +3403,8 @@ void MainWindow::crearMatrizEncadenamientoEndogena(QTableWidget *tw,QTableWidget
         valorAdelante->setFlags(valorAdelante->flags() ^ Qt::ItemIsEditable);
         valorAdelante->setTextAlignment(Qt::AlignCenter);
         enTable->setItem(columna,3,valorAdelante);
+        //Se estiman los clasificadores
+        determinarClasificador(enTable,columna,i-2,total_ma);
         columna++;
     }
     //Se agregan los titulos
@@ -3297,10 +3416,22 @@ void MainWindow::crearMatrizEncadenamientoEndogena(QTableWidget *tw,QTableWidget
     enTable->setItem(0,2,encAtras);
     enTable->setItem(0,3,encAdelante);
     noEditColZero(enTable);
+    //Se agregan los titulos para la clasificación de las cuentas
+    QTableWidgetItem *indAdelante = new QTableWidgetItem("Indicador de Encadenamiento Parcial\nhacia adelante");
+    encadenamientosStyle(indAdelante);
+    QTableWidgetItem *indAtras = new QTableWidgetItem("Indicador de  Encadenamiento Parcial\nhacia atrás");
+    encadenamientosStyle(indAtras);
+    QTableWidgetItem *clasificacion = new QTableWidgetItem("Clasificación");
+    encadenamientosStyle(clasificacion);
+    enTable->setItem(0,4,indAdelante);
+    enTable->setItem(0,5,indAtras);
+    enTable->setItem(0,6,clasificacion);
     //Se agregan las cuentas y sus componentes
     cuentacomponentesResultado(enTable,countEndogena-1);
     //Se agregan los totales
     calcularTotalesEncadenamientos(enTable);
+    //Se colocan como no editables las celdas debajo de los clasificadores
+    RowColNoEditable(enTable,4,6,enTable->rowCount()-1,true);
     //Se auto ajustan las tablas al contenido
     enTable->resizeRowsToContents();
     enTable->resizeColumnsToContents();
@@ -3356,7 +3487,7 @@ void MainWindow::calcularTotalesEncadenamientos(QTableWidget *tw)
         QTableWidgetItem *zero = new QTableWidgetItem;
         zero->setFlags(zero->flags() ^ Qt::ItemIsEditable);
         tw->setItem(count,0,zero);
-        QTableWidgetItem *titulo = new QTableWidgetItem(QString("Encadenamiento Parcial %1, Total").arg(accName.at(k)));
+        QTableWidgetItem *titulo = new QTableWidgetItem(QString("Encadenamiento Parcial %1").arg(accName.at(k)));
         encadenamientosStyle(titulo);
         tw->setItem(count,1,titulo);
         QTableWidgetItem *totalAtras = new QTableWidgetItem(QString::number(sumaAtras,'f',precission));
@@ -3373,142 +3504,24 @@ void MainWindow::calcularTotalesEncadenamientos(QTableWidget *tw)
 }
 
 /**
-    @brief Función que permite accionar el clasificador de cuentas
-    @date 01/09/2015
+    @brief Función que calcular los vectores fila/columna usados para la clasificación de cuentas
+    @date 07/09/2016
     @author Rodrigo Boet
 */
-void MainWindow::slotClasificarCuentas()
+void MainWindow::estimarVIFVC()
 {
-    QTableWidget *An = findChild<QTableWidget *>("MatrizAn");
-    QTableWidget *Ma = findChild<QTableWidget *>("MatrizMa");
-    int count = An->rowCount()-1;
-    QTableWidget *CC = new QTableWidget;
-    CC->setObjectName("Clasificador de Cuentas");
-    crearTablaVaciaEncadenamiento(count,CC,8);
-    cuentacomponentesResultado(CC,count-1,true);
-    QVector<double> vectorFila;
-    QVector<double> vectorColumna;
-    obtenerUiUj(An,vectorFila,vectorColumna);
-    calcularClasificador(CC,vectorFila,vectorColumna);
-    vectorFila.clear();
-    vectorColumna.clear();
-    obtenerUiUj(Ma,vectorFila,vectorColumna);
-    calcularClasificador(CC,vectorFila,vectorColumna,5);
-    CC->resizeColumnsToContents();//Ajuste de Columnas
-    agregarPrimeraCelda(CC);
-
-    tabWidget->addTab(new QWidget,"Clasificador");
-    int indice=ObtenerIndice("Clasificador");
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(CC);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
-    actionClasificarCuentas.setDisabled(true);
-    tabWidget->setCurrentIndex(indice);
-}
-
-/**
-    @brief Función que permite calcular los Ui y Uj para los clasificadores
-    @date 03/09/2015
-    @author Rodrigo Boet
-*/
-void MainWindow::obtenerUiUj(QTableWidget *tw, QVector<double> &ui, QVector<double> &uj)
-{
-    int contador = tw->rowCount();
-    double totalFila = 0;
-    double totalColumna = 0;
-    QVector<double> vectorFila;
-    QVector<double> vectorColumna;
-    for(int i=2;i<contador;i++)
-    {
-        double sumaFila = 0;
-        double sumaColumna = 0;
-        for(int j=2;j<contador;j++)
-        {
-            QString itemFila = Separador(tw->item(i,j),true);
-            QString itemColumna = Separador(tw->item(j,i),true);
-            double fila = itemFila.toDouble();
-            double columna = itemColumna.toDouble();
-            sumaFila+=fila;
-            sumaColumna+=columna;
-            totalFila+=fila;
-            totalColumna+=columna;
-        }
-        vectorFila.append(sumaFila);
-        vectorColumna.append(sumaColumna);
-    }
-    int cantidad = vectorFila.count();
-    totalFila/=cantidad;
-    totalColumna/=cantidad;
-    for(int i=0;i<cantidad;i++)
-    {
-        double fila = vectorFila.at(i)/totalFila;
-        ui.append(fila);
-        double columna = vectorColumna.at(i)/totalColumna;
-        uj.append(columna);
-    }
-}
-
-/**
-    @brief Función que permite hacer los cálculos de los clasificadores
-    @date 05/09/2015
-    @author Rodrigo Boet
-    @param <tw> Recibe el widget de la tabla
-    @param <ui> Recibe el vector Ui
-    @param <uj> Recibe el vector Uj
-    @param <init> Recibe el valor guía para cuentas y componentes
-*/
-void MainWindow::calcularClasificador(QTableWidget *tw, QVector<double> ui, QVector<double> uj,int init)
-{
-    int count = tw->rowCount()-1;
-    //Fuente Negrita
-    QFont font;
-    font.setBold(true);
-    //Titulos Ui, Uj y Tipo de Cuenta
-    QTableWidgetItem *uiItem = new QTableWidgetItem("Ui");
-    uiItem->setFlags(uiItem->flags() ^ Qt::ItemIsEditable);
-    uiItem->setFont(font);
-    tw->setItem(0,init,uiItem);
-    QTableWidgetItem *ujItem = new QTableWidgetItem("Uj");
-    ujItem->setFlags(ujItem->flags() ^ Qt::ItemIsEditable);
-    ujItem->setFont(font);
-    tw->setItem(0,init+1,ujItem);
-    QTableWidgetItem *tcItem = new QTableWidgetItem("Tipo de Cuenta");
-    tcItem->setFlags(tcItem->flags() ^ Qt::ItemIsEditable);
-    tcItem->setFont(font);
-    tw->setItem(0,init+2,tcItem);
+    int count = An.cols();
     for(int i=0;i<count;i++)
     {
-        QTableWidgetItem *vFila = new QTableWidgetItem(QString::number(ui.at(i),'f',precission));
-        vFila->setFlags(vFila->flags() ^ Qt::ItemIsEditable);
-        QString itemFila = Separador(vFila,false);
-        vFila->setText(itemFila);
-        tw->setItem(i+1,init,vFila);
-        QTableWidgetItem *vColumna = new QTableWidgetItem(QString::number(uj.at(i),'f',precission));
-        vColumna->setFlags(vColumna->flags() ^ Qt::ItemIsEditable);
-        QString itemColumna = Separador(vColumna,false);
-        vColumna->setText(itemColumna);
-        tw->setItem(i+1,init+1,vColumna);
-        QTableWidgetItem *tipo = new QTableWidgetItem;
-        tipo->setFlags(tipo->flags() ^ Qt::ItemIsEditable);
-        //Se determina que tipo de cuenta es
-        if(ui.at(i)<1 and uj.at(i)<1)
+        double fila = 0;
+        double columna = 0;
+        for(int j=0;j<count;j++)
         {
-            tipo->setText("Independiente");
+            fila+= An(i,j);
+            columna += An(j,i);
         }
-        else if(ui.at(i)>1 and uj.at(i)<1)
-        {
-            tipo->setText("Impulsor de Economía");
-        }
-        else if(ui.at(i)<1 and uj.at(i)>1)
-        {
-            tipo->setText("Base");
-        }
-        else if(ui.at(i)>1 and uj.at(i)>1)
-        {
-            tipo->setText("Clave");
-        }
-        tw->setItem(i+1,init+2,tipo);
+        vFila.append(fila);
+        vColumna.append(columna);
     }
 }
 
@@ -3580,13 +3593,51 @@ void MainWindow::slotGenerarEncadenamientoReport(QString filename)
         myHtml.append("</tr>");
     }
     myHtml.append("</table>");
+    QCustomPlot *customPlot = new QCustomPlot;
+    QVector<double> x(101), y(101); // initialize with entries 0..100
+    for (int i=0; i<10; ++i)
+    {
+      x[i] = i/5.0 - 1; // x goes from -1 to 1
+      y[i] = x[i]*x[i]; // let's plot a quadratic function
+    }
+    // create graph and assign data to it:
+    customPlot->addGraph();
+    customPlot->graph(0)->setData(x, y);
+    //customPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
+    customPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCross, 4));
+    // give the axes some labels:
+    customPlot->xAxis->setLabel("-y");
+    customPlot->yAxis->setLabel("-x");
+    customPlot->xAxis2->setLabel("y");
+    customPlot->yAxis2->setLabel("x");
+    // set axes ranges, so we see all data:
+    customPlot->xAxis->setRange(-5, 5);
+    customPlot->yAxis->setRange(-5, 5);
+    customPlot->xAxis2->setRange(-5, 5);
+    customPlot->yAxis2->setRange(-5, 5);
+    customPlot->xAxis2->setVisible(true);
+    customPlot->yAxis2->setVisible(true);
+    customPlot->replot();
+
     QTextDocument report;
     report.setHtml(myHtml.join(""));
-    QPrinter printer;
+    QTextCursor cursor(&report);
+    QPixmap pm = customPlot->toPixmap();
+    QImage img = pm.toImage();
+    cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+    cursor.insertImage(img);
+    QPrinter printer( QPrinter::HighResolution );
     printer.setOutputFileName(filename);
     printer.setOutputFormat(QPrinter::PdfFormat);
     report.print(&printer);
-    printer.newPage();
+
+    /*QPainter painter( &printer );
+    int h = painter.window().height()*0.4;
+    int w = h * 1.3;
+    int x1 = (painter.window().width() / 2) - (w/2);
+    int y1 = (painter.window().height() / 2) - (h/2);
+    painter.drawPixmap(x1, y1, w, h, customPlot->toPixmap());*/
+
 }
 
 

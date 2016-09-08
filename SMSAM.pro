@@ -20,7 +20,8 @@ HEADERS += mainwindow.H \
     stackpreciosnohomogeneos.h \
     variablepnh.h \
     genericFunctions.h \
-    formexportreport.h
+    formexportreport.h \
+    qcustomplot.h
 
 SOURCES += mainwindow.C \
     main.C \
@@ -42,7 +43,8 @@ SOURCES += mainwindow.C \
     stackpreciosnohomogeneos.cpp \
     variablepnh.cpp \
     genericFunctions.cpp \
-    formexportreport.cpp
+    formexportreport.cpp \
+    qcustomplot.cpp
 FORMS += formLoadMatrix.ui \
     formvariablesexogenas.ui \
     formexportmatrix.ui \

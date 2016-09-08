@@ -19,6 +19,7 @@
 #include <formexportreport.h>
 #include <ui_formexportreport.h>
 #include <genericFunctions.h>
+#include <qcustomplot.h>
 
 #include <sstream>
 #include <stackwidget.H>
@@ -55,37 +56,42 @@ class MainWindow : public QMainWindow
     QMenu PreciosNH;
     QMenu PreciosNHIncidencia;
 
+    //Acciones principales
     QAction actionLoadMatrix;
     QAction actionExportMatrix;
     QAction actionQuit;
     QAction actionNewProject;
 
+    //Acciones del menú de coeficientes
     QAction actionCH;
     QAction actionCV;
     QAction actionVariableExogena;
-
     QAction actionEncadenamiento;
-    QAction actionClasificarCuentas;
 
+    //Acciones del Modelo clásico y no clásico
     QAction actionModeloClasico;
     QAction actionCompararResultados;
     QAction actionModeloNoClasico;
     QAction actionCompararResultadosMNC;
 
+    //Acciones de precios homógeneos por módelo clásico
     QAction actionPHClasicoIncidencia100;
     QAction actionPHCIncidenciaCuenta;
     QAction actionPHCIncidenciaComponente;
 
+    //Acciones de precios homógeneos por módelo no clásico
     QAction actionPHNoClasicoIncidencia100;
     QAction actionPHNCIncidenciaCuenta;
     QAction actionPHNCIncidenciaComponente;
 
+    //Acciones de precios no homógeneos
     QAction actionPNHIncidencia100;
     QAction actionPNHIncidenciaCuenta;
     QAction actionPNHIncidenciaComponente;
 
     QAction actionSeleccionarTabla;
 
+    //Acciones del manú de ayuda
     QAction actionManual;
     QAction actionAcercaDe;
 
@@ -121,6 +127,7 @@ class MainWindow : public QMainWindow
     Eigen::MatrixXd MatrizMat;
     Eigen::MatrixXd MatrizMbt;
 
+    double total_ma;
 
     QString csvFilePath;
     char csvSeparator;
@@ -150,6 +157,9 @@ class MainWindow : public QMainWindow
     QVector<double> subtotalExog;
     QVector<double> subtotalExogEnd;
     QVector<double> Vpond;
+    //Son los vectores que almacenrán los totales del vectorFila y vectorColumna para An
+    QVector<double> vFila;
+    QVector<double> vColumna;
 
     int cantidadSelecciones;
     int cantidadEncadenamientos;
@@ -216,8 +226,6 @@ class MainWindow : public QMainWindow
     void crearMatrizEncadenamientoEndogena(QTableWidget *, QTableWidget *, Eigen::MatrixXd Matrix);
     void calcularTotalesEncadenamientos(QTableWidget *);
     void cuentacomponentesEncadenamiento(QTableWidget *, int count);
-    void obtenerUiUj(QTableWidget *, QVector<double> &, QVector<double> &);
-    void calcularClasificador(QTableWidget *, QVector<double>, QVector<double>, int init = 2);
     void agregarPrimeraCelda(QTableWidget *);
 
     void calcularSubtotal(QTableWidget *,int inicio, int fin,int exogena);
@@ -254,6 +262,13 @@ class MainWindow : public QMainWindow
     void calcularPNHIncidencia100(QTableWidget *, Eigen::MatrixXd Diagonal);
     void crearFormularioPNH();
     QStringList obtenerCuentas();
+
+    //Función estimar los vectores fila y columna para la clasificación en los encadenamientos
+    void estimarVIFVC();
+    //Función para estimar la clasificación de las cuentas por CW o Rassmusen
+    void estimarClasificador(double &, double &, int index, int total = 0);
+    //Función para determinar los clasificadores
+    void determinarClasificador(QTableWidget *, int index_table, int element, int total = 0);
 
     bool ComprobarCuentas();
     int ObtenerIndice(QString );
@@ -296,7 +311,6 @@ private slots:
     void slotCloseEncadenamiento();
     void slotAgregarEncadenamiento();
     void slotVerEncadenamiento();
-    void slotClasificarCuentas();
 
     //Slots para reportes
     void slotEncadenamientoReport();
