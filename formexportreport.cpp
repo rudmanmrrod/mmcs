@@ -69,9 +69,46 @@ void FormExportReport::slotClicked()
     if(filename.isEmpty())
     {
         QMessageBox::critical(this, "Faltan datos",
-                              "Debe seleccionar un archivo");
+                              "Debe seleccionar una ruta y nombre para el archivo");
         return;
     }
-    emit formAccepted(filename);
+    emit formAccepted(filename,true);
+    close();
+}
+
+/**
+    @brief Método que permite mostrar el diálogo para seleccionar el nombre del gráfico
+    @date 14/09/2016
+    @author Rodrigo Boet
+*/
+void FormExportReport::slotLoadGraphic()
+{
+    QString format = ".png";
+
+    QString filename = QFileDialog::getSaveFileName(this,
+            "Elija el nombre del gráfico", QDir::homePath(),"*.png");
+
+    filename.remove(format);
+
+    filename +=format;
+
+    ui->lineEdit->setText(filename);
+}
+
+/**
+    @brief Método que valida al darle clic en generar y que emite una SIGNAL
+    @date 14/09/2016
+    @author Rodrigo Boet
+*/
+void FormExportReport::slotClickedGraphic()
+{
+    QString filename= ui->lineEdit->text();
+    if(filename.isEmpty())
+    {
+        QMessageBox::critical(this, "Faltan datos",
+                              "Debe seleccionar una ruta y nombre para el archivo");
+        return;
+    }
+    emit formAccepted(filename,false);
     close();
 }

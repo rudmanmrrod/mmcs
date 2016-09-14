@@ -26,6 +26,7 @@ public:
     {
         if (FormEncadenamientos->objectName().isEmpty())
             FormEncadenamientos->setObjectName(QStringLiteral("FormEncadenamientos"));
+        FormEncadenamientos->setWindowModality(Qt::ApplicationModal);
         FormEncadenamientos->resize(756, 395);
 
         retranslateUi(FormEncadenamientos);

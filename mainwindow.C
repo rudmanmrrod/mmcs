@@ -877,38 +877,7 @@ QString MainWindow::numberFormat(double & d) {
 */
 void MainWindow::abrirManual()
 {
-    //QDesktopServices::openUrl(QUrl("/usr/share/mmcs/Usuario/Entrada.html",QUrl::TolerantMode));
-    // generate some data:
-    /*QCustomPlot *customPlot = new QCustomPlot;
-    QVector<double> x(101), y(101); // initialize with entries 0..100
-    for (int i=0; i<10; ++i)
-    {
-      x[i] = i/5.0 - 1; // x goes from -1 to 1
-      y[i] = x[i]*x[i]; // let's plot a quadratic function
-    }
-    // create graph and assign data to it:
-    customPlot->addGraph();
-    customPlot->graph(0)->setData(x, y);
-    //customPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
-    customPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCross, 4));
-    // give the axes some labels:
-    customPlot->xAxis->setLabel("-y");
-    customPlot->yAxis->setLabel("-x");
-    customPlot->xAxis2->setLabel("y");
-    customPlot->yAxis2->setLabel("x");
-    // set axes ranges, so we see all data:
-    customPlot->xAxis->setRange(-5, 5);
-    customPlot->yAxis->setRange(-5, 5);
-    customPlot->xAxis2->setRange(-5, 5);
-    customPlot->yAxis2->setRange(-5, 5);
-    customPlot->xAxis2->setVisible(true);
-    customPlot->yAxis2->setVisible(true);
-    customPlot->replot();
-    FormExportMatrix *form = new FormExportMatrix(this);
-    QHBoxLayout *layoutHorizontal = new QHBoxLayout;
-    layoutHorizontal->addWidget(customPlot);
-    form->setLayout(layoutHorizontal);
-    form->show();*/
+    QDesktopServices::openUrl(QUrl("/usr/share/mmcs/Usuario/Entrada.html",QUrl::TolerantMode));
 }
 
 /**
@@ -2869,21 +2838,21 @@ void MainWindow::slotEncadenamientos()
         /***        Se crean y personalizan los bottones para agregar, finalizar, deshacer y cancelar    ***/
         QPushButton * buttonAgregar = new QPushButton;
         buttonAgregar->setObjectName("AgregarEncadenamiento");//Se le asigna nombre al objeto
-        buttonAgregar->setText("Agregar");
+        buttonAgregar->setText("A&gregar");
         buttonAgregar->setFixedWidth(130);
         buttonAgregar->setStyleSheet("background-color: #358ccb; color: #fff;"
                                  "font-weight: bold; height: 30px; border: none;"
                                  "border-radius: 5px; margin-top: 40px;");
         QPushButton * buttonCancelar = new QPushButton;
         buttonCancelar->setObjectName("CancelarEncadenamiento");//Se le asigna nombre al objeto
-        buttonCancelar->setText("Cancelar");
+        buttonCancelar->setText("&Cancelar");
         buttonCancelar->setFixedWidth(130);
         buttonCancelar->setStyleSheet("background-color: #358ccb; color: #fff;"
                                  "font-weight: bold; height: 30px; border: none;"
                                  "border-radius: 5px; margin-top: 40px;");
         QPushButton * buttonVer = new QPushButton;
         buttonVer->setObjectName("VerEncadenamiento");//Se le asigna nombre al objeto
-        buttonVer->setText("Ver");
+        buttonVer->setText("V&er");
         buttonVer->setFixedWidth(130);
         buttonVer->setStyleSheet("background-color: #358ccb; color: #fff;"
                                  "font-weight: bold; height: 30px; border: none;"
@@ -3029,6 +2998,14 @@ void MainWindow::slotVerEncadenamiento()
             buttonReport->setStyleSheet("background-color: #358ccb; color: #fff;"
                                      "font-weight: bold; height: 30px; border: none;"
                                      "border-radius: 5px; margin-top: 40px;");
+            //Se genera el boton de gráfico
+            QPushButton * buttonGraphic = new QPushButton;
+            buttonGraphic->setText("&Gráfico");
+            buttonGraphic->setObjectName("ReportButton");
+            buttonGraphic->setFixedWidth(100);
+            buttonGraphic->setStyleSheet("background-color: #358ccb; color: #fff;"
+                                     "font-weight: bold; height: 30px; border: none;"
+                                     "border-radius: 5px; margin-top: 40px;");
 
             //Se genera la caja de grupo que contendrá el botón
             QGroupBox * groupBoxAccount = new QGroupBox;
@@ -3041,9 +3018,11 @@ void MainWindow::slotVerEncadenamiento()
 
             QHBoxLayout * layoutButtons = new QHBoxLayout;
             layoutButtons->addWidget(buttonReport);
+            layoutButtons->addWidget(buttonGraphic);
             groupBoxAccount->setLayout(layoutButtons);
             //Se conecta el boton de reporte
             connect(buttonReport,SIGNAL(clicked()),this,SLOT(slotEncadenamientoReport()));
+            connect(buttonGraphic,SIGNAL(clicked()),this,SLOT(slotEncadenamientoGraphic()));
 
             layoutLateralWidget->addWidget(groupBoxAccount);
             layoutCentralWidget->addLayout(layoutLateralWidget);
@@ -3083,6 +3062,14 @@ void MainWindow::slotVerEncadenamiento()
             buttonReport->setStyleSheet("background-color: #358ccb; color: #fff;"
                                      "font-weight: bold; height: 30px; border: none;"
                                      "border-radius: 5px; margin-top: 40px;");
+            //Se genera el boton de gráfico
+            QPushButton * buttonGraphic = new QPushButton;
+            buttonGraphic->setText("&Gráfico");
+            buttonGraphic->setObjectName("ReportButton");
+            buttonGraphic->setFixedWidth(100);
+            buttonGraphic->setStyleSheet("background-color: #358ccb; color: #fff;"
+                                     "font-weight: bold; height: 30px; border: none;"
+                                     "border-radius: 5px; margin-top: 40px;");
 
             //Se genera la caja de grupo que contendrá el botón
             QGroupBox * groupBoxAccount = new QGroupBox;
@@ -3095,9 +3082,11 @@ void MainWindow::slotVerEncadenamiento()
 
             QHBoxLayout * layoutButtons = new QHBoxLayout;
             layoutButtons->addWidget(buttonReport);
+            layoutButtons->addWidget(buttonGraphic);
             groupBoxAccount->setLayout(layoutButtons);
             //Se conecta el boton de reporte
             connect(buttonReport,SIGNAL(clicked()),this,SLOT(slotEncadenamientoReport()));
+            connect(buttonGraphic,SIGNAL(clicked()),this,SLOT(slotEncadenamientoGraphic()));
 
             layoutLateralWidget->addWidget(groupBoxAccount);
             layoutCentralWidget->addLayout(layoutLateralWidget);
@@ -3139,7 +3128,6 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
     }
     crearTablaVaciaEncadenamiento(elementos,enTable,7);
     int columna=0;
-    qDebug()<< diccCuentasEncadenamientos;
     foreach(int key,diccCuentasEncadenamientos.keys())
     {
         foreach(QString name,diccCuentasEncadenamientos[key].keys())
@@ -3526,37 +3514,6 @@ void MainWindow::estimarVIFVC()
 }
 
 /**
-    @brief Función que permite agregar la primera celda en los clasificadores
-    @date 10/09/2015
-    @author Rodrigo Boet
-    @param <tw> Recibe el widget de la tabla de clasificadores
-*/
-void MainWindow::agregarPrimeraCelda(QTableWidget *tw)
-{
-    tw->insertRow(0);
-    //Se colocan no editables la celda 0 y 1
-    noEditColZero(tw);
-    QTableWidgetItem *one = new QTableWidgetItem;
-    one->setFlags(one->flags() ^ Qt::ItemIsEditable);
-    tw->setItem(0,1,one);
-    for(int i=0;i<3;i++)
-    {
-        QTableWidgetItem *cAn = new QTableWidgetItem("Clasificador por An");
-        cAn->setTextAlignment(Qt::AlignCenter);
-        cAn->setFlags(cAn->flags() ^ Qt::ItemIsEditable);
-        CellStyleExEn(cAn);
-        tw->setItem(0,i+2,cAn);
-        QTableWidgetItem *cMa = new QTableWidgetItem("Clasificador por Ma");
-        cMa->setTextAlignment(Qt::AlignCenter);
-        cMa->setFlags(cMa->flags() ^ Qt::ItemIsEditable);
-        CellStyleExEn(cMa);
-        tw->setItem(0,5+i,cMa);
-    }
-    tw->setSpan(0,2,1,3);
-    tw->setSpan(0,5,1,3);
-}
-
-/**
     @brief Función que permite abir el formulario de creación del reporte de los encadenamientos
     @date 31/08/2015
     @author Rodrigo Boet
@@ -3564,7 +3521,26 @@ void MainWindow::agregarPrimeraCelda(QTableWidget *tw)
 void MainWindow::slotEncadenamientoReport()
 {
     FormExportReport *formularioReporte = new FormExportReport(this);
-    connect(formularioReporte,SIGNAL(formAccepted(QString)),this,SLOT(slotGenerarEncadenamientoReport(QString)));
+    connect(formularioReporte,SIGNAL(formAccepted(QString,bool)),this,SLOT(slotGenerarEncadenamientoReport(QString,bool)));
+    formularioReporte->show();
+}
+
+/**
+    @brief Función que permite abir el formulario de creación de gráficos de los encadenamientos
+    @date 14/09/2016
+    @author Rodrigo Boet
+*/
+void MainWindow::slotEncadenamientoGraphic()
+{
+    FormExportReport *formularioReporte = new FormExportReport(this);
+    formularioReporte->setWindowTitle("Exportar Gráfico");
+    formularioReporte->ui->label->setText("Guardar Gráifco");
+    formularioReporte->ui->label_3->setText("Seleccione la ruta para guardar el gráfico");
+    disconnect(formularioReporte->ui->ButtonCargar,SIGNAL(clicked()),formularioReporte,SLOT(slotLoad()));
+    disconnect(formularioReporte->ui->ButtonGenerar,SIGNAL(clicked()),formularioReporte,SLOT(slotClicked()));
+    connect(formularioReporte->ui->ButtonCargar,SIGNAL(clicked()),formularioReporte,SLOT(slotLoadGraphic()));
+    connect(formularioReporte->ui->ButtonGenerar,SIGNAL(clicked()),formularioReporte,SLOT(slotClickedGraphic()));
+    connect(formularioReporte,SIGNAL(formAccepted(QString,bool)),this,SLOT(slotGenerarEncadenamientoReport(QString,bool)));
     formularioReporte->show();
 }
 
@@ -3572,14 +3548,17 @@ void MainWindow::slotEncadenamientoReport()
     @brief Función que crear el reporte de los encadenamientos
     @date 31/08/2015
     @author Rodrigo Boet
+    @param <filename> Recibe el nombre del archivo
+    @param <report> recibe un booleano (true si es reporte, falso en caso contrario)
 */
-void MainWindow::slotGenerarEncadenamientoReport(QString filename)
+void MainWindow::slotGenerarEncadenamientoReport(QString filename, bool report)
 {
     int indice = tabWidget->currentIndex();
     QWidget *widget = tabWidget->widget(indice);
     QTableWidget *tw = widget->findChild<QTableWidget *>();
     int row = tw->rowCount();
     int col = tw->columnCount();
+    QVector<double> x, y;
     QStringList myHtml;
     myHtml.append("<table>");
     for(int i=0;i<row;i++)
@@ -3588,48 +3567,147 @@ void MainWindow::slotGenerarEncadenamientoReport(QString filename)
         for(int j=0;j<col;j++)
         {
             QString item = tw->item(i,j)->text();
-            myHtml.append("<td>"+item+"</td>");
+            //Comprende las filas superiores
+            if(i==0 and j>1)
+            {
+                myHtml.append("<td align='center' style='font-weight:bold;background-color:LightGrey;'>"+item+"</td>");
+            }
+            //Comprende las cuentas en la parte izquierda
+            else if((i>0 and i<row-1) and j==0)
+            {
+                myHtml.append("<td style='background-color:steelblue;color:white'>"+item+"</td>");
+            }
+            //Comprende las subcuentas en la parte izquierda
+            else if((i>0 and i<row-1)and j==1)
+            {
+                myHtml.append("<td align='center' style='background-color:LightGrey'>"+item+"</td>");
+            }
+            //Comprende la última fila
+            else if(i==row-1)
+            {
+                myHtml.append("<td align='center' style='font-weight:bold'>"+item+"</td>");
+            }
+            //Comprende el resto de los elementos
+            else
+            {
+                myHtml.append("<td align='center'>"+item+"</td>");
+            }
+            if((i>0 and i<row-1) and (j>3 and j<col-1))
+            {
+                QString titem = Separador(tw->item(i,j),true);
+                double valor = titem.toDouble();
+                if(j==4)
+                {
+                    x.append(valor);
+                }
+                else
+                {
+                    y.append(valor);
+                }
+            }
         }
         myHtml.append("</tr>");
     }
     myHtml.append("</table>");
+    //Máximos y Mínimos
+    double max = 3;
+    double min = -1;
+    //Gráfico
     QCustomPlot *customPlot = new QCustomPlot;
-    QVector<double> x(101), y(101); // initialize with entries 0..100
-    for (int i=0; i<10; ++i)
-    {
-      x[i] = i/5.0 - 1; // x goes from -1 to 1
-      y[i] = x[i]*x[i]; // let's plot a quadratic function
-    }
     // create graph and assign data to it:
     customPlot->addGraph();
     customPlot->graph(0)->setData(x, y);
-    //customPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
+    customPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
     customPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCross, 4));
+    // set title of plot:
+    customPlot->plotLayout()->insertRow(0);
+    customPlot->plotLayout()->addElement(0, 0, new QCPPlotTitle(customPlot, "Clasificación de Cuentas"));
     // give the axes some labels:
     customPlot->xAxis->setLabel("-y");
+    customPlot->xAxis->setTickStep(1);
+    customPlot->xAxis->setAutoTickStep(false);
+    customPlot->xAxis->setSubTickCount(5);
     customPlot->yAxis->setLabel("-x");
+    customPlot->yAxis->setAutoTickStep(false);
+    customPlot->yAxis->setTickStep(1);
+    customPlot->yAxis->setSubTickCount(5);
     customPlot->xAxis2->setLabel("y");
+    customPlot->xAxis2->setAutoTickStep(false);
+    customPlot->xAxis2->setTickStep(1);
+    customPlot->xAxis2->setSubTickCount(5);
     customPlot->yAxis2->setLabel("x");
+    customPlot->yAxis2->setAutoTickStep(false);
+    customPlot->yAxis2->setTickStep(1);
+    customPlot->yAxis2->setSubTickCount(5);
     // set axes ranges, so we see all data:
-    customPlot->xAxis->setRange(-5, 5);
-    customPlot->yAxis->setRange(-5, 5);
-    customPlot->xAxis2->setRange(-5, 5);
-    customPlot->yAxis2->setRange(-5, 5);
+    customPlot->xAxis->setRange(min, max);
+    customPlot->yAxis->setRange(min, max);
+    customPlot->xAxis2->setRange(min, max);
+    customPlot->yAxis2->setRange(min, max);
     customPlot->xAxis2->setVisible(true);
     customPlot->yAxis2->setVisible(true);
+    // flecha
+    QCPItemStraightLine *newY = new QCPItemStraightLine(customPlot);
+    customPlot->addItem(newY);
+    newY->point1->setCoords(1,3);
+    QCPItemStraightLine *newX = new QCPItemStraightLine(customPlot);
+    customPlot->addItem(newX);
+    newX->point1->setCoords(3,1);
+    //Se crean los labels
+    QCPItemText *claveText = new QCPItemText(customPlot);
+    customPlot->addItem(claveText);
+    claveText->position->setCoords(max-0.5, max-0.5);
+    claveText->setPositionAlignment(Qt::AlignBottom|Qt::AlignHCenter);
+    claveText->setPen(QPen(Qt::black));
+    claveText->setText("Clave");
+    claveText->setFont(QFont(font().family(), 10));
+    QCPItemText *baseText = new QCPItemText(customPlot);
+    customPlot->addItem(baseText);
+    baseText->position->setCoords(min+0.5, max-0.5);
+    baseText->setPositionAlignment(Qt::AlignBottom|Qt::AlignHCenter);
+    baseText->setPen(QPen(Qt::black));
+    baseText->setText("Base");
+    baseText->setFont(QFont(font().family(), 10));
+    QCPItemText *indepentientesText = new QCPItemText(customPlot);
+    customPlot->addItem(indepentientesText);
+    indepentientesText->position->setCoords(min+0.8, min+0.5);
+    indepentientesText->setPositionAlignment(Qt::AlignBottom|Qt::AlignHCenter);
+    indepentientesText->setPen(QPen(Qt::black));
+    indepentientesText->setText("Independiente");
+    indepentientesText->setFont(QFont(font().family(), 10));
+    QCPItemText *fuertearrastreText = new QCPItemText(customPlot);
+    customPlot->addItem(fuertearrastreText);
+    fuertearrastreText->position->setCoords(max-0.8, min+0.5);
+    fuertearrastreText->setPositionAlignment(Qt::AlignBottom|Qt::AlignHCenter);
+    fuertearrastreText->setPen(QPen(Qt::black));
+    fuertearrastreText->setText("Impulsor");
+    fuertearrastreText->setFont(QFont(font().family(), 10));
+    //Se generan los cambios en el grafico
     customPlot->replot();
 
-    QTextDocument report;
-    report.setHtml(myHtml.join(""));
-    QTextCursor cursor(&report);
-    QPixmap pm = customPlot->toPixmap();
-    QImage img = pm.toImage();
-    cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
-    cursor.insertImage(img);
-    QPrinter printer( QPrinter::HighResolution );
-    printer.setOutputFileName(filename);
-    printer.setOutputFormat(QPrinter::PdfFormat);
-    report.print(&printer);
+    QString reportText;
+    //Se evalua si es un reporte
+    if(report){
+        QTextDocument report;
+        report.setHtml(myHtml.join(""));
+        QTextCursor cursor(&report);
+        QPixmap pm = customPlot->toPixmap();
+        QImage img = pm.toImage();
+        cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+        cursor.insertImage(img);
+        QPrinter printer( QPrinter::HighResolution );
+        printer.setOutputFileName(filename);
+        printer.setOutputFormat(QPrinter::PdfFormat);
+        report.print(&printer);
+        reportText = "Se generó con éxito el reporte\n en "+filename;
+    }
+    else
+    {
+        customPlot->savePng(filename);
+        reportText = "Se generó con éxito el gráfico en "+filename;
+    }
+    //Mensaje de confimación
+    QMessageBox::information(this,"Reporte",reportText);
 
     /*QPainter painter( &printer );
     int h = painter.window().height()*0.4;

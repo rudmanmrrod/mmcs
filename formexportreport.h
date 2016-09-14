@@ -16,12 +16,13 @@ public:
     Ui::FormExportReport *ui;
     ~FormExportReport();
 signals:
-    void formAccepted(QString);
+    void formAccepted(QString,bool);
 
 public slots:
     void slotLoad();
     void slotClicked();
-
+    void slotLoadGraphic();
+    void slotClickedGraphic();
 private:
 
 };

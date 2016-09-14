@@ -226,7 +226,6 @@ class MainWindow : public QMainWindow
     void crearMatrizEncadenamientoEndogena(QTableWidget *, QTableWidget *, Eigen::MatrixXd Matrix);
     void calcularTotalesEncadenamientos(QTableWidget *);
     void cuentacomponentesEncadenamiento(QTableWidget *, int count);
-    void agregarPrimeraCelda(QTableWidget *);
 
     void calcularSubtotal(QTableWidget *,int inicio, int fin,int exogena);
     void llenarEscenario(QTableWidget *, bool clasico=true);
@@ -314,7 +313,10 @@ private slots:
 
     //Slots para reportes
     void slotEncadenamientoReport();
-    void slotGenerarEncadenamientoReport(QString);
+    void slotGenerarEncadenamientoReport(QString,bool);
+
+    //Slots para gráfico
+    void slotEncadenamientoGraphic();
 
     //Slots para exportar
     void slotCloseExport();

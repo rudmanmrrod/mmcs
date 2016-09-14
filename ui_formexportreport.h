@@ -36,6 +36,7 @@ public:
     QPushButton *ButtonCancelar;
     QPushButton *ButtonCargar;
     QSpacerItem *verticalSpacer_2;
+    QLabel *label_3;
 
     void setupUi(QWidget *FormExportReport)
     {
@@ -63,7 +64,7 @@ public:
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout->addItem(verticalSpacer, 3, 1, 1, 1);
+        gridLayout->addItem(verticalSpacer, 4, 1, 1, 1);
 
         label_2 = new QLabel(FormExportReport);
         label_2->setObjectName(QStringLiteral("label_2"));
@@ -73,7 +74,7 @@ public:
         sizePolicy1.setHeightForWidth(label_2->sizePolicy().hasHeightForWidth());
         label_2->setSizePolicy(sizePolicy1);
 
-        gridLayout->addWidget(label_2, 2, 0, 1, 1);
+        gridLayout->addWidget(label_2, 3, 0, 1, 1);
 
         ButtonGenerar = new QPushButton(FormExportReport);
         ButtonGenerar->setObjectName(QStringLiteral("ButtonGenerar"));
@@ -83,20 +84,20 @@ public:
         sizePolicy2.setHeightForWidth(ButtonGenerar->sizePolicy().hasHeightForWidth());
         ButtonGenerar->setSizePolicy(sizePolicy2);
 
-        gridLayout->addWidget(ButtonGenerar, 5, 2, 1, 1);
+        gridLayout->addWidget(ButtonGenerar, 6, 2, 1, 1);
 
         lineEdit = new QLineEdit(FormExportReport);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
         lineEdit->setReadOnly(true);
 
-        gridLayout->addWidget(lineEdit, 2, 1, 1, 4);
+        gridLayout->addWidget(lineEdit, 3, 1, 1, 4);
 
         ButtonCancelar = new QPushButton(FormExportReport);
         ButtonCancelar->setObjectName(QStringLiteral("ButtonCancelar"));
         sizePolicy2.setHeightForWidth(ButtonCancelar->sizePolicy().hasHeightForWidth());
         ButtonCancelar->setSizePolicy(sizePolicy2);
 
-        gridLayout->addWidget(ButtonCancelar, 5, 4, 1, 1);
+        gridLayout->addWidget(ButtonCancelar, 6, 4, 1, 1);
 
         ButtonCargar = new QPushButton(FormExportReport);
         ButtonCargar->setObjectName(QStringLiteral("ButtonCargar"));
@@ -107,11 +108,19 @@ public:
         ButtonCargar->setIcon(icon);
         ButtonCargar->setFlat(true);
 
-        gridLayout->addWidget(ButtonCargar, 2, 5, 1, 1);
+        gridLayout->addWidget(ButtonCargar, 3, 5, 1, 1);
 
         verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         gridLayout->addItem(verticalSpacer_2, 1, 1, 1, 1);
+
+        label_3 = new QLabel(FormExportReport);
+        label_3->setObjectName(QStringLiteral("label_3"));
+        label_3->setStyleSheet(QLatin1String("font-weight: bold;\n"
+"color: #358ccb;\n"
+""));
+
+        gridLayout->addWidget(label_3, 2, 1, 1, 4);
 
 
         gridLayout_2->addLayout(gridLayout, 0, 0, 1, 1);
@@ -130,6 +139,7 @@ public:
         ButtonGenerar->setText(QApplication::translate("FormExportReport", "Generar", 0));
         ButtonCancelar->setText(QApplication::translate("FormExportReport", "Cancelar", 0));
         ButtonCargar->setText(QString());
+        label_3->setText(QApplication::translate("FormExportReport", "Seleccione la ruta para guardar el reporte.", 0));
     } // retranslateUi
 
 };
