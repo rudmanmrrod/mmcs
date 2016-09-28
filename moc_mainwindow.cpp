@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[65];
-    char stringdata[1356];
+    QByteArrayData data[67];
+    char stringdata[1401];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -68,32 +68,34 @@ QT_MOC_LITERAL(35, 646, 18),
 QT_MOC_LITERAL(36, 665, 19),
 QT_MOC_LITERAL(37, 685, 19),
 QT_MOC_LITERAL(38, 705, 20),
-QT_MOC_LITERAL(39, 726, 25),
-QT_MOC_LITERAL(40, 752, 19),
-QT_MOC_LITERAL(41, 772, 20),
-QT_MOC_LITERAL(42, 793, 24),
-QT_MOC_LITERAL(43, 818, 32),
-QT_MOC_LITERAL(44, 851, 28),
-QT_MOC_LITERAL(45, 880, 36),
-QT_MOC_LITERAL(46, 917, 22),
-QT_MOC_LITERAL(47, 940, 16),
-QT_MOC_LITERAL(48, 957, 21),
-QT_MOC_LITERAL(49, 979, 25),
-QT_MOC_LITERAL(50, 1005, 33),
-QT_MOC_LITERAL(51, 1039, 29),
-QT_MOC_LITERAL(52, 1069, 37),
-QT_MOC_LITERAL(53, 1107, 20),
-QT_MOC_LITERAL(54, 1128, 16),
-QT_MOC_LITERAL(55, 1145, 13),
-QT_MOC_LITERAL(56, 1159, 24),
-QT_MOC_LITERAL(57, 1184, 28),
-QT_MOC_LITERAL(58, 1213, 14),
-QT_MOC_LITERAL(59, 1228, 32),
-QT_MOC_LITERAL(60, 1261, 15),
-QT_MOC_LITERAL(61, 1277, 36),
-QT_MOC_LITERAL(62, 1314, 20),
-QT_MOC_LITERAL(63, 1335, 11),
-QT_MOC_LITERAL(64, 1347, 8)
+QT_MOC_LITERAL(39, 726, 18),
+QT_MOC_LITERAL(40, 745, 25),
+QT_MOC_LITERAL(41, 771, 25),
+QT_MOC_LITERAL(42, 797, 19),
+QT_MOC_LITERAL(43, 817, 20),
+QT_MOC_LITERAL(44, 838, 24),
+QT_MOC_LITERAL(45, 863, 32),
+QT_MOC_LITERAL(46, 896, 28),
+QT_MOC_LITERAL(47, 925, 36),
+QT_MOC_LITERAL(48, 962, 22),
+QT_MOC_LITERAL(49, 985, 16),
+QT_MOC_LITERAL(50, 1002, 21),
+QT_MOC_LITERAL(51, 1024, 25),
+QT_MOC_LITERAL(52, 1050, 33),
+QT_MOC_LITERAL(53, 1084, 29),
+QT_MOC_LITERAL(54, 1114, 37),
+QT_MOC_LITERAL(55, 1152, 20),
+QT_MOC_LITERAL(56, 1173, 16),
+QT_MOC_LITERAL(57, 1190, 13),
+QT_MOC_LITERAL(58, 1204, 24),
+QT_MOC_LITERAL(59, 1229, 28),
+QT_MOC_LITERAL(60, 1258, 14),
+QT_MOC_LITERAL(61, 1273, 32),
+QT_MOC_LITERAL(62, 1306, 15),
+QT_MOC_LITERAL(63, 1322, 36),
+QT_MOC_LITERAL(64, 1359, 20),
+QT_MOC_LITERAL(65, 1380, 11),
+QT_MOC_LITERAL(66, 1392, 8)
     },
     "MainWindow\0slotNuevoProyecto\0\0"
     "slotLoadMatrix\0slotExportMatrix\0"
@@ -115,9 +117,10 @@ QT_MOC_LITERAL(64, 1347, 8)
     "slotModeloClasico\0calcularEscenario\0"
     "clasico\0finalizarEscenario\0"
     "slotModeloNoClasico\0calcularEscenarioNC\0"
-    "finalizarEscenarioNC\0slotCompararResultadosMNC\0"
-    "slotVerResultadoMNC\0slotPHCIncidencia100\0"
-    "slotPHCIncidenciaiCuenta\0"
+    "finalizarEscenarioNC\0slotDescomposicion\0"
+    "slotAgregarDescomposicion\0"
+    "slotCompararResultadosMNC\0slotVerResultadoMNC\0"
+    "slotPHCIncidencia100\0slotPHCIncidenciaiCuenta\0"
     "slotCalcularPHCIncidenciaiCuenta\0"
     "slotPHCIncidenciaiComponente\0"
     "slotCalcularPHCIncidenciaiComponente\0"
@@ -142,7 +145,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      63,   14, // methods
+      65,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -150,69 +153,71 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,  329,    2, 0x08 /* Private */,
-       3,    0,  330,    2, 0x08 /* Private */,
-       4,    0,  331,    2, 0x08 /* Private */,
-       5,    3,  332,    2, 0x08 /* Private */,
-       6,    0,  339,    2, 0x08 /* Private */,
-       7,    0,  340,    2, 0x08 /* Private */,
-       8,    0,  341,    2, 0x08 /* Private */,
-       9,    0,  342,    2, 0x08 /* Private */,
-      10,    0,  343,    2, 0x08 /* Private */,
-      11,    0,  344,    2, 0x08 /* Private */,
-      12,    0,  345,    2, 0x08 /* Private */,
-      13,    0,  346,    2, 0x08 /* Private */,
-      14,    0,  347,    2, 0x08 /* Private */,
-      15,    0,  348,    2, 0x08 /* Private */,
-      16,    0,  349,    2, 0x08 /* Private */,
-      17,    0,  350,    2, 0x08 /* Private */,
-      18,    0,  351,    2, 0x08 /* Private */,
-      19,    0,  352,    2, 0x08 /* Private */,
-      20,    0,  353,    2, 0x08 /* Private */,
-      21,    0,  354,    2, 0x08 /* Private */,
-      22,    0,  355,    2, 0x08 /* Private */,
-      23,    0,  356,    2, 0x08 /* Private */,
-      24,    0,  357,    2, 0x08 /* Private */,
-      25,    0,  358,    2, 0x08 /* Private */,
-      26,    0,  359,    2, 0x08 /* Private */,
-      27,    2,  360,    2, 0x08 /* Private */,
-      28,    0,  365,    2, 0x08 /* Private */,
-      29,    0,  366,    2, 0x08 /* Private */,
-      30,    0,  367,    2, 0x08 /* Private */,
-      31,    0,  368,    2, 0x08 /* Private */,
-      32,    0,  369,    2, 0x08 /* Private */,
-      33,    1,  370,    2, 0x08 /* Private */,
-      33,    0,  373,    2, 0x28 /* Private | MethodCloned */,
-      35,    0,  374,    2, 0x08 /* Private */,
-      36,    0,  375,    2, 0x08 /* Private */,
-      37,    0,  376,    2, 0x08 /* Private */,
-      38,    0,  377,    2, 0x08 /* Private */,
-      39,    0,  378,    2, 0x08 /* Private */,
-      40,    0,  379,    2, 0x08 /* Private */,
-      41,    0,  380,    2, 0x08 /* Private */,
-      42,    0,  381,    2, 0x08 /* Private */,
-      43,    0,  382,    2, 0x08 /* Private */,
-      44,    0,  383,    2, 0x08 /* Private */,
-      45,    0,  384,    2, 0x08 /* Private */,
-      46,    0,  385,    2, 0x08 /* Private */,
-      47,    0,  386,    2, 0x08 /* Private */,
-      48,    0,  387,    2, 0x08 /* Private */,
-      49,    0,  388,    2, 0x08 /* Private */,
-      50,    0,  389,    2, 0x08 /* Private */,
-      51,    0,  390,    2, 0x08 /* Private */,
-      52,    0,  391,    2, 0x08 /* Private */,
-      53,    0,  392,    2, 0x08 /* Private */,
-      54,    0,  393,    2, 0x08 /* Private */,
-      55,    0,  394,    2, 0x08 /* Private */,
-      56,    0,  395,    2, 0x08 /* Private */,
-      57,    0,  396,    2, 0x08 /* Private */,
-      58,    0,  397,    2, 0x08 /* Private */,
-      59,    0,  398,    2, 0x08 /* Private */,
-      60,    0,  399,    2, 0x08 /* Private */,
-      61,    0,  400,    2, 0x08 /* Private */,
-      62,    0,  401,    2, 0x08 /* Private */,
-      63,    0,  402,    2, 0x08 /* Private */,
-      64,    0,  403,    2, 0x08 /* Private */,
+       1,    0,  339,    2, 0x08 /* Private */,
+       3,    0,  340,    2, 0x08 /* Private */,
+       4,    0,  341,    2, 0x08 /* Private */,
+       5,    3,  342,    2, 0x08 /* Private */,
+       6,    0,  349,    2, 0x08 /* Private */,
+       7,    0,  350,    2, 0x08 /* Private */,
+       8,    0,  351,    2, 0x08 /* Private */,
+       9,    0,  352,    2, 0x08 /* Private */,
+      10,    0,  353,    2, 0x08 /* Private */,
+      11,    0,  354,    2, 0x08 /* Private */,
+      12,    0,  355,    2, 0x08 /* Private */,
+      13,    0,  356,    2, 0x08 /* Private */,
+      14,    0,  357,    2, 0x08 /* Private */,
+      15,    0,  358,    2, 0x08 /* Private */,
+      16,    0,  359,    2, 0x08 /* Private */,
+      17,    0,  360,    2, 0x08 /* Private */,
+      18,    0,  361,    2, 0x08 /* Private */,
+      19,    0,  362,    2, 0x08 /* Private */,
+      20,    0,  363,    2, 0x08 /* Private */,
+      21,    0,  364,    2, 0x08 /* Private */,
+      22,    0,  365,    2, 0x08 /* Private */,
+      23,    0,  366,    2, 0x08 /* Private */,
+      24,    0,  367,    2, 0x08 /* Private */,
+      25,    0,  368,    2, 0x08 /* Private */,
+      26,    0,  369,    2, 0x08 /* Private */,
+      27,    2,  370,    2, 0x08 /* Private */,
+      28,    0,  375,    2, 0x08 /* Private */,
+      29,    0,  376,    2, 0x08 /* Private */,
+      30,    0,  377,    2, 0x08 /* Private */,
+      31,    0,  378,    2, 0x08 /* Private */,
+      32,    0,  379,    2, 0x08 /* Private */,
+      33,    1,  380,    2, 0x08 /* Private */,
+      33,    0,  383,    2, 0x28 /* Private | MethodCloned */,
+      35,    0,  384,    2, 0x08 /* Private */,
+      36,    0,  385,    2, 0x08 /* Private */,
+      37,    0,  386,    2, 0x08 /* Private */,
+      38,    0,  387,    2, 0x08 /* Private */,
+      39,    0,  388,    2, 0x08 /* Private */,
+      40,    0,  389,    2, 0x08 /* Private */,
+      41,    0,  390,    2, 0x08 /* Private */,
+      42,    0,  391,    2, 0x08 /* Private */,
+      43,    0,  392,    2, 0x08 /* Private */,
+      44,    0,  393,    2, 0x08 /* Private */,
+      45,    0,  394,    2, 0x08 /* Private */,
+      46,    0,  395,    2, 0x08 /* Private */,
+      47,    0,  396,    2, 0x08 /* Private */,
+      48,    0,  397,    2, 0x08 /* Private */,
+      49,    0,  398,    2, 0x08 /* Private */,
+      50,    0,  399,    2, 0x08 /* Private */,
+      51,    0,  400,    2, 0x08 /* Private */,
+      52,    0,  401,    2, 0x08 /* Private */,
+      53,    0,  402,    2, 0x08 /* Private */,
+      54,    0,  403,    2, 0x08 /* Private */,
+      55,    0,  404,    2, 0x08 /* Private */,
+      56,    0,  405,    2, 0x08 /* Private */,
+      57,    0,  406,    2, 0x08 /* Private */,
+      58,    0,  407,    2, 0x08 /* Private */,
+      59,    0,  408,    2, 0x08 /* Private */,
+      60,    0,  409,    2, 0x08 /* Private */,
+      61,    0,  410,    2, 0x08 /* Private */,
+      62,    0,  411,    2, 0x08 /* Private */,
+      63,    0,  412,    2, 0x08 /* Private */,
+      64,    0,  413,    2, 0x08 /* Private */,
+      65,    0,  414,    2, 0x08 /* Private */,
+      66,    0,  415,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -247,6 +252,8 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Bool,   34,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -324,32 +331,34 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 34: _t->slotModeloNoClasico(); break;
         case 35: _t->calcularEscenarioNC(); break;
         case 36: _t->finalizarEscenarioNC(); break;
-        case 37: _t->slotCompararResultadosMNC(); break;
-        case 38: _t->slotVerResultadoMNC(); break;
-        case 39: _t->slotPHCIncidencia100(); break;
-        case 40: _t->slotPHCIncidenciaiCuenta(); break;
-        case 41: _t->slotCalcularPHCIncidenciaiCuenta(); break;
-        case 42: _t->slotPHCIncidenciaiComponente(); break;
-        case 43: _t->slotCalcularPHCIncidenciaiComponente(); break;
-        case 44: _t->slotCompararResultados(); break;
-        case 45: _t->slotVerResultado(); break;
-        case 46: _t->slotPHNCIncidencia100(); break;
-        case 47: _t->slotPHNCIncidenciaiCuenta(); break;
-        case 48: _t->slotCalcularPHNCIncidenciaiCuenta(); break;
-        case 49: _t->slotPHNCIncidenciaiComponente(); break;
-        case 50: _t->slotCalcularPHNCIncidenciaiComponente(); break;
-        case 51: _t->slotPNHIncudencia100(); break;
-        case 52: _t->slotCloseformPNH(); break;
-        case 53: _t->slotSelectPNH(); break;
-        case 54: _t->slotPNHIncidenciaiCuenta(); break;
-        case 55: _t->slotPNHIncidenciaiComponente(); break;
-        case 56: _t->slotSelectPNHi(); break;
-        case 57: _t->slotCalcularPNHIncidenciaiCuenta(); break;
-        case 58: _t->slotSelectPNHic(); break;
-        case 59: _t->slotCalcularPNHIncidenciaiComponente(); break;
-        case 60: _t->slotSeleccionarTabla(); break;
-        case 61: _t->abrirManual(); break;
-        case 62: _t->acercaDe(); break;
+        case 37: _t->slotDescomposicion(); break;
+        case 38: _t->slotAgregarDescomposicion(); break;
+        case 39: _t->slotCompararResultadosMNC(); break;
+        case 40: _t->slotVerResultadoMNC(); break;
+        case 41: _t->slotPHCIncidencia100(); break;
+        case 42: _t->slotPHCIncidenciaiCuenta(); break;
+        case 43: _t->slotCalcularPHCIncidenciaiCuenta(); break;
+        case 44: _t->slotPHCIncidenciaiComponente(); break;
+        case 45: _t->slotCalcularPHCIncidenciaiComponente(); break;
+        case 46: _t->slotCompararResultados(); break;
+        case 47: _t->slotVerResultado(); break;
+        case 48: _t->slotPHNCIncidencia100(); break;
+        case 49: _t->slotPHNCIncidenciaiCuenta(); break;
+        case 50: _t->slotCalcularPHNCIncidenciaiCuenta(); break;
+        case 51: _t->slotPHNCIncidenciaiComponente(); break;
+        case 52: _t->slotCalcularPHNCIncidenciaiComponente(); break;
+        case 53: _t->slotPNHIncudencia100(); break;
+        case 54: _t->slotCloseformPNH(); break;
+        case 55: _t->slotSelectPNH(); break;
+        case 56: _t->slotPNHIncidenciaiCuenta(); break;
+        case 57: _t->slotPNHIncidenciaiComponente(); break;
+        case 58: _t->slotSelectPNHi(); break;
+        case 59: _t->slotCalcularPNHIncidenciaiCuenta(); break;
+        case 60: _t->slotSelectPNHic(); break;
+        case 61: _t->slotCalcularPNHIncidenciaiComponente(); break;
+        case 62: _t->slotSeleccionarTabla(); break;
+        case 63: _t->abrirManual(); break;
+        case 64: _t->acercaDe(); break;
         default: ;
         }
     }
@@ -380,13 +389,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 63)
+        if (_id < 65)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 63;
+        _id -= 65;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 63)
+        if (_id < 65)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 63;
+        _id -= 65;
     }
     return _id;
 }

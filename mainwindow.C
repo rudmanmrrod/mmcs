@@ -8,10 +8,6 @@
 */
 
 #include "mainwindow.H"
-#include "accountwidget.H"
-#include "stackvariablesexogenas.h"
-#include "formexportmatrix.h"
-#include <stackencadenamientos.h>
 #include <QDebug>
 
 
@@ -385,6 +381,12 @@ void MainWindow::matricesMenuBar()
     actionVariableExogena.setDisabled(true);
 
     menuTools.addAction(&actionVariableExogena);
+
+    //Se agrega la acción de descomposición
+    actionDescomposicion.setText("&Descomposicion");
+    actionDescomposicion.setDisabled(true);
+
+    menuTools.addAction(&actionDescomposicion);
 
     Modelos.setTitle("&Modelos");
     Modelos.setDisabled(true);
@@ -796,8 +798,11 @@ void MainWindow::loadsAccounts(QTableWidget *tw)
             vector.append(item);
             vector.append(QString::number(inicio));
             vector.append(QString::number(fin));
-            tw->setSpan(0,inicio-1,1,numberAccounts.count(item));
-            tw->setSpan(inicio-1,0,numberAccounts.count(item),1);
+            if(numberAccounts.count(item)>1)
+            {
+                tw->setSpan(0,inicio-1,1,numberAccounts.count(item));
+                tw->setSpan(inicio-1,0,numberAccounts.count(item),1);
+            }
         }
     }
     //Se cargan los datos en la cuenta
@@ -905,7 +910,7 @@ void MainWindow::acercaDe()//Funcion para el mensaje acerca de
 */
 MainWindow::MainWindow()
     : actionNewProject(this),actionLoadMatrix(this), actionExportMatrix(this), actionQuit(this),actionCH(this), actionCV(this),
-      actionVariableExogena(this),actionEncadenamiento(this),actionModeloClasico(this),
+      actionVariableExogena(this),actionEncadenamiento(this),actionModeloClasico(this), actionDescomposicion(this),
       actionCompararResultados(this),actionModeloNoClasico(this),actionCompararResultadosMNC(this),actionPHClasicoIncidencia100(this),
       actionPHCIncidenciaCuenta(this),actionPHCIncidenciaComponente(this),actionPHNoClasicoIncidencia100(this),actionPHNCIncidenciaCuenta(this),
       actionPHNCIncidenciaComponente(this),actionPNHIncidencia100(this),actionPNHIncidenciaCuenta(this),actionPNHIncidenciaComponente(this),
@@ -2210,21 +2215,12 @@ void MainWindow::slotFinalizarExogena()
         setEndogenaExogenaCell(tablaEE,inicioExogena,elementos,true);
 
         //Se crea la nueva pestaña
-        tabWidget->addTab(new QWidget,"Tipo de Variable");
-        int indice=ObtenerIndice("Tipo de Variable");//Se obtiene el indice de la pestaña
-        QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-        layoutCentralWidget->addWidget(tablaEE);
-        QWidget *widget = tabWidget->widget(indice);
-        widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
+        createTab("Tipo de Variable",tablaEE);
+        int indice=ObtenerIndice("Tipo de Variable");
         formVariablesExogenas->close();
 
         /*                  Se crea la pestaña endogena-endogena            */
-        tabWidget->addTab(new QWidget,"Endogena-Endogena");
-        int indiceEndogeno=ObtenerIndice("Endogena-Endogena");//Se obtiene el indice de la pestaña
-        QHBoxLayout * layoutEndogeno = new QHBoxLayout;
-        layoutEndogeno->addWidget(matrizEndogena);
-        QWidget *widgetEndogeno = tabWidget->widget(indiceEndogeno);
-        widgetEndogeno->setLayout(layoutEndogeno);//Se añade el widget y layout a la pestaña creada
+        createTab("Endogena-Endogena",matrizEndogena);
 
         calcularTotalCuentas(tablaEE);
 
@@ -2242,6 +2238,10 @@ void MainWindow::slotFinalizarExogena()
         slotMa();
         connect(&actionEncadenamiento,SIGNAL(triggered()),this,SLOT(slotEncadenamientos()));
         actionEncadenamiento.setEnabled(true);
+
+        //Se activa la descomposicion
+        connect(&actionDescomposicion,SIGNAL(triggered()),this,SLOT(slotDescomposicion()));
+        actionDescomposicion.setEnabled(true);
 
         //Se activa la opción de modelo clásico
         Modelos.setEnabled(true);
@@ -2461,12 +2461,7 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw)
         }
         titleEndogena(tablaMa);
         spanEndogenaCell(tablaMa,2,0,false);
-        tabWidget->addTab(new QWidget,"Ma");
-        int indice=ObtenerIndice("Ma");//Se obtiene el indice de la pestaña
-        QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-        layoutCentralWidget->addWidget(tablaMa);
-        QWidget *widget = tabWidget->widget(indice);
-        widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
+        createTab("Ma",tablaMa,true);
 
         opcionMa = 1;
     }
@@ -3949,14 +3944,7 @@ void MainWindow::finalizarEscenario()
         QStackedWidget *sw = findChild<QStackedWidget *>(QString("StackEscenario %1").arg(cantidadEscenarios));
         sw->hide();
 
-        tabWidget->addTab(new QWidget,QString("Resultado C %1").arg(cantidadEscenarios));
-        int indice=ObtenerIndice(QString("Resultado C %1").arg(cantidadEscenarios));
-
-        QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-        layoutCentralWidget->addWidget(resultadoEscenario);
-        QWidget *widget = tabWidget->widget(indice);
-        widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
-        tabWidget->setCurrentIndex(indice);
+        createTab(QString("Resultado C %1").arg(cantidadEscenarios),resultadoEscenario,true);
 
         cantidadEscenarios++;
         actionModeloClasico.setEnabled(true);
@@ -4135,16 +4123,9 @@ void MainWindow::slotVerResultado()
     }
     ItemsNoEditable(tablaComparar,0,2);
 
-    tabWidget->addTab(new QWidget,QString("Comparacion %1").arg(cantidadResultados));
-    int indice=ObtenerIndice(QString("Comparacion %1").arg(cantidadResultados));
-
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(tablaComparar);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);
+    createTab(QString("Comparacion %1").arg(cantidadResultados),tablaComparar,true);
 
     formCompararResultados->close();
-    tabWidget->setCurrentIndex(indice);
     cantidadResultados++;
 }
 
@@ -4310,12 +4291,8 @@ void MainWindow::calcularMb()
     ctvMatrizExgEnd(MatrizExgEnd,Bn);
     titlespanMatrizExgEnd(Bn);
 
-    tabWidget->addTab(new QWidget,"Bn");
+    createTab("Bn",Bn);
     int indice=ObtenerIndice("Bn");
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(Bn);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);
     tabWidget->removeTab(indice);
 
     estimarMb(Bn,Mb);
@@ -4580,12 +4557,7 @@ void MainWindow::estimarMb(QTableWidget *Bn,QTableWidget *Mb)
         }
     }
     titlespanMatrizExgEnd(Mb);
-    tabWidget->addTab(new QWidget,"Mb");
-    int indice=ObtenerIndice("Mb");
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(Mb);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);
+    createTab("Mb",Mb);
 }
 
 /**
@@ -4624,14 +4596,7 @@ void MainWindow::finalizarEscenarioNC()
         QStackedWidget *sw = findChild<QStackedWidget *>(QString("StackEscenarioMNC %1").arg(cantidadMNC));
         sw->hide();
 
-        tabWidget->addTab(new QWidget,QString("Resultado NC %1").arg(cantidadMNC));
-        int indice=ObtenerIndice(QString("Resultado NC %1").arg(cantidadMNC));
-
-        QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-        layoutCentralWidget->addWidget(resultadoEscenario);
-        QWidget *widget = tabWidget->widget(indice);
-        widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
-        tabWidget->setCurrentIndex(indice);
+        createTab(QString("Resultado NC %1").arg(cantidadMNC),resultadoEscenario,true);
 
         cantidadMNC++;
         actionModeloNoClasico.setEnabled(true);
@@ -4832,16 +4797,9 @@ void MainWindow::slotVerResultadoMNC()
     }
     ItemsNoEditable(tablaComparar,0,2);
 
-    tabWidget->addTab(new QWidget,QString("Comparacion MNC %1").arg(cantidadResultadosMNC));
-    int indice=ObtenerIndice(QString("Comparacion MNC %1").arg(cantidadResultadosMNC));
-
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(tablaComparar);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);
+    createTab(QString("Comparacion MNC %1").arg(cantidadResultadosMNC),tablaComparar,true);
 
     formCompararMNC->close();
-    tabWidget->setCurrentIndex(indice);
     cantidadResultadosMNC++;
 }
 
@@ -4862,14 +4820,7 @@ void MainWindow::slotPHCIncidencia100()
     MatrizMi->setObjectName("PIHc100");
     calcularPHCIncidencia100(MatrizMi);
 
-    tabWidget->addTab(new QWidget,"PIHc100");
-    int indice=ObtenerIndice("PIHc100");
-
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(MatrizMi);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);
-    tabWidget->setCurrentIndex(indice);
+    createTab("PIHc100",MatrizMi,true);
     actionPHClasicoIncidencia100.setDisabled(true);
 }
 
@@ -4906,13 +4857,7 @@ void MainWindow::calcularMaT()
     }
     titleEndogena(MaT);
     spanEndogenaCell(MaT,2,0,false);
-    tabWidget->addTab(new QWidget,"Pc");
-    int indice=ObtenerIndice("Pc");
-
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(MaT);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);
+    createTab("Pc",MaT);
     opcionMAT++;
 }
 
@@ -5008,14 +4953,7 @@ void MainWindow::slotCalcularPHCIncidenciaiCuenta()
     calcularPHCIncidencia100(MatrizIC);
     calcularPHCIncidenciaI(MatrizIC,cantidades);
 
-    tabWidget->addTab(new QWidget,QString("PIHci %1").arg(cantidadPHCindidenciaiCuenta));
-    int indice=ObtenerIndice(QString("PIHci %1").arg(cantidadPHCindidenciaiCuenta));
-
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(MatrizIC);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);
-    tabWidget->setCurrentIndex(indice);
+    createTab(QString("PIHci %1").arg(cantidadPHCindidenciaiCuenta),MatrizIC,true);
     cantidadPHCindidenciaiCuenta++;
 }
 
@@ -5099,14 +5037,7 @@ void MainWindow::slotCalcularPHCIncidenciaiComponente()
     calcularPHCIncidencia100(MatrizIComp);
     calcularPHCIncidenciaIComponente(MatrizIComp,tw);
 
-    tabWidget->addTab(new QWidget,QString("PIHcic %1").arg(cantidadPHCindidenciaiComponente));
-    int indice=ObtenerIndice(QString("PIHcic %1").arg(cantidadPHCindidenciaiComponente));
-
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(MatrizIComp);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);
-    tabWidget->setCurrentIndex(indice);
+    createTab(QString("PIHcic %1").arg(cantidadPHCindidenciaiComponente),MatrizIComp,true);
     cantidadPHCindidenciaiComponente++;
 }
 
@@ -5206,13 +5137,7 @@ void MainWindow::calcularMbT()
         }
     }
     titlespanMatrizExgEnd(MbT);
-    tabWidget->addTab(new QWidget,"Pnc");
-    int indice=ObtenerIndice("Pnc");
-
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(MbT);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);
+    createTab("Pnc",MbT);
     opcionMBT++;
 }
 
@@ -5232,14 +5157,8 @@ void MainWindow::slotPHNCIncidencia100()
     MatrizMi->setObjectName("PIHnc100");
     calcularPHNCIncidencia100(MatrizMi);
 
-    tabWidget->addTab(new QWidget,"PIHnc100");
-    int indice=ObtenerIndice("PIHnc100");
+    createTab("PIHnc100",MatrizMi,true);
 
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(MatrizMi);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);
-    tabWidget->setCurrentIndex(indice);
     actionPHNoClasicoIncidencia100.setDisabled(true);
 }
 
@@ -5362,14 +5281,7 @@ void MainWindow::slotCalcularPHNCIncidenciaiCuenta()
     calcularPHNCIncidencia100(MatrizIC);
     calcularPHCIncidenciaI(MatrizIC,cantidades);
 
-    tabWidget->addTab(new QWidget,QString("PIHnci %1").arg(cantidadPHNCindidenciaiCuenta));
-    int indice=ObtenerIndice(QString("PIHnci %1").arg(cantidadPHNCindidenciaiCuenta));
-
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(MatrizIC);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);
-    tabWidget->setCurrentIndex(indice);
+    createTab(QString("PIHnci %1").arg(cantidadPHNCindidenciaiCuenta),MatrizIC,true);
     cantidadPHNCindidenciaiCuenta++;
 }
 
@@ -5421,14 +5333,7 @@ void MainWindow::slotCalcularPHNCIncidenciaiComponente()
     calcularPHNCIncidencia100(MatrizIComp);
     calcularPHCIncidenciaIComponente(MatrizIComp,tw);
 
-    tabWidget->addTab(new QWidget,QString("PIHncic %1").arg(cantidadPHNCindidenciaiComponente));
-    int indice=ObtenerIndice(QString("PIHncic %1").arg(cantidadPHNCindidenciaiComponente));
-
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(MatrizIComp);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);
-    tabWidget->setCurrentIndex(indice);
+    createTab(QString("PIHncic %1").arg(cantidadPHNCindidenciaiComponente),MatrizIComp,true);
     cantidadPHNCindidenciaiComponente++;
 }
 
@@ -5617,13 +5522,7 @@ void MainWindow::multiplicarMatricesPNH(QTableWidget *tw,QVector<double> vector)
     calcularPNHIncidencia100(tw,trans);
     if(opcionPNHT == 0)
     {
-        tabWidget->addTab(new QWidget,QString("PINH100 %1").arg(cantidadPNHincidencia100));
-        int indice=ObtenerIndice(QString("PINH100 %1").arg(cantidadPNHincidencia100));
-        QHBoxLayout * layoutCentralWidget3 = new QHBoxLayout;
-        layoutCentralWidget3->addWidget(tw);
-        QWidget *widget3 = tabWidget->widget(indice);
-        widget3->setLayout(layoutCentralWidget3);
-        tabWidget->setCurrentIndex(indice);
+        createTab(QString("PINH100 %1").arg(cantidadPNHincidencia100),tw,true);
         cantidadPNHincidencia100++;
         opcionPNHT = 1;
     }
@@ -5780,14 +5679,7 @@ void MainWindow::slotCalcularPNHIncidenciaiCuenta()
 
     calcularPHCIncidenciaI(PNHI,cantidades);
 
-    tabWidget->addTab(new QWidget,QString("PINHi %1").arg(cantidadPNHincidenciaiCuenta));
-    int indice=ObtenerIndice(QString("PINHi %1").arg(cantidadPNHincidenciaiCuenta));
-
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(PNHI);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);
-    tabWidget->setCurrentIndex(indice);
+    createTab(QString("PINHi %1").arg(cantidadPNHincidenciaiCuenta),PNHI,true);
     cantidadPNHincidenciaiCuenta++;
     FI->close();
 }
@@ -5895,14 +5787,7 @@ void MainWindow::slotCalcularPNHIncidenciaiComponente()
     QTableWidget *tw = FI->ui->TableIncidencia;
     calcularPHCIncidenciaIComponente(PNHIc,tw);
 
-    tabWidget->addTab(new QWidget,QString("PINHic %1").arg(cantidadPNHincidenciaiComponente));
-    int indice=ObtenerIndice(QString("PINHic %1").arg(cantidadPNHincidenciaiComponente));
-
-    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-    layoutCentralWidget->addWidget(PNHIc);
-    QWidget *widget = tabWidget->widget(indice);
-    widget->setLayout(layoutCentralWidget);
-    tabWidget->setCurrentIndex(indice);
+    createTab(QString("PINHic %1").arg(cantidadPNHincidenciaiComponente),PNHIc,true);
     cantidadPNHincidenciaiComponente++;
     FI->close();
 }
@@ -6097,16 +5982,329 @@ void MainWindow::slotSeleccionarTabla()
                 ItemsNoEditable(nuevaTabla,0,2,1);
 
                 titleSeleccionar(nuevaTabla);
-                tabWidget->addTab(new QWidget,QString("Seleccion %1").arg(cantidadSelecciones));
-                int indice=ObtenerIndice(QString("Seleccion %1").arg(cantidadSelecciones));
-                QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
-                layoutCentralWidget->addWidget(nuevaTabla);
-                QWidget *widget = tabWidget->widget(indice);
-                widget->setLayout(layoutCentralWidget);
-                tabWidget->setCurrentIndex(indice);
+                createTab(QString("Seleccion %1").arg(cantidadSelecciones),nuevaTabla,true);
                 cantidadSelecciones++;
             }
         }
     }
+}
+
+/**
+    @brief Función para mostrar el formulario para la descomposicion
+    @date 27/09/2015
+    @author Rodrigo Boet
+*/
+void MainWindow::slotDescomposicion()
+{
+    formdescomposicion = new FormDescomposicion(this);
+    QStringList list;
+    foreach(int key,diccCuentasEndogenas.keys())
+    {
+        list.append(diccCuentasEndogenas[key][0]);
+    }
+    formdescomposicion->ui->listAgregar->addItems(list);
+    connect(formdescomposicion->ui->pushButton_3,SIGNAL(clicked()),this,SLOT(slotAgregarDescomposicion()));
+    formdescomposicion->show();
+}
+
+/**
+    @brief Función para seleccionar las cuentas que seran actividad/producto
+    @date 27/09/2015
+    @author Rodrigo Boet
+*/
+void MainWindow::slotAgregarDescomposicion()
+{
+    int item = formdescomposicion->ui->listSeleccionado->count();
+    if(item==2)
+    {
+        QStringList list;
+        for(int i=0;i<item;i++)
+        {
+            list.append(formdescomposicion->ui->listSeleccionado->item(i)->text());
+        }
+        if(validarDescomposicion(list))
+        {
+            QTableWidget *tw = findChild<QTableWidget *>("MatrizAn");
+            int filas = tw->rowCount();
+            Eigen::MatrixXd M1 = extractSubMatriz(tw,list.at(0),list.at(0),An);
+            Eigen::MatrixXd M2 = extractSubMatriz(tw,list.at(0),list.at(1),An);
+            Eigen::MatrixXd M3 = extractSubMatriz(tw,list.at(1),list.at(0),An);
+            Eigen::MatrixXd M4 = extractSubMatriz(tw,list.at(1),list.at(1),An);
+            QVector<double> V1 = extractDiagonal(M1);
+            QVector<double> V2 = extractDiagonal(M2);
+            QVector<double> V3 = extractDiagonal(M3);
+            QVector<double> V4 = extractDiagonal(M4);
+            QVector<double> diagonal;
+            if(validarDiagonal(V1))
+            {
+                appendElements(V1,diagonal);
+            }
+            if(validarDiagonal(V2))
+            {
+                appendElements(V2,diagonal);
+            }
+            if(validarDiagonal(V3))
+            {
+                appendElements(V3,diagonal);
+            }
+            if(validarDiagonal(V4))
+            {
+                appendElements(V4,diagonal);
+            }
+            for (int i = 2; i<filas;i++)
+            {
+                for(int j=2; j<filas;j++)
+                {
+                    if(tw->item(0,j)->text()!=list.at(0) and tw->item(0,j)->text()!=list.at(1))
+                    {
+                        if(i==j)
+                        {
+                            diagonal.append(An(i-2,j-2));
+                        }
+                    }
+                }
+            }
+            calcularA0(diagonal);
+            calcularAuxiliares();
+            calcularMatricesDescomposicion();
+
+        }
+        else
+        {
+            QMessageBox::warning(this,"Error","La cuenta Producto y Actividad\ndeben ser simétricas, ajuste la matriz\ne intente de nuevo");
+        }
+    }
+    else
+    {
+        QMessageBox::warning(this,"Alerta","Debe seleccionar dos (2) cuentas");
+    }
+
+}
+
+/**
+    @brief Función para validar que las cuentas producto y actividad sean simétricas
+    @date 28/09/2015
+    @author Rodrigo Boet
+    @param <cuentas> Recibe la lista con las cuentas
+    @return <valores> Retorna verdadera si son simétricas, falso en caso contrario
+*/
+bool MainWindow::validarDescomposicion(QStringList cuentas)
+{
+    QStringList valores;
+    foreach (int key, diccCuentasEndogenas.keys()) {
+       if (diccCuentasEndogenas[key][0]==cuentas.at(0) or diccCuentasEndogenas[key][0]==cuentas.at(1))
+       {
+           valores.append(diccCuentasEndogenas[key][1]);
+       }
+    }
+    if(valores.at(0)==valores.at(1))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+/**
+    @brief Función para calcular A0
+    @date 28/09/2015
+    @author Rodrigo Boet
+    @param <diagonal> Recibe el valor de las diagonales
+*/
+void MainWindow::calcularA0(QVector<double> diagonal)
+{
+    A0 = MatrixXd::Identity(An.rows(),An.cols());
+    int fila = A0.rows();
+    for(int i=0;i<fila;i++)
+    {
+        for(int j=0;j<fila;j++)
+        {
+            if(i==j)
+            {
+                A0(i,j)=diagonal.at(i);
+            }
+        }
+    }
+    QTableWidget *MAN = findChild<QTableWidget *>("MatrizAn");
+    QTableWidget *tw = new QTableWidget;
+    CrearTablaVacia(MAN->rowCount(),tw);
+    noEditColZero(tw);
+    clonarTabla(MAN,tw,MAN->rowCount());
+    fila = MAN->rowCount()-1;
+    for(int i=2;i<fila;i++)
+    {
+        for(int j=2;j<fila;j++)
+        {
+            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(A0(i-2,j-2),'f',precission));
+            valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
+            tw->setItem(i,j,valoraInsertar);
+        }
+    }
+    createTab("A0",tw,true);
+    formdescomposicion->close();
+
+    MatrixXd ident = MatrixXd::Identity(An.rows(),An.cols());
+    M1 = ident - A0;
+    M1 = M1.inverse();
+    QTableWidget *Mm1 = new QTableWidget;
+    CrearTablaVacia(MAN->rowCount(),Mm1);
+    noEditColZero(Mm1);
+    clonarTabla(MAN,Mm1,MAN->rowCount());
+    fila = MAN->rowCount()-1;
+    for(int i=2;i<fila;i++)
+    {
+        for(int j=2;j<fila;j++)
+        {
+            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(M1(i-2,j-2),'f',precission));
+            valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
+            Mm1->setItem(i,j,valoraInsertar);
+        }
+    }
+    createTab("M1",Mm1);
+}
+
+/**
+    @brief Función para calcular los auxiliares de la descomposicion y también M2 y M3
+    @date 28/09/2015
+    @author Rodrigo Boet
+*/
+void MainWindow::calcularAuxiliares()
+{
+    MatrixXd ident = MatrixXd::Identity(A0.rows(),A0.cols());
+    MatrixXd aux = M1*(A0-An);
+    M2 = ident+aux;
+    int cantidad = diccCuentasEndogenas.count()-2;
+    MatrixXd ant = aux;
+    for(int i=0;i<cantidad;i++)
+    {
+        aux *= ant;
+        ant = aux;
+        if(i<cantidad-1)
+        {
+            M2 += aux;
+        }
+    }
+    M3 = ident - aux;
+    M3 = M3.inverse();
+    QTableWidget *MAN = findChild<QTableWidget *>("MatrizAn");
+    QTableWidget *Mm2 = new QTableWidget;
+    CrearTablaVacia(MAN->rowCount(),Mm2);
+    noEditColZero(Mm2);
+    clonarTabla(MAN,Mm2,MAN->rowCount());
+    int fila = MAN->rowCount()-1;
+    for(int i=2;i<fila;i++)
+    {
+        for(int j=2;j<fila;j++)
+        {
+            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(M2(i-2,j-2),'f',precission));
+            valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
+            Mm2->setItem(i,j,valoraInsertar);
+        }
+    }
+    createTab("M2",Mm2);
+
+    QTableWidget *Mm3 = new QTableWidget;
+    CrearTablaVacia(MAN->rowCount(),Mm3);
+    noEditColZero(Mm3);
+    clonarTabla(MAN,Mm3,MAN->rowCount());
+    fila = MAN->rowCount()-1;
+    for(int i=2;i<fila;i++)
+    {
+        for(int j=2;j<fila;j++)
+        {
+            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(M3(i-2,j-2),'f',precission));
+            valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
+            Mm3->setItem(i,j,valoraInsertar);
+        }
+    }
+    createTab("M3",Mm3);
+}
+
+/**
+    @brief Función para calcular las matrices de Transferencia (T), Open(O) y Close(C)
+    @date 28/09/2015
+    @author Rodrigo Boet
+*/
+void MainWindow::calcularMatricesDescomposicion()
+{
+    MatrixXd ident = MatrixXd::Identity(A0.rows(),A0.cols());
+    T = M1 - ident;
+    O = (M2 - ident) * M1;
+    C = (M3 - ident) * (M2 * M1);
+
+    QTableWidget *MAN = findChild<QTableWidget *>("MatrizAn");
+    QTableWidget *mt = new QTableWidget;
+    CrearTablaVacia(MAN->rowCount(),mt);
+    noEditColZero(mt);
+    clonarTabla(MAN,mt,MAN->rowCount());
+    int fila = MAN->rowCount()-1;
+    for(int i=2;i<fila;i++)
+    {
+        for(int j=2;j<fila;j++)
+        {
+            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(T(i-2,j-2),'f',precission));
+            valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
+            mt->setItem(i,j,valoraInsertar);
+        }
+    }
+    createTab("T",mt);
+
+    QTableWidget *mo = new QTableWidget;
+    CrearTablaVacia(MAN->rowCount(),mo);
+    noEditColZero(mo);
+    clonarTabla(MAN,mo,MAN->rowCount());
+    fila = MAN->rowCount()-1;
+    for(int i=2;i<fila;i++)
+    {
+        for(int j=2;j<fila;j++)
+        {
+            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(O(i-2,j-2),'f',precission));
+            valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
+            mo->setItem(i,j,valoraInsertar);
+        }
+    }
+    createTab("O",mo);
+
+    QTableWidget *mc = new QTableWidget;
+    CrearTablaVacia(MAN->rowCount(),mc);
+    noEditColZero(mc);
+    clonarTabla(MAN,mc,MAN->rowCount());
+    fila = MAN->rowCount()-1;
+    for(int i=2;i<fila;i++)
+    {
+        for(int j=2;j<fila;j++)
+        {
+            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(C(i-2,j-2),'f',precission));
+            valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
+            mc->setItem(i,j,valoraInsertar);
+        }
+    }
+    createTab("C",mc);
+}
+
+/**
+    @brief Función para crear un nueva pestaña
+    @date 28/09/2015
+    @author Rodrigo Boet
+    @param <texto> Recibe el nombre de la pestaña
+    @param <tw> Recibe el widget de la tabla que se insertara
+    @param <current> recibe un booleano (verdadero si se coloca como activo, falso en caso contrario)
+*/
+void MainWindow::createTab(QString texto, QTableWidget *tw, bool current)
+{
+    tabWidget->addTab(new QWidget,texto);
+    int indice=ObtenerIndice(texto);
+
+    QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+    layoutCentralWidget->addWidget(tw);
+    QWidget *widget = tabWidget->widget(indice);
+    widget->setLayout(layoutCentralWidget);
+    if(current)
+    {
+        tabWidget->setCurrentIndex(indice);
+    }
+
 }
 

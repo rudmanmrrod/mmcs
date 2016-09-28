@@ -7,6 +7,8 @@
 */
 #include <genericFunctions.h>
 
+using namespace Eigen;
+
 
 /**
     @brief Función que permite obtener los elementos distintos en una lista
@@ -78,7 +80,11 @@ void titleSeleccionar(QTableWidget *tw)
         if(CuentaFila.contains(accName))
         {
             int contar = CuentaFila.count(accName);
-            tw->setSpan(i,0,contar,1);
+            qDebug()<<contar;
+            if(contar>1)
+            {
+                tw->setSpan(i,0,contar,1);
+            }
             CuentaFila.removeAll(accName);
         }
         if(CuentaFila.isEmpty())
@@ -93,7 +99,11 @@ void titleSeleccionar(QTableWidget *tw)
         if(CuentaColumna.contains(accName))
         {
             int contar = CuentaColumna.count(accName);
-            tw->setSpan(0,j,1,contar);
+            qDebug()<<contar;
+            if(contar>1)
+            {
+                tw->setSpan(0,j,1,contar);
+            }
             CuentaColumna.removeAll(accName);
         }
         if(CuentaColumna.isEmpty())
@@ -399,7 +409,7 @@ double sumElements(QVector<double> valor)
 }
 
 /**
-   @brief Funcion que permite
+   @brief Funcion que permite colocar filas/columnas como no editables
    @date 08/09/2016
    @author Rodrigo Boet
    @param <tw> Recibe el widget de la tabla
@@ -425,6 +435,107 @@ void RowColNoEditable(QTableWidget *tw,int inicio,int fin,int item, bool fila)
             tw->setItem(i,item,ValoraInsertarColumna);
         }
 
+    }
+}
+
+/**
+   @brief Funcion que extraer una submatriz de una tabla
+   @date 27/09/2016
+   @author Rodrigo Boet
+   @param <tw> Recibe el widget de la tabla
+   @param <nombre_fila> Recibe el nombre de la cuenta en fila
+   @param <nombre_columna> Recibe el nombre de la cuenta en columna
+   @param <matriz> Recibe la sub-matriz de donde se sacarán los valores
+   @return <result> Retorna la sub-matriz
+*/
+Eigen::MatrixXd extractSubMatriz(QTableWidget *tw, QString nombre_fila, QString nombre_columna, Eigen::MatrixXd Matrix)
+{
+    int rows = tw->rowCount();
+    Eigen::MatrixXd result;
+    int pos = 0;
+    for(int i = 2; i < rows ;i++)
+    {
+        bool entro = false;
+        int cant = 0;
+        QVector <double> values;
+        for(int j = 2; j < rows;j++)
+        {
+            if(tw->item(0,i)->text()==nombre_fila and tw->item(j,0)->text()==nombre_columna)
+            {
+                entro = true;
+                double value = Matrix(i-2,j-2);
+                values.append(value);
+                cant++;
+            }
+        }
+        if(entro)
+        {
+            result.resize(cant,cant);
+            for(int k=0;k<values.count();k++)
+            {
+                result(pos,k) = values.at(k);
+            }
+            pos++;
+        }
+    }
+    return result;
+}
+
+/**
+   @brief Funcion que extraer la diagonal principal de una matriz de Eigen
+   @date 28/09/2016
+   @author Rodrigo Boet
+   @param <matriz> Recibe la sub-matriz de donde se sacarán los valores
+   @return <resul> Retorna la suma de la diagonal
+*/
+QVector<double> extractDiagonal(Eigen::MatrixXd Matrix)
+{
+    QVector<double> result;
+    for(int i=0;i<Matrix.rows();i++)
+    {
+        for(int j=0;j<Matrix.rows();j++)
+        {
+            if(i==j)
+            {
+                result.append(Matrix(i,j));
+            }
+        }
+    }
+    return result;
+}
+
+/**
+   @brief Funcion que valida que la diagonal sea distinta de cero
+   @date 28/09/2016
+   @author Rodrigo Boet
+   @param <diagonal> Recibe el vector con la diagonal
+   @return <valida> Retorna verdadero si la diagonal es distinta de cero, falso en caso contrario
+*/
+bool validarDiagonal(QVector<double> diagonal)
+{
+    int count = diagonal.count();
+    bool valida = true;
+    for(int i=0;i<count;i++)
+    {
+        if(qAbs(diagonal.at(i))<0.00001)
+        {
+            valida = false;
+        }
+    }
+    return valida;
+}
+
+/**
+   @brief Funcion para llenar un vector con otro
+   @date 28/09/2016
+   @author Rodrigo Boet
+   @param <elements> Recibe el vector con los elementos
+   @param <vector> Recibe el vector que se llenara
+*/
+void appendElements(QVector<double> elements, QVector<double> &vector)
+{
+    foreach (double value, elements) {
+        vector.append(value);
     }
 }
 

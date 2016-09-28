@@ -21,7 +21,8 @@ HEADERS += mainwindow.H \
     variablepnh.h \
     genericFunctions.h \
     formexportreport.h \
-    qcustomplot.h
+    qcustomplot.h \
+    formdescomposicion.h
 
 SOURCES += mainwindow.C \
     main.C \
@@ -44,7 +45,8 @@ SOURCES += mainwindow.C \
     variablepnh.cpp \
     genericFunctions.cpp \
     formexportreport.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    formdescomposicion.cpp
 FORMS += formLoadMatrix.ui \
     formvariablesexogenas.ui \
     formexportmatrix.ui \
@@ -54,7 +56,8 @@ FORMS += formLoadMatrix.ui \
     formincidenciai.ui \
     formpreciosnohomogeneos.ui \
     formexportreport.ui \
-    formViewMatrix.ui
+    formViewMatrix.ui \
+    formdescomposicion.ui
 
 INCLUDEPATH += $$PWD/Eigen
 

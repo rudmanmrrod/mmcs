@@ -11,16 +11,25 @@
 #include <formencadenamientos.h>
 #include <ui_formcompararresultados.h>
 #include <formcompararresultados.h>
+//Formulario para comparar el modelo no clasico
 #include <ui_formcompararmnc.h>
 #include <formcompararmnc.h>
+//Formulario de incidencias
 #include "ui_formincidenciai.h"
 #include <formincidenciai.h>
 #include <formpreciosnohomogeneos.h>
+//Formulario para exportar reporte
 #include <formexportreport.h>
 #include <ui_formexportreport.h>
-#include <genericFunctions.h>
-#include <qcustomplot.h>
+#include "accountwidget.H"
+//Formulario de descomposicon
+#include <formdescomposicion.h>
+#include <ui_formdescomposicion.h>
 
+//Funciones genericas
+#include <genericFunctions.h>
+//Librería de gráficos
+#include <qcustomplot.h>
 #include <sstream>
 #include <stackwidget.H>
 #include <stackvariablesexogenas.h>
@@ -89,6 +98,9 @@ class MainWindow : public QMainWindow
     QAction actionPNHIncidenciaCuenta;
     QAction actionPNHIncidenciaComponente;
 
+    //Acción para la descomposición
+    QAction actionDescomposicion;
+
     QAction actionSeleccionarTabla;
 
     //Acciones del manú de ayuda
@@ -126,6 +138,14 @@ class MainWindow : public QMainWindow
     Eigen::MatrixXd MatrixMb;
     Eigen::MatrixXd MatrizMat;
     Eigen::MatrixXd MatrizMbt;
+    //Matrices para la descomposicion
+    Eigen::MatrixXd A0;
+    Eigen::MatrixXd M1;
+    Eigen::MatrixXd M2;
+    Eigen::MatrixXd M3;
+    Eigen::MatrixXd T;
+    Eigen::MatrixXd O;
+    Eigen::MatrixXd C;
 
     double total_ma;
 
@@ -187,6 +207,7 @@ class MainWindow : public QMainWindow
     FormCompararMNC *formCompararMNC;
     FormIncidenciaI *FI;
     FormPreciosNoHomogeneos * formPreciosNoHomogeneos;
+    FormDescomposicion *formdescomposicion;
 
     void initGUI();
 
@@ -269,6 +290,17 @@ class MainWindow : public QMainWindow
     //Función para determinar los clasificadores
     void determinarClasificador(QTableWidget *, int index_table, int element, int total = 0);
 
+    //Función para validar la cuenta producto/actividad
+    bool validarDescomposicion(QStringList);
+
+    //Funciones referentes a la descomposicion
+    void calcularA0(QVector<double>);
+    void calcularAuxiliares();
+    void calcularMatricesDescomposicion();
+
+    //Funcion para crear una nueva pestaña
+    void createTab(QString , QTableWidget *,bool current=false);
+
     bool ComprobarCuentas();
     int ObtenerIndice(QString );
 
@@ -332,6 +364,10 @@ private slots:
     void slotModeloNoClasico();
     void calcularEscenarioNC();
     void finalizarEscenarioNC();
+
+    //Slot para descomposicion
+    void slotDescomposicion();
+    void slotAgregarDescomposicion();
 
     void slotCompararResultadosMNC();
     void slotVerResultadoMNC();
