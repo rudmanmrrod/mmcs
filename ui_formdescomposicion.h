@@ -90,7 +90,8 @@ public:
         pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
         pushButton_2->setMinimumSize(QSize(80, 30));
         pushButton_2->setMaximumSize(QSize(150, 30));
-        pushButton_2->setStyleSheet(QStringLiteral("background-color: #358ccb; color: #fff; font-weight: bold; height: 30px; border: none; border-radius: 5px;"));
+        pushButton_2->setStyleSheet(QStringLiteral("font-weight: bold; height: 30px; border: none; border-radius: 5px;"));
+        pushButton_2->setFlat(true);
 
         gridLayout->addWidget(pushButton_2, 4, 1, 1, 1);
 
@@ -98,7 +99,8 @@ public:
         pushButton->setObjectName(QStringLiteral("pushButton"));
         pushButton->setMinimumSize(QSize(80, 30));
         pushButton->setMaximumSize(QSize(150, 30));
-        pushButton->setStyleSheet(QStringLiteral("background-color: #358ccb; color: #fff; font-weight: bold; height: 30px; border: none; border-radius: 5px;"));
+        pushButton->setStyleSheet(QStringLiteral("font-weight: bold; height: 30px; border: none; border-radius: 5px;"));
+        pushButton->setFlat(true);
 
         gridLayout->addWidget(pushButton, 3, 1, 1, 1);
 

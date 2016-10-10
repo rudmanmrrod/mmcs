@@ -45,8 +45,13 @@ void MainWindow::slotFormLoadMatrixAccepted(const QString & filePath,
     csvSeparator = ';';
     numAccounts = accountNumber;
     precission = pre;
-    createMatrixCentralWidget();
+    formLoadMatrix->close();
+    FormCargando *cargando = new FormCargando(this);
+    cargando->show();
 
+
+    createMatrixCentralWidget();
+    QTimer::singleShot(1000,cargando,SLOT(hide()));
 }
 
 /**
@@ -716,6 +721,7 @@ void MainWindow::populateTable(QTableWidget * tableWidget)
         CellStyleComponente(itemColumna);
         itemColumna->setFlags(itemColumna->flags() ^ Qt::ItemIsEditable);
         tableWidget->setItem(i,0,itemColumna);
+        QCoreApplication::processEvents();
     }
     int row = 1;
     while(!in.atEnd())//Se lee el archivo hasta el final
@@ -733,7 +739,9 @@ void MainWindow::populateTable(QTableWidget * tableWidget)
             QTableWidgetItem *tw = new QTableWidgetItem(numberFormat(value));
             tw->setFlags(tw->flags() ^ Qt::ItemIsEditable);
             tableWidget->setItem(row,i,tw);
+            QCoreApplication::processEvents();
         }
+        QCoreApplication::processEvents();
         row++;
     }
     file.close();
@@ -749,8 +757,10 @@ void MainWindow::populateTable(QTableWidget * tableWidget)
                 tw->setFlags(tw->flags() ^ Qt::ItemIsEditable);
                 tableWidget->setItem(row-1,i,tw);
             }
+            QCoreApplication::processEvents();
             row++;
         }
+        QCoreApplication::processEvents();
     }
     //Se agregan las cuentas si se selecciono la opción correspondiente
     if(formLoadMatrix->ui->radioAccount->isChecked())
@@ -771,7 +781,9 @@ void MainWindow::populateTable(QTableWidget * tableWidget)
             itemColumna->setFlags(itemColumna->flags() ^ Qt::ItemIsEditable);
             itemColumna->setTextAlignment(Qt::AlignCenter);
             tableWidget->setItem(i,0,itemColumna);
+            QCoreApplication::processEvents();
         }
+        QCoreApplication::processEvents();
         ItemsNoEditable(tableWidget,1,2,0);
     }
 
@@ -1190,6 +1202,8 @@ void MainWindow::FinalizarCuentas()
     msBox.setDefaultButton(QMessageBox::Yes);
     if(msBox.exec()==QMessageBox::Yes)
     {
+        FormCargando *cargando = new FormCargando(this);
+        cargando->show();
         bool Centinela=ComprobarCuentas();//Se llama a la funcion que comprueba si todos los campos de las cuentas estan llenos
         if(Centinela)
         {
@@ -1219,6 +1233,8 @@ void MainWindow::FinalizarCuentas()
         {
             QMessageBox::warning(this,"Alerta","Debe llenar correctamente y agregar todas las cuentas");
         }
+        QTimer::singleShot(1000,cargando,SLOT(hide()));
+        delete cargando;
     }
 }
 
@@ -1813,6 +1829,8 @@ QStringList MainWindow::obtenerCuentas()
 */
 void MainWindow::slotCoeficienteVertical()
 {
+    FormCargando *cargando = new FormCargando(this);
+    cargando->show();
     actionCV.setDisabled(true);
     tabWidget->addTab(new QWidget,"CT_Vertical");
     QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
@@ -1835,6 +1853,7 @@ void MainWindow::slotCoeficienteVertical()
     QWidget *widget = tabWidget->widget(indice);
     widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
     tabWidget->setCurrentIndex(indice);
+    QTimer::singleShot(1000,cargando,SLOT(hide()));
 }
 
 /**
@@ -1844,6 +1863,8 @@ void MainWindow::slotCoeficienteVertical()
 */
 void MainWindow::slotCoeficienteHorizontal()
 {
+    FormCargando *cargando = new FormCargando(this);
+    cargando->show();
     actionCH.setDisabled(true);
     tabWidget->addTab(new QWidget,"CT_Horizontal");
     QTableWidget *tw = findChild<QTableWidget *>("TablaPrincipal");
@@ -1905,6 +1926,7 @@ void MainWindow::slotCoeficienteHorizontal()
     QWidget *widget = tabWidget->widget(indice);
     widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
     tabWidget->setCurrentIndex(indice);
+    QTimer::singleShot(1000,cargando,SLOT(hide()));
 }
 
 //FH_002
@@ -2096,6 +2118,9 @@ void MainWindow::slotAgregarExogena()
 */
 void MainWindow::slotFinalizarExogena()
 {
+    formVariablesExogenas->close();
+    FormCargando *cargando = new FormCargando(this);
+    cargando->show();
     QTableWidget *tablaEE = new QTableWidget;
     tablaEE->setObjectName("MatrizExogenaEndogena");
     QTableWidget *tablaPPAL = findChild<QTableWidget *>("TablaPrincipal");//Se carga la tabla principal
@@ -2217,7 +2242,6 @@ void MainWindow::slotFinalizarExogena()
         //Se crea la nueva pestaña
         createTab("Tipo de Variable",tablaEE);
         int indice=ObtenerIndice("Tipo de Variable");
-        formVariablesExogenas->close();
 
         /*                  Se crea la pestaña endogena-endogena            */
         createTab("Endogena-Endogena",matrizEndogena);
@@ -2279,7 +2303,7 @@ void MainWindow::slotFinalizarExogena()
         connect(&actionPNHIncidenciaComponente,SIGNAL(triggered()),this,SLOT(slotPNHIncidenciaiComponente()));
 
         tabWidget->setCurrentIndex(indice);
-
+        QTimer::singleShot(1000,cargando,SLOT(hide()));
     }
     else
     {
@@ -2905,7 +2929,6 @@ void MainWindow::slotAgregarEncadenamiento()
 
     if(nombre_cuenta!="Sub-Matriz Endógena-Endógena")
     {
-        diccCuentasEncadenamientos.clear();
         if(!lw->isEnabled())
         {
             QMessageBox::warning(this,"Alerta","La Cuenta Actual ya fue Agregada");
@@ -3026,6 +3049,7 @@ void MainWindow::slotVerEncadenamiento()
             widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
             formEncadenamientos->close();
             tabWidget->setCurrentIndex(indice);
+            diccCuentasEncadenamientos.clear();
 
         }
         else if (opcionCuentaEncadenamientos==2)//opcion para encadenar por la matriz endogena-endogena
@@ -3090,6 +3114,7 @@ void MainWindow::slotVerEncadenamiento()
             widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
             formEncadenamientos->close();
             tabWidget->setCurrentIndex(indice);
+            diccCuentasEncadenamientos.clear();
         }
         else
         {
@@ -3233,9 +3258,23 @@ void MainWindow::estimarClasificador(double &fila, double &columna, int index, i
     if(rbCT->isChecked())
     {
         double total_col = sumElements(vFila);
-        columna = vFila.at(index)/(total_col/vFila.count());
         double total_row = sumElements(vColumna);
-        fila = vColumna.at(index)/(total_row/vColumna.count());
+        if(total_col!=0)
+        {
+            columna = vFila.at(index)/(total_col/vFila.count());
+        }
+        else
+        {
+            columna = 0;
+        }
+        if(total_row!=0)
+        {
+            fila = vColumna.at(index)/(total_row/vColumna.count());
+        }
+        else
+        {
+            fila = 0;
+        }
     }
     else if(rbMa->isChecked())
     {
@@ -3467,9 +3506,6 @@ void MainWindow::calcularTotalesEncadenamientos(QTableWidget *tw)
         //Se inserta la fila donde iran los totales
         tw->insertRow(count);
         //Se insertan las celdas con los respectivos valores totales
-        QTableWidgetItem *zero = new QTableWidgetItem;
-        zero->setFlags(zero->flags() ^ Qt::ItemIsEditable);
-        tw->setItem(count,0,zero);
         QTableWidgetItem *titulo = new QTableWidgetItem(QString("Encadenamiento Parcial %1").arg(accName.at(k)));
         encadenamientosStyle(titulo);
         tw->setItem(count,1,titulo);
@@ -3483,6 +3519,19 @@ void MainWindow::calcularTotalesEncadenamientos(QTableWidget *tw)
         encadenamientosStyle(totalAdelante);
         tw->setItem(count,2,totalAtras);
         tw->setItem(count,3,totalAdelante);
+        //Se insertan los items de la tabla
+        QTableWidgetItem *zero = new QTableWidgetItem;
+        zero->setFlags(zero->flags() ^ Qt::ItemIsEditable);
+        tw->setItem(count,0,zero);
+        QTableWidgetItem *one = new QTableWidgetItem;
+        one->setFlags(one->flags() ^ Qt::ItemIsEditable);
+        tw->setItem(count,4,one);
+        QTableWidgetItem *two = new QTableWidgetItem;
+        two->setFlags(two->flags() ^ Qt::ItemIsEditable);
+        tw->setItem(count,5,two);
+        QTableWidgetItem *three = new QTableWidgetItem;
+        three->setFlags(three->flags() ^ Qt::ItemIsEditable);
+        tw->setItem(count,6,three);
     }
 }
 
@@ -3562,23 +3611,24 @@ void MainWindow::slotGenerarEncadenamientoReport(QString filename, bool report)
         for(int j=0;j<col;j++)
         {
             QString item = tw->item(i,j)->text();
+            QString limit = tw->item(i,0)->text();
             //Comprende las filas superiores
             if(i==0 and j>1)
             {
                 myHtml.append("<td align='center' style='font-weight:bold;background-color:LightGrey;'>"+item+"</td>");
             }
             //Comprende las cuentas en la parte izquierda
-            else if((i>0 and i<row-1) and j==0)
+            else if((i>0 and !limit.isEmpty()) and j==0)
             {
                 myHtml.append("<td style='background-color:steelblue;color:white'>"+item+"</td>");
             }
             //Comprende las subcuentas en la parte izquierda
-            else if((i>0 and i<row-1)and j==1)
+            else if((i>0 and !limit.isEmpty())and j==1)
             {
                 myHtml.append("<td align='center' style='background-color:LightGrey'>"+item+"</td>");
             }
             //Comprende la última fila
-            else if(i==row-1)
+            else if(i>0 and limit.isEmpty())
             {
                 myHtml.append("<td align='center' style='font-weight:bold'>"+item+"</td>");
             }

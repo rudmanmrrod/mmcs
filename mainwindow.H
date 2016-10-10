@@ -25,6 +25,8 @@
 //Formulario de descomposicon
 #include <formdescomposicion.h>
 #include <ui_formdescomposicion.h>
+//Formulario de Carga
+#include <formcargando.h>
 
 //Funciones genericas
 #include <genericFunctions.h>

@@ -67,7 +67,8 @@ SOURCES       = mainwindow.C \
 		genericFunctions.cpp \
 		formexportreport.cpp \
 		qcustomplot.cpp \
-		formdescomposicion.cpp qrc_images.cpp \
+		formdescomposicion.cpp \
+		formcargando.cpp qrc_images.cpp \
 		moc_mainwindow.cpp \
 		moc_formloadmatrix.cpp \
 		moc_formviewmatrix.cpp \
@@ -88,7 +89,8 @@ SOURCES       = mainwindow.C \
 		moc_variablepnh.cpp \
 		moc_formexportreport.cpp \
 		moc_qcustomplot.cpp \
-		moc_formdescomposicion.cpp
+		moc_formdescomposicion.cpp \
+		moc_formcargando.cpp
 OBJECTS       = mainwindow.o \
 		main.o \
 		formloadmatrix.o \
@@ -112,6 +114,7 @@ OBJECTS       = mainwindow.o \
 		formexportreport.o \
 		qcustomplot.o \
 		formdescomposicion.o \
+		formcargando.o \
 		qrc_images.o \
 		moc_mainwindow.o \
 		moc_formloadmatrix.o \
@@ -133,7 +136,8 @@ OBJECTS       = mainwindow.o \
 		moc_variablepnh.o \
 		moc_formexportreport.o \
 		moc_qcustomplot.o \
-		moc_formdescomposicion.o
+		moc_formdescomposicion.o \
+		moc_formcargando.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -210,7 +214,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		genericFunctions.cpp \
 		formexportreport.cpp \
 		qcustomplot.cpp \
-		formdescomposicion.cpp
+		formdescomposicion.cpp \
+		formcargando.cpp
 QMAKE_TARGET  = SMSAM
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = SMSAM
@@ -240,7 +245,7 @@ first: all
 
 all: Makefile $(TARGET)
 
-$(TARGET): ui_formLoadMatrix.h ui_formvariablesexogenas.h ui_formexportmatrix.h ui_formencadenamientos.h ui_formcompararresultados.h ui_formcompararmnc.h ui_formincidenciai.h ui_formpreciosnohomogeneos.h ui_formexportreport.h ui_formViewMatrix.h ui_formdescomposicion.h $(OBJECTS)  
+$(TARGET): ui_formLoadMatrix.h ui_formvariablesexogenas.h ui_formexportmatrix.h ui_formencadenamientos.h ui_formcompararresultados.h ui_formcompararmnc.h ui_formincidenciai.h ui_formpreciosnohomogeneos.h ui_formexportreport.h ui_formViewMatrix.h ui_formdescomposicion.h ui_formcargando.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: SMSAM.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -371,7 +376,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/SMSAM1.0.0 || mkdir -p .tmp/SMSAM1.0.0
-	$(COPY_FILE) --parents $(DIST) .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents img/images.qrc .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents mainwindow.H formloadmatrix.H formviewmatrix.H stackwidget.H accountwidget.H formvariablesexogenas.h stackvariablesexogenas.h variableexogenawidget.h formexportmatrix.h formencadenamientos.h stackencadenamientos.h encadenamientoswidget.h formcompararresultados.h formcompararmnc.h formincidenciai.h formpreciosnohomogeneos.h stackpreciosnohomogeneos.h variablepnh.h genericFunctions.h formexportreport.h qcustomplot.h formdescomposicion.h .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents mainwindow.C main.C formloadmatrix.C formviewmatrix.C stackwidget.C accountwidget.C formvariablesexogenas.cpp stackvariablesexogenas.cpp variableexogenawidget.cpp formexportmatrix.cpp formencadenamientos.cpp stackencadenamientos.cpp encadenamientoswidget.cpp formcompararresultados.cpp formcompararmnc.cpp formincidenciai.cpp formpreciosnohomogeneos.cpp stackpreciosnohomogeneos.cpp variablepnh.cpp genericFunctions.cpp formexportreport.cpp qcustomplot.cpp formdescomposicion.cpp .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents formLoadMatrix.ui formvariablesexogenas.ui formexportmatrix.ui formencadenamientos.ui formcompararresultados.ui formcompararmnc.ui formincidenciai.ui formpreciosnohomogeneos.ui formexportreport.ui formViewMatrix.ui formdescomposicion.ui .tmp/SMSAM1.0.0/ && (cd `dirname .tmp/SMSAM1.0.0` && $(TAR) SMSAM1.0.0.tar SMSAM1.0.0 && $(COMPRESS) SMSAM1.0.0.tar) && $(MOVE) `dirname .tmp/SMSAM1.0.0`/SMSAM1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/SMSAM1.0.0
+	$(COPY_FILE) --parents $(DIST) .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents img/images.qrc .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents mainwindow.H formloadmatrix.H formviewmatrix.H stackwidget.H accountwidget.H formvariablesexogenas.h stackvariablesexogenas.h variableexogenawidget.h formexportmatrix.h formencadenamientos.h stackencadenamientos.h encadenamientoswidget.h formcompararresultados.h formcompararmnc.h formincidenciai.h formpreciosnohomogeneos.h stackpreciosnohomogeneos.h variablepnh.h genericFunctions.h formexportreport.h qcustomplot.h formdescomposicion.h formcargando.h .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents mainwindow.C main.C formloadmatrix.C formviewmatrix.C stackwidget.C accountwidget.C formvariablesexogenas.cpp stackvariablesexogenas.cpp variableexogenawidget.cpp formexportmatrix.cpp formencadenamientos.cpp stackencadenamientos.cpp encadenamientoswidget.cpp formcompararresultados.cpp formcompararmnc.cpp formincidenciai.cpp formpreciosnohomogeneos.cpp stackpreciosnohomogeneos.cpp variablepnh.cpp genericFunctions.cpp formexportreport.cpp qcustomplot.cpp formdescomposicion.cpp formcargando.cpp .tmp/SMSAM1.0.0/ && $(COPY_FILE) --parents formLoadMatrix.ui formvariablesexogenas.ui formexportmatrix.ui formencadenamientos.ui formcompararresultados.ui formcompararmnc.ui formincidenciai.ui formpreciosnohomogeneos.ui formexportreport.ui formViewMatrix.ui formdescomposicion.ui formcargando.ui .tmp/SMSAM1.0.0/ && (cd `dirname .tmp/SMSAM1.0.0` && $(TAR) SMSAM1.0.0.tar SMSAM1.0.0 && $(COMPRESS) SMSAM1.0.0.tar) && $(MOVE) `dirname .tmp/SMSAM1.0.0`/SMSAM1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/SMSAM1.0.0
 
 
 clean:compiler_clean 
@@ -400,14 +405,15 @@ qrc_images.cpp: img/images.qrc \
 		img/Imagen-matriz.png \
 		img/edit-deshabilitado.png \
 		img/edit-habilitado.png \
+		img/mmcsload.gif \
 		img/logo_cenditel.jpg \
 		img/estructura_matriz.jpg \
 		img/undo-habilitado.png
 	/usr/lib/x86_64-linux-gnu/qt5/bin/rcc -name images img/images.qrc -o qrc_images.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_formloadmatrix.cpp moc_formviewmatrix.cpp moc_stackwidget.cpp moc_accountwidget.cpp moc_formvariablesexogenas.cpp moc_stackvariablesexogenas.cpp moc_variableexogenawidget.cpp moc_formexportmatrix.cpp moc_formencadenamientos.cpp moc_stackencadenamientos.cpp moc_encadenamientoswidget.cpp moc_formcompararresultados.cpp moc_formcompararmnc.cpp moc_formincidenciai.cpp moc_formpreciosnohomogeneos.cpp moc_stackpreciosnohomogeneos.cpp moc_variablepnh.cpp moc_formexportreport.cpp moc_qcustomplot.cpp moc_formdescomposicion.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_formloadmatrix.cpp moc_formviewmatrix.cpp moc_stackwidget.cpp moc_accountwidget.cpp moc_formvariablesexogenas.cpp moc_stackvariablesexogenas.cpp moc_variableexogenawidget.cpp moc_formexportmatrix.cpp moc_formencadenamientos.cpp moc_stackencadenamientos.cpp moc_encadenamientoswidget.cpp moc_formcompararresultados.cpp moc_formcompararmnc.cpp moc_formincidenciai.cpp moc_formpreciosnohomogeneos.cpp moc_stackpreciosnohomogeneos.cpp moc_variablepnh.cpp moc_formexportreport.cpp moc_qcustomplot.cpp moc_formdescomposicion.cpp moc_formcargando.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_formloadmatrix.cpp moc_formviewmatrix.cpp moc_stackwidget.cpp moc_accountwidget.cpp moc_formvariablesexogenas.cpp moc_stackvariablesexogenas.cpp moc_variableexogenawidget.cpp moc_formexportmatrix.cpp moc_formencadenamientos.cpp moc_stackencadenamientos.cpp moc_encadenamientoswidget.cpp moc_formcompararresultados.cpp moc_formcompararmnc.cpp moc_formincidenciai.cpp moc_formpreciosnohomogeneos.cpp moc_stackpreciosnohomogeneos.cpp moc_variablepnh.cpp moc_formexportreport.cpp moc_qcustomplot.cpp moc_formdescomposicion.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_formloadmatrix.cpp moc_formviewmatrix.cpp moc_stackwidget.cpp moc_accountwidget.cpp moc_formvariablesexogenas.cpp moc_stackvariablesexogenas.cpp moc_variableexogenawidget.cpp moc_formexportmatrix.cpp moc_formencadenamientos.cpp moc_stackencadenamientos.cpp moc_encadenamientoswidget.cpp moc_formcompararresultados.cpp moc_formcompararmnc.cpp moc_formincidenciai.cpp moc_formpreciosnohomogeneos.cpp moc_stackpreciosnohomogeneos.cpp moc_variablepnh.cpp moc_formexportreport.cpp moc_qcustomplot.cpp moc_formdescomposicion.cpp moc_formcargando.cpp
 moc_mainwindow.cpp: formloadmatrix.H \
 		ui_formLoadMatrix.h \
 		formviewmatrix.H \
@@ -423,17 +429,11 @@ moc_mainwindow.cpp: formloadmatrix.H \
 		formpreciosnohomogeneos.h \
 		formexportreport.h \
 		ui_formexportreport.h \
-		genericFunctions.h \
-		qcustomplot.h \
 		accountwidget.H \
 		formdescomposicion.h \
-		stackwidget.H \
-		stackvariablesexogenas.h \
-		variableexogenawidget.h \
-		stackencadenamientos.h \
-		encadenamientoswidget.h \
-		stackpreciosnohomogeneos.h \
-		variablepnh.h \
+		ui_formdescomposicion.h \
+		formcargando.h \
+		genericFunctions.h \
 		Eigen/Eigen \
 		Eigen/Dense \
 		Eigen/Core \
@@ -632,6 +632,14 @@ moc_mainwindow.cpp: formloadmatrix.H \
 		Eigen/src/Eigenvalues/RealSchur_MKL.h \
 		Eigen/src/Eigenvalues/ComplexSchur_MKL.h \
 		Eigen/src/Eigenvalues/SelfAdjointEigenSolver_MKL.h \
+		qcustomplot.h \
+		stackwidget.H \
+		stackvariablesexogenas.h \
+		variableexogenawidget.h \
+		stackencadenamientos.h \
+		encadenamientoswidget.h \
+		stackpreciosnohomogeneos.h \
+		variablepnh.h \
 		mainwindow.H
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/rodrigo/Proyectos/Matrices/mmcs -I/home/rodrigo/Proyectos/Matrices/mmcs/Eigen -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/4.9 -I/usr/include/x86_64-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include mainwindow.H -o moc_mainwindow.cpp
 
@@ -696,14 +704,18 @@ moc_formexportreport.cpp: formexportreport.h
 moc_qcustomplot.cpp: qcustomplot.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/rodrigo/Proyectos/Matrices/mmcs -I/home/rodrigo/Proyectos/Matrices/mmcs/Eigen -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/4.9 -I/usr/include/x86_64-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include qcustomplot.h -o moc_qcustomplot.cpp
 
-moc_formdescomposicion.cpp: formdescomposicion.h
+moc_formdescomposicion.cpp: ui_formdescomposicion.h \
+		formdescomposicion.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/rodrigo/Proyectos/Matrices/mmcs -I/home/rodrigo/Proyectos/Matrices/mmcs/Eigen -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/4.9 -I/usr/include/x86_64-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include formdescomposicion.h -o moc_formdescomposicion.cpp
+
+moc_formcargando.cpp: formcargando.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/rodrigo/Proyectos/Matrices/mmcs -I/home/rodrigo/Proyectos/Matrices/mmcs/Eigen -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/4.9 -I/usr/include/x86_64-linux-gnu/c++/4.9 -I/usr/include/c++/4.9/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include formcargando.h -o moc_formcargando.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_formLoadMatrix.h ui_formvariablesexogenas.h ui_formexportmatrix.h ui_formencadenamientos.h ui_formcompararresultados.h ui_formcompararmnc.h ui_formincidenciai.h ui_formpreciosnohomogeneos.h ui_formexportreport.h ui_formViewMatrix.h ui_formdescomposicion.h
+compiler_uic_make_all: ui_formLoadMatrix.h ui_formvariablesexogenas.h ui_formexportmatrix.h ui_formencadenamientos.h ui_formcompararresultados.h ui_formcompararmnc.h ui_formincidenciai.h ui_formpreciosnohomogeneos.h ui_formexportreport.h ui_formViewMatrix.h ui_formdescomposicion.h ui_formcargando.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_formLoadMatrix.h ui_formvariablesexogenas.h ui_formexportmatrix.h ui_formencadenamientos.h ui_formcompararresultados.h ui_formcompararmnc.h ui_formincidenciai.h ui_formpreciosnohomogeneos.h ui_formexportreport.h ui_formViewMatrix.h ui_formdescomposicion.h
+	-$(DEL_FILE) ui_formLoadMatrix.h ui_formvariablesexogenas.h ui_formexportmatrix.h ui_formencadenamientos.h ui_formcompararresultados.h ui_formcompararmnc.h ui_formincidenciai.h ui_formpreciosnohomogeneos.h ui_formexportreport.h ui_formViewMatrix.h ui_formdescomposicion.h ui_formcargando.h
 ui_formLoadMatrix.h: formLoadMatrix.ui
 	/usr/lib/x86_64-linux-gnu/qt5/bin/uic formLoadMatrix.ui -o ui_formLoadMatrix.h
 
@@ -737,6 +749,9 @@ ui_formViewMatrix.h: formViewMatrix.ui
 ui_formdescomposicion.h: formdescomposicion.ui
 	/usr/lib/x86_64-linux-gnu/qt5/bin/uic formdescomposicion.ui -o ui_formdescomposicion.h
 
+ui_formcargando.h: formcargando.ui
+	/usr/lib/x86_64-linux-gnu/qt5/bin/uic formcargando.ui -o ui_formcargando.h
+
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
 compiler_yacc_impl_make_all:
@@ -763,17 +778,11 @@ mainwindow.o: mainwindow.C mainwindow.H \
 		formpreciosnohomogeneos.h \
 		formexportreport.h \
 		ui_formexportreport.h \
-		genericFunctions.h \
-		qcustomplot.h \
 		accountwidget.H \
 		formdescomposicion.h \
-		stackwidget.H \
-		stackvariablesexogenas.h \
-		variableexogenawidget.h \
-		stackencadenamientos.h \
-		encadenamientoswidget.h \
-		stackpreciosnohomogeneos.h \
-		variablepnh.h \
+		ui_formdescomposicion.h \
+		formcargando.h \
+		genericFunctions.h \
 		Eigen/Eigen \
 		Eigen/Dense \
 		Eigen/Core \
@@ -971,7 +980,15 @@ mainwindow.o: mainwindow.C mainwindow.H \
 		Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
 		Eigen/src/Eigenvalues/RealSchur_MKL.h \
 		Eigen/src/Eigenvalues/ComplexSchur_MKL.h \
-		Eigen/src/Eigenvalues/SelfAdjointEigenSolver_MKL.h
+		Eigen/src/Eigenvalues/SelfAdjointEigenSolver_MKL.h \
+		qcustomplot.h \
+		stackwidget.H \
+		stackvariablesexogenas.h \
+		variableexogenawidget.h \
+		stackencadenamientos.h \
+		encadenamientoswidget.h \
+		stackpreciosnohomogeneos.h \
+		variablepnh.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.C
 
 main.o: main.C mainwindow.H \
@@ -990,17 +1007,11 @@ main.o: main.C mainwindow.H \
 		formpreciosnohomogeneos.h \
 		formexportreport.h \
 		ui_formexportreport.h \
-		genericFunctions.h \
-		qcustomplot.h \
 		accountwidget.H \
 		formdescomposicion.h \
-		stackwidget.H \
-		stackvariablesexogenas.h \
-		variableexogenawidget.h \
-		stackencadenamientos.h \
-		encadenamientoswidget.h \
-		stackpreciosnohomogeneos.h \
-		variablepnh.h \
+		ui_formdescomposicion.h \
+		formcargando.h \
+		genericFunctions.h \
 		Eigen/Eigen \
 		Eigen/Dense \
 		Eigen/Core \
@@ -1198,7 +1209,15 @@ main.o: main.C mainwindow.H \
 		Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
 		Eigen/src/Eigenvalues/RealSchur_MKL.h \
 		Eigen/src/Eigenvalues/ComplexSchur_MKL.h \
-		Eigen/src/Eigenvalues/SelfAdjointEigenSolver_MKL.h
+		Eigen/src/Eigenvalues/SelfAdjointEigenSolver_MKL.h \
+		qcustomplot.h \
+		stackwidget.H \
+		stackvariablesexogenas.h \
+		variableexogenawidget.h \
+		stackencadenamientos.h \
+		encadenamientoswidget.h \
+		stackpreciosnohomogeneos.h \
+		variablepnh.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.C
 
 formloadmatrix.o: formloadmatrix.C formloadmatrix.H \
@@ -1265,7 +1284,205 @@ stackpreciosnohomogeneos.o: stackpreciosnohomogeneos.cpp stackpreciosnohomogeneo
 variablepnh.o: variablepnh.cpp variablepnh.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o variablepnh.o variablepnh.cpp
 
-genericFunctions.o: genericFunctions.cpp genericFunctions.h
+genericFunctions.o: genericFunctions.cpp genericFunctions.h \
+		Eigen/Eigen \
+		Eigen/Dense \
+		Eigen/Core \
+		Eigen/src/Core/util/DisableStupidWarnings.h \
+		Eigen/src/Core/util/Macros.h \
+		Eigen/src/Core/util/MKL_support.h \
+		Eigen/src/Core/util/Constants.h \
+		Eigen/src/Core/util/ForwardDeclarations.h \
+		Eigen/src/Core/util/Meta.h \
+		Eigen/src/Core/util/StaticAssert.h \
+		Eigen/src/Core/util/XprHelper.h \
+		Eigen/src/Core/util/Memory.h \
+		Eigen/src/Core/NumTraits.h \
+		Eigen/src/Core/MathFunctions.h \
+		Eigen/src/Core/GenericPacketMath.h \
+		Eigen/src/Core/arch/SSE/PacketMath.h \
+		Eigen/src/Core/arch/SSE/MathFunctions.h \
+		Eigen/src/Core/arch/SSE/Complex.h \
+		Eigen/src/Core/arch/AltiVec/PacketMath.h \
+		Eigen/src/Core/arch/AltiVec/Complex.h \
+		Eigen/src/Core/arch/NEON/PacketMath.h \
+		Eigen/src/Core/arch/NEON/Complex.h \
+		Eigen/src/Core/arch/Default/Settings.h \
+		Eigen/src/Core/Functors.h \
+		Eigen/src/Core/DenseCoeffsBase.h \
+		Eigen/src/Core/DenseBase.h \
+		Eigen/src/plugins/BlockMethods.h \
+		Eigen/src/Core/MatrixBase.h \
+		Eigen/src/plugins/CommonCwiseUnaryOps.h \
+		Eigen/src/plugins/CommonCwiseBinaryOps.h \
+		Eigen/src/plugins/MatrixCwiseUnaryOps.h \
+		Eigen/src/plugins/MatrixCwiseBinaryOps.h \
+		Eigen/src/Core/EigenBase.h \
+		Eigen/src/Core/Assign.h \
+		Eigen/src/Core/util/BlasUtil.h \
+		Eigen/src/Core/DenseStorage.h \
+		Eigen/src/Core/NestByValue.h \
+		Eigen/src/Core/ForceAlignedAccess.h \
+		Eigen/src/Core/ReturnByValue.h \
+		Eigen/src/Core/NoAlias.h \
+		Eigen/src/Core/PlainObjectBase.h \
+		Eigen/src/Core/Matrix.h \
+		Eigen/src/Core/Array.h \
+		Eigen/src/Core/CwiseBinaryOp.h \
+		Eigen/src/Core/CwiseUnaryOp.h \
+		Eigen/src/Core/CwiseNullaryOp.h \
+		Eigen/src/Core/CwiseUnaryView.h \
+		Eigen/src/Core/SelfCwiseBinaryOp.h \
+		Eigen/src/Core/Dot.h \
+		Eigen/src/Core/StableNorm.h \
+		Eigen/src/Core/MapBase.h \
+		Eigen/src/Core/Stride.h \
+		Eigen/src/Core/Map.h \
+		Eigen/src/Core/Block.h \
+		Eigen/src/Core/VectorBlock.h \
+		Eigen/src/Core/Ref.h \
+		Eigen/src/Core/Transpose.h \
+		Eigen/src/Core/DiagonalMatrix.h \
+		Eigen/src/Core/Diagonal.h \
+		Eigen/src/Core/DiagonalProduct.h \
+		Eigen/src/Core/PermutationMatrix.h \
+		Eigen/src/Core/Transpositions.h \
+		Eigen/src/Core/Redux.h \
+		Eigen/src/Core/Visitor.h \
+		Eigen/src/Core/Fuzzy.h \
+		Eigen/src/Core/IO.h \
+		Eigen/src/Core/Swap.h \
+		Eigen/src/Core/CommaInitializer.h \
+		Eigen/src/Core/Flagged.h \
+		Eigen/src/Core/ProductBase.h \
+		Eigen/src/Core/GeneralProduct.h \
+		Eigen/src/Core/TriangularMatrix.h \
+		Eigen/src/Core/SelfAdjointView.h \
+		Eigen/src/Core/products/GeneralBlockPanelKernel.h \
+		Eigen/src/Core/products/Parallelizer.h \
+		Eigen/src/Core/products/CoeffBasedProduct.h \
+		Eigen/src/Core/products/GeneralMatrixVector.h \
+		Eigen/src/Core/products/GeneralMatrixMatrix.h \
+		Eigen/src/Core/SolveTriangular.h \
+		Eigen/src/Core/products/GeneralMatrixMatrixTriangular.h \
+		Eigen/src/Core/products/SelfadjointMatrixVector.h \
+		Eigen/src/Core/products/SelfadjointMatrixMatrix.h \
+		Eigen/src/Core/products/SelfadjointProduct.h \
+		Eigen/src/Core/products/SelfadjointRank2Update.h \
+		Eigen/src/Core/products/TriangularMatrixVector.h \
+		Eigen/src/Core/products/TriangularMatrixMatrix.h \
+		Eigen/src/Core/products/TriangularSolverMatrix.h \
+		Eigen/src/Core/products/TriangularSolverVector.h \
+		Eigen/src/Core/BandMatrix.h \
+		Eigen/src/Core/CoreIterators.h \
+		Eigen/src/Core/BooleanRedux.h \
+		Eigen/src/Core/Select.h \
+		Eigen/src/Core/VectorwiseOp.h \
+		Eigen/src/Core/Random.h \
+		Eigen/src/Core/Replicate.h \
+		Eigen/src/Core/Reverse.h \
+		Eigen/src/Core/ArrayBase.h \
+		Eigen/src/plugins/ArrayCwiseUnaryOps.h \
+		Eigen/src/plugins/ArrayCwiseBinaryOps.h \
+		Eigen/src/Core/ArrayWrapper.h \
+		Eigen/src/Core/products/GeneralMatrixMatrix_MKL.h \
+		Eigen/src/Core/products/GeneralMatrixVector_MKL.h \
+		Eigen/src/Core/products/GeneralMatrixMatrixTriangular_MKL.h \
+		Eigen/src/Core/products/SelfadjointMatrixMatrix_MKL.h \
+		Eigen/src/Core/products/SelfadjointMatrixVector_MKL.h \
+		Eigen/src/Core/products/TriangularMatrixMatrix_MKL.h \
+		Eigen/src/Core/products/TriangularMatrixVector_MKL.h \
+		Eigen/src/Core/products/TriangularSolverMatrix_MKL.h \
+		Eigen/src/Core/Assign_MKL.h \
+		Eigen/src/Core/GlobalFunctions.h \
+		Eigen/src/Core/util/ReenableStupidWarnings.h \
+		Eigen/Eigen2Support \
+		Eigen/src/Eigen2Support/Macros.h \
+		Eigen/src/Eigen2Support/Memory.h \
+		Eigen/src/Eigen2Support/Meta.h \
+		Eigen/src/Eigen2Support/Lazy.h \
+		Eigen/src/Eigen2Support/Cwise.h \
+		Eigen/src/Eigen2Support/CwiseOperators.h \
+		Eigen/src/Eigen2Support/TriangularSolver.h \
+		Eigen/src/Eigen2Support/Block.h \
+		Eigen/src/Eigen2Support/VectorBlock.h \
+		Eigen/src/Eigen2Support/Minor.h \
+		Eigen/src/Eigen2Support/MathFunctions.h \
+		Eigen/LU \
+		Eigen/src/misc/Solve.h \
+		Eigen/src/misc/Kernel.h \
+		Eigen/src/misc/Image.h \
+		Eigen/src/LU/FullPivLU.h \
+		Eigen/src/LU/PartialPivLU.h \
+		Eigen/src/LU/PartialPivLU_MKL.h \
+		Eigen/src/LU/Determinant.h \
+		Eigen/src/LU/Inverse.h \
+		Eigen/src/LU/arch/Inverse_SSE.h \
+		Eigen/src/Eigen2Support/LU.h \
+		Eigen/Cholesky \
+		Eigen/src/Cholesky/LLT.h \
+		Eigen/src/Cholesky/LDLT.h \
+		Eigen/src/Cholesky/LLT_MKL.h \
+		Eigen/QR \
+		Eigen/Jacobi \
+		Eigen/src/Jacobi/Jacobi.h \
+		Eigen/Householder \
+		Eigen/src/Householder/Householder.h \
+		Eigen/src/Householder/HouseholderSequence.h \
+		Eigen/src/Householder/BlockHouseholder.h \
+		Eigen/src/QR/HouseholderQR.h \
+		Eigen/src/QR/FullPivHouseholderQR.h \
+		Eigen/src/QR/ColPivHouseholderQR.h \
+		Eigen/src/QR/HouseholderQR_MKL.h \
+		Eigen/src/QR/ColPivHouseholderQR_MKL.h \
+		Eigen/src/Eigen2Support/QR.h \
+		Eigen/Eigenvalues \
+		Eigen/Geometry \
+		Eigen/SVD \
+		Eigen/src/SVD/JacobiSVD.h \
+		Eigen/src/SVD/JacobiSVD_MKL.h \
+		Eigen/src/SVD/UpperBidiagonalization.h \
+		Eigen/src/Eigen2Support/SVD.h \
+		Eigen/src/Geometry/OrthoMethods.h \
+		Eigen/src/Geometry/EulerAngles.h \
+		Eigen/src/Geometry/Homogeneous.h \
+		Eigen/src/Geometry/RotationBase.h \
+		Eigen/src/Geometry/Rotation2D.h \
+		Eigen/src/Geometry/Quaternion.h \
+		Eigen/src/Geometry/AngleAxis.h \
+		Eigen/src/Geometry/Transform.h \
+		Eigen/src/Geometry/Translation.h \
+		Eigen/src/Geometry/Scaling.h \
+		Eigen/src/Geometry/Hyperplane.h \
+		Eigen/src/Geometry/ParametrizedLine.h \
+		Eigen/src/Geometry/AlignedBox.h \
+		Eigen/src/Geometry/Umeyama.h \
+		Eigen/src/Geometry/arch/Geometry_SSE.h \
+		Eigen/src/Eigen2Support/Geometry/All.h \
+		Eigen/src/Eigen2Support/Geometry/RotationBase.h \
+		Eigen/src/Eigen2Support/Geometry/Rotation2D.h \
+		Eigen/src/Eigen2Support/Geometry/Quaternion.h \
+		Eigen/src/Eigen2Support/Geometry/AngleAxis.h \
+		Eigen/src/Eigen2Support/Geometry/Transform.h \
+		Eigen/src/Eigen2Support/Geometry/Translation.h \
+		Eigen/src/Eigen2Support/Geometry/Scaling.h \
+		Eigen/src/Eigen2Support/Geometry/AlignedBox.h \
+		Eigen/src/Eigen2Support/Geometry/Hyperplane.h \
+		Eigen/src/Eigen2Support/Geometry/ParametrizedLine.h \
+		Eigen/src/Eigenvalues/Tridiagonalization.h \
+		Eigen/src/Eigenvalues/RealSchur.h \
+		Eigen/src/Eigenvalues/HessenbergDecomposition.h \
+		Eigen/src/Eigenvalues/EigenSolver.h \
+		Eigen/src/Eigenvalues/SelfAdjointEigenSolver.h \
+		Eigen/src/Eigenvalues/GeneralizedSelfAdjointEigenSolver.h \
+		Eigen/src/Eigenvalues/ComplexSchur.h \
+		Eigen/src/Eigenvalues/ComplexEigenSolver.h \
+		Eigen/src/Eigenvalues/RealQZ.h \
+		Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
+		Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
+		Eigen/src/Eigenvalues/RealSchur_MKL.h \
+		Eigen/src/Eigenvalues/ComplexSchur_MKL.h \
+		Eigen/src/Eigenvalues/SelfAdjointEigenSolver_MKL.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o genericFunctions.o genericFunctions.cpp
 
 formexportreport.o: formexportreport.cpp formexportreport.h \
@@ -1278,6 +1495,10 @@ qcustomplot.o: qcustomplot.cpp qcustomplot.h
 formdescomposicion.o: formdescomposicion.cpp formdescomposicion.h \
 		ui_formdescomposicion.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o formdescomposicion.o formdescomposicion.cpp
+
+formcargando.o: formcargando.cpp formcargando.h \
+		ui_formcargando.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o formcargando.o formcargando.cpp
 
 qrc_images.o: qrc_images.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_images.o qrc_images.cpp
@@ -1344,6 +1565,9 @@ moc_qcustomplot.o: moc_qcustomplot.cpp
 
 moc_formdescomposicion.o: moc_formdescomposicion.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_formdescomposicion.o moc_formdescomposicion.cpp
+
+moc_formcargando.o: moc_formcargando.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_formcargando.o moc_formcargando.cpp
 
 ####### Install
 

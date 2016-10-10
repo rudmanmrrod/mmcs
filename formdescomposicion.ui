@@ -96,10 +96,13 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: #358ccb; color: #fff; font-weight: bold; height: 30px; border: none; border-radius: 5px;</string>
+        <string notr="true">font-weight: bold; height: 30px; border: none; border-radius: 5px;</string>
        </property>
        <property name="text">
         <string>&lt;&lt;</string>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -118,10 +121,13 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: #358ccb; color: #fff; font-weight: bold; height: 30px; border: none; border-radius: 5px;</string>
+        <string notr="true">font-weight: bold; height: 30px; border: none; border-radius: 5px;</string>
        </property>
        <property name="text">
         <string>&gt;&gt;</string>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
