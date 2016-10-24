@@ -4,7 +4,7 @@
     @brief Cuerpo Principal de funciones del Sistema de Matrices de Contabilidad Social
     @author José Ruiz at 05/15, Rodrigo Boet
     @author <a href='http://www.cenditel.gob.ve'>Centro Nacional de Desarrollo e Investigación en Tecnologías Libres (CENDITEL) nodo Mérida - Venezuela</a>
-    @copyright <a href='http://www.gnu.org/licenses/gpl-2.0.html'>GNU Public License versión 2 (GPLv2)</a>
+    @copyright <a href='http://conocimientolibre.cenditel.gob.ve/licencia-de-software-v-1-3/>Licencia de Software Versión 1.2</a>
 */
 
 #include "mainwindow.H"
@@ -906,7 +906,7 @@ void MainWindow::acercaDe()//Funcion para el mensaje acerca de
 {
     QString Mensaje = "Sistema de Manejo de Matrices de Contabilidad Social\n\n";
     Mensaje+="Centro Nacional de Desarrollo e Investigación en Tecnologías Libres, 2015.\n";
-    Mensaje+="Distribuido bajo la licencia GNU V.2.0\n\n";
+    Mensaje+="Distribuido bajo la Licencia de Software V 1.2\n\n";
     Mensaje+="https://mpv.cenditel.gob.ve/mmcs";
     QMessageBox::information(this,"Acerca de..",Mensaje);
 }
