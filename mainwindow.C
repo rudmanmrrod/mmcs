@@ -6193,6 +6193,7 @@ void MainWindow::calcularA0(QVector<double> diagonal)
             tw->setItem(i,j,valoraInsertar);
         }
     }
+    spanEndogenaCell(tw,2,0,false);
     createTab("A0",tw,true);
     formdescomposicion->close();
 
@@ -6213,6 +6214,7 @@ void MainWindow::calcularA0(QVector<double> diagonal)
             Mm1->setItem(i,j,valoraInsertar);
         }
     }
+    spanEndogenaCell(Mm1,2,0,false);
     createTab("M1",Mm1);
 }
 
@@ -6254,6 +6256,7 @@ void MainWindow::calcularAuxiliares()
             Mm2->setItem(i,j,valoraInsertar);
         }
     }
+    spanEndogenaCell(Mm2,2,0,false);
     createTab("M2",Mm2);
 
     QTableWidget *Mm3 = new QTableWidget;
@@ -6270,6 +6273,7 @@ void MainWindow::calcularAuxiliares()
             Mm3->setItem(i,j,valoraInsertar);
         }
     }
+    spanEndogenaCell(Mm3,2,0,false);
     createTab("M3",Mm3);
 }
 
@@ -6300,6 +6304,7 @@ void MainWindow::calcularMatricesDescomposicion()
             mt->setItem(i,j,valoraInsertar);
         }
     }
+    spanEndogenaCell(mt,2,0,false);
     createTab("T",mt);
 
     QTableWidget *mo = new QTableWidget;
@@ -6316,6 +6321,7 @@ void MainWindow::calcularMatricesDescomposicion()
             mo->setItem(i,j,valoraInsertar);
         }
     }
+    spanEndogenaCell(mo,2,0,false);
     createTab("O",mo);
 
     QTableWidget *mc = new QTableWidget;
@@ -6332,6 +6338,7 @@ void MainWindow::calcularMatricesDescomposicion()
             mc->setItem(i,j,valoraInsertar);
         }
     }
+    spanEndogenaCell(mc,2,0,false);
     createTab("C",mc);
 }
 
