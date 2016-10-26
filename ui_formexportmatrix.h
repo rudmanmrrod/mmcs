@@ -26,7 +26,7 @@ public:
     {
         if (FormExportMatrix->objectName().isEmpty())
             FormExportMatrix->setObjectName(QStringLiteral("FormExportMatrix"));
-        FormExportMatrix->setWindowModality(Qt::ApplicationModal);
+        FormExportMatrix->setWindowModality(Qt::WindowModal);
         FormExportMatrix->resize(650, 336);
 
         retranslateUi(FormExportMatrix);

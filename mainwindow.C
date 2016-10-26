@@ -255,6 +255,7 @@ void MainWindow::slotSaveExport()
             }
             archivo.flush();
             archivo.close();
+            QMessageBox::information(this,"Éxito",QString("Se exportó con éxito\nla matriz en\n"+formExportMatriz->ExportLine->text()));
             formExportMatriz->ExportLine->setText("");
             formExportMatriz->close();
         }
