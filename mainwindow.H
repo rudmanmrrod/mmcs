@@ -288,9 +288,9 @@ class MainWindow : public QMainWindow
     //Función estimar los vectores fila y columna para la clasificación en los encadenamientos
     void estimarVIFVC();
     //Función para estimar la clasificación de las cuentas por CW o Rassmusen
-    void estimarClasificador(double &, double &, int index, int total = 0);
+    void estimarClasificador(double &, double &, int index, double total = 0);
     //Función para determinar los clasificadores
-    void determinarClasificador(QTableWidget *, int index_table, int element, int total = 0);
+    void determinarClasificador(QTableWidget *, int index_table, int element, double total = 0);
 
     //Función para validar la cuenta producto/actividad
     bool validarDescomposicion(QStringList);

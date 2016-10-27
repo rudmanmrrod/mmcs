@@ -3251,7 +3251,7 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
     @param <columna> Recibe la variable donde se almacenará la columna
     @param <index> Recibe la ubicación del vector de donde se extraerá el valor
 */
-void MainWindow::estimarClasificador(double &fila, double &columna, int index, int total)
+void MainWindow::estimarClasificador(double &fila, double &columna, int index, double total)
 {
     //Se buscan los botones para saber si se estimó por coeficientes técnicos o Ma
     QRadioButton *rbCT = findChild<QRadioButton *>("CTButton");
@@ -3293,7 +3293,7 @@ void MainWindow::estimarClasificador(double &fila, double &columna, int index, i
     @param <index_table> Recibe el indice de la tabla de encadenamientos
     @param <element> Recibe el indice de donde se extraerá el valor para calcular el clasificador
 */
-void MainWindow::determinarClasificador(QTableWidget *tw, int index_table, int element, int total)
+void MainWindow::determinarClasificador(QTableWidget *tw, int index_table, int element, double total)
 {
     QString value;
     //Se estima la clasificación
