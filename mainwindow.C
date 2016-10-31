@@ -2191,7 +2191,7 @@ void MainWindow::slotFinalizarExogena()
                         fila=llenarLista(fila,tablaEE,i,1);
                         tablaEE->removeRow(i);
                         tablaEE->insertRow(tablaEE->rowCount());
-                        insertRowExogena(fila,tablaEE,1);
+                        insertRowExogena(fila,tablaEE,1,true,2);
                         fila.clear();
                         //Se agregan los estilos correspondientes a las cuentas y componentes de las filas
                         QString nombre_cuenta = tablaEE->item(position,0)->text();
@@ -2208,7 +2208,7 @@ void MainWindow::slotFinalizarExogena()
                         columna=llenarLista(columna,tablaEE,i,0);
                         tablaEE->removeColumn(i);
                         tablaEE->insertColumn(tablaEE->columnCount());
-                        insertRowExogena(columna,tablaEE,0);
+                        insertRowExogena(columna,tablaEE,0,true,2);
                         columna.clear();
                         //Se agregan los estilos correspondientes a las cuentas y componentes de las columnas
                         QTableWidgetItem *ValoraInsertarCuentaC = new QTableWidgetItem(nombre_cuenta);
@@ -2413,7 +2413,9 @@ void MainWindow::setEndogenaExogenaCell(QTableWidget *tw,int inicioExogena,int e
         CuentaEndogenafila->setTextAlignment(Qt::AlignCenter);
         CellStyleExEn(CuentaEndogenafila);
         tw->setItem(0,1,CuentaEndogenafila);
-        tw->setSpan(0,1,1,inicioExogena-1);
+        if(inicioExogena-1>1){
+            tw->setSpan(0,1,1,inicioExogena-1);
+        }
         QTableWidgetItem *CuentaEndogenaColumna = new QTableWidgetItem;
         if(elementos<12)
         {
@@ -2757,7 +2759,6 @@ void MainWindow::calcularTotalCuentas(QTableWidget *tw)
     for(int i = 3;i<cantidad-1;i++)
     {
         QString cuenta = tw->item(i,1)->text();
-        QString value = Separador(tw->item(i,cantidad-1),true);
         if(totalCuentas.contains(cuenta))
         {
             totalCuentas[cuenta] += EndogenasyExogenas(i-3,cantidad-4);
@@ -4531,7 +4532,10 @@ void MainWindow::titlespanMatrizExgEnd(QTableWidget *Bn)
         if(valoresColumna.contains(name))
         {
             int contar = valoresColumna.count(name);
-            Bn->setSpan(0,i,1,contar);
+            if(contar>1)
+            {
+                Bn->setSpan(0,i,1,contar);
+            }
             valoresColumna.removeAll(name);
         }
         if(valoresColumna.isEmpty())
@@ -4546,7 +4550,10 @@ void MainWindow::titlespanMatrizExgEnd(QTableWidget *Bn)
         if(valoresFila.contains(name))
         {
             int contar = valoresFila.count(name);
-            Bn->setSpan(j,0,contar,1);
+            if(contar>1)
+            {
+                Bn->setSpan(j,0,contar,1);
+            }
             valoresFila.removeAll(name);
         }
         if(valoresFila.isEmpty())

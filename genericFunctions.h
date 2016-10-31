@@ -12,7 +12,7 @@ void tableItem(QTableWidget *tw, int inicio, int fin, QString texto);
 void CellStyle(QTableWidgetItem *);
 void CellStyleComponente(QTableWidgetItem *);
 void CellStyleExEn(QTableWidgetItem *);
-void insertRowExogena(QList<QString> lista,QTableWidget *,int opcion);
+void insertRowExogena(QList<QString> lista, QTableWidget *, int opcion, bool center, int init);
 void noEditColZero(QTableWidget *);
 void ItemsNoEditable(QTableWidget *, int inicio, int fin, int col=0);
 void CrearTablaVacia(int contador, QTableWidget *);

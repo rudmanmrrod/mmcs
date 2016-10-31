@@ -234,13 +234,17 @@ void CellStyleExEn(QTableWidgetItem *ti)
    @param <tw> Recibe el widget de la tabla
    @param <opcion> Recibe la opción (1 para escribir en columna y 0 para la fila)
 */
-void insertRowExogena(QList<QString> lista,QTableWidget *tw,int opcion)
+void insertRowExogena(QList<QString> lista,QTableWidget *tw,int opcion, bool center, int init)
 {
     for(int i=0;i<tw->rowCount();i++)
     {
         QTableWidgetItem *twi =new QTableWidgetItem;
         twi->setText(lista[i]);
         twi->setFlags(twi->flags() ^ Qt::ItemIsEditable);
+        if(center and i>=init)
+        {
+            twi->setTextAlignment(Qt::AlignCenter);
+        }
         int fin=tw->rowCount();
         if(opcion==1)
         {
