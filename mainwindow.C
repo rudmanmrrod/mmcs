@@ -4344,11 +4344,11 @@ void MainWindow::calcularMb()
     titlespanMatrizExgEnd(Bn);
 
     createTab("Bn",Bn);
-    int indice=ObtenerIndice("Bn");
-    tabWidget->removeTab(indice);
+    //int indice=ObtenerIndice("Bn");
+    //tabWidget->removeTab(indice);
 
-    //estimarMb(Bn,Mb);
-    //calcularSubtotalEndExg();
+    estimarMb(Bn,Mb);
+    calcularSubtotalEndExg();
     opcionMb++;
 }
 
