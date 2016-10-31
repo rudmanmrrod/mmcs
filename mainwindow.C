@@ -2180,7 +2180,7 @@ void MainWindow::slotFinalizarExogena()
         {
             foreach(QString key2,diccCuentasExogenas[key])
             {
-                for(int i=2;i<=cantidad;i++)
+                for(int i=2;i<cantidad;i++)
                 {
                     QString cuenta=tablaEE->item(0,i)->text();
                     QString componente =tablaEE->item(1,i)->text();
@@ -4347,8 +4347,8 @@ void MainWindow::calcularMb()
     int indice=ObtenerIndice("Bn");
     tabWidget->removeTab(indice);
 
-    estimarMb(Bn,Mb);
-    calcularSubtotalEndExg();
+    //estimarMb(Bn,Mb);
+    //calcularSubtotalEndExg();
     opcionMb++;
 }
 
