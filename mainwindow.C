@@ -388,12 +388,23 @@ void MainWindow::matricesMenuBar()
 
     menuTools.addAction(&actionVariableExogena);
 
-    //Se agrega la acción de descomposición
-    actionDescomposicion.setText("&Descomposicion");
+    //Menú de descomposición
+    Descomposicion.setTitle("&Descomposicion");
+    Descomposicion.setDisabled(true);
+
+    actionDescomposicion.setText("&Multiplicadores");
     actionDescomposicion.setDisabled(true);
 
-    menuTools.addAction(&actionDescomposicion);
+    Descomposicion.addAction(&actionDescomposicion);
 
+    actionCortoPlazo.setText("&Evaluar Escenario");
+    actionCortoPlazo.setDisabled(true);
+
+    Descomposicion.addAction(&actionCortoPlazo);
+
+    menuTools.addMenu(&Descomposicion);
+
+    //Menú de Modelos
     Modelos.setTitle("&Modelos");
     Modelos.setDisabled(true);
 
@@ -923,10 +934,12 @@ void MainWindow::acercaDe()//Funcion para el mensaje acerca de
 */
 MainWindow::MainWindow()
     : actionNewProject(this),actionLoadMatrix(this), actionExportMatrix(this), actionQuit(this),actionCH(this), actionCV(this),
-      actionVariableExogena(this),actionEncadenamiento(this),actionModeloClasico(this), actionDescomposicion(this),
-      actionCompararResultados(this),actionModeloNoClasico(this),actionCompararResultadosMNC(this),actionPHClasicoIncidencia100(this),
-      actionPHCIncidenciaCuenta(this),actionPHCIncidenciaComponente(this),actionPHNoClasicoIncidencia100(this),actionPHNCIncidenciaCuenta(this),
-      actionPHNCIncidenciaComponente(this),actionPNHIncidencia100(this),actionPNHIncidenciaCuenta(this),actionPNHIncidenciaComponente(this),
+      actionVariableExogena(this),actionEncadenamiento(this),
+      actionDescomposicion(this), actionCortoPlazo(this),
+      actionModeloClasico(this), actionCompararResultados(this),actionModeloNoClasico(this),actionCompararResultadosMNC(this),
+      actionPHClasicoIncidencia100(this),actionPHCIncidenciaCuenta(this),actionPHCIncidenciaComponente(this),
+      actionPHNoClasicoIncidencia100(this),actionPHNCIncidenciaCuenta(this),actionPHNCIncidenciaComponente(this),actionPNHIncidencia100(this),
+      actionPNHIncidenciaCuenta(this),actionPNHIncidenciaComponente(this),
       actionSeleccionarTabla(this),actionManual(this),actionAcercaDe(this),formLoadMatrix(0)
 {
     tabWidget = new QTabWidget;
@@ -962,6 +975,7 @@ MainWindow::MainWindow()
     cantidadPNHincidencia100 = 1;
     cantidadPNHincidenciaiCuenta = 1;
     cantidadPNHincidenciaiComponente = 1;
+    cantidadImpactos = 1;
 
     initGUI();
 
@@ -2265,6 +2279,7 @@ void MainWindow::slotFinalizarExogena()
         actionEncadenamiento.setEnabled(true);
 
         //Se activa la descomposicion
+        Descomposicion.setEnabled(true);
         connect(&actionDescomposicion,SIGNAL(triggered()),this,SLOT(slotDescomposicion()));
         actionDescomposicion.setEnabled(true);
 
@@ -3254,6 +3269,9 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
 */
 void MainWindow::estimarClasificador(double &fila, double &columna, int index, double total)
 {
+    qDebug("Clasificadores");
+    qDebug()<<vFila;
+    qDebug()<<vColumna;
     //Se buscan los botones para saber si se estimó por coeficientes técnicos o Ma
     QRadioButton *rbCT = findChild<QRadioButton *>("CTButton");
     QRadioButton *rbMa = findChild<QRadioButton *>("MaButton");
@@ -3379,7 +3397,10 @@ void MainWindow::cuentacomponentesEncadenamiento(QTableWidget *to,int count)
         if(cuentaTitulos.contains(accName))
         {
             int contar = cuentaTitulos.count(accName);
-            to->setSpan(i+1,0,contar,1);
+            if(contar>1)
+            {
+                to->setSpan(i+1,0,contar,1);
+            }
             cuentaTitulos.removeAll(accName);
         }
         if(cuentaTitulos.isEmpty())
@@ -3836,9 +3857,9 @@ void MainWindow::slotModeloClasico()
     @date 15/09/2015
     @author Rodrigo Boet
     @param <tw> Recibe el widget de la tabla
-    @param <clasico> Recibe un booleano (Verdadero si para el modelo clásico, Falso en caso contrario)
+    @param <clasico> Recibe un entero (0->clasico,1->no clasico,2->corto plazo)
 */
-void MainWindow::llenarEscenario(QTableWidget *tw,bool clasico)
+void MainWindow::llenarEscenario(QTableWidget *tw,int clasico)
 {
     QTableWidget *tablaEndogena = findChild<QTableWidget *>("MatrizEndogenaEndogena");
     int contador = tablaEndogena->rowCount()-2;
@@ -3859,13 +3880,17 @@ void MainWindow::llenarEscenario(QTableWidget *tw,bool clasico)
     title3->setTextAlignment(Qt::AlignCenter);
     title3->setFont(font);
     QTableWidgetItem *title4 ;
-    if(clasico)
+    if(clasico==0)
     {
         title4 = new QTableWidgetItem(QString("Sub-Total\nEscenario %1").arg(cantidadEscenarios));
     }
-    else
+    else if(clasico==1)
     {
         title4 = new QTableWidgetItem(QString("Sub-Total\nEscenario %1").arg(cantidadMNC));
+    }
+    else if(clasico==2)
+    {
+        title4 = new QTableWidgetItem(QString("Sub-Total\nEscenario %1").arg(cantidadImpactos));
     }
     title4->setFlags(title4->flags() ^ Qt::ItemIsEditable);
     title4->setTextAlignment(Qt::AlignCenter);
@@ -3908,7 +3933,7 @@ void MainWindow::llenarEscenario(QTableWidget *tw,bool clasico)
     @param <tw> Recibe el widget de la tabla
     @param <clasico> Recibe un booleano (Verdadero si para el modelo clásico, Falso en caso contrario)
 */
-void MainWindow::calcularEscenario(bool clasico)
+void MainWindow::calcularEscenario(int clasico)
 {
     QMessageBox msBox(QMessageBox::Question,"Calcular Escenario","¿Está seguro que desea calcular?",
                       QMessageBox::Yes | QMessageBox::No,this);
@@ -3918,14 +3943,19 @@ void MainWindow::calcularEscenario(bool clasico)
     {
         QTableWidget *tw = new QTableWidget;
         int count;
-        if(clasico)
+        if(clasico==0)
         {
             tw = findChild<QTableWidget *>(QString("TablaModeloClasico %1").arg(cantidadEscenarios));
             count = tw->rowCount();
         }
-        else
+        else if(clasico==1)
         {
             tw = findChild<QTableWidget *>(QString("TablaModeloNoClasico %1").arg(cantidadMNC));
+            count = tw->rowCount();
+        }
+        else if(clasico==2)
+        {
+            tw = findChild<QTableWidget *>(QString("TablaImpactos %1").arg(cantidadImpactos));
             count = tw->rowCount();
         }
         for(int i=1;i<count;i++)
@@ -3955,13 +3985,17 @@ void MainWindow::calcularEscenario(bool clasico)
         tw->resizeColumnsToContents();
         tw->resizeRowsToContents();
         QPushButton *buttonFinalizar;
-        if(clasico)
+        if(clasico==0)
         {
             buttonFinalizar = findChild<QPushButton *>(QString("Finalizar %1").arg(cantidadEscenarios));
         }
-        else
+        else if(clasico==1)
         {
             buttonFinalizar = findChild<QPushButton *>(QString("FinalizarMNC %1").arg(cantidadMNC));
+        }
+        else if(clasico==2)
+        {
+            buttonFinalizar = findChild<QPushButton *>(QString("FinalizarImpacto %1").arg(cantidadImpactos));
         }
         buttonFinalizar->setStyleSheet("background-color: #358ccb; color: #fff;"
                                  "font-weight: bold; height: 30px; border: none;"
@@ -3988,7 +4022,7 @@ void MainWindow::finalizarEscenario()
         resultadoEscenario->setObjectName(QString("TablaResultadoEscenario %1").arg(cantidadEscenarios));
         int contador = tw->rowCount();
         crearTablaVaciaEncadenamiento(contador,resultadoEscenario);
-        calcularFinEscenario(resultadoEscenario);
+        calcularFinEscenario(resultadoEscenario,"TablaModeloClasico",MatrixMa);
         //Se ajustan las columnas/filas al contenido
         resultadoEscenario->resizeColumnsToContents();
         resultadoEscenario->resizeRowsToContents();
@@ -4013,10 +4047,10 @@ void MainWindow::finalizarEscenario()
     @date 18/09/2015
     @author Rodrigo Boet
 */
-void MainWindow::calcularFinEscenario(QTableWidget *tw)
+void MainWindow::calcularFinEscenario(QTableWidget *tw,QString nombre,MatrixXd matrix)
 {
     QVector<double> resultado;
-    resultado= obtenerResultadoEscenario(resultado);//Llama a la funcion que retorna el resultado en un Qvector
+    resultado= obtenerResultadoEscenario(resultado,nombre,matrix);//Llama a la funcion que retorna el resultado en un Qvector
     QFont font;
     font.setBold(true);
     //Se crean los titulos
@@ -4068,18 +4102,18 @@ void MainWindow::calcularFinEscenario(QTableWidget *tw)
     @param <res> Recibe el vector donde se almacenarán los resultados
     @return <res> retorna el vector con los elementos
 */
-QVector<double> MainWindow::obtenerResultadoEscenario(QVector<double> res)
+QVector<double> MainWindow::obtenerResultadoEscenario(QVector<double> res,QString nombre,MatrixXd matrix)
 {
     QTableWidget *Ma = findChild<QTableWidget *>("MatrizMa");
     int cantidad = Ma->rowCount()-2;
-    QTableWidget *tw = findChild<QTableWidget *>(QString("TablaModeloClasico %1").arg(cantidadEscenarios));
+    QTableWidget *tw = findChild<QTableWidget *>(QString(nombre+" %1").arg(cantidadEscenarios));
     VectorXd vector(cantidad);
     for(int i=0;i<cantidad;i++)
     {
         QString value = Separador(tw->item(i+1,5),true);
         vector(i)=value.toDouble();
     }
-    VectorXd resultado = MatrixMa*vector;
+    VectorXd resultado = matrix*vector;
     for(int i=0;i<cantidad;i++)
     {
         double val = resultado(i);
@@ -4228,7 +4262,10 @@ void MainWindow::cuentacomponentesResultado(QTableWidget *to, int count,bool cla
         if(cuentaTitulos.contains(accName))
         {
             int contar = cuentaTitulos.count(accName);
-            to->setSpan(i+1,0,contar,1);
+            if(contar>1)
+            {
+                to->setSpan(i+1,0,contar,1);
+            }
             cuentaTitulos.removeAll(accName);
         }
         if(cuentaTitulos.isEmpty())
@@ -4302,7 +4339,7 @@ void MainWindow::obtenerMatrizExgEnd()
     //Se crea y se llena la tabla del modelo clásico
     QTableWidget *modeloNoClasico = new QTableWidget;
     modeloNoClasico->setObjectName(QString("TablaModeloNoClasico %1").arg(cantidadMNC));
-    llenarEscenario(modeloNoClasico,false);
+    llenarEscenario(modeloNoClasico,1);
 
     tabWidget->addTab(new QWidget,QString("Escenario NC %1").arg(cantidadMNC));
     int indice2=ObtenerIndice(QString("Escenario NC %1").arg(cantidadMNC));//Se obtiene el indice de la pestaña
@@ -4625,7 +4662,7 @@ void MainWindow::estimarMb(QTableWidget *Bn,QTableWidget *Mb)
 */
 void MainWindow::calcularEscenarioNC()
 {
-    calcularEscenario(false);
+    calcularEscenario(1);
 }
 
 /**
@@ -6085,30 +6122,12 @@ void MainWindow::slotAgregarDescomposicion()
             QTableWidget *tw = findChild<QTableWidget *>("MatrizAn");
             int filas = tw->rowCount();
             Eigen::MatrixXd M1 = extractSubMatriz(tw,list.at(0),list.at(0),An);
-            Eigen::MatrixXd M2 = extractSubMatriz(tw,list.at(0),list.at(1),An);
-            Eigen::MatrixXd M3 = extractSubMatriz(tw,list.at(1),list.at(0),An);
-            Eigen::MatrixXd M4 = extractSubMatriz(tw,list.at(1),list.at(1),An);
+            Eigen::MatrixXd M2 = extractSubMatriz(tw,list.at(1),list.at(1),An);
             QVector<double> V1 = extractDiagonal(M1);
             QVector<double> V2 = extractDiagonal(M2);
-            QVector<double> V3 = extractDiagonal(M3);
-            QVector<double> V4 = extractDiagonal(M4);
             QVector<double> diagonal;
-            if(validarDiagonal(V1))
-            {
-                appendElements(V1,diagonal);
-            }
-            if(validarDiagonal(V2))
-            {
-                appendElements(V2,diagonal);
-            }
-            if(validarDiagonal(V3))
-            {
-                appendElements(V3,diagonal);
-            }
-            if(validarDiagonal(V4))
-            {
-                appendElements(V4,diagonal);
-            }
+            appendElements(V1,diagonal);
+            appendElements(V2,diagonal);
             for (int i = 2; i<filas;i++)
             {
                 for(int j=2; j<filas;j++)
@@ -6125,7 +6144,6 @@ void MainWindow::slotAgregarDescomposicion()
             calcularA0(diagonal);
             calcularAuxiliares();
             calcularMatricesDescomposicion();
-
         }
         else
         {
@@ -6187,13 +6205,13 @@ void MainWindow::calcularA0(QVector<double> diagonal)
     }
     QTableWidget *MAN = findChild<QTableWidget *>("MatrizAn");
     QTableWidget *tw = new QTableWidget;
-    CrearTablaVacia(MAN->rowCount(),tw);
+    CrearTablaVacia(MAN->rowCount()+1,tw);
     noEditColZero(tw);
-    clonarTabla(MAN,tw,MAN->rowCount());
-    fila = MAN->rowCount()-1;
-    for(int i=2;i<fila;i++)
+    clonarTabla(MAN,tw,MAN->rowCount()+1);
+    qDebug()<<fila;
+    for(int i=2;i<fila+2;i++)
     {
-        for(int j=2;j<fila;j++)
+        for(int j=2;j<fila+2;j++)
         {
             QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(A0(i-2,j-2),'f',precission));
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
@@ -6202,19 +6220,17 @@ void MainWindow::calcularA0(QVector<double> diagonal)
     }
     spanEndogenaCell(tw,2,0,false);
     createTab("A0",tw,true);
-    formdescomposicion->close();
 
     MatrixXd ident = MatrixXd::Identity(An.rows(),An.cols());
     M1 = ident - A0;
     M1 = M1.inverse();
     QTableWidget *Mm1 = new QTableWidget;
-    CrearTablaVacia(MAN->rowCount(),Mm1);
+    CrearTablaVacia(MAN->rowCount()+1,Mm1);
     noEditColZero(Mm1);
-    clonarTabla(MAN,Mm1,MAN->rowCount());
-    fila = MAN->rowCount()-1;
-    for(int i=2;i<fila;i++)
+    clonarTabla(MAN,Mm1,MAN->rowCount()+1);
+    for(int i=2;i<fila+2;i++)
     {
-        for(int j=2;j<fila;j++)
+        for(int j=2;j<fila+2;j++)
         {
             QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(M1(i-2,j-2),'f',precission));
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
@@ -6250,10 +6266,10 @@ void MainWindow::calcularAuxiliares()
     M3 = M3.inverse();
     QTableWidget *MAN = findChild<QTableWidget *>("MatrizAn");
     QTableWidget *Mm2 = new QTableWidget;
-    CrearTablaVacia(MAN->rowCount(),Mm2);
+    CrearTablaVacia(MAN->rowCount()+1,Mm2);
     noEditColZero(Mm2);
-    clonarTabla(MAN,Mm2,MAN->rowCount());
-    int fila = MAN->rowCount()-1;
+    clonarTabla(MAN,Mm2,MAN->rowCount()+1);
+    int fila = MAN->rowCount();
     for(int i=2;i<fila;i++)
     {
         for(int j=2;j<fila;j++)
@@ -6267,10 +6283,9 @@ void MainWindow::calcularAuxiliares()
     createTab("M2",Mm2);
 
     QTableWidget *Mm3 = new QTableWidget;
-    CrearTablaVacia(MAN->rowCount(),Mm3);
+    CrearTablaVacia(MAN->rowCount()+1,Mm3);
     noEditColZero(Mm3);
-    clonarTabla(MAN,Mm3,MAN->rowCount());
-    fila = MAN->rowCount()-1;
+    clonarTabla(MAN,Mm3,MAN->rowCount()+1);
     for(int i=2;i<fila;i++)
     {
         for(int j=2;j<fila;j++)
@@ -6298,10 +6313,10 @@ void MainWindow::calcularMatricesDescomposicion()
 
     QTableWidget *MAN = findChild<QTableWidget *>("MatrizAn");
     QTableWidget *mt = new QTableWidget;
-    CrearTablaVacia(MAN->rowCount(),mt);
+    CrearTablaVacia(MAN->rowCount()+1,mt);
     noEditColZero(mt);
-    clonarTabla(MAN,mt,MAN->rowCount());
-    int fila = MAN->rowCount()-1;
+    clonarTabla(MAN,mt,MAN->rowCount()+1);
+    int fila = MAN->rowCount();
     for(int i=2;i<fila;i++)
     {
         for(int j=2;j<fila;j++)
@@ -6315,10 +6330,9 @@ void MainWindow::calcularMatricesDescomposicion()
     createTab("T",mt);
 
     QTableWidget *mo = new QTableWidget;
-    CrearTablaVacia(MAN->rowCount(),mo);
+    CrearTablaVacia(MAN->rowCount()+1,mo);
     noEditColZero(mo);
-    clonarTabla(MAN,mo,MAN->rowCount());
-    fila = MAN->rowCount()-1;
+    clonarTabla(MAN,mo,MAN->rowCount()+1);
     for(int i=2;i<fila;i++)
     {
         for(int j=2;j<fila;j++)
@@ -6332,10 +6346,9 @@ void MainWindow::calcularMatricesDescomposicion()
     createTab("O",mo);
 
     QTableWidget *mc = new QTableWidget;
-    CrearTablaVacia(MAN->rowCount(),mc);
+    CrearTablaVacia(MAN->rowCount()+1,mc);
     noEditColZero(mc);
-    clonarTabla(MAN,mc,MAN->rowCount());
-    fila = MAN->rowCount()-1;
+    clonarTabla(MAN,mc,MAN->rowCount()+1);
     for(int i=2;i<fila;i++)
     {
         for(int j=2;j<fila;j++)
@@ -6347,6 +6360,13 @@ void MainWindow::calcularMatricesDescomposicion()
     }
     spanEndogenaCell(mc,2,0,false);
     createTab("C",mc);
+
+    formdescomposicion->close();
+    actionDescomposicion.setDisabled(true);
+
+    //Se activa el impacto a corto plazo (evaluacion de escenario)
+    connect(&actionCortoPlazo,SIGNAL(triggered()),this,SLOT(slotCortoPlazoForm()));
+    actionCortoPlazo.setEnabled(true);
 }
 
 /**
@@ -6373,3 +6393,168 @@ void MainWindow::createTab(QString texto, QTableWidget *tw, bool current)
 
 }
 
+/**
+    @brief Función para mostrar el formulario para el impacto a corto plazo
+    @date 03/11/2015
+    @author Rodrigo Boet
+*/
+void MainWindow::slotCortoPlazoForm()
+{
+    formcortoplazo = new FormCortoPlazo(this);
+    connect(formcortoplazo->ui->pushButton_3,SIGNAL(clicked()),this,SLOT(slotAgregarCortoPlazo()));
+    formcortoplazo->show();
+}
+
+/**
+    @brief Función para agregar el corto plazo
+    @date 03/11/2015
+    @author Rodrigo Boet
+*/
+void MainWindow::slotAgregarCortoPlazo()
+{
+    int item = formcortoplazo->ui->listSeleccionado->count();
+    if(item>0)
+    {
+        QHBoxLayout *layoutHorizontal = new QHBoxLayout;
+        QVBoxLayout *stackLayout = new QVBoxLayout;
+        QStackedWidget *Stack = new QStackedWidget;
+        Stack->setObjectName(QString("StackImpacto %1").arg(cantidadImpactos));
+        Stack->setFixedWidth(150);
+
+        QPushButton *buttonCalcular = new QPushButton;
+        buttonCalcular->setText("&Calcular");
+        buttonCalcular->setObjectName(QString("CalcularImpacto %1").arg(cantidadImpactos));
+        buttonCalcular->setFixedWidth(130);
+        buttonCalcular->setStyleSheet("background-color: #358ccb; color: #fff;"
+                                 "font-weight: bold; height: 30px; border: none;"
+                                 "border-radius: 5px; margin-top: 40px;");
+        stackLayout->addWidget(buttonCalcular);
+
+        QPushButton *buttonFinalizar = new QPushButton;
+        buttonFinalizar->setText("&Finalizar");
+        buttonFinalizar->setObjectName(QString("FinalizarImpacto %1").arg(cantidadImpactos));
+        buttonFinalizar->setDisabled(true);
+        buttonFinalizar->setFixedWidth(130);
+        buttonFinalizar->setStyleSheet("background-color: gray; color: #fff;"
+                                 "font-weight: bold; height: 30px; border: none;"
+                                 "border-radius: 5px; margin-top: 40px;");
+        stackLayout->addWidget(buttonFinalizar);
+        stackLayout->addStretch(50);
+        QWidget *nw = new QWidget;
+        nw->setLayout(stackLayout);
+        Stack->addWidget(nw);
+
+        //Se conectan los botones
+        connect(buttonCalcular,SIGNAL(clicked()),this,SLOT(calcularEscenarioImpacto()));
+        connect(buttonFinalizar,SIGNAL(clicked()),this,SLOT(finalizarImpacto()));
+
+        //Se crea y se llena la tabla de los impactos
+        QTableWidget *modeloImpacto = new QTableWidget;
+        modeloImpacto->setObjectName(QString("TablaImpactos %1").arg(cantidadImpactos));
+        llenarEscenario(modeloImpacto,2);
+
+        tabWidget->addTab(new QWidget,QString("Escenario CP %1").arg(cantidadImpactos));
+        int indice=ObtenerIndice(QString("Escenario CP %1").arg(cantidadImpactos));//Se obtiene el indice de la pestaña
+
+        layoutHorizontal->addWidget(modeloImpacto);
+        layoutHorizontal->addWidget(Stack);
+        QHBoxLayout * layoutCentralWidget = new QHBoxLayout;
+        layoutCentralWidget->addLayout(layoutHorizontal);
+        QWidget *widget = tabWidget->widget(indice);
+        widget->setLayout(layoutCentralWidget);//Se añade el widget y layout a la pestaña creada
+        actionCortoPlazo.setDisabled(true);
+        tabWidget->setCurrentIndex(indice);
+        formcortoplazo->close();
+    }
+    else
+    {
+        QMessageBox::warning(this,"Alerta","Debe seleccionar al menos una matriz");
+    }
+}
+
+/**
+    @brief Función para obtener alguna matriz de la descomposicion por el nombre
+    @date 03/11/2015
+    @author Rodrigo Boet
+    @param <nombre> Recibe el nombre de la matriz a buscar
+    @return <Eigen::MatrixXd> retorna una matriz de la librería Eigen
+*/
+MatrixXd MainWindow::obtenerMatriz(QString nombre)
+{
+    if (nombre=="I") {
+        return MatrixXd::Identity(An.rows(),An.cols());
+    }
+    else if(nombre=="O"){
+        return O;
+    }
+    else if(nombre=="C"){
+        return C;
+    }
+    else if(nombre=="T"){
+        return T;
+    }
+    else if(nombre=="M1"){
+        return M1;
+    }
+    else if(nombre=="M2"){
+        return M2;
+    }
+    else if(nombre=="M3"){
+        return M3;
+    }
+}
+
+/**
+    @brief Función que permite calcular un impacto a corto plazo
+    @date 03/11/2015
+    @author Rodrigo Boet
+*/
+void MainWindow::calcularEscenarioImpacto()
+{
+    calcularEscenario(2);
+}
+
+/**
+    @brief Función que permite finalizar el impacto a corto plazo
+    @date 03/11/2015
+    @author Rodrigo Boet
+*/
+void MainWindow::finalizarImpacto()
+{
+    QMessageBox msBox(QMessageBox::Question,"Finalizar Escenario","¿Está seguro que desea finalizar\ este escenario?",
+                      QMessageBox::Yes | QMessageBox::No,this);
+    msBox.setButtonText(QMessageBox::Yes,"&Si");
+    msBox.setDefaultButton(QMessageBox::Yes);
+    if(msBox.exec()==QMessageBox::Yes)
+    {
+        int item = formcortoplazo->ui->listSeleccionado->count();
+        MatrixXd suma = MatrixXd::Zero(An.rows(),An.cols());
+        for(int i=0;i<item;i++)
+        {
+            suma += obtenerMatriz(formcortoplazo->ui->listSeleccionado->item(i)->text());
+        }
+        QTableWidget *tw = findChild<QTableWidget *>(QString("TablaImpactos %1").arg(cantidadImpactos));
+        QTableWidget *resultadoImpactos = new QTableWidget;
+        resultadoImpactos->setObjectName(QString("TablaResultadoImpactos %1").arg(cantidadImpactos));
+        int contador = tw->rowCount();
+        crearTablaVaciaEncadenamiento(contador,resultadoImpactos);
+        calcularFinEscenario(resultadoImpactos,"TablaImpactos",suma);
+        //Se ajustan las columnas/filas al contenido
+        resultadoImpactos->resizeColumnsToContents();
+        resultadoImpactos->resizeRowsToContents();
+        //Se oculta el stack
+        QStackedWidget *sw = findChild<QStackedWidget *>(QString("StackImpacto %1").arg(cantidadImpactos));
+        sw->hide();
+
+        createTab(QString("Resultado CP %1").arg(cantidadImpactos),resultadoImpactos,true);
+
+        cantidadImpactos++;
+        actionCortoPlazo.setEnabled(true);
+        formcortoplazo->ui->listSeleccionado->clear();
+        /*if(cantidadEscenarios>2)
+        {
+            actionCompararResultados.setEnabled(true);
+            connect(&actionCompararResultados,SIGNAL(triggered()),this,SLOT(slotCompararResultados()));
+        }*/
+    }
+}

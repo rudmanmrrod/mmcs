@@ -25,6 +25,9 @@
 //Formulario de descomposicon
 #include <formdescomposicion.h>
 #include <ui_formdescomposicion.h>
+//Formulario de Impacto a Corto Plazo
+#include <formcortoplazo.h>
+#include <ui_formcortoplazo.h>
 //Formulario de Carga
 #include <formcargando.h>
 
@@ -66,6 +69,7 @@ class MainWindow : public QMainWindow
     QMenu PHNoClasicoIncidencia;
     QMenu PreciosNH;
     QMenu PreciosNHIncidencia;
+    QMenu Descomposicion;
 
     //Acciones principales
     QAction actionLoadMatrix;
@@ -102,6 +106,7 @@ class MainWindow : public QMainWindow
 
     //Acción para la descomposición
     QAction actionDescomposicion;
+    QAction actionCortoPlazo;
 
     QAction actionSeleccionarTabla;
 
@@ -199,6 +204,8 @@ class MainWindow : public QMainWindow
     int cantidadPNHincidencia100;
     int cantidadPNHincidenciaiCuenta;
     int cantidadPNHincidenciaiComponente;
+    //Cantidad de impactos a corto plazo
+    int cantidadImpactos;
 
     FormLoadMatrix * formLoadMatrix;
     FormMatrixView * formViewMatrix;
@@ -210,6 +217,7 @@ class MainWindow : public QMainWindow
     FormIncidenciaI *FI;
     FormPreciosNoHomogeneos * formPreciosNoHomogeneos;
     FormDescomposicion *formdescomposicion;
+    FormCortoPlazo *formcortoplazo;
 
     void initGUI();
 
@@ -251,9 +259,9 @@ class MainWindow : public QMainWindow
     void cuentacomponentesEncadenamiento(QTableWidget *, int count);
 
     void calcularSubtotal(QTableWidget *,int inicio, int fin,int exogena);
-    void llenarEscenario(QTableWidget *, bool clasico=true);
-    void calcularFinEscenario(QTableWidget *);
-    QVector<double> obtenerResultadoEscenario(QVector<double>);
+    void llenarEscenario(QTableWidget *, int clasico=0);
+    void calcularFinEscenario(QTableWidget *, QString, Eigen::MatrixXd matrix);
+    QVector<double> obtenerResultadoEscenario(QVector<double>, QString, Eigen::MatrixXd matrix);
     QStringList obtenerNombreResultadoEscenario();
     void cuentacomponentesResultado(QTableWidget *, int count, bool clasico = true);
 
@@ -299,6 +307,8 @@ class MainWindow : public QMainWindow
     void calcularA0(QVector<double>);
     void calcularAuxiliares();
     void calcularMatricesDescomposicion();
+    //Funciones referentes al impacto a corto plazo
+    Eigen::MatrixXd obtenerMatriz(QString);
 
     //Funcion para crear una nueva pestaña
     void createTab(QString , QTableWidget *,bool current=false);
@@ -359,7 +369,7 @@ private slots:
 
     //Slots para el modelo clásico
     void slotModeloClasico();
-    void calcularEscenario(bool clasico = true);
+    void calcularEscenario(int clasico = 0);
     void finalizarEscenario();
 
     //Slots para el modelo no clásico
@@ -370,6 +380,10 @@ private slots:
     //Slot para descomposicion
     void slotDescomposicion();
     void slotAgregarDescomposicion();
+    void slotCortoPlazoForm();
+    void slotAgregarCortoPlazo();
+    void calcularEscenarioImpacto();
+    void finalizarImpacto();
 
     void slotCompararResultadosMNC();
     void slotVerResultadoMNC();

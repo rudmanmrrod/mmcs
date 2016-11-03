@@ -490,7 +490,7 @@ Eigen::MatrixXd extractSubMatriz(QTableWidget *tw, QString nombre_fila, QString 
    @date 28/09/2016
    @author Rodrigo Boet
    @param <matriz> Recibe la sub-matriz de donde se sacarán los valores
-   @return <resul> Retorna la suma de la diagonal
+   @return <result> Retorna la suma de la diagonal
 */
 QVector<double> extractDiagonal(Eigen::MatrixXd Matrix)
 {
