@@ -6203,7 +6203,7 @@ void MainWindow::calcularA0(QVector<double> diagonal)
             }
         }
     }
-    A0 -= An;
+    A0 = An - A0;
     QTableWidget *MAN = findChild<QTableWidget *>("MatrizAn");
     QTableWidget *tw = new QTableWidget;
     CrearTablaVacia(MAN->rowCount()+1,tw);
@@ -6249,7 +6249,7 @@ void MainWindow::calcularA0(QVector<double> diagonal)
 void MainWindow::calcularAuxiliares()
 {
     MatrixXd ident = MatrixXd::Identity(A0.rows(),A0.cols());
-    MatrixXd aux = M1*(A0-An);
+    MatrixXd aux = M1*(An-A0);
     M2 = ident+aux;
     int cantidad = diccCuentasEndogenas.count()-2;
     MatrixXd ant = aux;
