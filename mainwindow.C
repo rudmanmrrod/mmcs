@@ -6203,12 +6203,12 @@ void MainWindow::calcularA0(QVector<double> diagonal)
             }
         }
     }
+    A0 -= An;
     QTableWidget *MAN = findChild<QTableWidget *>("MatrizAn");
     QTableWidget *tw = new QTableWidget;
     CrearTablaVacia(MAN->rowCount()+1,tw);
     noEditColZero(tw);
     clonarTabla(MAN,tw,MAN->rowCount()+1);
-    qDebug()<<fila;
     for(int i=2;i<fila+2;i++)
     {
         for(int j=2;j<fila+2;j++)
