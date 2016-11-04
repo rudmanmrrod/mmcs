@@ -6117,70 +6117,37 @@ void MainWindow::slotAgregarDescomposicion()
         {
             list.append(formdescomposicion->ui->listSeleccionado->item(i)->text());
         }
-        if(validarDescomposicion(list))
+        QTableWidget *tw = findChild<QTableWidget *>("MatrizAn");
+        int filas = tw->rowCount();
+        Eigen::MatrixXd M1 = extractSubMatriz(tw,list.at(0),list.at(0),An);
+        Eigen::MatrixXd M2 = extractSubMatriz(tw,list.at(1),list.at(1),An);
+        QVector<double> V1 = extractDiagonal(M1);
+        QVector<double> V2 = extractDiagonal(M2);
+        QVector<double> diagonal;
+        appendElements(V1,diagonal);
+        appendElements(V2,diagonal);
+        for (int i = 2; i<filas;i++)
         {
-            QTableWidget *tw = findChild<QTableWidget *>("MatrizAn");
-            int filas = tw->rowCount();
-            Eigen::MatrixXd M1 = extractSubMatriz(tw,list.at(0),list.at(0),An);
-            Eigen::MatrixXd M2 = extractSubMatriz(tw,list.at(1),list.at(1),An);
-            QVector<double> V1 = extractDiagonal(M1);
-            QVector<double> V2 = extractDiagonal(M2);
-            QVector<double> diagonal;
-            appendElements(V1,diagonal);
-            appendElements(V2,diagonal);
-            for (int i = 2; i<filas;i++)
+            for(int j=2; j<filas;j++)
             {
-                for(int j=2; j<filas;j++)
+                if(tw->item(0,j)->text()!=list.at(0) and tw->item(0,j)->text()!=list.at(1))
                 {
-                    if(tw->item(0,j)->text()!=list.at(0) and tw->item(0,j)->text()!=list.at(1))
+                    if(i==j)
                     {
-                        if(i==j)
-                        {
-                            diagonal.append(An(i-2,j-2));
-                        }
+                        diagonal.append(An(i-2,j-2));
                     }
                 }
             }
-            calcularA0(diagonal);
-            calcularAuxiliares();
-            calcularMatricesDescomposicion();
         }
-        else
-        {
-            QMessageBox::warning(this,"Error","La cuenta Producto y Actividad\ndeben ser simétricas, ajuste la matriz\ne intente de nuevo");
-        }
+        calcularA0(diagonal);
+        calcularAuxiliares();
+        calcularMatricesDescomposicion();
     }
     else
     {
         QMessageBox::warning(this,"Alerta","Debe seleccionar dos (2) cuentas");
     }
 
-}
-
-/**
-    @brief Función para validar que las cuentas producto y actividad sean simétricas
-    @date 28/09/2015
-    @author Rodrigo Boet
-    @param <cuentas> Recibe la lista con las cuentas
-    @return <valores> Retorna verdadera si son simétricas, falso en caso contrario
-*/
-bool MainWindow::validarDescomposicion(QStringList cuentas)
-{
-    QStringList valores;
-    foreach (int key, diccCuentasEndogenas.keys()) {
-       if (diccCuentasEndogenas[key][0]==cuentas.at(0) or diccCuentasEndogenas[key][0]==cuentas.at(1))
-       {
-           valores.append(diccCuentasEndogenas[key][1]);
-       }
-    }
-    if(valores.at(0)==valores.at(1))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
 }
 
 /**
@@ -6253,9 +6220,10 @@ void MainWindow::calcularAuxiliares()
     M2 = ident+aux;
     int cantidad = diccCuentasEndogenas.count()-2;
     MatrixXd ant = aux;
+    MatrixXd A1 = aux;
     for(int i=0;i<cantidad;i++)
     {
-        aux *= ant;
+        aux = ant*A1;
         ant = aux;
         if(i<cantidad-1)
         {
