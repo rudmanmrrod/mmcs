@@ -2372,6 +2372,7 @@ void MainWindow::slotMa()
 {
     QTableWidget *tw = findChild<QTableWidget *>("MatrizAn");
     restarIdentidadAn(tw);
+    totalesEncadenamientoMa();
 }
 
 /**
@@ -2483,7 +2484,6 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw)
     }
     else
     {
-        total_ma = MatrixMa.sum();
         QTableWidget *tablaMa = new QTableWidget;
         tablaMa->setObjectName("MatrizMa");
         CrearTablaVacia(cantidad,tablaMa);
@@ -2980,7 +2980,6 @@ void MainWindow::slotAgregarEncadenamiento()
             lw->setDisabled(true);
             opcionCuentaEncadenamientos=2;//Se establece un valor para la variable de la opcion
         }
-
     }
 
 }
@@ -3213,7 +3212,7 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
                             valorAdelante->setTextAlignment(Qt::AlignCenter);
                             enTable->setItem(columna,3,valorAdelante);
                             //Se estiman los clasificadores
-                            determinarClasificador(enTable,columna,j-2,total_ma);
+                            determinarClasificador(enTable,columna,j-2,titulo);
                             columna++;
                         }
                     }
@@ -3267,11 +3266,8 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
     @param <columna> Recibe la variable donde se almacenará la columna
     @param <index> Recibe la ubicación del vector de donde se extraerá el valor
 */
-void MainWindow::estimarClasificador(double &fila, double &columna, int index, double total)
+void MainWindow::estimarClasificador(double &fila, double &columna, int index, QString nombre)
 {
-    qDebug("Clasificadores");
-    qDebug()<<vFila;
-    qDebug()<<vColumna;
     //Se buscan los botones para saber si se estimó por coeficientes técnicos o Ma
     QRadioButton *rbCT = findChild<QRadioButton *>("CTButton");
     QRadioButton *rbMa = findChild<QRadioButton *>("MaButton");
@@ -3298,27 +3294,29 @@ void MainWindow::estimarClasificador(double &fila, double &columna, int index, d
     }
     else if(rbMa->isChecked())
     {
-        columna = (vFila.at(index)*vFila.count())/total;
-        fila = (vColumna.at(index)*vColumna.count())/total;
+        columna = (vFila.at(index)*vFila.count())/totalCuentasEncadenamiento[nombre][0];
+        qDebug()<<"Columna:"<<vFila.at(index)<<"*"<<vFila.count()<<"/"<<totalCuentasEncadenamiento[nombre][0];
+        fila = (vColumna.at(index)*vColumna.count())/totalCuentasEncadenamiento[nombre][1];
+        qDebug()<<"Fila:"<<vColumna.at(index)<<"*"<<vColumna.count()<<"/"<<totalCuentasEncadenamiento[nombre][1];
     }
 }
 
 
 /**
-    @brief Función que hace el trabajo de calcular y determinar los clasificadores
+    @ brief Función que hace el trabajo de calcular y determinar los clasificadores
     @date 08/09/2016
     @author Rodrigo Boet
     @param <to> Recibe el widget de la tabla de encadenamientos
     @param <index_table> Recibe el indice de la tabla de encadenamientos
     @param <element> Recibe el indice de donde se extraerá el valor para calcular el clasificador
 */
-void MainWindow::determinarClasificador(QTableWidget *tw, int index_table, int element, double total)
+void MainWindow::determinarClasificador(QTableWidget *tw, int index_table, int element, QString nombre)
 {
     QString value;
     //Se estima la clasificación
     double elementColumna;
     double elementFila;
-    estimarClasificador(elementFila,elementColumna,element,total);
+    estimarClasificador(elementFila,elementColumna,element,nombre);
     //Elementos de la clasificación columna
     QTableWidgetItem *clasificacionColumna = new QTableWidgetItem(QString::number(elementColumna,'f',precission));
     value = Separador(clasificacionColumna,false);
@@ -3425,6 +3423,7 @@ void MainWindow::crearMatrizEncadenamientoEndogena(QTableWidget *tw,QTableWidget
     int columna=0;
     for(int i=2;i<countEndogena;i++)
     {
+        QString title = tw->item(i,0)->text();
         double sumaColumna = 0;
         double sumaFila = 0;
         for(int j=2;j<countEndogena;j++)
@@ -3449,7 +3448,7 @@ void MainWindow::crearMatrizEncadenamientoEndogena(QTableWidget *tw,QTableWidget
         valorAdelante->setTextAlignment(Qt::AlignCenter);
         enTable->setItem(columna,3,valorAdelante);
         //Se estiman los clasificadores
-        determinarClasificador(enTable,columna,i-2,total_ma);
+        determinarClasificador(enTable,columna,i-2,title);
         columna++;
     }
     //Se agregan los titulos
@@ -3627,56 +3626,84 @@ void MainWindow::slotGenerarEncadenamientoReport(QString filename, bool report)
     int col = tw->columnCount();
     QVector<double> x, y;
     QStringList myHtml;
-    myHtml.append("<table>");
-    for(int i=0;i<row;i++)
+    QStringList encadenamientos_totales;
+    int end = 0;
+    if(report)
     {
-        myHtml.append("<tr>");
-        for(int j=0;j<col;j++)
+        myHtml.append("<table style='font-size:small;'><caption align='center'><h3>Encadenamientos</h3></caption>");
+        encadenamientos_totales.append("<table style='font-size:small;'><caption align='center'><h3>Totales por Cuenta</h3></caption><tr><td></td><td></td>");
+        encadenamientos_totales.append("<td align='center' style='font-weight:bold;background-color:LightGrey;'>Encadenamiento Parcial hacia atrás</td>");
+        encadenamientos_totales.append("<td align='center' style='font-weight:bold;background-color:LightGrey;'>Encadenamiento Parcial hacia adelante</td></tr><tr>");
+        for(int i=0;i<row;i++)
         {
-            QString item = tw->item(i,j)->text();
-            QString limit = tw->item(i,0)->text();
-            //Comprende las filas superiores
-            if(i==0 and j>1)
+            myHtml.append("<tr>");
+            if(end!=0)
             {
-                myHtml.append("<td align='center' style='font-weight:bold;background-color:LightGrey;'>"+item+"</td>");
+                encadenamientos_totales.append("<tr>");
             }
-            //Comprende las cuentas en la parte izquierda
-            else if((i>0 and !limit.isEmpty()) and j==0)
+            for(int j=0;j<col;j++)
             {
-                myHtml.append("<td style='background-color:steelblue;color:white'>"+item+"</td>");
-            }
-            //Comprende las subcuentas en la parte izquierda
-            else if((i>0 and !limit.isEmpty())and j==1)
-            {
-                myHtml.append("<td align='center' style='background-color:LightGrey'>"+item+"</td>");
-            }
-            //Comprende la última fila
-            else if(i>0 and limit.isEmpty())
-            {
-                myHtml.append("<td align='center' style='font-weight:bold'>"+item+"</td>");
-            }
-            //Comprende el resto de los elementos
-            else
-            {
-                myHtml.append("<td align='center'>"+item+"</td>");
-            }
-            if((i>0 and i<row-1) and (j>3 and j<col-1))
-            {
-                QString titem = Separador(tw->item(i,j),true);
-                double valor = titem.toDouble();
-                if(j==4)
+                QString item = tw->item(i,j)->text();
+                QString limit = tw->item(i,0)->text();
+                //Comprende las filas superiores
+                if(i==0 and j>1)
                 {
-                    x.append(valor);
+                    myHtml.append("<td align='center' style='font-weight:bold;background-color:LightGrey;'>"+item+"</td>");
                 }
+                //Comprende las cuentas en la parte izquierda
+                else if((i>0 and !limit.isEmpty()) and j==0)
+                {
+                    myHtml.append("<td style='background-color:steelblue;color:white'>"+item+"</td>");
+                }
+                //Comprende las subcuentas en la parte izquierda
+                else if((i>0 and !limit.isEmpty())and j==1)
+                {
+                    myHtml.append("<td align='center' style='background-color:LightGrey'>"+item+"</td>");
+                }
+                //Comprende la última fila
+                else if(i>0 and limit.isEmpty())
+                {
+                    if(end==0)
+                    {
+                        end = i;
+                    }
+                    if(j==1)
+                    {
+                        encadenamientos_totales.append("<td align='center' style='font-weight:bold;background-color:steelblue;'>"+item+"</td>");
+                    }
+                    else
+                    {
+                        encadenamientos_totales.append("<td align='center' style='font-weight:bold'>"+item+"</td>");
+                    }
+                }
+                //Comprende el resto de los elementos
                 else
                 {
-                    y.append(valor);
+                    myHtml.append("<td align='center'>"+item+"</td>");
+                }
+                if((i>0 and i<row-1) and (j>3 and j<col-1))
+                {
+                    QString titem = Separador(tw->item(i,j),true);
+                    double valor = titem.toDouble();
+                    if(j==4)
+                    {
+                        x.append(valor);
+                    }
+                    else
+                    {
+                        y.append(valor);
+                    }
                 }
             }
+            myHtml.append("</tr>");
+            if(end!=0)
+            {
+                encadenamientos_totales.append("</tr>");
+            }
         }
-        myHtml.append("</tr>");
+        myHtml.append("</table>");
+        encadenamientos_totales.append("</table>");
     }
-    myHtml.append("</table>");
     //Máximos y Mínimos
     double max = 3;
     double min = -1;
@@ -3752,21 +3779,18 @@ void MainWindow::slotGenerarEncadenamientoReport(QString filename, bool report)
     fuertearrastreText->setFont(QFont(font().family(), 10));
     //Se generan los cambios en el grafico
     customPlot->replot();
-
     QString reportText;
     //Se evalua si es un reporte
     if(report){
         QTextDocument report;
-        report.setHtml(myHtml.join(""));
+        report.setHtml(myHtml.join("")+encadenamientos_totales.join(""));
         QTextCursor cursor(&report);
         QPixmap pm = customPlot->toPixmap();
         QImage img = pm.toImage();
         cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
         cursor.insertImage(img);
-        QPrinter printer( QPrinter::HighResolution );
-        printer.setOutputFileName(filename);
-        printer.setOutputFormat(QPrinter::PdfFormat);
-        report.print(&printer);
+        QPdfWriter pdf(filename);
+        report.print(&pdf);
         reportText = "Se generó con éxito el reporte\n en "+filename;
     }
     else
@@ -3931,7 +3955,7 @@ void MainWindow::llenarEscenario(QTableWidget *tw,int clasico)
     @date 18/09/2015
     @author Rodrigo Boet
     @param <tw> Recibe el widget de la tabla
-    @param <clasico> Recibe un booleano (Verdadero si para el modelo clásico, Falso en caso contrario)
+    @param <clasico> Recibe un int para buscar la tabla
 */
 void MainWindow::calcularEscenario(int clasico)
 {
@@ -6525,4 +6549,43 @@ void MainWindow::finalizarImpacto()
             connect(&actionCompararResultados,SIGNAL(triggered()),this,SLOT(slotCompararResultados()));
         }*/
     }
+}
+
+/**
+    @brief Función para obtener los totales de encademientos de Ma y almacenarlos en un diccionario
+    @date 04/11/2015
+    @author Rodrigo Boet
+*/
+void MainWindow::totalesEncadenamientoMa()
+{
+    QTableWidget *tw = findChild<QTableWidget *>("MatrizMa");
+    int count = tw->rowCount();
+    for(int i=2;i<count;i++)
+    {
+        QString title = tw->item(i,0)->text();
+        double sumaColumna = 0;
+        double sumaFila = 0;
+        double EncadenamientoAtras;
+        double EncadenamientoAdelante;
+        for(int j=2;j<count;j++)
+        {
+            EncadenamientoAtras = MatrixMa(j-2,i-2);
+            EncadenamientoAdelante = MatrixMa(i-2,j-2);
+            sumaColumna+=EncadenamientoAtras;
+            sumaFila+=EncadenamientoAdelante;
+        }
+        if(!totalCuentasEncadenamiento.contains(title))
+        {
+            QVector<double> valores;
+            valores.append(sumaColumna);
+            valores.append(sumaFila);
+            totalCuentasEncadenamiento.insert(title,valores);
+        }
+        else
+        {
+            totalCuentasEncadenamiento[title][0]+=sumaColumna;
+            totalCuentasEncadenamiento[title][1]+=sumaFila;
+        }
+    }
+    qDebug()<<totalCuentasEncadenamiento;
 }

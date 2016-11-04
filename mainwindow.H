@@ -122,6 +122,7 @@ class MainWindow : public QMainWindow
     QMap<int, QMap<QString,QStringList> > diccCuentasComponentes;
     QMap<int, QMap<QString,QStringList> > diccCuentasEncadenamientos;
     QMap<QString,double> totalCuentas;
+    QMap<QString,QVector<double> > totalCuentasEncadenamiento;
 
     QStringList ComponentesEndogenos;
 
@@ -153,8 +154,6 @@ class MainWindow : public QMainWindow
     Eigen::MatrixXd T;
     Eigen::MatrixXd O;
     Eigen::MatrixXd C;
-
-    double total_ma;
 
     QString csvFilePath;
     char csvSeparator;
@@ -296,9 +295,9 @@ class MainWindow : public QMainWindow
     //Función estimar los vectores fila y columna para la clasificación en los encadenamientos
     void estimarVIFVC();
     //Función para estimar la clasificación de las cuentas por CW o Rassmusen
-    void estimarClasificador(double &, double &, int index, double total = 0);
+    void estimarClasificador(double &, double &, int index, QString nombre);
     //Función para determinar los clasificadores
-    void determinarClasificador(QTableWidget *, int index_table, int element, double total = 0);
+    void determinarClasificador(QTableWidget *, int index_table, int element, QString nombre);
 
     //Función para validar la cuenta producto/actividad
     bool validarDescomposicion(QStringList);
@@ -309,6 +308,9 @@ class MainWindow : public QMainWindow
     void calcularMatricesDescomposicion();
     //Funciones referentes al impacto a corto plazo
     Eigen::MatrixXd obtenerMatriz(QString);
+
+    //Funcion para crear un diccionario con los totales por cuenta en Ma
+    void totalesEncadenamientoMa();
 
     //Funcion para crear una nueva pestaña
     void createTab(QString , QTableWidget *,bool current=false);
