@@ -402,6 +402,11 @@ void MainWindow::matricesMenuBar()
 
     Descomposicion.addAction(&actionCortoPlazo);
 
+    actionCompararDescomposicion.setText("&Comparar Resultados");
+    actionCompararDescomposicion.setDisabled(true);
+
+    Descomposicion.addAction(&actionCompararDescomposicion);
+
     menuTools.addMenu(&Descomposicion);
 
     //Menú de Modelos
@@ -935,7 +940,7 @@ void MainWindow::acercaDe()//Funcion para el mensaje acerca de
 MainWindow::MainWindow()
     : actionNewProject(this),actionLoadMatrix(this), actionExportMatrix(this), actionQuit(this),actionCH(this), actionCV(this),
       actionVariableExogena(this),actionEncadenamiento(this),
-      actionDescomposicion(this), actionCortoPlazo(this),
+      actionDescomposicion(this), actionCortoPlazo(this), actionCompararDescomposicion(this),
       actionModeloClasico(this), actionCompararResultados(this),actionModeloNoClasico(this),actionCompararResultadosMNC(this),
       actionPHClasicoIncidencia100(this),actionPHCIncidenciaCuenta(this),actionPHCIncidenciaComponente(this),
       actionPHNoClasicoIncidencia100(this),actionPHNCIncidenciaCuenta(this),actionPHNCIncidenciaComponente(this),actionPNHIncidencia100(this),
@@ -976,6 +981,7 @@ MainWindow::MainWindow()
     cantidadPNHincidenciaiCuenta = 1;
     cantidadPNHincidenciaiComponente = 1;
     cantidadImpactos = 1;
+    comparacionImpactos = 1;
 
     initGUI();
 
@@ -4156,16 +4162,19 @@ void MainWindow::slotCompararResultados()
     if(opcionFormCompararResultados == 0)
     {
         formCompararResultados = new FormCompararResultados(this);
-        QStringList nombres = obtenerNombreResultadoEscenario();
+        QStringList nombres = obtenerNombreResultadoEscenario(cantidadEscenarios,"Resultado C");
         formCompararResultados->ui->resultadosListWidget->addItems(nombres);
         connect(formCompararResultados->ui->buttonVerResultados,SIGNAL(clicked()),this,SLOT(slotVerResultado()));
         opcionFormCompararResultados ++;
     }
     else
     {
+        disconnect(formCompararResultados->ui->buttonVerResultados,SIGNAL(clicked()),this,SLOT(slotVerResultado()));
+        disconnect(formCompararResultados->ui->buttonVerResultados,SIGNAL(clicked()),this,SLOT(slotVerResultadoDescomposicion()));
         formCompararResultados->ui->resultadosListWidget->clear();
-        QStringList nombres = obtenerNombreResultadoEscenario();
+        QStringList nombres = obtenerNombreResultadoEscenario(cantidadEscenarios,"Resultado C");
         formCompararResultados->ui->resultadosListWidget->addItems(nombres);
+        connect(formCompararResultados->ui->buttonVerResultados,SIGNAL(clicked()),this,SLOT(slotVerResultado()));
     }
     formCompararResultados->show();
 }
@@ -4174,14 +4183,16 @@ void MainWindow::slotCompararResultados()
     @brief Función que permite obtener los nombres de los resultados de un escenario
     @date 02/10/2015
     @author Rodrigo Boet
+    @param <cantidad> Recibe la cantidad de elementos
+    @param <nombre> Recibe el nombre de la pestaña que buscará
     @return <nombres> retorna los nombres de los resultados del escenario
 */
-QStringList MainWindow::obtenerNombreResultadoEscenario()
+QStringList MainWindow::obtenerNombreResultadoEscenario(int cantidad, QString nombre)
 {
     QStringList nombres;
-    for(int i=1;i<cantidadEscenarios;i++)
+    for(int i=1;i<cantidad;i++)
     {
-        int indice = ObtenerIndice(QString("Resultado C %1").arg(i));
+        int indice = ObtenerIndice(QString(nombre+" %1").arg(i));
         nombres.append(tabWidget->tabText(indice));
     }
     return nombres;
@@ -6513,7 +6524,7 @@ void MainWindow::calcularEscenarioImpacto()
 */
 void MainWindow::finalizarImpacto()
 {
-    QMessageBox msBox(QMessageBox::Question,"Finalizar Escenario","¿Está seguro que desea finalizar\ este escenario?",
+    QMessageBox msBox(QMessageBox::Question,"Finalizar Escenario","¿Está seguro que desea finalizar\neste escenario?",
                       QMessageBox::Yes | QMessageBox::No,this);
     msBox.setButtonText(QMessageBox::Yes,"&Si");
     msBox.setDefaultButton(QMessageBox::Yes);
@@ -6543,11 +6554,11 @@ void MainWindow::finalizarImpacto()
         cantidadImpactos++;
         actionCortoPlazo.setEnabled(true);
         formcortoplazo->ui->listSeleccionado->clear();
-        /*if(cantidadEscenarios>2)
+        if(cantidadImpactos>2)
         {
-            actionCompararResultados.setEnabled(true);
-            connect(&actionCompararResultados,SIGNAL(triggered()),this,SLOT(slotCompararResultados()));
-        }*/
+            actionCompararDescomposicion.setEnabled(true);
+            connect(&actionCompararDescomposicion,SIGNAL(triggered()),this,SLOT(slotFormResultadosDescomposicion()));
+        }
     }
 }
 
@@ -6587,5 +6598,83 @@ void MainWindow::totalesEncadenamientoMa()
             totalCuentasEncadenamiento[title][1]+=sumaFila;
         }
     }
-    qDebug()<<totalCuentasEncadenamiento;
+}
+
+/**
+    @brief Función para abrir el formulario de comparar resultados
+    @date 14/11/2016
+    @author Rodrigo Boet
+*/
+void MainWindow::slotFormResultadosDescomposicion()
+{
+    if(opcionFormCompararResultados == 0)
+    {
+        formCompararResultados = new FormCompararResultados(this);
+        QStringList nombres = obtenerNombreResultadoEscenario(cantidadImpactos,"Resultado CP");
+        formCompararResultados->ui->resultadosListWidget->addItems(nombres);
+        connect(formCompararResultados->ui->buttonVerResultados,SIGNAL(clicked()),this,SLOT(slotVerResultadoDescomposicion()));
+        opcionFormCompararResultados ++;
+    }
+    else
+    {
+        disconnect(formCompararResultados->ui->buttonVerResultados,SIGNAL(clicked()),this,SLOT(slotVerResultado()));
+        disconnect(formCompararResultados->ui->buttonVerResultados,SIGNAL(clicked()),this,SLOT(slotVerResultadoDescomposicion()));
+        formCompararResultados->ui->resultadosListWidget->clear();
+        QStringList nombres = obtenerNombreResultadoEscenario(cantidadImpactos,"Resultado CP");
+        formCompararResultados->ui->resultadosListWidget->addItems(nombres);
+        connect(formCompararResultados->ui->buttonVerResultados,SIGNAL(clicked()),this,SLOT(slotVerResultadoDescomposicion()));
+    }
+    formCompararResultados->show();
+}
+
+/**
+    @brief Función para comparar los resultados de la descomposición de multiplicadores
+    @date 14/11/2016
+    @author Rodrigo Boet
+*/
+void MainWindow::slotVerResultadoDescomposicion()
+{
+    QTableWidget *tablaComparar = new QTableWidget;
+    tablaComparar->setObjectName(QString("TablaCompararResultadoImpacto %1").arg(comparacionImpactos));
+    QTableWidget *endogena = findChild<QTableWidget *>("MatrizEndogenaEndogena");
+    int contador = endogena->rowCount()-2;
+    crearTablaVaciaEncadenamiento(contador,tablaComparar,2);
+    cuentacomponentesResultado(tablaComparar,contador);
+    int contar=formCompararResultados->ui->resultadosListWidget->selectedItems().count();
+    for(int i=0;i<contar;i++)
+    {
+        QString text = formCompararResultados->ui->resultadosListWidget->selectedItems().value(i)->text();
+        QStringList number = text.split(" ");
+        text = number.at(2);
+        QTableWidget *tw = findChild<QTableWidget *>(QString("TablaResultadoImpactos %1").arg(text));
+        crearTablaComparar(tablaComparar,tw);
+    }
+    //Se agrega el nombre de los resultados
+    tablaComparar->insertRow(0);
+    QFont font;
+    font.setBold(true);
+    int j = 0;
+    for(int i=0;i<contar;i++)
+    {
+        QString text = formCompararResultados->ui->resultadosListWidget->selectedItems().value(i)->text();
+        QTableWidgetItem *item1 = new QTableWidgetItem(text);
+        item1->setFlags(item1->flags() ^ Qt::ItemIsEditable);
+        item1->setFont(font);
+        item1->setTextAlignment(Qt::AlignCenter);
+        QTableWidgetItem *item2 = new QTableWidgetItem(text);
+        item2->setFlags(item2->flags() ^ Qt::ItemIsEditable);
+        item2->setFont(font);
+        item2->setTextAlignment(Qt::AlignCenter);
+        tablaComparar->setItem(0,2+j,item1);
+        j++;
+        tablaComparar->setItem(0,2+j,item2);
+        tablaComparar->setSpan(0,(2+j)-1,1,2);
+        j++;
+    }
+    ItemsNoEditable(tablaComparar,0,2);
+
+    createTab(QString("Comparacion Impactos %1").arg(comparacionImpactos),tablaComparar,true);
+
+    formCompararResultados->close();
+    comparacionImpactos++;
 }

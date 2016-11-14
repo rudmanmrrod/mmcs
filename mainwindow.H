@@ -107,6 +107,7 @@ class MainWindow : public QMainWindow
     //Acción para la descomposición
     QAction actionDescomposicion;
     QAction actionCortoPlazo;
+    QAction actionCompararDescomposicion;
 
     QAction actionSeleccionarTabla;
 
@@ -205,6 +206,8 @@ class MainWindow : public QMainWindow
     int cantidadPNHincidenciaiComponente;
     //Cantidad de impactos a corto plazo
     int cantidadImpactos;
+    //Cantidad de comparaciones de impactos
+    int comparacionImpactos;
 
     FormLoadMatrix * formLoadMatrix;
     FormMatrixView * formViewMatrix;
@@ -261,7 +264,7 @@ class MainWindow : public QMainWindow
     void llenarEscenario(QTableWidget *, int clasico=0);
     void calcularFinEscenario(QTableWidget *, QString, Eigen::MatrixXd matrix);
     QVector<double> obtenerResultadoEscenario(QVector<double>, QString, Eigen::MatrixXd matrix);
-    QStringList obtenerNombreResultadoEscenario();
+    QStringList obtenerNombreResultadoEscenario(int cantidad, QString nombre);
     void cuentacomponentesResultado(QTableWidget *, int count, bool clasico = true);
 
     void obtenerMatrizExgEnd();
@@ -387,18 +390,22 @@ private slots:
     void calcularEscenarioImpacto();
     void finalizarImpacto();
 
+    //Slots para comparar resultados en el modelo no clásico
     void slotCompararResultadosMNC();
     void slotVerResultadoMNC();
 
+    //Slots para precios homogeneos
     void slotPHCIncidencia100();
     void slotPHCIncidenciaiCuenta();
     void slotCalcularPHCIncidenciaiCuenta();
     void slotPHCIncidenciaiComponente();
     void slotCalcularPHCIncidenciaiComponente();
 
+    //Slots para comparar resultados en los precios homogeneos
     void slotCompararResultados();
     void slotVerResultado();
 
+    //Slots para precios no homogeneos
     void slotPHNCIncidencia100();
     void slotPHNCIncidenciaiCuenta();
     void slotCalcularPHNCIncidenciaiCuenta();
@@ -416,6 +423,10 @@ private slots:
     void slotCalcularPNHIncidenciaiComponente();
 
     void slotSeleccionarTabla();
+
+    //Slots para comparar resultados de descomposicion
+    void slotFormResultadosDescomposicion();
+    void slotVerResultadoDescomposicion();
 
     //Slots del menú de ayuda
     void abrirManual();
