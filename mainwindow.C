@@ -73,7 +73,7 @@ void MainWindow::slotFormLoadMatrixClosed()
 */
 void MainWindow::slotOnlyaccount()
 {
-    formLoadMatrix->ui->label_info->setText("Info: Para esta opción debe agregar debe cargar un csv con cuentas y componentes");
+    formLoadMatrix->ui->label_info->setText("Info: En la primera fila del archivo debe indicarse el nombre de las cuentas,\ny en la segunda fila el nombre de las sub-cuentas.");
 
 }
 
@@ -84,7 +84,7 @@ void MainWindow::slotOnlyaccount()
 */
 void MainWindow::slotOnlycomponent()
 {
-    formLoadMatrix->ui->label_info->setText("Info: Para esta opción debe agregar debe cargar un csv con sólo los componentes");
+    formLoadMatrix->ui->label_info->setText("Info: En la primera fila del archivo debe indicarse el nombre de las sub-cuentas");
 }
 
 
@@ -911,7 +911,7 @@ QString MainWindow::numberFormat(double & d) {
 */
 void MainWindow::abrirManual()
 {
-    QDesktopServices::openUrl(QUrl("/usr/share/mmcs/Usuario/Entrada.html",QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl("/usr/share/xamu/Usuario/Entrada.html",QUrl::TolerantMode));
 }
 
 /**
@@ -2866,8 +2866,8 @@ void MainWindow::slotEncadenamientos()
         ct->setObjectName("CTButton");
         QRadioButton *ma = new QRadioButton;
         ma->setObjectName("MaButton");
-        ct->setText("Coeficientes Técnicos");
-        ma->setText("Multiplicadores Leontief");
+        ct->setText("Técnica de Chenery-Watanabe");
+        ma->setText("Técnica de Rasmussen");
         radioBox->addWidget(ct);
         radioBox->addWidget(ma);
         QGroupBox * groupRadio = new QGroupBox;

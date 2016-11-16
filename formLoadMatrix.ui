@@ -31,153 +31,10 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="2" column="2" colspan="2">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="5" column="0" colspan="2">
-      <widget class="QLabel" name="label_2">
-       <property name="font">
-        <font>
-         <family>Aero Matics</family>
-         <pointsize>14</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
+     <item row="8" column="2">
+      <widget class="QRadioButton" name="radioComponent">
        <property name="text">
-        <string>2.- Cargar Matriz</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <spacer name="verticalSpacer_5">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="4" column="0">
-      <spacer name="verticalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="0" colspan="2">
-      <widget class="QLabel" name="label">
-       <property name="font">
-        <font>
-         <family>Aero Matics</family>
-         <pointsize>14</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>1.- Estructura de la Matriz</string>
-       </property>
-      </widget>
-     </item>
-     <item row="11" column="6">
-      <widget class="QPushButton" name="buttonOpen">
-       <property name="text">
-        <string>A&amp;brir</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="4" colspan="2">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Número de Decimales</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="6">
-      <widget class="QSpinBox" name="spinBox">
-       <property name="minimum">
-        <number>3</number>
-       </property>
-       <property name="maximum">
-        <number>15</number>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" colspan="7">
-      <widget class="Line" name="line">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QSpinBox" name="spinNumber">
-       <property name="minimum">
-        <number>2</number>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="font">
-        <font>
-         <pointsize>10</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Número de Cuentas:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1" colspan="5">
-      <widget class="QLineEdit" name="editFilePath">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="6">
-      <widget class="QPushButton" name="buttonSearch">
-       <property name="toolTip">
-        <string>Examinar</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="img/images.qrc">
-         <normaloff>:/imgs/folder_blue.png</normaloff>:/imgs/folder_blue.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="11" column="4">
-      <widget class="QPushButton" name="buttonCancel">
-       <property name="text">
-        <string>&amp;Cancelar</string>
+        <string>Componentes</string>
        </property>
       </widget>
      </item>
@@ -194,19 +51,93 @@
        </property>
       </spacer>
      </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="label_7">
+     <item row="4" column="0">
+      <spacer name="verticalSpacer_5">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="8" column="0">
+      <widget class="QRadioButton" name="radioAccount">
+       <property name="text">
+        <string>Con Cuentas</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="3">
+      <widget class="QPushButton" name="buttonCancel">
+       <property name="text">
+        <string>&amp;Cancelar</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
        <property name="font">
         <font>
          <pointsize>10</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>Archivo:</string>
+        <string>Número de Cuentas:</string>
        </property>
       </widget>
      </item>
-     <item row="8" column="1">
+     <item row="7" column="0" colspan="6">
+      <widget class="QLabel" name="label_info">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;
+color: #358ccb;
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" colspan="6">
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3" colspan="2">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Número de Decimales</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1" colspan="4">
+      <widget class="QLineEdit" name="editFilePath">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSpinBox" name="spinNumber">
+       <property name="minimum">
+        <number>2</number>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="5">
+      <widget class="QPushButton" name="buttonOpen">
+       <property name="text">
+        <string>A&amp;brir</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -219,29 +150,57 @@
        </property>
       </spacer>
      </item>
-     <item row="10" column="0">
-      <widget class="QRadioButton" name="radioAccount">
-       <property name="text">
-        <string>Con Cuentas</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="2">
-      <widget class="QRadioButton" name="radioComponent">
-       <property name="text">
-        <string>Componentes</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0" colspan="7">
-      <widget class="QLabel" name="label_info">
-       <property name="styleSheet">
-        <string notr="true">font-weight: bold;
-color: #358ccb;
-</string>
+     <item row="5" column="5">
+      <widget class="QPushButton" name="buttonSearch">
+       <property name="toolTip">
+        <string>Examinar</string>
        </property>
        <property name="text">
         <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="img/images.qrc">
+         <normaloff>:/imgs/folder_blue.png</normaloff>:/imgs/folder_blue.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Archivo:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="5">
+      <widget class="QSpinBox" name="spinBox">
+       <property name="minimum">
+        <number>3</number>
+       </property>
+       <property name="maximum">
+        <number>15</number>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="3">
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <family>Aero Matics</family>
+         <pointsize>14</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Definir Parámetros de la Matriz</string>
        </property>
       </widget>
      </item>
