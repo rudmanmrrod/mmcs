@@ -443,7 +443,7 @@ void MainWindow::matricesMenuBar()
     actionPHCIncidenciaCuenta.setDisabled(true);
     PHClasicoIncidencia.addAction(&actionPHCIncidenciaCuenta);
 
-    actionPHCIncidenciaComponente.setText("Por co&mponente");
+    actionPHCIncidenciaComponente.setText("Por sub-&cuenta");
     actionPHCIncidenciaComponente.setDisabled(true);
     PHClasicoIncidencia.addAction(&actionPHCIncidenciaComponente);
 
@@ -465,7 +465,7 @@ void MainWindow::matricesMenuBar()
     actionPHNCIncidenciaCuenta.setDisabled(true);
     PHNoClasicoIncidencia.addAction(&actionPHNCIncidenciaCuenta);
 
-    actionPHNCIncidenciaComponente.setText("Por co&mponente");
+    actionPHNCIncidenciaComponente.setText("Por sub-&cuenta");
     actionPHNCIncidenciaComponente.setDisabled(true);
     PHNoClasicoIncidencia.addAction(&actionPHNCIncidenciaComponente);
 
@@ -487,7 +487,7 @@ void MainWindow::matricesMenuBar()
     actionPNHIncidenciaCuenta.setDisabled(true);
     PreciosNHIncidencia.addAction(&actionPNHIncidenciaCuenta);
 
-    actionPNHIncidenciaComponente.setText("Por co&mponente");
+    actionPNHIncidenciaComponente.setText("Por sub-&cuenta");
     actionPHNCIncidenciaComponente.setDisabled(true);
     PreciosNHIncidencia.addAction(&actionPNHIncidenciaComponente);
 
@@ -1968,7 +1968,7 @@ void MainWindow::slotVariableExogena()
         QLabel *label1 = new QLabel;
         QLabel *label2 = new QLabel;
         label1->setText("Cuentas");
-        label2->setText("Componentes");
+        label2->setText("Sub-Cuentas");
         labels->addWidget(label1);
         labels->addWidget(label2);
         QWidget *nw = new QWidget;
@@ -5937,7 +5937,7 @@ void MainWindow::crearFormularioPNH()
     QLabel *label1 = new QLabel;
     QLabel *label2 = new QLabel;
     label1->setText("Cuentas");
-    label2->setText("Componentes");
+    label2->setText("Sub-Cuentas");
     labels->addWidget(label1);
     labels->addWidget(label2);
     QWidget *nw = new QWidget;

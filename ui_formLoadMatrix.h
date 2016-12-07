@@ -190,7 +190,7 @@ public:
     void retranslateUi(QWidget *FormLoadMatrix)
     {
         FormLoadMatrix->setWindowTitle(QApplication::translate("FormLoadMatrix", "Cargar Matriz", 0));
-        radioComponent->setText(QApplication::translate("FormLoadMatrix", "Componentes", 0));
+        radioComponent->setText(QApplication::translate("FormLoadMatrix", "Sub-Cuentas", 0));
         radioAccount->setText(QApplication::translate("FormLoadMatrix", "Con Cuentas", 0));
         buttonCancel->setText(QApplication::translate("FormLoadMatrix", "&Cancelar", 0));
         label_3->setText(QApplication::translate("FormLoadMatrix", "N\303\272mero de Cuentas:", 0));

@@ -34,7 +34,7 @@
      <item row="8" column="2">
       <widget class="QRadioButton" name="radioComponent">
        <property name="text">
-        <string>Componentes</string>
+        <string>Sub-Cuentas</string>
        </property>
       </widget>
      </item>
