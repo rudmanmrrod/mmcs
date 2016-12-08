@@ -911,7 +911,7 @@ QString MainWindow::numberFormat(double & d) {
 */
 void MainWindow::abrirManual()
 {
-    QDesktopServices::openUrl(QUrl("/usr/share/xamu/Usuario/Entrada.html",QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl("/usr/share/xamu/Usuario/manual_xamu.pdf",QUrl::TolerantMode));
 }
 
 /**
