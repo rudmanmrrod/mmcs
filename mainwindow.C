@@ -885,7 +885,7 @@ QString MainWindow::numberFormat(double & d) {
     }
 
 
-    QString stringNumber = QString::number(d);
+    QString stringNumber = QString::number(d, 'f', precission);
     for(int point = 0, i = (stringNumber.lastIndexOf('.') == -1 ? stringNumber.length() : stringNumber.lastIndexOf('.')); i > 0; --i, ++point)
     {
         if(point != 0 && point % 3 == 0)
@@ -911,7 +911,7 @@ QString MainWindow::numberFormat(double & d) {
 */
 void MainWindow::abrirManual()
 {
-    QDesktopServices::openUrl(QUrl("/usr/share/xamu/Usuario/manual_xamu.pdf",QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl("/usr/share/xamu/Usuario/Entrada.html",QUrl::TolerantMode));
 }
 
 /**
@@ -1331,14 +1331,14 @@ void MainWindow::CalcularTotales(QTableWidget *tableWidget,int inicio,bool &igua
             SumaColumna+=thisColumna;
         }
         QTableWidgetItem *Valor1 = new QTableWidgetItem;
-        Valor1->setText(QString::number(SumaFila));
+        Valor1->setText(QString::number(SumaFila,'f',precission));
         QString value1 = Separador(Valor1,false);
         Valor1->setText(value1);
         Valor1->setFlags(Valor1->flags() ^ Qt::ItemIsEditable);
         Valor1->setTextAlignment(Qt::AlignCenter);
         CellStyle(Valor1);//Estilo de la Celda
         QTableWidgetItem *Valor2 = new QTableWidgetItem;
-        Valor2->setText(QString::number(SumaColumna));
+        Valor2->setText(QString::number(SumaColumna,'f',precission));
         QString value2 = Separador(Valor2,false);
         Valor2->setText(value2);
         Valor2->setFlags(Valor2->flags() ^ Qt::ItemIsEditable);
@@ -1544,7 +1544,7 @@ void MainWindow::CalcularAn(QTableWidget *tw,QTableWidget *nuevaTabla,QTableWidg
                 {
                     int contador = tablaOriginal->rowCount()-1;
                     value = Separador(tablaOriginal->item(contador,i),true);
-                    value = QString::number(value.toDouble());
+                    value = QString::number(value.toDouble(),'f',precission);
                     total=value.toDouble();
                 }
                 else
@@ -1561,7 +1561,7 @@ void MainWindow::CalcularAn(QTableWidget *tw,QTableWidget *nuevaTabla,QTableWidg
                     valor/=total;//Se divide el valor de la celda entre el total correspondiente
 
                 }
-                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor));
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',precission));
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
                 QString value = Separador(ValoraInsertar,false);
                 ValoraInsertar->setText(value);
@@ -1786,7 +1786,7 @@ void MainWindow::clonarTabla(QTableWidget *tw,QTableWidget *nuevaTabla,int canti
             {
                 QString value = Separador(tw->item(i,j),true);
                 double valor= value.toDouble();
-                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor));
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',precission));
                 value = Separador(ValoraInsertar,false);
                 ValoraInsertar->setText(value);
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
@@ -1916,7 +1916,7 @@ void MainWindow::slotCoeficienteHorizontal()
                 {
                     valor/=total;//Se divide el valor de la celda entre el total correspondiente
                 }
-                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor));
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',precission));
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
                 ValoraInsertar->setTextAlignment(Qt::AlignCenter);
                 QString value = Separador(ValoraInsertar,false);
@@ -2161,7 +2161,7 @@ void MainWindow::slotFinalizarExogena()
                 {
                     QString value;
                     double valor=PrincipalTable(i-2,j-2);
-                    QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor));
+                    QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',precission));
                     value = Separador(ValoraInsertar,false);
                     ValoraInsertar->setText(value);
                     ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
@@ -2498,7 +2498,7 @@ void MainWindow::restarIdentidadAn(QTableWidget *tw)
             for(int j=0;j<cantidad-1;j++)
             {
                 double value = MatrixMa(i,j);
-                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(value));
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(value,'f',precission));
                 QString valor = Separador(ValoraInsertar,false);
                 ValoraInsertar->setText(valor);
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
@@ -3204,14 +3204,14 @@ void MainWindow::crearMatrizEncadenamiento(QTableWidget *tw,QTableWidget *enTabl
                                 sumaFila+=EncadenamientoAdelante;
                             }
                             //Elementos del encadenamiento hacia atras
-                            QTableWidgetItem *valorAtras = new QTableWidgetItem(QString::number(sumaColumna));
+                            QTableWidgetItem *valorAtras = new QTableWidgetItem(QString::number(sumaColumna,'f',precission));
                             QString value = Separador(valorAtras,false);
                             valorAtras->setText(value);
                             valorAtras->setFlags(valorAtras->flags() ^ Qt::ItemIsEditable);
                             valorAtras->setTextAlignment(Qt::AlignCenter);
                             enTable->setItem(columna,2,valorAtras);
                             //Elementos del encadenamiento hacia adelante
-                            QTableWidgetItem *valorAdelante = new QTableWidgetItem(QString::number(sumaFila));
+                            QTableWidgetItem *valorAdelante = new QTableWidgetItem(QString::number(sumaFila,'f',precission));
                             value = Separador(valorAdelante,false);
                             valorAdelante->setText(value);
                             valorAdelante->setFlags(valorAdelante->flags() ^ Qt::ItemIsEditable);
@@ -3324,14 +3324,14 @@ void MainWindow::determinarClasificador(QTableWidget *tw, int index_table, int e
     double elementFila;
     estimarClasificador(elementFila,elementColumna,element,nombre);
     //Elementos de la clasificación columna
-    QTableWidgetItem *clasificacionColumna = new QTableWidgetItem(QString::number(elementColumna));
+    QTableWidgetItem *clasificacionColumna = new QTableWidgetItem(QString::number(elementColumna,'f',precission));
     value = Separador(clasificacionColumna,false);
     clasificacionColumna->setText(value);
     clasificacionColumna->setFlags(clasificacionColumna->flags() ^ Qt::ItemIsEditable);
     clasificacionColumna->setTextAlignment(Qt::AlignCenter);
     tw->setItem(index_table,4,clasificacionColumna);
     //Elementos de la clasificación fila
-    QTableWidgetItem *clasificacionFila = new QTableWidgetItem(QString::number(elementFila));
+    QTableWidgetItem *clasificacionFila = new QTableWidgetItem(QString::number(elementFila,'f',precission));
     value = Separador(clasificacionFila,false);
     clasificacionFila->setText(value);
     clasificacionFila->setFlags(clasificacionFila->flags() ^ Qt::ItemIsEditable);
@@ -3440,14 +3440,14 @@ void MainWindow::crearMatrizEncadenamientoEndogena(QTableWidget *tw,QTableWidget
             sumaFila+=EncadenamientoAdelante;
         }
         //Elementos del encadenamiento hacia atras
-        QTableWidgetItem *valorAtras = new QTableWidgetItem(QString::number(sumaColumna));
+        QTableWidgetItem *valorAtras = new QTableWidgetItem(QString::number(sumaColumna,'f',precission));
         QString value = Separador(valorAtras,false);
         valorAtras->setText(value);
         valorAtras->setFlags(valorAtras->flags() ^ Qt::ItemIsEditable);
         valorAtras->setTextAlignment(Qt::AlignCenter);
         enTable->setItem(columna,2,valorAtras);
         //Elementos del encadenamiento hacia adelante
-        QTableWidgetItem *valorAdelante = new QTableWidgetItem(QString::number(sumaFila));
+        QTableWidgetItem *valorAdelante = new QTableWidgetItem(QString::number(sumaFila,'f',precission));
         value = Separador(valorAdelante,false);
         valorAdelante->setText(value);
         valorAdelante->setFlags(valorAdelante->flags() ^ Qt::ItemIsEditable);
@@ -3537,11 +3537,11 @@ void MainWindow::calcularTotalesEncadenamientos(QTableWidget *tw)
         QTableWidgetItem *titulo = new QTableWidgetItem(QString("Encadenamiento Parcial %1").arg(accName.at(k)));
         encadenamientosStyle(titulo);
         tw->setItem(count,1,titulo);
-        QTableWidgetItem *totalAtras = new QTableWidgetItem(QString::number(sumaAtras));
+        QTableWidgetItem *totalAtras = new QTableWidgetItem(QString::number(sumaAtras,'f',precission));
         QString value = Separador(totalAtras,false);
         totalAtras->setText(value);
         encadenamientosStyle(totalAtras);
-        QTableWidgetItem *totalAdelante = new QTableWidgetItem(QString::number(sumaAdelante));
+        QTableWidgetItem *totalAdelante = new QTableWidgetItem(QString::number(sumaAdelante,'f',precission));
         value = Separador(totalAdelante,false);
         totalAdelante->setText(value);
         encadenamientosStyle(totalAdelante);
@@ -3933,9 +3933,9 @@ void MainWindow::llenarEscenario(QTableWidget *tw,int clasico)
     for(int i=0;i<contador;i++)
     {
         //Se colocan no editables la tercera, cuarta y quinta columna, y se llena de 0 el porcentaje
-        QTableWidgetItem *porcentaje = new QTableWidgetItem(QString::number(0));
+        QTableWidgetItem *porcentaje = new QTableWidgetItem(QString::number(0,'f',precission));
         porcentaje->setTextAlignment(Qt::AlignCenter);
-        QTableWidgetItem *mExg = new QTableWidgetItem(QString::number(subtotalExog[i]));
+        QTableWidgetItem *mExg = new QTableWidgetItem(QString::number(subtotalExog[i],'f',precission));
         QString number = Separador (mExg,false);
         mExg->setText(number);
         mExg->setFlags(mExg->flags() ^ Qt::ItemIsEditable);
@@ -3993,7 +3993,7 @@ void MainWindow::calcularEscenario(int clasico)
             double value = tw->item(i,2)->text().toDouble();
             value = (value*subtotalExog[i-1])/100;
             QString item;
-            QTableWidgetItem *inyeccion = new QTableWidgetItem(QString::number(value));
+            QTableWidgetItem *inyeccion = new QTableWidgetItem(QString::number(value,'f',precission));
             item = Separador(inyeccion,false);
             inyeccion->setText(item);
             inyeccion->setFlags(inyeccion->flags() ^ Qt::ItemIsEditable);
@@ -4005,7 +4005,7 @@ void MainWindow::calcularEscenario(int clasico)
             QString item = Separador(tw->item(i,4),true);
             double value = item.toDouble();
             value += subtotalExog[i-1];
-            QTableWidgetItem *subtotal = new QTableWidgetItem(QString::number(value));
+            QTableWidgetItem *subtotal = new QTableWidgetItem(QString::number(value,'f',precission));
             item = Separador(subtotal,false);
             subtotal->setText(item);
             subtotal->setFlags(subtotal->flags() ^ Qt::ItemIsEditable);
@@ -4100,7 +4100,7 @@ void MainWindow::calcularFinEscenario(QTableWidget *tw,QString nombre,MatrixXd m
     {
         //Se agregan los valores del Ma*SubTotal
         double valor = resultado[i];
-        QTableWidgetItem *res = new QTableWidgetItem(QString::number(valor));
+        QTableWidgetItem *res = new QTableWidgetItem(QString::number(valor,'f',precission));
         QString item = Separador(res,false);
         res->setText(item);
         res->setTextAlignment(Qt::AlignCenter);
@@ -4116,7 +4116,7 @@ void MainWindow::calcularFinEscenario(QTableWidget *tw,QString nombre,MatrixXd m
         {
             var = ((valor/(subtotalEnd[i]+subtotalExog[i]))-1)*100;
         }
-        QTableWidgetItem *vari = new QTableWidgetItem(QString::number(var));
+        QTableWidgetItem *vari = new QTableWidgetItem(QString::number(var,'f',precission));
         QString variItem = Separador(vari,false);
         vari->setText(QString(variItem+"%"));
         vari->setTextAlignment(Qt::AlignCenter);
@@ -4495,7 +4495,7 @@ void MainWindow::calcularMatrizExgEnd(QTableWidget *MatrizExgEnd)
             double valor = value.toDouble();
             total+=valor;
         }
-        QTableWidgetItem *item = new QTableWidgetItem(QString::number(total));
+        QTableWidgetItem *item = new QTableWidgetItem(QString::number(total,'f',precission));
         QString value = Separador(item,false);
         item->setText(value);
         item->setFlags(item->flags() ^ Qt::ItemIsEditable);
@@ -4537,7 +4537,7 @@ void MainWindow::ctvMatrizExgEnd(QTableWidget *MatrizExgEnd,QTableWidget *Bn)
                     valoraInsertar /= total;
                 }
                 MBn(j-2,i-2) = valoraInsertar;
-                QTableWidgetItem *item = new QTableWidgetItem(QString::number(valoraInsertar));
+                QTableWidgetItem *item = new QTableWidgetItem(QString::number(valoraInsertar,'f',precission));
                 QString value = Separador(item,false);
                 item->setText(value);
                 item->setFlags(item->flags() ^ Qt::ItemIsEditable);
@@ -4653,7 +4653,7 @@ void MainWindow::estimarMb(QTableWidget *Bn,QTableWidget *Mb)
         {
             if(i>=2 and j>=2)
             {
-                QString valor = QString::number(MatrixMb(j-2,i-2));
+                QString valor = QString::number(MatrixMb(j-2,i-2),'f',precission);
                 QTableWidgetItem *item = new QTableWidgetItem(valor);
                 QString value = Separador(item,false);
                 item->setText(value);
@@ -4794,7 +4794,7 @@ void MainWindow::calcularFinEscenarioMNC(QTableWidget *tw)
     {
         //Se agregan los valores del Ma*SubTotal
         double valor = resultado[i];
-        QTableWidgetItem *res = new QTableWidgetItem(QString::number(valor));
+        QTableWidgetItem *res = new QTableWidgetItem(QString::number(valor,'f',precission));
         QString item = Separador(res,false);
         res->setText(item);
         res->setTextAlignment(Qt::AlignCenter);
@@ -4810,7 +4810,7 @@ void MainWindow::calcularFinEscenarioMNC(QTableWidget *tw)
         {
             var = ((valor/subtotalExogEnd[i])-1)*100;
         }
-        QTableWidgetItem *vari = new QTableWidgetItem(QString::number(var));
+        QTableWidgetItem *vari = new QTableWidgetItem(QString::number(var,'f',precission));
         QString variItem = Separador(vari,false);
         vari->setText(QString(variItem+"%"));
         vari->setTextAlignment(Qt::AlignCenter);
@@ -4976,7 +4976,7 @@ void MainWindow::calcularMaT()
         for(int j=0;j<cantidad;j++)
         {
             double value = MatrizMat(i,j);
-            QString valor = QString::number(value);
+            QString valor = QString::number(value,'f',precission);
             QTableWidgetItem *item = new QTableWidgetItem(valor);
             valor = Separador(item,false);
             item->setText(valor);
@@ -5014,7 +5014,7 @@ void MainWindow::calcularPHCIncidencia100(QTableWidget *tw)
         for(int j=0;j<count;j++)
         {
             double value = Res(i,j);
-            QString valor = QString::number(value);
+            QString valor = QString::number(value,'f',precission);
             QTableWidgetItem *item = new QTableWidgetItem(valor);
             valor = Separador(item,false);
             item->setText(valor);
@@ -5050,7 +5050,7 @@ void MainWindow::slotPHCIncidenciaiCuenta()
         titulo->setTextAlignment(Qt::AlignCenter);
         CellStyle(titulo);
         tw->setItem(0,i,titulo);
-        QTableWidgetItem *number = new QTableWidgetItem(QString::number(0));
+        QTableWidgetItem *number = new QTableWidgetItem(QString::number(0,'f',precission));
         number->setTextAlignment(Qt::AlignCenter);
         QString item = Separador(number,false);
         number->setText(item);
@@ -5110,7 +5110,7 @@ void MainWindow::calcularPHCIncidenciaI(QTableWidget *tw,QMap<QString,double> in
             {
                 valor = valor*(inci[cuenta]/100);
             }
-            QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor));
+            QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',precission));
             ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
             ValoraInsertar->setTextAlignment(Qt::AlignCenter);
             QString value = Separador(ValoraInsertar,false);
@@ -5143,7 +5143,7 @@ void MainWindow::slotPHCIncidenciaiComponente()
         titulo->setTextAlignment(Qt::AlignCenter);
         CellStyleComponente(titulo);
         tw->setItem(0,i,titulo);
-        QTableWidgetItem *number = new QTableWidgetItem(QString::number(0));
+        QTableWidgetItem *number = new QTableWidgetItem(QString::number(0,'f',precission));
         number->setTextAlignment(Qt::AlignCenter);
         QString item = Separador(number,false);
         number->setText(item);
@@ -5193,7 +5193,7 @@ void MainWindow::calcularPHCIncidenciaIComponente(QTableWidget *tw,QTableWidget 
             if(inci!=0)
             {
                 valor = valor*(inci/100);
-                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor));
+                QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',precission));
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
                 ValoraInsertar->setTextAlignment(Qt::AlignCenter);
                 QString value = Separador(ValoraInsertar,false);
@@ -5233,7 +5233,7 @@ void MainWindow::calcularMbT()
             if(i>=2 and j>=2)
             {
                 double value = MatrizMbt(i-2,j-2);
-                QString valor = QString::number(value);
+                QString valor = QString::number(value,'f',precission);
                 QTableWidgetItem *item = new QTableWidgetItem(valor);
                 valor = Separador(item,false);
                 item->setText(valor);
@@ -5319,7 +5319,7 @@ void MainWindow::calcularPHNCIncidencia100(QTableWidget *tw)
             if(i>=2 and j>=2)
             {
                 double value = Res(i-2,j-2);
-                QString valor = QString::number(value);
+                QString valor = QString::number(value,'f',precission);
                 QTableWidgetItem *item = new QTableWidgetItem(valor);
                 valor = Separador(item,false);
                 item->setText(valor);
@@ -5378,7 +5378,7 @@ void MainWindow::slotPHNCIncidenciaiCuenta()
         titulo->setTextAlignment(Qt::AlignCenter);
         CellStyle(titulo);
         tw->setItem(0,i,titulo);
-        QTableWidgetItem *number = new QTableWidgetItem(QString::number(0));
+        QTableWidgetItem *number = new QTableWidgetItem(QString::number(0,'f',precission));
         number->setTextAlignment(Qt::AlignCenter);
         QString item = Separador(number,false);
         number->setText(item);
@@ -5439,7 +5439,7 @@ void MainWindow::slotPHNCIncidenciaiComponente()
         titulo->setTextAlignment(Qt::AlignCenter);
         CellStyleComponente(titulo);
         tw->setItem(0,i,titulo);
-        QTableWidgetItem *number = new QTableWidgetItem(QString::number(0));
+        QTableWidgetItem *number = new QTableWidgetItem(QString::number(0,'f',precission));
         number->setTextAlignment(Qt::AlignCenter);
         QString item = Separador(number,false);
         number->setText(item);
@@ -5606,7 +5606,7 @@ void MainWindow::multiplicarMatricesPNH(QTableWidget *tw,QVector<double> vector)
         for(int j = 0;j<count;j++)
         {
             double value = res(i,j);
-            QString valor = QString::number(value,precission);
+            QString valor = QString::number(value,'f',precission);
             QTableWidgetItem *item = new QTableWidgetItem(valor);
             valor = Separador(item,false);
             item->setText(valor);
@@ -5632,7 +5632,7 @@ void MainWindow::multiplicarMatricesPNH(QTableWidget *tw,QVector<double> vector)
         for(int j = 0;j<count;j++)
         {
             double value = trans(i,j);
-            QString valor = QString::number(value,precission);
+            QString valor = QString::number(value,'f',precission);
             QTableWidgetItem *item = new QTableWidgetItem(valor);
             valor = Separador(item,false);
             item->setText(valor);
@@ -5682,7 +5682,7 @@ void MainWindow::calcularPNHIncidencia100(QTableWidget *tw,MatrixXd Diagonal)
         for(int j=0;j<count;j++)
         {
             double value = Res(i,j);
-            QString valor = QString::number(value);
+            QString valor = QString::number(value,'f',precission);
             QTableWidgetItem *item = new QTableWidgetItem(valor);
             valor = Separador(item,false);
             item->setText(valor);
@@ -5768,7 +5768,7 @@ void MainWindow::slotSelectPNHi()
             titulo->setTextAlignment(Qt::AlignCenter);
             CellStyle(titulo);
             tw->setItem(0,i,titulo);
-            QTableWidgetItem *number = new QTableWidgetItem(QString::number(0));
+            QTableWidgetItem *number = new QTableWidgetItem(QString::number(0,'f',precission));
             number->setTextAlignment(Qt::AlignCenter);
             QString item = Separador(number,false);
             number->setText(item);
@@ -5886,7 +5886,7 @@ void MainWindow::slotSelectPNHic()
             titulo->setTextAlignment(Qt::AlignCenter);
             CellStyleComponente(titulo);
             tw->setItem(0,i,titulo);
-            QTableWidgetItem *number = new QTableWidgetItem(QString::number(0));
+            QTableWidgetItem *number = new QTableWidgetItem(QString::number(0,'f',precission));
             number->setTextAlignment(Qt::AlignCenter);
             QString item = Separador(number,false);
             number->setText(item);
@@ -6215,7 +6215,7 @@ void MainWindow::calcularA0(QVector<double> diagonal)
     {
         for(int j=2;j<fila+2;j++)
         {
-            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(A0(i-2,j-2)));
+            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(A0(i-2,j-2),'f',precission));
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
             tw->setItem(i,j,valoraInsertar);
         }
@@ -6234,7 +6234,7 @@ void MainWindow::calcularA0(QVector<double> diagonal)
     {
         for(int j=2;j<fila+2;j++)
         {
-            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(M1(i-2,j-2)));
+            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(M1(i-2,j-2),'f',precission));
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
             Mm1->setItem(i,j,valoraInsertar);
         }
@@ -6277,7 +6277,7 @@ void MainWindow::calcularAuxiliares()
     {
         for(int j=2;j<fila;j++)
         {
-            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(M2(i-2,j-2)));
+            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(M2(i-2,j-2),'f',precission));
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
             Mm2->setItem(i,j,valoraInsertar);
         }
@@ -6293,7 +6293,7 @@ void MainWindow::calcularAuxiliares()
     {
         for(int j=2;j<fila;j++)
         {
-            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(M3(i-2,j-2)));
+            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(M3(i-2,j-2),'f',precission));
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
             Mm3->setItem(i,j,valoraInsertar);
         }
@@ -6324,7 +6324,7 @@ void MainWindow::calcularMatricesDescomposicion()
     {
         for(int j=2;j<fila;j++)
         {
-            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(T(i-2,j-2)));
+            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(T(i-2,j-2),'f',precission));
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
             mt->setItem(i,j,valoraInsertar);
         }
@@ -6340,7 +6340,7 @@ void MainWindow::calcularMatricesDescomposicion()
     {
         for(int j=2;j<fila;j++)
         {
-            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(O(i-2,j-2)));
+            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(O(i-2,j-2),'f',precission));
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
             mo->setItem(i,j,valoraInsertar);
         }
@@ -6356,7 +6356,7 @@ void MainWindow::calcularMatricesDescomposicion()
     {
         for(int j=2;j<fila;j++)
         {
-            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(C(i-2,j-2)));
+            QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(C(i-2,j-2),'f',precission));
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
             mc->setItem(i,j,valoraInsertar);
         }
