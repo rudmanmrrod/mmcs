@@ -156,7 +156,7 @@ public:
         spinBox = new QSpinBox(FormLoadMatrix);
         spinBox->setObjectName(QStringLiteral("spinBox"));
         spinBox->setMinimum(3);
-        spinBox->setMaximum(15);
+        spinBox->setMaximum(5);
 
         gridLayout->addWidget(spinBox, 2, 5, 1, 1);
 

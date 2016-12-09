@@ -185,7 +185,7 @@ color: #358ccb;
         <number>3</number>
        </property>
        <property name="maximum">
-        <number>15</number>
+        <number>5</number>
        </property>
       </widget>
      </item>
