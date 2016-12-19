@@ -35,21 +35,6 @@
       <widget class="QListWidget" name="listAgregar">
        <item>
         <property name="text">
-         <string>M1</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>M2</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>M3</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
          <string>I</string>
         </property>
        </item>
