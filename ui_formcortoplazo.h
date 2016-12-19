@@ -61,9 +61,6 @@ public:
         new QListWidgetItem(listAgregar);
         new QListWidgetItem(listAgregar);
         new QListWidgetItem(listAgregar);
-        new QListWidgetItem(listAgregar);
-        new QListWidgetItem(listAgregar);
-        new QListWidgetItem(listAgregar);
         listAgregar->setObjectName(QStringLiteral("listAgregar"));
 
         gridLayout->addWidget(listAgregar, 2, 0, 4, 1);
@@ -146,19 +143,13 @@ public:
         const bool __sortingEnabled = listAgregar->isSortingEnabled();
         listAgregar->setSortingEnabled(false);
         QListWidgetItem *___qlistwidgetitem = listAgregar->item(0);
-        ___qlistwidgetitem->setText(QApplication::translate("FormCortoPlazo", "M1", 0));
+        ___qlistwidgetitem->setText(QApplication::translate("FormCortoPlazo", "I", 0));
         QListWidgetItem *___qlistwidgetitem1 = listAgregar->item(1);
-        ___qlistwidgetitem1->setText(QApplication::translate("FormCortoPlazo", "M2", 0));
+        ___qlistwidgetitem1->setText(QApplication::translate("FormCortoPlazo", "T", 0));
         QListWidgetItem *___qlistwidgetitem2 = listAgregar->item(2);
-        ___qlistwidgetitem2->setText(QApplication::translate("FormCortoPlazo", "M3", 0));
+        ___qlistwidgetitem2->setText(QApplication::translate("FormCortoPlazo", "O", 0));
         QListWidgetItem *___qlistwidgetitem3 = listAgregar->item(3);
-        ___qlistwidgetitem3->setText(QApplication::translate("FormCortoPlazo", "I", 0));
-        QListWidgetItem *___qlistwidgetitem4 = listAgregar->item(4);
-        ___qlistwidgetitem4->setText(QApplication::translate("FormCortoPlazo", "T", 0));
-        QListWidgetItem *___qlistwidgetitem5 = listAgregar->item(5);
-        ___qlistwidgetitem5->setText(QApplication::translate("FormCortoPlazo", "O", 0));
-        QListWidgetItem *___qlistwidgetitem6 = listAgregar->item(6);
-        ___qlistwidgetitem6->setText(QApplication::translate("FormCortoPlazo", "C", 0));
+        ___qlistwidgetitem3->setText(QApplication::translate("FormCortoPlazo", "C", 0));
         listAgregar->setSortingEnabled(__sortingEnabled);
 
         pushButton_3->setText(QApplication::translate("FormCortoPlazo", "Seleccionar", 0));

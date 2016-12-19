@@ -755,6 +755,7 @@ void MainWindow::populateTable(QTableWidget * tableWidget)
             }
             QTableWidgetItem *tw = new QTableWidgetItem(numberFormat(value));
             tw->setFlags(tw->flags() ^ Qt::ItemIsEditable);
+            tw->setTextAlignment(Qt::AlignCenter);
             tableWidget->setItem(row,i,tw);
             QCoreApplication::processEvents();
         }
@@ -5077,7 +5078,6 @@ void MainWindow::slotCalcularPHCIncidenciaiCuenta()
         QString value = Separador(tw->item(1,i),true);
         cantidades.insert(cuenta,value.toDouble());
     }
-
     QTableWidget *MatrizIC = new QTableWidget;
     MatrizIC->setObjectName(QString("PHCIcuenta %1").arg(cantidadPHCindidenciaiCuenta));
     calcularPHCIncidencia100(MatrizIC);
@@ -5093,22 +5093,30 @@ void MainWindow::slotCalcularPHCIncidenciaiCuenta()
     @author Rodrigo Boet
     @param <tw> Recibe el widget de la tabla
     @param <inci> Recibe el diccionario con las cuentas-valor
+    @param <clasico> Recibe verdadero si se calculará con modelo clásico o falso en caso contrario
 */
-void MainWindow::calcularPHCIncidenciaI(QTableWidget *tw,QMap<QString,double> inci)
+void MainWindow::calcularPHCIncidenciaI(QTableWidget *tw,QMap<QString,double> inci, bool clasico)
 {
     int fila = tw->rowCount();
     int columna = tw->columnCount();
     for(int i=2;i<fila;i++)
     {
+        QString cuenta= tw->item(i,0)->text();
         for(int j=2;j<columna;j++)
         {
-
-            QString cuenta= tw->item(i,0)->text();
+            QString cuenta_col= tw->item(0,j)->text();
             QString number = Separador(tw->item(i,j),true);
             double valor = number.toDouble();
-            if(inci.contains(cuenta) and inci[cuenta]!=0)
+            if((inci.contains(cuenta) and inci[cuenta]!=0))
             {
-                valor = valor*(inci[cuenta]/100);
+                if(clasico and cuenta == cuenta_col)
+                {
+                    valor = valor*(inci[cuenta]/100);
+                }
+                else if(!clasico)
+                {
+                    valor = valor*(inci[cuenta]/100);
+                }
             }
             QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',precission));
             ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
@@ -5177,22 +5185,37 @@ void MainWindow::slotCalcularPHCIncidenciaiComponente()
     @author Rodrigo Boet
     @param <tw> Recibe el widget de la tabla
     @param <ot> Recibe el widget de la tabla donde se colocarán las incidencias
+    @param <clasico> Recibe verdadero si se calculará con modelo clásico o falso en caso contrario
 */
-void MainWindow::calcularPHCIncidenciaIComponente(QTableWidget *tw,QTableWidget *ot)
+void MainWindow::calcularPHCIncidenciaIComponente(QTableWidget *tw,QTableWidget *ot,bool clasico)
 {
     int fila = tw->rowCount();
     int columna = tw->columnCount();
+    QString componente_col = "";
+    QString componente = "";
     for(int i=2;i<fila;i++)
     {
         QString incidencia = ot->item(1,i-2)->text();
         double inci = incidencia.toDouble();
         for(int j=2;j<columna;j++)
         {
+            if(clasico)
+            {
+                componente = tw->item(1,i)->text();
+                componente_col = tw->item(j,1)->text();
+            }
             QString number = Separador(tw->item(i,j),true);
             double valor = number.toDouble();
             if(inci!=0)
             {
-                valor = valor*(inci/100);
+                if(clasico and componente==componente_col)
+                {
+                    valor = valor*(inci/100);
+                }
+                else if(!clasico)
+                {
+                    valor = valor*(inci/100);
+                }
                 QTableWidgetItem *ValoraInsertar = new QTableWidgetItem(QString::number(valor,'f',precission));
                 ValoraInsertar->setFlags(ValoraInsertar->flags() ^ Qt::ItemIsEditable);
                 ValoraInsertar->setTextAlignment(Qt::AlignCenter);
@@ -5409,7 +5432,7 @@ void MainWindow::slotCalcularPHNCIncidenciaiCuenta()
     QTableWidget *MatrizIC = new QTableWidget;
     MatrizIC->setObjectName(QString("PHNCIcuenta %1").arg(cantidadPHNCindidenciaiCuenta));
     calcularPHNCIncidencia100(MatrizIC);
-    calcularPHCIncidenciaI(MatrizIC,cantidades);
+    calcularPHCIncidenciaI(MatrizIC,cantidades,false);
 
     createTab(QString("PIHnci %1").arg(cantidadPHNCindidenciaiCuenta),MatrizIC,true);
     cantidadPHNCindidenciaiCuenta++;
@@ -5461,7 +5484,7 @@ void MainWindow::slotCalcularPHNCIncidenciaiComponente()
     QTableWidget *MatrizIComp = new QTableWidget;
     MatrizIComp->setObjectName(QString("PHNCIcomponente %1").arg(cantidadPHNCindidenciaiComponente));
     calcularPHNCIncidencia100(MatrizIComp);
-    calcularPHCIncidenciaIComponente(MatrizIComp,tw);
+    calcularPHCIncidenciaIComponente(MatrizIComp,tw,false);
 
     createTab(QString("PIHncic %1").arg(cantidadPHNCindidenciaiComponente),MatrizIComp,true);
     cantidadPHNCindidenciaiComponente++;
@@ -6147,6 +6170,9 @@ void MainWindow::slotAgregarDescomposicion()
     int item = formdescomposicion->ui->listSeleccionado->count();
     if(item==2)
     {
+        FormCargando *cargando = new FormCargando(this);
+        cargando->show();
+        disconnect(formdescomposicion->ui->pushButton_3,SIGNAL(clicked()),this,SLOT(slotAgregarDescomposicion()));
         QStringList list;
         for(int i=0;i<item;i++)
         {
@@ -6177,6 +6203,7 @@ void MainWindow::slotAgregarDescomposicion()
         calcularA0(diagonal);
         calcularAuxiliares();
         calcularMatricesDescomposicion();
+        QTimer::singleShot(1000,cargando,SLOT(hide()));
     }
     else
     {
@@ -6216,7 +6243,10 @@ void MainWindow::calcularA0(QVector<double> diagonal)
         for(int j=2;j<fila+2;j++)
         {
             QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(A0(i-2,j-2),'f',precission));
+            QString valor = Separador(valoraInsertar,false);
+            valoraInsertar->setText(valor);
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
+            valoraInsertar->setTextAlignment(Qt::AlignCenter);
             tw->setItem(i,j,valoraInsertar);
         }
     }
@@ -6235,7 +6265,10 @@ void MainWindow::calcularA0(QVector<double> diagonal)
         for(int j=2;j<fila+2;j++)
         {
             QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(M1(i-2,j-2),'f',precission));
+            QString valor = Separador(valoraInsertar,false);
+            valoraInsertar->setText(valor);
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
+            valoraInsertar->setTextAlignment(Qt::AlignCenter);
             Mm1->setItem(i,j,valoraInsertar);
         }
     }
@@ -6278,7 +6311,10 @@ void MainWindow::calcularAuxiliares()
         for(int j=2;j<fila;j++)
         {
             QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(M2(i-2,j-2),'f',precission));
+            QString valor = Separador(valoraInsertar,false);
+            valoraInsertar->setText(valor);
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
+            valoraInsertar->setTextAlignment(Qt::AlignCenter);
             Mm2->setItem(i,j,valoraInsertar);
         }
     }
@@ -6294,7 +6330,10 @@ void MainWindow::calcularAuxiliares()
         for(int j=2;j<fila;j++)
         {
             QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(M3(i-2,j-2),'f',precission));
+            QString valor = Separador(valoraInsertar,false);
+            valoraInsertar->setText(valor);
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
+            valoraInsertar->setTextAlignment(Qt::AlignCenter);
             Mm3->setItem(i,j,valoraInsertar);
         }
     }
@@ -6325,7 +6364,10 @@ void MainWindow::calcularMatricesDescomposicion()
         for(int j=2;j<fila;j++)
         {
             QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(T(i-2,j-2),'f',precission));
+            QString valor = Separador(valoraInsertar,false);
+            valoraInsertar->setText(valor);
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
+            valoraInsertar->setTextAlignment(Qt::AlignCenter);
             mt->setItem(i,j,valoraInsertar);
         }
     }
@@ -6341,7 +6383,10 @@ void MainWindow::calcularMatricesDescomposicion()
         for(int j=2;j<fila;j++)
         {
             QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(O(i-2,j-2),'f',precission));
+            QString valor = Separador(valoraInsertar,false);
+            valoraInsertar->setText(valor);
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
+            valoraInsertar->setTextAlignment(Qt::AlignCenter);
             mo->setItem(i,j,valoraInsertar);
         }
     }
@@ -6357,7 +6402,10 @@ void MainWindow::calcularMatricesDescomposicion()
         for(int j=2;j<fila;j++)
         {
             QTableWidgetItem *valoraInsertar = new QTableWidgetItem(QString::number(C(i-2,j-2),'f',precission));
+            QString valor = Separador(valoraInsertar,false);
+            valoraInsertar->setText(valor);
             valoraInsertar->setFlags(valoraInsertar->flags() ^ Qt::ItemIsEditable);
+            valoraInsertar->setTextAlignment(Qt::AlignCenter);
             mc->setItem(i,j,valoraInsertar);
         }
     }

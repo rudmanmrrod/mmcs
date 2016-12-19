@@ -283,8 +283,8 @@ class MainWindow : public QMainWindow
 
     void calcularMaT();
     void calcularPHCIncidencia100(QTableWidget *);
-    void calcularPHCIncidenciaI(QTableWidget *, QMap<QString, double>);
-    void calcularPHCIncidenciaIComponente(QTableWidget *,QTableWidget *);
+    void calcularPHCIncidenciaI(QTableWidget *, QMap<QString, double>, bool clasico = true);
+    void calcularPHCIncidenciaIComponente(QTableWidget *, QTableWidget *, bool clasico = true);
 
     void calcularMbT();
     void calcularMb();
