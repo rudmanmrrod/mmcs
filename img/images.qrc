@@ -8,5 +8,6 @@
         <file>logo_cenditel.jpg</file>
         <file>undo-habilitado.png</file>
         <file>mmcsload.gif</file>
+        <file>icono.ico</file>
     </qresource>
 </RCC>

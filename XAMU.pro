@@ -74,3 +74,7 @@ RESOURCES += \
     img/images.qrc
 
 OTHER_FILES +=
+
+DISTFILES +=
+
+win32: RC_ICONS = img/icono.ico
